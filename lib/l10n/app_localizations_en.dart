@@ -171,8 +171,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutPrivacyBody =>
-      'The app collects no personal data. It needs the internet to load content.';
+      'The app collects no personal data. It needs the internet to load content, keeps copies of what you open on your device for offline reading, and you can turn that off or clear it in Settings.';
 
   @override
   String get openSourceLicences => 'Open-source licences';
+
+  @override
+  String get offlineCopies => 'Offline reading';
+
+  @override
+  String get offlineCopiesHint =>
+      'Keep the hadiths you open on this device so you can read them without internet.';
+
+  @override
+  String get clearSavedCopies => 'Clear saved copies';
+
+  @override
+  String get savedCopiesCleared => 'Saved copies cleared';
 }

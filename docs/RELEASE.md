@@ -71,5 +71,6 @@ preferably to an environment named `production` with required reviewers: `ANDROI
 - [ ] Both languages and both themes checked (Settings > Language / Appearance)
 - [ ] No stock imagery is bundled (guarded by `test/architecture_test.dart`; the Rawpixel backdrop was removed)
 - [ ] HadeethEnc terms still say what the audit recorded; credit line is visible on every hadith
+- [ ] Offline reading was shipped **without** HadeethEnc's written permission (owner's decision): re-read their terms before release and keep the Settings switch and clear button
 - [ ] iOS only: bundle ID confirmed, signing set up in Xcode, privacy strings reviewed
 - [ ] Play Console data-safety answers match the app (no data collected; network use only)

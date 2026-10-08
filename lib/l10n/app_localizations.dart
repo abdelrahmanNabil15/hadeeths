@@ -395,7 +395,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutPrivacyBody.
   ///
   /// In ar, this message translates to:
-  /// **'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى.'**
+  /// **'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى، ويحفظ على جهازك نسخًا مما فتحته لتقرأه دون اتصال، ويمكنك إيقاف ذلك أو مسحه من الإعدادات.'**
   String get aboutPrivacyBody;
 
   /// No description provided for @openSourceLicences.
@@ -403,6 +403,30 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تراخيص البرمجيات مفتوحة المصدر'**
   String get openSourceLicences;
+
+  /// No description provided for @offlineCopies.
+  ///
+  /// In ar, this message translates to:
+  /// **'القراءة دون اتصال'**
+  String get offlineCopies;
+
+  /// No description provided for @offlineCopiesHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'احتفظ على هذا الجهاز بالأحاديث التي فتحتها لتقرأها دون إنترنت.'**
+  String get offlineCopiesHint;
+
+  /// No description provided for @clearSavedCopies.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح النسخ المحفوظة'**
+  String get clearSavedCopies;
+
+  /// No description provided for @savedCopiesCleared.
+  ///
+  /// In ar, this message translates to:
+  /// **'تم مسح النسخ المحفوظة'**
+  String get savedCopiesCleared;
 }
 
 class _AppLocalizationsDelegate

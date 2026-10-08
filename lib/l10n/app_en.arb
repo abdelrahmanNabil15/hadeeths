@@ -49,6 +49,10 @@
   "aboutFontsHeading": "Fonts",
   "aboutFontsBody": "Cairo and Amiri, under the SIL Open Font License 1.1.",
   "aboutPrivacyHeading": "Privacy",
-  "aboutPrivacyBody": "The app collects no personal data. It needs the internet to load content.",
-  "openSourceLicences": "Open-source licences"
+  "aboutPrivacyBody": "The app collects no personal data. It needs the internet to load content, keeps copies of what you open on your device for offline reading, and you can turn that off or clear it in Settings.",
+  "openSourceLicences": "Open-source licences",
+  "offlineCopies": "Offline reading",
+  "offlineCopiesHint": "Keep the hadiths you open on this device so you can read them without internet.",
+  "clearSavedCopies": "Clear saved copies",
+  "savedCopiesCleared": "Saved copies cleared"
 }

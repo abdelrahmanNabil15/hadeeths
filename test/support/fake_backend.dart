@@ -47,14 +47,19 @@ class FakeBackend
 
   /// Language code of every call, in order.
   final languages = <String>[];
+
+  /// The `refresh` flag of every categories / page call ("categories:true", "page:2:1:false").
+  final refreshes = <String>[];
   final pageRequests = <String>[];
   final detailsRequests = <String>[];
 
   @override
   Future<Result<List<HadithCategory>>> getCategories({
     required String language,
+    bool refresh = false,
   }) async {
     categoriesCalls++;
+    refreshes.add('categories:$refresh');
     languages.add(language);
     await gate?.future;
     final failure = categoriesFailure;
@@ -71,8 +76,10 @@ class FakeBackend
     required String language,
     int page = 1,
     int perPage = HadithsRepository.defaultPageSize,
+    bool refresh = false,
   }) async {
     pageRequests.add('$categoryId:$page');
+    refreshes.add('page:$categoryId:$page:$refresh');
     languages.add(language);
     await gate?.future;
     final failure = pageFailure;

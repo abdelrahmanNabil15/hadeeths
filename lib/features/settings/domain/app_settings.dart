@@ -23,6 +23,7 @@ class AppSettings extends Equatable {
     this.language = AppLanguage.system,
     this.theme = ThemePreference.system,
     this.readingScale = defaultReadingScale,
+    this.offlineCopies = true,
   });
 
   /// Allowed multipliers for the reading text (hadith and explanation), smallest first.
@@ -35,6 +36,9 @@ class AppSettings extends Equatable {
   /// Multiplier for the reading text, one of [readingScales]. It is applied on top of the
   /// device's own text-size setting.
   final double readingScale;
+
+  /// Keep hadiths the user opens on the device so they can be read again without a connection.
+  final bool offlineCopies;
 
   /// Index of [readingScale] in [readingScales].
   int get readingScaleIndex => readingScales.indexOf(readingScale);
@@ -56,12 +60,14 @@ class AppSettings extends Equatable {
     AppLanguage? language,
     ThemePreference? theme,
     double? readingScale,
+    bool? offlineCopies,
   }) => AppSettings(
     language: language ?? this.language,
     theme: theme ?? this.theme,
     readingScale: readingScale ?? this.readingScale,
+    offlineCopies: offlineCopies ?? this.offlineCopies,
   );
 
   @override
-  List<Object?> get props => [language, theme, readingScale];
+  List<Object?> get props => [language, theme, readingScale, offlineCopies];
 }

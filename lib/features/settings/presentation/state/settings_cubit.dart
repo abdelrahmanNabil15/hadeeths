@@ -15,6 +15,9 @@ class SettingsCubit extends Cubit<AppSettings> {
   Future<void> setTheme(ThemePreference theme) =>
       _update(state.copyWith(theme: theme));
 
+  Future<void> setOfflineCopies({required bool enabled}) =>
+      _update(state.copyWith(offlineCopies: enabled));
+
   Future<void> setReadingScale(double scale) => _update(
     state.copyWith(readingScale: AppSettings.snapReadingScale(scale)),
   );

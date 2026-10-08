@@ -11,9 +11,13 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   @override
   Future<Result<List<HadithCategory>>> getCategories({
     required String language,
+    bool refresh = false,
   }) => Result.guard(
     () async => [
-      for (final dto in await _remote.fetchCategories(language: language))
+      for (final dto in await _remote.fetchCategories(
+        language: language,
+        refresh: refresh,
+      ))
         dto.toEntity(),
     ],
   );

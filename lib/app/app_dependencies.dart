@@ -1,3 +1,5 @@
+import 'package:mynewapp/core/cache/cached_fetcher.dart';
+import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
@@ -20,18 +22,28 @@ class AppDependencies {
     required this.hadiths,
     required this.search,
     required this.settings,
+    required this.cache,
   });
 
-  /// Production wiring: the content repositories share one HTTP client.
-  factory AppDependencies.live({required SharedPreferences preferences}) {
-    final client = HadeethClient();
+  /// Production wiring: the content repositories share one HTTP client and one saved-copy
+  /// cache. Search is never cached (it needs the server's current index).
+  factory AppDependencies.live({
+    required SharedPreferences preferences,
+    required SwitchableResponseCache cache,
+    HadeethClient? client,
+  }) {
+    final http = client ?? HadeethClient();
+    final fetcher = CachedFetcher(cache);
     return AppDependencies(
       categories: CategoriesRepositoryImpl(
-        HttpCategoriesRemoteDataSource(client),
+        HttpCategoriesRemoteDataSource(http, fetcher),
       ),
-      hadiths: HadithsRepositoryImpl(HttpHadithsRemoteDataSource(client)),
-      search: SearchRepositoryImpl(HttpSearchRemoteDataSource(client)),
+      hadiths: HadithsRepositoryImpl(
+        HttpHadithsRemoteDataSource(http, fetcher),
+      ),
+      search: SearchRepositoryImpl(HttpSearchRemoteDataSource(http)),
       settings: SettingsRepositoryImpl(preferences),
+      cache: cache,
     );
   }
 
@@ -39,4 +51,7 @@ class AppDependencies {
   final HadithsRepository hadiths;
   final SearchRepository search;
   final SettingsRepository settings;
+
+  /// Saved copies of opened content; switched on and off by the user's setting.
+  final SwitchableResponseCache cache;
 }

@@ -67,7 +67,11 @@ release build on the same device.
   word meanings and sources, and share them with the HadeethEnc credit.
 - Search the text of the hadiths (server-side; Arabic diacritics are handled by the server, matches are highlighted in an
   unmodified excerpt).
-- Settings: language (device, Arabic, English), appearance (device, light, dark) and reading text size, all saved on the device.
+- Offline reading of what you have opened: categories, hadith lists and hadiths are kept on the device, unmodified, and used when
+  there is no connection (a recent copy is used without asking the server; pull-to-refresh asks it). Copies are capped at 20 MB,
+  expire after 60 days when stale, and can be turned off or cleared in Settings. Search always needs a connection.
+- Settings: language (device, Arabic, English), appearance (device, light, dark), reading text size and the offline switch,
+  all saved on the device.
 - Sources and rights screen with credits, font licences and the privacy position.
 
 ## Languages
@@ -84,8 +88,9 @@ reading text. Tokens live in `lib/core/design_system`; every text/background pai
 
 ## Known limitations
 
-- Bookmarks, recents and offline reading are not built: storing hadith content on the device needs HadeethEnc's written
-  permission (see `docs/PHASE0_REVISED_AUDIT.md`). Search returns at most 100 results (a server limit, no paging).
+- Offline reading covers only what was opened. There is no "download everything", no bundled starter set, no offline search and
+  no bookmarks: those would store or ship much more of HadeethEnc's content, and the project owner has not obtained their
+  written permission (see `docs/PHASE0_REVISED_AUDIT.md`, section 7). Search returns at most 100 results (a server limit).
 - Numbers always use Western digits in both languages.
 - iOS: deployment target raised to 13.0 but not built here; bundle identifier is still the placeholder `com.example.mynewapp`;
   the iOS display name is not localized yet.

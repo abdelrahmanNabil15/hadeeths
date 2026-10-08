@@ -52,7 +52,7 @@ Status legend: PASS / FAIL / BLOCKED / NOT RUN. "Confirmed" = observed in code, 
 | F-23 iOS target | Raised to 13.0, **not built (needs macOS)** |
 | F-24 unused font | Removed |
 | F-27 unused server features | Search adopted; `hadeeth_intro` deliberately not shown (it repeats the start of the hadith) |
-| Phase 4 (offline storage) | **Blocked** on HadeethEnc's written permission to cache |
+| Phase 4 (offline storage) | **Partly done, deliberately limited**: a read cache of content the user opened (unmodified, bounded, switchable, clearable). The owner chose to proceed without HadeethEnc's written permission. Not done: bulk download, bundled snapshot, offline search, bookmarks that store titles. The licensing risk of caching remains open (HadeethEnc's terms do not address it) |
 
 ## 2. Corrections to the original audit
 

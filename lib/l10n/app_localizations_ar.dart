@@ -169,8 +169,21 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aboutPrivacyBody =>
-      'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى.';
+      'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى، ويحفظ على جهازك نسخًا مما فتحته لتقرأه دون اتصال، ويمكنك إيقاف ذلك أو مسحه من الإعدادات.';
 
   @override
   String get openSourceLicences => 'تراخيص البرمجيات مفتوحة المصدر';
+
+  @override
+  String get offlineCopies => 'القراءة دون اتصال';
+
+  @override
+  String get offlineCopiesHint =>
+      'احتفظ على هذا الجهاز بالأحاديث التي فتحتها لتقرأها دون إنترنت.';
+
+  @override
+  String get clearSavedCopies => 'مسح النسخ المحفوظة';
+
+  @override
+  String get savedCopiesCleared => 'تم مسح النسخ المحفوظة';
 }

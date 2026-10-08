@@ -15,8 +15,10 @@ class _ThrowingSource implements CategoriesRemoteDataSource {
   final Object error;
 
   @override
-  Future<List<CategoryDto>> fetchCategories({String language = 'ar'}) async =>
-      throw error;
+  Future<List<CategoryDto>> fetchCategories({
+    String language = 'ar',
+    bool refresh = false,
+  }) async => throw error;
 }
 
 void main() {
@@ -27,6 +29,7 @@ void main() {
       );
       final dtos = await HttpCategoriesRemoteDataSource(
         client,
+        uncachedFetcher(),
       ).fetchCategories();
       expect(dtos, hasLength(5));
       expect(adapter.requests.single.path, 'categories/list');
@@ -38,7 +41,10 @@ void main() {
         (o, n) async => jsonResponse({'unexpected': true}),
       );
       expect(
-        HttpCategoriesRemoteDataSource(client).fetchCategories(),
+        HttpCategoriesRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchCategories(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.parse),
         ),
@@ -52,7 +58,10 @@ void main() {
         ]),
       );
       expect(
-        HttpCategoriesRemoteDataSource(client).fetchCategories(),
+        HttpCategoriesRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchCategories(),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.parse),
         ),
@@ -66,7 +75,7 @@ void main() {
         (o, n) async => jsonResponse(categoriesJson),
       );
       final repo = CategoriesRepositoryImpl(
-        HttpCategoriesRemoteDataSource(client),
+        HttpCategoriesRemoteDataSource(client, uncachedFetcher()),
       );
       final result = await repo.getCategories(language: 'ar');
       expect(result, isA<Success<List<HadithCategory>>>());

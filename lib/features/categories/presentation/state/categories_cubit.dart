@@ -86,11 +86,13 @@ class CategoriesCubit extends Cubit<CategoriesState> {
     await _fetch();
   }
 
-  /// Pull-to-refresh: keeps showing the current tree while loading, and keeps it if
-  /// the refresh fails.
-  Future<void> refresh() => retry();
+  /// Pull-to-refresh asks the server even when a recent saved copy exists.
+  Future<void> refresh() async {
+    if (_inFlight) return;
+    await _fetch(refresh: true);
+  }
 
-  Future<void> _fetch() async {
+  Future<void> _fetch({bool refresh = false}) async {
     _inFlight = true;
     final hadData = state.categories.isNotEmpty;
     // With data on screen, only clear an old refresh error so that a repeated failure
@@ -99,7 +101,10 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       hadData ? state.copyWith() : state.copyWith(status: LoadStatus.loading),
     );
     try {
-      final result = await _repository.getCategories(language: language);
+      final result = await _repository.getCategories(
+        language: language,
+        refresh: refresh,
+      );
       if (isClosed) return;
       switch (result) {
         case Success(:final value):
