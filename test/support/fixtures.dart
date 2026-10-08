@@ -2,9 +2,11 @@
 // Ids and counts are strings; `last_page` and `total_items` are numbers; `current_page`
 // and `per_page` are strings.
 
-import 'package:mynewapp/Model/category_node.dart';
-import 'package:mynewapp/Model/hadith_details.dart';
-import 'package:mynewapp/Model/hadith_page.dart';
+import 'package:mynewapp/features/categories/data/category_dto.dart';
+import 'package:mynewapp/features/categories/domain/hadith_category.dart';
+import 'package:mynewapp/features/hadiths/data/hadith_dtos.dart';
+import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
+import 'package:mynewapp/features/hadiths/domain/hadith_page.dart';
 
 /// Two roots, two children of root 1, and one grandchild. Root 2 is a leaf.
 const categoriesJson = [
@@ -72,22 +74,23 @@ const englishDetailsJson = {
   'words_meanings_ar': [],
 };
 
-List<CategoryNode> sampleCategories() =>
-    categoriesJson.map(CategoryNode.fromJson).toList();
+List<HadithCategory> sampleCategories() => [
+  for (final json in categoriesJson) CategoryDto.fromJson(json).toEntity(),
+];
 
 HadithPage samplePage({
   required List<String> ids,
   int page = 1,
   int lastPage = 1,
   int totalItems = -1,
-}) => HadithPage.fromJson(
+}) => HadithPageDto.fromJson(
   hadithPageJson(
     ids: ids,
     page: page,
     lastPage: lastPage,
     totalItems: totalItems,
   ),
-);
+).toEntity();
 
 HadithDetails sampleDetails([Map<String, dynamic> json = arabicDetailsJson]) =>
-    HadithDetails.fromJson(json);
+    HadithDetailsDto.fromJson(json).toEntity();

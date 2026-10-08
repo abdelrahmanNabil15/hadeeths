@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynewapp/Model/hadith_details.dart';
-import 'package:mynewapp/Shared/share_text.dart';
+import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
+import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
 
-import 'support/fixtures.dart';
+import '../../../support/fixtures.dart';
 
 void main() {
   test(

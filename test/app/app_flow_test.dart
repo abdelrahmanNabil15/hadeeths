@@ -2,18 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynewapp/Modules/home_page.dart';
-import 'package:mynewapp/Shared/errors/failure.dart';
-import 'package:mynewapp/Shared/share_text.dart';
-import 'package:mynewapp/main.dart';
+import 'package:mynewapp/app/app.dart';
+import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/core/errors/failure.dart';
+import 'package:mynewapp/features/categories/presentation/widgets/category_grid.dart';
+import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
 
-import '../support/fake_api.dart';
+import '../support/fake_backend.dart';
 import '../support/fixtures.dart';
 
 const _retry = 'إعادة المحاولة';
 const _offline = 'لا يوجد اتصال بالإنترنت';
 
-FakeHadeethApi _api({Map<String, dynamic>? details}) => FakeHadeethApi(
+FakeBackend _api({Map<String, dynamic>? details}) => FakeBackend(
   details: details == null ? null : sampleDetails(details),
   pages: {
     '2:1': samplePage(ids: ['101', '102', '103'], totalItems: 500),
@@ -22,8 +23,12 @@ FakeHadeethApi _api({Map<String, dynamic>? details}) => FakeHadeethApi(
   },
 );
 
-Future<void> _pump(WidgetTester tester, FakeHadeethApi api) async {
-  await tester.pumpWidget(MyApp(api: api));
+Future<void> _pump(WidgetTester tester, FakeBackend api) async {
+  await tester.pumpWidget(
+    MyApp(
+      dependencies: AppDependencies(categories: api, hadiths: api),
+    ),
+  );
   await tester.pumpAndSettle();
 }
 
@@ -54,7 +59,11 @@ void main() {
       tester,
     ) async {
       final api = _api()..gate = Completer<void>();
-      await tester.pumpWidget(MyApp(api: api));
+      await tester.pumpWidget(
+        MyApp(
+          dependencies: AppDependencies(categories: api, hadiths: api),
+        ),
+      );
       await tester.pump();
       expect(find.byType(CircularProgressIndicator), findsOneWidget);
       api.gate!.complete();
@@ -232,10 +241,7 @@ void main() {
   });
 
   group('hadith details', () {
-    Future<void> openFirstHadith(
-      WidgetTester tester,
-      FakeHadeethApi api,
-    ) async {
+    Future<void> openFirstHadith(WidgetTester tester, FakeBackend api) async {
       await _pump(tester, api);
       await tester.tap(find.text('جذر ثان'));
       await tester.pumpAndSettle();

@@ -1,47 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynewapp/Model/category_node.dart';
-import 'package:mynewapp/Model/hadith_details.dart';
-import 'package:mynewapp/Model/hadith_page.dart';
+import 'package:mynewapp/features/hadiths/data/hadith_dtos.dart';
 
-import '../support/fixtures.dart';
+import '../../../support/fixtures.dart';
 
 void main() {
-  group('CategoryNode', () {
-    test('parses string ids/counts and null parent', () {
-      final root = CategoryNode.fromJson(categoriesJson[0]);
-      expect(root.id, '1');
-      expect(root.hadithCount, 197);
-      expect(root.parentId, isNull);
-      expect(root.isRoot, isTrue);
-    });
-
-    test('parses a child with a parent id', () {
-      final child = CategoryNode.fromJson(categoriesJson[2]);
-      expect(child.parentId, '1');
-      expect(child.isRoot, isFalse);
-    });
-
-    test('accepts numeric ids and counts', () {
-      final node = CategoryNode.fromJson({
-        'id': 5,
-        'title': 't',
-        'hadeeths_count': 7,
-        'parent_id': 2,
-      });
-      expect(node.id, '5');
-      expect(node.hadithCount, 7);
-      expect(node.parentId, '2');
-    });
-
-    test('rejects a category without an id', () {
-      expect(
-        () => CategoryNode.fromJson({'title': 'x'}),
-        throwsFormatException,
-      );
-    });
-  });
-
-  group('HadithPage', () {
+  group('HadithPageDto', () {
     test('parses live meta types (string page numbers, numeric totals)', () {
       final page = samplePage(
         ids: ['1', '2', '3'],
@@ -65,7 +28,7 @@ void main() {
     );
 
     test('missing meta falls back to the items it has', () {
-      final page = HadithPage.fromJson({
+      final page = HadithPageDto.fromJson({
         'data': [
           {'id': '1', 'title': 'a'},
         ],
@@ -76,7 +39,7 @@ void main() {
     });
 
     test('missing data is an empty page', () {
-      final page = HadithPage.fromJson({
+      final page = HadithPageDto.fromJson({
         'meta': {'current_page': '1', 'last_page': 1},
       });
       expect(page.items, isEmpty);
@@ -84,7 +47,7 @@ void main() {
 
     test('a malformed item is reported, not swallowed', () {
       expect(
-        () => HadithPage.fromJson({
+        () => HadithPageDto.fromJson({
           'data': ['not an object'],
         }),
         throwsFormatException,
@@ -92,7 +55,7 @@ void main() {
     });
   });
 
-  group('HadithDetails', () {
+  group('HadithDetailsDto', () {
     test('parses an Arabic response', () {
       final d = sampleDetails();
       expect(d.hadeeth, 'عَنْ عَبْدِ اللهِ بنِ مَسْعُودٍ رضي الله عنه');
@@ -118,7 +81,7 @@ void main() {
     );
 
     test('null lists default to empty', () {
-      final d = HadithDetails.fromJson({
+      final d = HadithDetailsDto.fromJson({
         'id': '1',
         'title': 't',
         'hadeeth': 'h',
@@ -133,7 +96,7 @@ void main() {
 
     test('rejects a hadith without an id', () {
       expect(
-        () => HadithDetails.fromJson({'title': 't'}),
+        () => HadithDetailsDto.fromJson({'title': 't'}),
         throwsFormatException,
       );
     });

@@ -1,29 +1,31 @@
 import 'dart:async';
 
-import 'package:mynewapp/Model/category_node.dart';
-import 'package:mynewapp/Model/hadith_details.dart';
-import 'package:mynewapp/Model/hadith_page.dart';
-import 'package:mynewapp/Shared/Network/hadeeth_api.dart';
-import 'package:mynewapp/Shared/errors/failure.dart';
+import 'package:mynewapp/core/errors/failure.dart';
+import 'package:mynewapp/core/result/result.dart';
+import 'package:mynewapp/features/categories/domain/categories_repository.dart';
+import 'package:mynewapp/features/categories/domain/hadith_category.dart';
+import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
+import 'package:mynewapp/features/hadiths/domain/hadith_page.dart';
+import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 
 import 'fixtures.dart';
 
-/// Programmable [HadeethApi] that records how often it was called.
-class FakeHadeethApi implements HadeethApi {
-  FakeHadeethApi({
-    List<CategoryNode>? categories,
+/// Programmable stand-in for both repositories. It records how often it was called.
+class FakeBackend implements CategoriesRepository, HadithsRepository {
+  FakeBackend({
+    List<HadithCategory>? categories,
     this.pages = const {},
     HadithDetails? details,
   }) : categories = categories ?? sampleCategories(),
        details = details ?? sampleDetails();
 
-  List<CategoryNode> categories;
+  List<HadithCategory> categories;
 
   /// Keyed by `"<categoryId>:<page>"`.
   Map<String, HadithPage> pages;
   HadithDetails details;
 
-  /// While set, the next call of that kind throws it (once), then clears it.
+  /// While set, the next call of that kind returns it (once), then clears it.
   Failure? categoriesFailure;
   Failure? pageFailure;
   Failure? detailsFailure;
@@ -36,51 +38,47 @@ class FakeHadeethApi implements HadeethApi {
   final detailsRequests = <String>[];
 
   @override
-  Future<List<CategoryNode>> getCategories({String language = 'ar'}) async {
+  Future<Result<List<HadithCategory>>> getCategories() async {
     categoriesCalls++;
     await gate?.future;
     final failure = categoriesFailure;
     if (failure != null) {
       categoriesFailure = null;
-      throw failure;
+      return Err(failure);
     }
-    return categories;
+    return Success(categories);
   }
 
   @override
-  Future<HadithPage> getHadithPage({
+  Future<Result<HadithPage>> getHadithPage({
     required String categoryId,
     int page = 1,
-    int perPage = HadeethApi.defaultPageSize,
-    String language = 'ar',
+    int perPage = HadithsRepository.defaultPageSize,
   }) async {
     pageRequests.add('$categoryId:$page');
     await gate?.future;
     final failure = pageFailure;
     if (failure != null) {
       pageFailure = null;
-      throw failure;
+      return Err(failure);
     }
     final result = pages['$categoryId:$page'];
     if (result == null) {
-      throw const Failure(FailureKind.server, statusCode: 500);
+      return const Err(Failure(FailureKind.server, statusCode: 500));
     }
-    return result;
+    return Success(result);
   }
 
   @override
-  Future<HadithDetails> getHadithDetails(
-    String id, {
-    String language = 'ar',
-  }) async {
+  Future<Result<HadithDetails>> getHadithDetails(String id) async {
     detailsRequests.add(id);
     await gate?.future;
     final failure = detailsFailure;
     if (failure != null) {
       detailsFailure = null;
-      throw failure;
+      return Err(failure);
     }
-    return details;
+    return Success(details);
   }
 }
 
