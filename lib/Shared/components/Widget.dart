@@ -4,7 +4,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:loadmore/loadmore.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../Modules/hadeethsdetails.dart';
 import 'CustomText.dart';
@@ -231,14 +231,14 @@ Widget hadeethsdetails(cubit)=>ConditionalBuilder(
               IconButton(
                 icon: const Icon(Icons.share),
                 onPressed: () async {
-                  Share.share(cubit.model!.hadeeth.isNotEmpty &&
+                  SharePlus.instance.share(ShareParams(text: cubit.model!.hadeeth.isNotEmpty &&
                       cubit.model!.grade.isNotEmpty &&
                       cubit.model!.attribution.isNotEmpty
                       ? cubit.model!.hadeeth +"[" + cubit.model!.attribution + "]"
                       "[" +
                       cubit.model!.grade +
                       "]"
-                      : "not data");
+                      : "not data"));
                 },
               ),
               Customtext(
@@ -307,9 +307,9 @@ Widget hadeethsdetails(cubit)=>ConditionalBuilder(
                   ),
                   builder: (context) => customScrollableSheet(
                     function: () async {
-                      Share.share(cubit.model!.explanation.isNotEmpty
+                      SharePlus.instance.share(ShareParams(text: cubit.model!.explanation.isNotEmpty
                           ? cubit.model!.explanation
-                          : "not data");
+                          : "not data"));
                     },
                     TextTitle: 'الشرح:',
                     Text:
@@ -523,9 +523,9 @@ Widget hadeethsdetails(cubit)=>ConditionalBuilder(
                   ),
                   builder: (context) => customScrollableSheet(
                     function: () async {
-                      Share.share(cubit.model!.reference.isNotEmpty
+                      SharePlus.instance.share(ShareParams(text: cubit.model!.reference.isNotEmpty
                           ? cubit.model!.reference
-                          : "not data");
+                          : "not data"));
                     },
                     TextTitle: 'المصادر:',
                     Text:
