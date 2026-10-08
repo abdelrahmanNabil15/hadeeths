@@ -5,7 +5,8 @@ Flutter app for browsing Prophetic hadiths in Arabic. Content and explanations c
 
 Published Android listing: `com.hadeeths.eg`.
 
-Project documents: [`docs/PHASE0_REVISED_AUDIT.md`](docs/PHASE0_REVISED_AUDIT.md) (audit, decisions, roadmap) and
+Project documents: [`docs/PHASE0_REVISED_AUDIT.md`](docs/PHASE0_REVISED_AUDIT.md) (audit, decisions, roadmap),
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (code structure and layering rules) and
 [`docs/UX_REDESIGN_PROPOSAL.md`](docs/UX_REDESIGN_PROPOSAL.md).
 
 ## Toolchain (verified on 2026-10-09)
@@ -54,8 +55,8 @@ registered with Play App Signing) and a `versionCode` higher than the published 
 flutter test
 ```
 
-Unit tests (models, API error mapping and retries, cubits) and widget tests (the main flows, driven through `MyApp`
-with a fake API) never touch the live API. Debug builds install as `com.hadeeths.eg.debug` so they can sit next to a
+Unit tests (DTOs, client, data sources, repositories, cubits), widget tests (the main flows, driven through `MyApp`
+with fake repositories) and an architecture test (layering rules) never touch the live API. Debug builds install as `com.hadeeths.eg.debug` so they can sit next to a
 release build on the same device.
 
 ## Languages
