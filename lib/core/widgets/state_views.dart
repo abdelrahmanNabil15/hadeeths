@@ -28,12 +28,45 @@ class LoadingView extends StatelessWidget {
   Widget build(BuildContext context) => Semantics(
     label: context.l10n.loading,
     liveRegion: true,
-    child: const Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(AppColors.appBar),
-      ),
-    ),
+    child: const Center(child: CircularProgressIndicator()),
   );
+}
+
+/// Grey placeholder rows shown while a list loads. Static (no animation), announced once
+/// as "Loading".
+class SkeletonList extends StatelessWidget {
+  const SkeletonList({
+    super.key,
+    this.count = 7,
+    this.rowHeight = AppSizes.minTileHeight,
+  });
+
+  final int count;
+  final double rowHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Semantics(
+      label: context.l10n.loading,
+      liveRegion: true,
+      excludeSemantics: true,
+      child: ListView.separated(
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        itemCount: count,
+        separatorBuilder: (context, index) =>
+            const SizedBox(height: AppSpacing.md),
+        itemBuilder: (context, index) => DecoratedBox(
+          decoration: BoxDecoration(
+            color: scheme.surfaceContainerHigh,
+            borderRadius: BorderRadius.circular(AppRadius.card),
+          ),
+          child: SizedBox(height: rowHeight, width: double.infinity),
+        ),
+      ),
+    );
+  }
 }
 
 /// A failure with a retry action. Announced to screen readers when it appears.
@@ -46,6 +79,7 @@ class ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
     final offline = failure.kind == FailureKind.noConnection;
     return Center(
       child: SingleChildScrollView(
@@ -59,13 +93,13 @@ class ErrorView extends StatelessWidget {
               Icon(
                 offline ? Icons.wifi_off : Icons.error_outline,
                 size: 48,
-                color: AppColors.heading,
+                color: scheme.onSurfaceVariant,
               ),
               const SizedBox(height: AppSpacing.lg),
               Text(
                 failureMessage(l10n, failure),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: AppTextSize.title),
+                style: const TextStyle(fontSize: AppTextSize.heading),
               ),
               if (onRetry != null && failure.isRetryable) ...[
                 const SizedBox(height: AppSpacing.lg),
@@ -84,24 +118,38 @@ class ErrorView extends StatelessWidget {
 }
 
 class EmptyView extends StatelessWidget {
-  const EmptyView({super.key, required this.message});
+  const EmptyView({super.key, required this.message, this.icon});
 
   final String message;
+  final IconData? icon;
 
   @override
-  Widget build(BuildContext context) => Center(
-    child: Padding(
-      padding: const EdgeInsets.all(AppSpacing.xl),
-      child: Semantics(
-        liveRegion: true,
-        child: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: const TextStyle(fontSize: AppTextSize.title),
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppSpacing.xl),
+        child: Semantics(
+          liveRegion: true,
+          container: true,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(icon, size: 48, color: scheme.onSurfaceVariant),
+                const SizedBox(height: AppSpacing.lg),
+              ],
+              Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: AppTextSize.heading),
+              ),
+            ],
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 /// Shows [failure] as a transient message, e.g. when a refresh failed but old data stays visible.

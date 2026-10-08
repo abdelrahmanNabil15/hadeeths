@@ -3,7 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/state/load_status.dart';
-import 'package:mynewapp/core/widgets/custom_text.dart';
+import 'package:mynewapp/core/widgets/app_tile.dart';
+import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
@@ -31,17 +32,7 @@ class HadithListPage extends StatelessWidget {
         language: language,
       )..load(),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: AppColors.appBar,
-          title: CustomText(
-            fontWeight: FontWeight.bold,
-            alignment: AlignmentDirectional.centerStart,
-            color: AppColors.onAppBar,
-            text: title,
-            fontSize: AppTextSize.title,
-            isHeader: true,
-          ),
-        ),
+        appBar: AppBar(title: Text(title)),
         body: const _HadithListBody(),
       ),
     );
@@ -64,12 +55,15 @@ class _HadithListBody extends StatelessWidget {
         switch (state.status) {
           case LoadStatus.initial:
           case LoadStatus.loading:
-            return const LoadingView();
+            return const ContentWidth(child: SkeletonList(rowHeight: 72));
           case LoadStatus.failure:
             return ErrorView(failure: state.failure!, onRetry: cubit.load);
           case LoadStatus.success:
             if (state.items.isEmpty) {
-              return EmptyView(message: context.l10n.noHadithsInCategory);
+              return EmptyView(
+                message: context.l10n.noHadithsInCategory,
+                icon: Icons.menu_book_outlined,
+              );
             }
             return _HadithList(state: state);
         }
@@ -94,46 +88,31 @@ class _HadithList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: cubit.refresh,
       child: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(
-              maxWidth: AppSizes.contentMaxWidth,
-            ),
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(
-                parent: BouncingScrollPhysics(),
-              ),
-              itemCount: itemCount,
-              itemBuilder: (context, index) {
-                if (index >= state.items.length) {
-                  return _Footer(
-                    failure: state.loadMoreFailure,
-                    onLoadMore: cubit.loadMore,
-                  );
-                }
-                final hadith = state.items[index];
-                return Card(
-                  elevation: 3,
-                  margin: const EdgeInsets.all(10),
-                  child: ListTile(
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (_) => HadithDetailsPage(id: hadith.id),
-                      ),
-                    ),
-                    title: CustomText(
-                      fontWeight: FontWeight.bold,
-                      alignment: AlignmentDirectional.centerStart,
-                      color: AppColors.listTitle,
-                      text: hadith.title,
-                      fontSize: AppTextSize.listTitle,
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios),
-                  ),
+        child: ContentWidth(
+          child: ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.all(AppSpacing.lg),
+            itemCount: itemCount,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.md),
+            itemBuilder: (context, index) {
+              if (index >= state.items.length) {
+                return _Footer(
+                  failure: state.loadMoreFailure,
+                  onLoadMore: cubit.loadMore,
                 );
-              },
-            ),
+              }
+              final hadith = state.items[index];
+              return AppTile(
+                title: hadith.title,
+                maxTitleLines: 4,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (_) => HadithDetailsPage(id: hadith.id),
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -167,31 +146,28 @@ class _FooterState extends State<_Footer> {
   Widget build(BuildContext context) {
     final failure = widget.failure;
     if (failure != null) {
-      return Padding(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        child: Semantics(
-          liveRegion: true,
-          container: true,
-          child: Column(
-            children: [
-              Text(failureMessage(context.l10n, failure)),
-              TextButton.icon(
-                onPressed: widget.onLoadMore,
-                icon: const Icon(Icons.refresh),
-                label: Text(context.l10n.retry),
-              ),
-            ],
-          ),
+      return Semantics(
+        liveRegion: true,
+        container: true,
+        child: Column(
+          children: [
+            Text(
+              failureMessage(context.l10n, failure),
+              textAlign: TextAlign.center,
+            ),
+            TextButton.icon(
+              onPressed: widget.onLoadMore,
+              icon: const Icon(Icons.refresh),
+              label: Text(context.l10n.retry),
+            ),
+          ],
         ),
       );
     }
-    return Padding(
-      padding: const EdgeInsets.all(AppSpacing.lg),
-      child: Center(
-        child: Semantics(
-          label: context.l10n.loading,
-          child: const CircularProgressIndicator(),
-        ),
+    return Center(
+      child: Semantics(
+        label: context.l10n.loading,
+        child: const CircularProgressIndicator(),
       ),
     );
   }

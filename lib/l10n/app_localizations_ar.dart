@@ -12,6 +12,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'الأحاديث النبوية';
 
   @override
+  String get homeIntro => 'تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.';
+
+  @override
   String get mainCategories => 'التصنيفات الرئيسية';
 
   @override
@@ -24,7 +27,7 @@ class AppLocalizationsAr extends AppLocalizations {
   String get allHadithsInCategory => 'جميع الأحاديث في هذا التصنيف';
 
   @override
-  String categoryCardSemantics(String title, String count) {
+  String tileSemantics(String title, String count) {
     return '$title، $count';
   }
 
@@ -62,26 +65,112 @@ class AppLocalizationsAr extends AppLocalizations {
   String get share => 'مشاركة';
 
   @override
-  String get hadithLabel => 'الحديث:';
-
-  @override
   String get explanation => 'الشرح';
 
   @override
-  String get explanationTitle => 'الشرح:';
+  String get benefits => 'الفوائد';
 
   @override
-  String get benefits => 'الفوائد:';
-
-  @override
-  String get wordMeanings => 'معاني الكلمات:';
+  String get wordMeanings => 'معاني الكلمات';
 
   @override
   String get sources => 'المصادر';
 
   @override
-  String get sourcesTitle => 'المصادر:';
+  String get sourceCredit => 'المصدر: HadeethEnc.com';
 
   @override
-  String get sourceCredit => 'المصدر: HadeethEnc.com';
+  String get searchHint => 'ابحث في الأحاديث';
+
+  @override
+  String get searchClear => 'مسح';
+
+  @override
+  String get searchPrompt => 'اكتب كلمة أو عبارة للبحث في نصوص الأحاديث.';
+
+  @override
+  String searchTooShort(int min) {
+    return 'اكتب $min أحرف على الأقل.';
+  }
+
+  @override
+  String searchNoResults(String query) {
+    return 'لا توجد نتائج لـ «$query»';
+  }
+
+  @override
+  String searchTruncated(int count) {
+    return 'تُعرض أول $count نتيجة فقط. حدّد بحثك للحصول على نتائج أدق.';
+  }
+
+  @override
+  String searchResultCount(int count) {
+    return '$count نتيجة';
+  }
+
+  @override
+  String get settings => 'الإعدادات';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get languageSystem => 'لغة الجهاز';
+
+  @override
+  String get languageArabic => 'العربية';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get theme => 'المظهر';
+
+  @override
+  String get themeSystem => 'حسب الجهاز';
+
+  @override
+  String get themeLight => 'فاتح';
+
+  @override
+  String get themeDark => 'داكن';
+
+  @override
+  String get textSize => 'حجم النص';
+
+  @override
+  String get textSizeSmaller => 'تصغير النص';
+
+  @override
+  String get textSizeLarger => 'تكبير النص';
+
+  @override
+  String get textSizeSample => 'عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللهُ عَنْهُ';
+
+  @override
+  String get aboutTitle => 'المصادر والحقوق';
+
+  @override
+  String get aboutContentHeading => 'المحتوى';
+
+  @override
+  String get aboutContentBody =>
+      'الأحاديث وشروحها وترجماتها من موقع HadeethEnc.com، وتُعرض كما نُشرت دون تعديل.';
+
+  @override
+  String get aboutFontsHeading => 'الخطوط';
+
+  @override
+  String get aboutFontsBody =>
+      'خط Cairo وخط Amiri، برخصة SIL Open Font License 1.1.';
+
+  @override
+  String get aboutPrivacyHeading => 'الخصوصية';
+
+  @override
+  String get aboutPrivacyBody =>
+      'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى.';
+
+  @override
+  String get openSourceLicences => 'تراخيص البرمجيات مفتوحة المصدر';
 }

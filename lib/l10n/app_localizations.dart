@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'الأحاديث النبوية'**
   String get appTitle;
 
+  /// No description provided for @homeIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.'**
+  String get homeIntro;
+
   /// No description provided for @mainCategories.
   ///
   /// In ar, this message translates to:
@@ -128,11 +134,11 @@ abstract class AppLocalizations {
   /// **'جميع الأحاديث في هذا التصنيف'**
   String get allHadithsInCategory;
 
-  /// Screen-reader label of a category card: the title and the number of hadiths.
+  /// Screen-reader label of a tile: the title and the number of hadiths.
   ///
   /// In ar, this message translates to:
   /// **'{title}، {count}'**
-  String categoryCardSemantics(String title, String count);
+  String tileSemantics(String title, String count);
 
   /// No description provided for @noHadithsInCategory.
   ///
@@ -200,34 +206,22 @@ abstract class AppLocalizations {
   /// **'مشاركة'**
   String get share;
 
-  /// No description provided for @hadithLabel.
-  ///
-  /// In ar, this message translates to:
-  /// **'الحديث:'**
-  String get hadithLabel;
-
   /// No description provided for @explanation.
   ///
   /// In ar, this message translates to:
   /// **'الشرح'**
   String get explanation;
 
-  /// No description provided for @explanationTitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'الشرح:'**
-  String get explanationTitle;
-
   /// No description provided for @benefits.
   ///
   /// In ar, this message translates to:
-  /// **'الفوائد:'**
+  /// **'الفوائد'**
   String get benefits;
 
   /// No description provided for @wordMeanings.
   ///
   /// In ar, this message translates to:
-  /// **'معاني الكلمات:'**
+  /// **'معاني الكلمات'**
   String get wordMeanings;
 
   /// No description provided for @sources.
@@ -236,17 +230,179 @@ abstract class AppLocalizations {
   /// **'المصادر'**
   String get sources;
 
-  /// No description provided for @sourcesTitle.
-  ///
-  /// In ar, this message translates to:
-  /// **'المصادر:'**
-  String get sourcesTitle;
-
   /// Credit line the HadeethEnc terms require next to its content. Keep the site name unchanged.
   ///
   /// In ar, this message translates to:
   /// **'المصدر: HadeethEnc.com'**
   String get sourceCredit;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث في الأحاديث'**
+  String get searchHint;
+
+  /// No description provided for @searchClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح'**
+  String get searchClear;
+
+  /// No description provided for @searchPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة أو عبارة للبحث في نصوص الأحاديث.'**
+  String get searchPrompt;
+
+  /// No description provided for @searchTooShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب {min} أحرف على الأقل.'**
+  String searchTooShort(int min);
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد نتائج لـ «{query}»'**
+  String searchNoResults(String query);
+
+  /// No description provided for @searchTruncated.
+  ///
+  /// In ar, this message translates to:
+  /// **'تُعرض أول {count} نتيجة فقط. حدّد بحثك للحصول على نتائج أدق.'**
+  String searchTruncated(int count);
+
+  /// No description provided for @searchResultCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count} نتيجة'**
+  String searchResultCount(int count);
+
+  /// No description provided for @settings.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإعدادات'**
+  String get settings;
+
+  /// No description provided for @language.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللغة'**
+  String get language;
+
+  /// No description provided for @languageSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'لغة الجهاز'**
+  String get languageSystem;
+
+  /// No description provided for @languageArabic.
+  ///
+  /// In ar, this message translates to:
+  /// **'العربية'**
+  String get languageArabic;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ar, this message translates to:
+  /// **'English'**
+  String get languageEnglish;
+
+  /// No description provided for @theme.
+  ///
+  /// In ar, this message translates to:
+  /// **'المظهر'**
+  String get theme;
+
+  /// No description provided for @themeSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب الجهاز'**
+  String get themeSystem;
+
+  /// No description provided for @themeLight.
+  ///
+  /// In ar, this message translates to:
+  /// **'فاتح'**
+  String get themeLight;
+
+  /// No description provided for @themeDark.
+  ///
+  /// In ar, this message translates to:
+  /// **'داكن'**
+  String get themeDark;
+
+  /// No description provided for @textSize.
+  ///
+  /// In ar, this message translates to:
+  /// **'حجم النص'**
+  String get textSize;
+
+  /// No description provided for @textSizeSmaller.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصغير النص'**
+  String get textSizeSmaller;
+
+  /// No description provided for @textSizeLarger.
+  ///
+  /// In ar, this message translates to:
+  /// **'تكبير النص'**
+  String get textSizeLarger;
+
+  /// No description provided for @textSizeSample.
+  ///
+  /// In ar, this message translates to:
+  /// **'عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللهُ عَنْهُ'**
+  String get textSizeSample;
+
+  /// No description provided for @aboutTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصادر والحقوق'**
+  String get aboutTitle;
+
+  /// No description provided for @aboutContentHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'المحتوى'**
+  String get aboutContentHeading;
+
+  /// No description provided for @aboutContentBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحاديث وشروحها وترجماتها من موقع HadeethEnc.com، وتُعرض كما نُشرت دون تعديل.'**
+  String get aboutContentBody;
+
+  /// No description provided for @aboutFontsHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخطوط'**
+  String get aboutFontsHeading;
+
+  /// No description provided for @aboutFontsBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'خط Cairo وخط Amiri، برخصة SIL Open Font License 1.1.'**
+  String get aboutFontsBody;
+
+  /// No description provided for @aboutPrivacyHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخصوصية'**
+  String get aboutPrivacyHeading;
+
+  /// No description provided for @aboutPrivacyBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى.'**
+  String get aboutPrivacyBody;
+
+  /// No description provided for @openSourceLicences.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراخيص البرمجيات مفتوحة المصدر'**
+  String get openSourceLicences;
 }
 
 class _AppLocalizationsDelegate
