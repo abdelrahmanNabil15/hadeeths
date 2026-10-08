@@ -45,8 +45,6 @@ class MyApp extends StatelessWidget {
               scaffoldBackgroundColor: Colors.white,
               appBarTheme: AppBarTheme(
 
-                  // ignore: deprecated_member_use
-                  backwardsCompatibility: false,
                   titleTextStyle: const TextStyle(
                       color: Colors.black,
                       fontSize: 20.0,
