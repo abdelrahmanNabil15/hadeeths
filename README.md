@@ -48,9 +48,24 @@ The listing `com.hadeeths.eg` already exists on Google Play, so updates must use
 registered with Play App Signing) and a `versionCode` higher than the published one. Set the version in `pubspec.yaml`
 (`version: x.y.z+build`); `+build` becomes `versionCode`.
 
+## Tests
+
+```bash
+flutter test
+```
+
+Unit tests (models, API error mapping and retries, cubits) and widget tests (the main flows, driven through `MyApp`
+with a fake API) never touch the live API. Debug builds install as `com.hadeeths.eg.debug` so they can sit next to a
+release build on the same device.
+
+## Languages
+
+The product is Arabic and English. The data layer already handles both (English responses have no `reference` or
+`words_meanings`); the UI is still Arabic-only and right-to-left until the localization phase.
+
 ## Known limitations
 
-- `test/widget_test.dart` is the leftover Flutter counter template and fails; it is replaced in Phase 2.
-- `flutter analyze` reports a handful of info-level lints that are cleaned up with the lint upgrade in Phase 2.
+- Screens are still Arabic-only with hard-coded strings; localization, accessibility and theming are planned work.
+- `dart format` has not been applied to the whole project (the first commit to touch a file does not reformat it).
 - iOS: deployment target raised to 13.0 but not built here; bundle identifier is still the placeholder `com.example.mynewapp`.
 - Web: not a verified target.
