@@ -32,6 +32,28 @@ Status legend: PASS / FAIL / BLOCKED / NOT RUN. "Confirmed" = observed in code, 
 
 ---
 
+## 1a. Status update (2026-10-09, after Phases 1, 2, 3, 5 and the redesign)
+
+| Finding | Status |
+|---|---|
+| F-01 compile error | Fixed (Phase 1) |
+| F-02 Android Gradle project | Fixed: Gradle 9.1.0, AGP 9.0.1, Kotlin 2.3.20 (Phase 1) |
+| F-03 `INTERNET` in release | Fixed and verified in the release APK (Phase 1) |
+| F-04 release signed with debug key | Fixed: unsigned unless `key.properties` exists; checked by `tool/check_release_config.sh` and CI |
+| F-05 Rawpixel backdrop | **Resolved by removal** (redesign): the image is no longer bundled; a test guards against stock imagery |
+| F-06..F-14 categories, errors, paging, parsing, cubits, timeouts | Fixed with regression tests (Phases 2 and 3) |
+| F-15, F-17 hard-coded strings, forced RTL | Fixed: Arabic and English, directional layout (Phase 5) |
+| F-16 accessibility | Fixed and tested in both languages and both themes (Phase 5 and redesign) |
+| F-18 backdrop memory | Resolved by removing the backdrop |
+| F-19 dependencies | Fixed (dio 5, `share_plus`, unused packages removed; no advisories) |
+| F-20 tests | Replaced; 200+ tests |
+| F-21 identity | Android `com.hadeeths.eg` done; **iOS bundle id still a placeholder** |
+| F-22 CI | Written (`.github/workflows`), **not yet run on GitHub** |
+| F-23 iOS target | Raised to 13.0, **not built (needs macOS)** |
+| F-24 unused font | Removed |
+| F-27 unused server features | Search adopted; `hadeeth_intro` deliberately not shown (it repeats the start of the hadith) |
+| Phase 4 (offline storage) | **Blocked** on HadeethEnc's written permission to cache |
+
 ## 2. Corrections to the original audit
 
 | # | Original claim | Verdict | Evidence |

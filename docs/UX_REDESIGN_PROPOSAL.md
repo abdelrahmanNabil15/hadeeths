@@ -6,6 +6,27 @@ Evidence sources: repository code; three committed 2022 device screenshots; a sc
 **Not tested:** list and details screens in the current build (a tap in my browser session did not navigate; the 2022
 screenshot is the only list/detail evidence), any Android/iOS device, text scaling, dark mode, TalkBack.
 
+> ## Status (implemented on branch `redesign/ui-refresh`)
+>
+> **Applied as proposed:** ivory/emerald light palette and dark palette (all pairs at least 4.5:1, control borders at least 3:1,
+> checked in tests); Cairo for the interface and Amiri for Arabic reading text (compared on a real device; licence verified
+> as SIL OFL 1.1 from the font files); home with intro, search entry, root categories and a sources link; category page with
+> an emphasised "all hadiths" entry; hadith list; details with title, reading surface, grade chip, narrator, expandable
+> sections and the HadeethEnc credit; search; settings (language, appearance, reading size); sources and rights screen;
+> skeleton, empty and error states; accessibility checks; 200% text on a 360x640 phone.
+>
+> **Deviations, with reasons:**
+> - `hadeeth_intro` is **not** displayed: it is the opening words of `hadeeth` (the narrator chain), so showing both would
+>   repeat text.
+> - Details sections start collapsed so the hadith stays the focus; explanation and sources can still be shared.
+> - No bottom navigation and no onboarding screen (one browse path plus search did not justify them).
+> - No offline banner: errors are reported by the request itself; offline reading is blocked on HadeethEnc permission.
+> - The photographic backdrop was removed (it removed the unresolved Rawpixel licence question and 36 MB of decoded memory).
+> - Digits stay Western in both languages (decision not given).
+>
+> **Not built:** bookmarks, recents and continue-reading (they need local storage of content or ids and a decision on
+> HadeethEnc permission), share-as-image, daily hadith.
+
 ---
 
 ## 1. UX audit

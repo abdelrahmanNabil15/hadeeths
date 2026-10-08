@@ -68,8 +68,8 @@ preferably to an environment named `production` with required reviewers: `ANDROI
 - [ ] `versionCode` is higher than the published one
 - [ ] CI green on the release branch
 - [ ] Android: installed the release APK on a real device; categories load, a hadith opens, share works
-- [ ] Both languages checked (Arabic device and English device, or `--dart-define=FORCE_LOCALE=en` in a debug build)
-- [ ] The background image licence question is resolved (see `docs/PHASE0_REVISED_AUDIT.md`, F-05)
+- [ ] Both languages and both themes checked (Settings > Language / Appearance)
+- [ ] No stock imagery is bundled (guarded by `test/architecture_test.dart`; the Rawpixel backdrop was removed)
 - [ ] HadeethEnc terms still say what the audit recorded; credit line is visible on every hadith
 - [ ] iOS only: bundle ID confirmed, signing set up in Xcode, privacy strings reviewed
 - [ ] Play Console data-safety answers match the app (no data collected; network use only)

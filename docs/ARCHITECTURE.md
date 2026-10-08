@@ -17,8 +17,10 @@ lib/
     network/                     HadeethClient (timeouts, retries, error mapping), endpoints
     json/json_helpers.dart       defensive JSON readers
     state/load_status.dart       LoadStatus shared by all cubits
-    design_system/               tokens.dart (colours, spacing, radii, sizes, motion) and AppTheme
-    widgets/, logging/
+    design_system/               tokens.dart (light and dark palettes, spacing, radii, sizes, motion) and AppTheme
+    widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
+    licences.dart                font licence texts for the licences page
+    logging/
   l10n/                          ARB files and generated AppLocalizations (+ context.l10n helper)
   features/
     categories/
@@ -29,6 +31,14 @@ lib/
       domain/                    HadithSummary, HadithPage, HadithDetails, HadithsRepository
       data/                      DTOs, remote data source, HadithsRepositoryImpl
       presentation/              HadithListCubit, HadithDetailCubit, pages, widgets, share text
+    search/
+      domain/                    HadithSearchResult (+ highlight parsing, excerpt), SearchRepository
+      data/                      search DTO ("no match" is an object, not a list), data source, repository
+      presentation/              SearchCubit (debounce, minimum length, stale-answer guard), SearchPage
+    settings/
+      domain/                    AppSettings (language, theme, reading size), SettingsRepository
+      data/                      SettingsRepositoryImpl over shared_preferences (corrupt values fall back)
+      presentation/              SettingsCubit, SettingsPage, AboutPage, reading-size control
 ```
 
 ## Rules (enforced by `test/architecture_test.dart`)
@@ -62,7 +72,7 @@ Constructor injection plus `RepositoryProvider`. `AppDependencies.live()` builds
 repositories; `MyApp(dependencies: ...)` accepts fakes. `CategoriesCubit` lives above the `Navigator`; list and details
 cubits are created per screen with `BlocProvider`.
 
-## Localization, direction and accessibility (Phase 5)
+## Localization, direction, accessibility and design
 
 - gen-l10n with `app_ar.arb` as the template and `app_en.arb`. `MaterialApp` supports `ar` and `en`; anything else
   falls back to Arabic. `context.apiLanguage` is the API language code and flows through the cubits to the repositories.
@@ -70,8 +80,14 @@ cubits are created per screen with `BlocProvider`.
 - Layout uses `AlignmentDirectional` / `EdgeInsetsDirectional` and Material icons that mirror on their own; nothing forces
   a text direction.
 - Category cards sit in rows that are as tall as their tallest card (no fixed heights), with fewer columns as text grows.
-- Screen readers: headings are marked, category cards announce title and count, errors are live regions, icon buttons
-  have tooltips.
+- Screen readers: headings are marked, tiles announce title and count, expandable sections announce expanded/collapsed,
+  errors are live regions, icon buttons have tooltips.
+- Settings are loaded before the first frame (`main` awaits them), so the saved language and theme apply immediately.
+  `MyApp` rebuilds `MaterialApp` from `SettingsCubit`; the language-keyed `CategoriesCubit` reloads on a language change.
+- Reading text: Amiri for Arabic (line height 2.0), Cairo for English (1.7), scaled by the reading-size setting on top of
+  the device text size. Cards and tiles use theme colours only; no widget hard-codes a colour.
+- Motion: sections animate for 250 ms; with the system's "remove animations" setting nothing animates (and no
+  `AnimatedSize` is built, which would assert with a zero duration).
 
 ## Decisions kept
 
@@ -82,5 +98,5 @@ cubits are created per screen with `BlocProvider`.
 ## Testing map
 
 `test/` mirrors `lib/`: DTO parsing, data sources and repositories (fake Dio adapter), cubits (fake repositories),
-widget flows through `MyApp` with fake repositories (both languages), accessibility and text-scale checks, the
-decoded size of the backdrop image, and the architecture rules. Nothing touches the live API.
+widget flows through `MyApp` with fake repositories (both languages), accessibility, text-scale and contrast checks across both languages and both themes, search and settings flows,
+translation parity, and the architecture rules. Nothing touches the live API.

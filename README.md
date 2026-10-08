@@ -61,22 +61,32 @@ Unit tests (DTOs, client, data sources, repositories, cubits), widget tests (the
 with fake repositories) and an architecture test (layering rules) never touch the live API. Debug builds install as `com.hadeeths.eg.debug` so they can sit next to a
 release build on the same device.
 
+## Features
+
+- Browse hadiths by category (roots and sub-categories), read them with their grade, narrator, explanation, benefits,
+  word meanings and sources, and share them with the HadeethEnc credit.
+- Search the text of the hadiths (server-side; Arabic diacritics are handled by the server, matches are highlighted in an
+  unmodified excerpt).
+- Settings: language (device, Arabic, English), appearance (device, light, dark) and reading text size, all saved on the device.
+- Sources and rights screen with credits, font licences and the privacy position.
+
 ## Languages
 
-Arabic and English. The UI follows the device language (Arabic is also the fallback for any other language), the layout
-flips between right-to-left and left-to-right, and the hadith content is requested from the API in the same language.
-Strings live in `lib/l10n/app_ar.arb` (template) and `app_en.arb`; run `flutter gen-l10n` after editing them and commit
-the generated files. To preview the other language without touching the device settings, use a debug build with
-`--dart-define=FORCE_LOCALE=en` (or `ar`). English content is smaller than Arabic: only translated hadiths are listed.
+Arabic and English. The UI follows the saved choice or, by default, the device language (Arabic is the fallback for any other
+language). The layout flips between right-to-left and left-to-right, and the hadith content is requested from the API in the
+same language. Strings live in `lib/l10n/app_ar.arb` (template) and `app_en.arb`; run `flutter gen-l10n` after editing them
+and commit the generated files. English content is smaller than Arabic: only translated hadiths are listed.
+
+## Design
+
+Ivory and deep emerald (light), dark green (dark); Cairo for the interface and Amiri (Naskh, full diacritics) for Arabic
+reading text. Tokens live in `lib/core/design_system`; every text/background pair is checked against WCAG AA in the tests.
 
 ## Known limitations
 
-- The look is the original one with tokens extracted (`lib/core/design_system`); the redesign in
-  `docs/UX_REDESIGN_PROPOSAL.md` is not applied and needs explicit approval. Only the app-bar title colour changed
-  (white was 1.11:1 on its background).
-- No in-app language switch yet (follows the device).
-- Latin and Arabic digits are not localized (numbers always use Western digits).
-- `assets/backgruond.jpg` still has an unresolved licence question (audit F-05) and is 6.2 MB in the package.
+- Bookmarks, recents and offline reading are not built: storing hadith content on the device needs HadeethEnc's written
+  permission (see `docs/PHASE0_REVISED_AUDIT.md`). Search returns at most 100 results (a server limit, no paging).
+- Numbers always use Western digits in both languages.
 - iOS: deployment target raised to 13.0 but not built here; bundle identifier is still the placeholder `com.example.mynewapp`;
   the iOS display name is not localized yet.
 - Web: not a verified target.
