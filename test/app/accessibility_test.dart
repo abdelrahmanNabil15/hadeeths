@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynewapp/app/app.dart';
-import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/features/settings/domain/app_settings.dart';
 
 import '../support/fake_backend.dart';
 import '../support/fixtures.dart';
+import '../support/test_app.dart';
 
 FakeBackend _backend() => FakeBackend(
   pages: {
-    // Long titles and many items exercise wrapping and scrolling.
     '2:1': samplePage(
       ids: List.generate(8, (i) => '${100 + i}'),
       totalItems: 8,
@@ -17,98 +16,93 @@ FakeBackend _backend() => FakeBackend(
   },
 );
 
-/// A small phone: 360x640 logical pixels.
-void _smallPhone(WidgetTester tester, {double textScale = 1.0}) {
-  tester.view.physicalSize = const Size(360, 640);
-  tester.view.devicePixelRatio = 1.0;
-  tester.platformDispatcher.textScaleFactorTestValue = textScale;
-  addTearDown(tester.view.reset);
-  addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-}
-
-Future<void> _launch(
-  WidgetTester tester,
-  FakeBackend api, {
-  required String locale,
-}) async {
-  tester.platformDispatcher.localesTestValue = [Locale(locale)];
-  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
-  await tester.pumpWidget(
-    MyApp(
-      key: UniqueKey(),
-      dependencies: AppDependencies(categories: api, hadiths: api),
-    ),
-  );
-  await tester.pumpAndSettle();
-}
-
-/// Scrolls [text] into view (at large text sizes cards move below the fold), then taps it.
-Future<void> _tapText(WidgetTester tester, String text) async {
-  await tester.ensureVisible(find.text(text));
-  await tester.pumpAndSettle();
-  await tester.tap(find.text(text));
-  await tester.pumpAndSettle();
-}
-
-/// Walks the four screens and runs [check] on each.
+/// Walks every screen of the app and runs [check] on each.
 Future<void> _forEachScreen(
-  WidgetTester tester,
-  String locale,
-  Future<void> Function(String screen) check,
-) async {
+  WidgetTester tester, {
+  required String locale,
+  required ThemePreference theme,
+  required Future<void> Function(String screen) check,
+}) async {
   final api = _backend();
-  await _launch(tester, api, locale: locale);
+  await pumpApp(
+    tester,
+    api,
+    locale: locale,
+    settings: AppSettings(theme: theme),
+  );
   await check('home');
 
-  await _tapText(tester, 'جذر أول');
-  await check('category');
-  await tester.tap(find.byType(BackButton));
-  await tester.pumpAndSettle();
+  await tapVisible(tester, find.byIcon(Icons.tune));
+  await check('settings');
+  await goBack(tester);
 
-  await _tapText(tester, 'جذر ثان');
+  await scrollAndTap(
+    tester,
+    find.text(locale == 'ar' ? 'المصادر والحقوق' : 'Sources and rights'),
+  );
+  await check('about');
+  await goBack(tester);
+
+  await tapVisible(tester, find.byIcon(Icons.search));
+  await check('search');
+  await tester.enterText(find.byType(TextField), 'ني');
+  await tester.pump(const Duration(milliseconds: 100));
+  await check('search-too-short');
+  await tester.enterText(find.byType(TextField), 'النية');
+  await tester.pump(const Duration(milliseconds: 600));
+  await tester.pumpAndSettle();
+  await check('search-results');
+  await goBack(tester);
+
+  await tapText(tester, 'جذر أول');
+  await check('category');
+  await goBack(tester);
+
+  await tapText(tester, 'جذر ثان');
   await check('list');
 
-  await _tapText(tester, 'حديث 100');
+  await tapText(tester, 'حديث 100');
   await check('details');
+  await tapText(tester, locale == 'ar' ? 'الشرح' : 'Explanation');
+  await check('details-expanded');
 }
 
-double _contrast(Color foreground, Color background) {
-  final bg = Color.alphaBlend(background, Colors.white);
-  final fg = Color.alphaBlend(foreground, bg);
-  final a = fg.computeLuminance() + 0.05;
-  final b = bg.computeLuminance() + 0.05;
-  return a > b ? a / b : b / a;
+double _contrast(Color a, Color b) {
+  final la = a.computeLuminance() + 0.05;
+  final lb = b.computeLuminance() + 0.05;
+  return la > lb ? la / lb : lb / la;
 }
 
 void main() {
   group('text scaling and small screens', () {
     for (final locale in ['ar', 'en']) {
-      testWidgets('no overflow at 200% text on a 360x640 phone ($locale)', (
-        tester,
-      ) async {
-        _smallPhone(tester, textScale: 2.0);
-        await _forEachScreen(tester, locale, (screen) async {
-          expect(tester.takeException(), isNull, reason: 'overflow on $screen');
-        });
-      });
-
-      testWidgets('no overflow at 130% text, as on the test phone ($locale)', (
-        tester,
-      ) async {
-        _smallPhone(tester, textScale: 1.3);
-        await _forEachScreen(tester, locale, (screen) async {
-          expect(tester.takeException(), isNull, reason: 'overflow on $screen');
-        });
-      });
+      for (final theme in [ThemePreference.light, ThemePreference.dark]) {
+        for (final scale in [1.3, 2.0]) {
+          testWidgets(
+            'no overflow at ${(scale * 100).round()}% text on 360x640 ($locale, ${theme.name})',
+            (tester) async {
+              useSmallPhone(tester, textScale: scale);
+              await _forEachScreen(
+                tester,
+                locale: locale,
+                theme: theme,
+                check: (screen) async {
+                  expect(
+                    tester.takeException(),
+                    isNull,
+                    reason: 'overflow on $screen',
+                  );
+                },
+              );
+            },
+          );
+        }
+      }
     }
 
     testWidgets('error state fits at 200% text', (tester) async {
-      _smallPhone(tester, textScale: 2.0);
-      await _launch(
-        tester,
-        _backend()..categoriesFailure = noConnection,
-        locale: 'ar',
-      );
+      useSmallPhone(tester, textScale: 2.0);
+      await pumpApp(tester, _backend()..categoriesFailure = noConnection);
       expect(tester.takeException(), isNull);
       expect(find.text('إعادة المحاولة'), findsOneWidget);
     });
@@ -116,60 +110,52 @@ void main() {
 
   group('Flutter accessibility guidelines', () {
     for (final locale in ['ar', 'en']) {
-      testWidgets('tap targets are large enough and labelled ($locale)', (
-        tester,
-      ) async {
-        final handle = tester.ensureSemantics();
-        _smallPhone(tester);
-        await _forEachScreen(tester, locale, (screen) async {
-          await expectLater(
-            tester,
-            meetsGuideline(androidTapTargetGuideline),
-            reason: screen,
-          );
-          await expectLater(
-            tester,
-            meetsGuideline(labeledTapTargetGuideline),
-            reason: screen,
-          );
-        });
-        handle.dispose();
-      });
-    }
-  });
-
-  group('rendered text contrast (Flutter textContrastGuideline)', () {
-    for (final locale in ['ar', 'en']) {
-      testWidgets('list, details and category screens ($locale)', (
-        tester,
-      ) async {
-        final handle = tester.ensureSemantics();
-        _smallPhone(tester);
-        await _forEachScreen(tester, locale, (screen) async {
-          // Home sits on the photographic backdrop, which the pixel sampler cannot judge.
-          if (screen == 'home') return;
-          await expectLater(
-            tester,
-            meetsGuideline(textContrastGuideline),
-            reason: screen,
-          );
-        });
-        handle.dispose();
-      });
+      for (final theme in [ThemePreference.light, ThemePreference.dark]) {
+        testWidgets(
+          'tap targets, labels and contrast on every screen ($locale, ${theme.name})',
+          (tester) async {
+            final handle = tester.ensureSemantics();
+            useSmallPhone(tester);
+            await _forEachScreen(
+              tester,
+              locale: locale,
+              theme: theme,
+              check: (screen) async {
+                await expectLater(
+                  tester,
+                  meetsGuideline(androidTapTargetGuideline),
+                  reason: '$screen tap targets',
+                );
+                await expectLater(
+                  tester,
+                  meetsGuideline(labeledTapTargetGuideline),
+                  reason: '$screen labels',
+                );
+                await expectLater(
+                  tester,
+                  meetsGuideline(textContrastGuideline),
+                  reason: '$screen contrast',
+                );
+              },
+            );
+            handle.dispose();
+          },
+        );
+      }
     }
   });
 
   group('semantics', () {
-    testWidgets('category cards announce title and count', (tester) async {
+    testWidgets('category tiles announce title and count', (tester) async {
       final handle = tester.ensureSemantics();
-      await _launch(tester, _backend(), locale: 'en');
+      await pumpApp(tester, _backend(), locale: 'en');
       expect(find.bySemanticsLabel('جذر أول, 197'), findsOneWidget);
       handle.dispose();
     });
 
     testWidgets('headings are marked as headers', (tester) async {
       final handle = tester.ensureSemantics();
-      await _launch(tester, _backend(), locale: 'en');
+      await pumpApp(tester, _backend(), locale: 'en');
       expect(
         tester.getSemantics(find.text('Main categories')),
         isSemantics(isHeader: true),
@@ -177,20 +163,19 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('the share button has a label', (tester) async {
+    testWidgets('the share and text-size buttons have labels', (tester) async {
       final handle = tester.ensureSemantics();
-      await _launch(tester, _backend(), locale: 'en');
-      await tester.tap(find.text('جذر ثان'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('حديث 100'));
-      await tester.pumpAndSettle();
+      await pumpApp(tester, _backend(), locale: 'en');
+      await tapText(tester, 'جذر ثان');
+      await tapText(tester, 'حديث 100');
       expect(find.byTooltip('Share hadith'), findsOneWidget);
+      expect(find.byTooltip('Text size'), findsOneWidget);
       handle.dispose();
     });
 
     testWidgets('an error is announced as a live region', (tester) async {
       final handle = tester.ensureSemantics();
-      await _launch(
+      await pumpApp(
         tester,
         _backend()..categoriesFailure = noConnection,
         locale: 'en',
@@ -201,39 +186,69 @@ void main() {
       );
       handle.dispose();
     });
+
+    testWidgets('expandable sections announce expanded and collapsed', (
+      tester,
+    ) async {
+      final handle = tester.ensureSemantics();
+      await pumpApp(tester, _backend(), locale: 'en');
+      await tapText(tester, 'جذر ثان');
+      await tapText(tester, 'حديث 100');
+      expect(
+        tester.getSemantics(find.text('Explanation')),
+        isSemantics(isExpanded: false, isButton: true),
+      );
+      await tapText(tester, 'Explanation');
+      expect(
+        tester.getSemantics(find.text('Explanation')),
+        isSemantics(isExpanded: true, isButton: true),
+      );
+      handle.dispose();
+    });
   });
 
-  group('colour contrast of the design tokens (WCAG AA: 4.5:1 for text)', () {
-    final appBarOverWhite = Color.alphaBlend(AppColors.appBar, Colors.white);
-    final homeBarOverWhite = Color.alphaBlend(
-      AppColors.homeAppBar,
-      Colors.white,
-    );
-    final cardOverWhite = Color.alphaBlend(AppColors.cardFill, Colors.white);
-
-    final pairs = <String, (Color, Color)>{
-      'app bar title': (AppColors.onAppBar, appBarOverWhite),
-      'home app bar title': (AppColors.onAppBar, homeBarOverWhite),
-      'ink on white': (AppColors.ink, Colors.white),
-      'muted text on white': (AppColors.inkMuted, Colors.white),
-      'muted text on cards': (AppColors.inkMuted, cardOverWhite),
-      'headings on white': (AppColors.heading, Colors.white),
-      'grade and attribution on white': (AppColors.accent, Colors.white),
-      'list titles on white': (AppColors.listTitle, Colors.white),
-    };
-
-    pairs.forEach((name, pair) {
-      test(name, () {
-        final ratio = _contrast(pair.$1, pair.$2);
-        expect(ratio, greaterThanOrEqualTo(4.5), reason: 'was $ratio');
+  group('colour contrast of the palettes (WCAG AA)', () {
+    for (final entry in {
+      'light': AppPalette.light,
+      'dark': AppPalette.dark,
+    }.entries) {
+      final s = entry.value;
+      final text = <String, (Color, Color)>{
+        'body on canvas': (s.onSurface, s.surface),
+        'body on reading surface': (s.onSurface, s.surfaceContainerLowest),
+        'secondary text on canvas': (s.onSurfaceVariant, s.surface),
+        'secondary text on cards': (
+          s.onSurfaceVariant,
+          s.surfaceContainerLowest,
+        ),
+        'brand colour on canvas': (s.primary, s.surface),
+        'brand colour on cards': (s.primary, s.surfaceContainerLowest),
+        'text on brand buttons': (s.onPrimary, s.primary),
+        'text on the emphasised tile': (
+          s.onPrimaryContainer,
+          s.primaryContainer,
+        ),
+        'grade chip text': (s.onSecondaryContainer, s.secondaryContainer),
+        'gold on canvas': (s.secondary, s.surface),
+        'error text on canvas': (s.error, s.surface),
+        'snackbar text': (s.onInverseSurface, s.inverseSurface),
+      };
+      text.forEach((name, pair) {
+        test('${entry.key}: $name is at least 4.5:1', () {
+          expect(_contrast(pair.$1, pair.$2), greaterThanOrEqualTo(4.5));
+        });
       });
-    });
 
-    test(
-      'the original white app-bar title failed, which is why it changed',
-      () {
-        expect(_contrast(Colors.white, appBarOverWhite), lessThan(1.5));
-      },
-    );
+      test(
+        '${entry.key}: control borders are at least 3:1 against the canvas and cards',
+        () {
+          expect(_contrast(s.outline, s.surface), greaterThanOrEqualTo(3.0));
+          expect(
+            _contrast(s.outline, s.surfaceContainerLowest),
+            greaterThanOrEqualTo(3.0),
+          );
+        },
+      );
+    }
   });
 }

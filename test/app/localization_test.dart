@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mynewapp/app/app.dart';
-import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 
 import '../support/fake_backend.dart';
 import '../support/fixtures.dart';
+import '../support/test_app.dart';
 
 FakeBackend _backend({Map<String, dynamic>? details}) => FakeBackend(
   details: details == null ? null : sampleDetails(details),
@@ -14,22 +13,6 @@ FakeBackend _backend({Map<String, dynamic>? details}) => FakeBackend(
     '2:1': samplePage(ids: ['101', '102']),
   },
 );
-
-Future<void> _launch(
-  WidgetTester tester,
-  FakeBackend api, {
-  required String locale,
-}) async {
-  tester.platformDispatcher.localesTestValue = [Locale(locale)];
-  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
-  await tester.pumpWidget(
-    MyApp(
-      key: UniqueKey(),
-      dependencies: AppDependencies(categories: api, hadiths: api),
-    ),
-  );
-  await tester.pumpAndSettle();
-}
 
 TextDirection _directionAt(WidgetTester tester, Finder finder) =>
     Directionality.of(tester.element(finder.first));
@@ -40,7 +23,7 @@ void main() {
       tester,
     ) async {
       final api = _backend();
-      await _launch(tester, api, locale: 'ar');
+      await pumpApp(tester, api, locale: 'ar');
       expect(find.text('التصنيفات الرئيسية'), findsOneWidget);
       expect(
         _directionAt(tester, find.text('التصنيفات الرئيسية')),
@@ -53,7 +36,7 @@ void main() {
       tester,
     ) async {
       final api = _backend();
-      await _launch(tester, api, locale: 'en');
+      await pumpApp(tester, api, locale: 'en');
       expect(find.text('Main categories'), findsOneWidget);
       expect(find.text('التصنيفات الرئيسية'), findsNothing);
       expect(
@@ -67,7 +50,7 @@ void main() {
       tester,
     ) async {
       final api = _backend();
-      await _launch(tester, api, locale: 'fr');
+      await pumpApp(tester, api, locale: 'fr');
       expect(find.text('التصنيفات الرئيسية'), findsOneWidget);
       expect(api.languages, ['ar']);
     });
@@ -76,7 +59,7 @@ void main() {
       'changing the device language reloads the tree in the new language',
       (tester) async {
         final api = _backend();
-        await _launch(tester, api, locale: 'ar');
+        await pumpApp(tester, api, locale: 'ar');
         tester.platformDispatcher.localesTestValue = const [Locale('en')];
         await tester.pumpAndSettle();
         expect(find.text('Main categories'), findsOneWidget);
@@ -88,66 +71,66 @@ void main() {
       tester,
     ) async {
       final api = _backend();
-      await _launch(tester, api, locale: 'en');
-      await tester.tap(find.text('جذر ثان'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('حديث 101'));
-      await tester.pumpAndSettle();
+      await pumpApp(tester, api, locale: 'en');
+      await tapText(tester, 'جذر ثان');
+      await tapText(tester, 'حديث 101');
       // categories, list page, details
       expect(api.languages, ['en', 'en', 'en']);
     });
   });
 
   group('layout direction', () {
-    double heading(WidgetTester tester, String text) =>
-        tester.getCenter(find.text(text)).dx;
-
-    testWidgets('the home heading sits at the start edge in both languages', (
-      tester,
-    ) async {
-      final width =
-          tester.view.physicalSize.width / tester.view.devicePixelRatio;
-      await _launch(tester, _backend(), locale: 'ar');
-      expect(heading(tester, 'التصنيفات الرئيسية'), greaterThan(width / 2));
-
-      await _launch(tester, _backend(), locale: 'en');
-      expect(heading(tester, 'Main categories'), lessThan(width / 2));
-    });
+    double centre(WidgetTester tester, Finder f) =>
+        tester.getCenter(f.first).dx;
 
     testWidgets(
-      'the details heading and share button swap sides with the language',
+      'tile chevrons sit at the end edge and the settings action at the end of the bar',
+      (tester) async {
+        final width =
+            tester.view.physicalSize.width / tester.view.devicePixelRatio;
+        await pumpApp(tester, _backend(), locale: 'ar');
+        expect(
+          centre(tester, find.byIcon(Icons.arrow_forward_ios)),
+          lessThan(width / 2),
+        );
+        expect(centre(tester, find.byIcon(Icons.tune)), lessThan(width / 2));
+
+        await pumpApp(tester, _backend(), locale: 'en');
+        expect(
+          centre(tester, find.byIcon(Icons.arrow_forward_ios)),
+          greaterThan(width / 2),
+        );
+        expect(centre(tester, find.byIcon(Icons.tune)), greaterThan(width / 2));
+      },
+    );
+
+    testWidgets(
+      'the back button and the share action swap sides with the language',
       (tester) async {
         Future<void> openDetails(String locale) async {
-          await _launch(tester, _backend(), locale: locale);
-          await tester.tap(find.text('جذر ثان'));
-          await tester.pumpAndSettle();
-          await tester.tap(find.text('حديث 101'));
-          await tester.pumpAndSettle();
+          await pumpApp(tester, _backend(), locale: locale);
+          await tapText(tester, 'جذر ثان');
+          await tapText(tester, 'حديث 101');
         }
 
         final width =
             tester.view.physicalSize.width / tester.view.devicePixelRatio;
         await openDetails('ar');
-        expect(heading(tester, 'الحديث:'), greaterThan(width / 2));
-        expect(
-          tester.getCenter(find.byIcon(Icons.share)).dx,
-          lessThan(width / 2),
-        );
+        expect(centre(tester, find.byType(BackButton)), greaterThan(width / 2));
+        expect(centre(tester, find.byIcon(Icons.share)), lessThan(width / 2));
 
         await openDetails('en');
-        expect(heading(tester, 'Hadith:'), lessThan(width / 2));
+        expect(centre(tester, find.byType(BackButton)), lessThan(width / 2));
         expect(
-          tester.getCenter(find.byIcon(Icons.share)).dx,
+          centre(tester, find.byIcon(Icons.share)),
           greaterThan(width / 2),
         );
       },
     );
 
-    testWidgets('list chevrons mirror with the text direction', (tester) async {
+    testWidgets('tile chevrons mirror with the text direction', (tester) async {
       for (final locale in ['ar', 'en']) {
-        await _launch(tester, _backend(), locale: locale);
-        await tester.tap(find.text('جذر ثان'));
-        await tester.pumpAndSettle();
+        await pumpApp(tester, _backend(), locale: locale);
         final icon = tester.widget<Icon>(
           find.byIcon(Icons.arrow_forward_ios).first,
         );
@@ -161,25 +144,27 @@ void main() {
       'English details: English labels, credit, no Arabic-only sections',
       (tester) async {
         final api = _backend(details: englishDetailsJson);
-        await _launch(tester, api, locale: 'en');
-        await tester.tap(find.text('جذر ثان'));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('حديث 101'));
-        await tester.pumpAndSettle();
+        await pumpApp(tester, api, locale: 'en');
+        await tapText(tester, 'جذر ثان');
+        await tapText(tester, 'حديث 101');
         expect(find.text('Narrated Abdullah ibn Masud'), findsOneWidget);
         expect(find.text('Explanation'), findsOneWidget);
+        await tester.scrollUntilVisible(
+          find.text('Source: HadeethEnc.com'),
+          300,
+        );
         expect(find.text('Source: HadeethEnc.com'), findsOneWidget);
         expect(
           find.text('Sources'),
           findsNothing,
         ); // no reference in English responses
-        expect(find.text('Word meanings:'), findsNothing);
+        expect(find.text('Word meanings'), findsNothing);
       },
     );
 
     testWidgets('errors and retry are in English', (tester) async {
       final api = _backend()..categoriesFailure = noConnection;
-      await _launch(tester, api, locale: 'en');
+      await pumpApp(tester, api, locale: 'en');
       expect(find.text('No internet connection'), findsOneWidget);
       expect(find.text('Try again'), findsOneWidget);
       await tester.tap(find.text('Try again'));
@@ -194,7 +179,7 @@ void main() {
         final messages = <String>{};
         for (final kind in FailureKind.values) {
           final api = _backend()..categoriesFailure = Failure(kind);
-          await _launch(tester, api, locale: locale);
+          await pumpApp(tester, api, locale: locale);
           final message = tester
               .widget<Text>(
                 find

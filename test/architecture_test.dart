@@ -94,4 +94,31 @@ void main() {
       isEmpty,
     );
   });
+
+  test(
+    'no photographic or stock imagery is bundled (licence of the old backdrop was never proven)',
+    () {
+      final files = Directory('assets')
+          .listSync(recursive: true)
+          .whereType<File>()
+          .map((f) => f.path.replaceAll(r'\', '/'))
+          .toList();
+      const images = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+      expect(files.where((f) => images.any(f.endsWith)), isEmpty);
+      expect(
+        File('pubspec.yaml').readAsStringSync(),
+        isNot(contains('backgruond')),
+      );
+    },
+  );
+
+  test('every bundled font ships with its licence text', () {
+    for (final font in ['Cairo', 'Amiri']) {
+      expect(
+        File('assets/licenses/OFL-$font.txt').existsSync(),
+        isTrue,
+        reason: font,
+      );
+    }
+  });
 }

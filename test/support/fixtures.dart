@@ -7,6 +7,7 @@ import 'package:mynewapp/features/categories/domain/hadith_category.dart';
 import 'package:mynewapp/features/hadiths/data/hadith_dtos.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_page.dart';
+import 'package:mynewapp/features/search/domain/hadith_search_result.dart';
 
 /// Two roots, two children of root 1, and one grandchild. Root 2 is a leaf.
 const categoriesJson = [
@@ -94,3 +95,14 @@ HadithPage samplePage({
 
 HadithDetails sampleDetails([Map<String, dynamic> json = arabicDetailsJson]) =>
     HadithDetailsDto.fromJson(json).toEntity();
+
+/// Search hits shaped like the live API (`<mark>` around the matched words).
+List<HadithSearchResult> sampleSearchResults({int count = 2}) => [
+  for (var i = 0; i < count; i++)
+    HadithSearchResult(
+      id: '${700 + i}',
+      title: 'نتيجة ${700 + i}',
+      text: 'إنما الأعمال بالنية وإنما لكل امرئ ما نوى',
+      highlightedText: 'إنما الأعمال <mark>بالنية</mark> وإنما لكل امرئ ما نوى',
+    ),
+];
