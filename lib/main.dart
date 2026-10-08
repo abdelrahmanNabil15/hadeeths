@@ -1,67 +1,60 @@
-
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
-import 'Modules/cubit/cubit.dart';
-import 'Shared/Network/DioHelper.dart';
-import 'Modules/hadeethsCategory.dart';
-
-
+import 'Modules/categories/categories_cubit.dart';
+import 'Modules/home_page.dart';
+import 'Shared/Network/hadeeth_api.dart';
 import 'Shared/bloc_observer.dart';
 
-
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  DioHelper.init();
-  BlocOverrides.runZoned(
-    () {
-      runApp(const MyApp());
-    },
-    blocObserver: MyBlocObserver(),
-  );
-
+  if (kDebugMode) Bloc.observer = MyBlocObserver();
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  /// [api] lets tests and previews supply a fake; production uses [HttpHadeethApi].
+  const MyApp({super.key, this.api});
 
-  // This widget is the root of your application.
+  final HadeethApi? api;
+
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (BuildContext context) => AlmunirCubit()
-              ..getCategories()
-              ..checkConection(),
-          ),
-        ],
+    return RepositoryProvider<HadeethApi>(
+      create: (_) => api ?? HttpHadeethApi(),
+      // One category tree for the whole app, above the navigator so it survives navigation.
+      child: BlocProvider(
+        create: (context) =>
+            CategoriesCubit(context.read<HadeethApi>())..load(),
         child: MaterialApp(
           title: 'My app',
           theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              appBarTheme: AppBarTheme(
-
-                  titleTextStyle: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold),
-                  iconTheme: const IconThemeData(color: Colors.black),
-                  systemOverlayStyle: SystemUiOverlayStyle(
-                      statusBarColor: Colors.grey.shade100,
-                      statusBarBrightness: Brightness.dark),
-                  backgroundColor: Colors.white,
-                  elevation: 2.0),
-              bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-                  selectedItemColor: Colors.cyan,
-                  elevation: 20.0,
-                  type: BottomNavigationBarType.fixed)),
-          home: const HadeethsCategory()
-        ));
-
-    /* */
+            scaffoldBackgroundColor: Colors.white,
+            appBarTheme: AppBarTheme(
+              titleTextStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold,
+              ),
+              iconTheme: const IconThemeData(color: Colors.black),
+              systemOverlayStyle: SystemUiOverlayStyle(
+                statusBarColor: Colors.grey.shade100,
+                statusBarBrightness: Brightness.dark,
+              ),
+              backgroundColor: Colors.white,
+              elevation: 2.0,
+            ),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+              selectedItemColor: Colors.cyan,
+              elevation: 20.0,
+              type: BottomNavigationBarType.fixed,
+            ),
+          ),
+          home: const HomePage(),
+        ),
+      ),
+    );
   }
 }

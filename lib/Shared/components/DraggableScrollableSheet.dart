@@ -7,7 +7,7 @@ import '../constant.dart';
 
 // ignore: camel_case_types
 class customScrollableSheet extends StatelessWidget {
-  const customScrollableSheet({Key? key,   required this.Text, required this.TextTitle, required this.function,}) : super(key: key);
+  const customScrollableSheet({super.key, required this.Text, required this.TextTitle, required this.function});
  final String Text ;
  final String TextTitle;
  final  VoidCallback function;
