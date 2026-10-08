@@ -17,7 +17,9 @@ lib/
     network/                     HadeethClient (timeouts, retries, error mapping), endpoints
     json/json_helpers.dart       defensive JSON readers
     state/load_status.dart       LoadStatus shared by all cubits
-    widgets/, constants/, logging/
+    design_system/               tokens.dart (colours, spacing, radii, sizes, motion) and AppTheme
+    widgets/, logging/
+  l10n/                          ARB files and generated AppLocalizations (+ context.l10n helper)
   features/
     categories/
       domain/                    HadithCategory, CategoriesRepository (interface)
@@ -60,15 +62,25 @@ Constructor injection plus `RepositoryProvider`. `AppDependencies.live()` builds
 repositories; `MyApp(dependencies: ...)` accepts fakes. `CategoriesCubit` lives above the `Navigator`; list and details
 cubits are created per screen with `BlocProvider`.
 
+## Localization, direction and accessibility (Phase 5)
+
+- gen-l10n with `app_ar.arb` as the template and `app_en.arb`. `MaterialApp` supports `ar` and `en`; anything else
+  falls back to Arabic. `context.apiLanguage` is the API language code and flows through the cubits to the repositories.
+- A `CategoriesCubit` keyed by language sits above the navigator: a language change reloads the tree.
+- Layout uses `AlignmentDirectional` / `EdgeInsetsDirectional` and Material icons that mirror on their own; nothing forces
+  a text direction.
+- Category cards sit in rows that are as tall as their tallest card (no fixed heights), with fewer columns as text grows.
+- Screen readers: headings are marked, category cards announce title and count, errors are live regions, icon buttons
+  have tooltips.
+
 ## Decisions kept
 
 - State management: `flutter_bloc` (ADR-1). DI: no second container (ADR-2). Routing: `Navigator` (ADR-3).
-- Language: the data layer takes a `language` parameter (default `ar`); wiring it to the app locale belongs to the
-  localization phase.
 - Phase 4 will add a local data source next to the remote one inside each repository implementation; the domain
   entities and cubits should not need to change.
 
 ## Testing map
 
 `test/` mirrors `lib/`: DTO parsing, data sources and repositories (fake Dio adapter), cubits (fake repositories),
-widget flows through `MyApp` with fake repositories, and the architecture rules. Nothing touches the live API.
+widget flows through `MyApp` with fake repositories (both languages), accessibility and text-scale checks, the
+decoded size of the backdrop image, and the architecture rules. Nothing touches the live API.

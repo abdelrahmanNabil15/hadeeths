@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches-ignore: [main, master]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: 3.44.8
+
+jobs:
+  verify:
+    name: Format, analyze, test, build (Android)
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - name: Dependencies
+        run: flutter pub get
+      - name: Generated localizations are up to date
+        run: |
+          flutter gen-l10n
+          git diff --exit-code -- lib/l10n
+      - name: Formatting
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Static analysis
+        run: flutter analyze
+      - name: Tests with coverage
+        run: flutter test --coverage
+      - name: Coverage gate (logic layers)
+        run: dart run tool/check_coverage.dart 80
+      - name: Release configuration
+        run: bash tool/check_release_config.sh
+      - name: Build debug APK
+        run: flutter build apk --debug
+      - name: Build release APK (unsigned; no secrets needed)
+        run: flutter build apk --release
+
+  ios:
+    name: Build (iOS, no code signing)
+    runs-on: macos-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter build ios --no-codesign

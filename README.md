@@ -6,7 +6,8 @@ Flutter app for browsing Prophetic hadiths in Arabic. Content and explanations c
 Published Android listing: `com.hadeeths.eg`.
 
 Project documents: [`docs/PHASE0_REVISED_AUDIT.md`](docs/PHASE0_REVISED_AUDIT.md) (audit, decisions, roadmap),
-[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (code structure and layering rules) and
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) (code structure and layering rules),
+[`docs/RELEASE.md`](docs/RELEASE.md) (versioning, signing, CI, checklist) and
 [`docs/UX_REDESIGN_PROPOSAL.md`](docs/UX_REDESIGN_PROPOSAL.md).
 
 ## Toolchain (verified on 2026-10-09)
@@ -52,7 +53,8 @@ registered with Play App Signing) and a `versionCode` higher than the published 
 ## Tests
 
 ```bash
-flutter test
+flutter test --coverage
+dart run tool/check_coverage.dart 80   # logic layers must stay at or above 80%
 ```
 
 Unit tests (DTOs, client, data sources, repositories, cubits), widget tests (the main flows, driven through `MyApp`
@@ -61,12 +63,20 @@ release build on the same device.
 
 ## Languages
 
-The product is Arabic and English. The data layer already handles both (English responses have no `reference` or
-`words_meanings`); the UI is still Arabic-only and right-to-left until the localization phase.
+Arabic and English. The UI follows the device language (Arabic is also the fallback for any other language), the layout
+flips between right-to-left and left-to-right, and the hadith content is requested from the API in the same language.
+Strings live in `lib/l10n/app_ar.arb` (template) and `app_en.arb`; run `flutter gen-l10n` after editing them and commit
+the generated files. To preview the other language without touching the device settings, use a debug build with
+`--dart-define=FORCE_LOCALE=en` (or `ar`). English content is smaller than Arabic: only translated hadiths are listed.
 
 ## Known limitations
 
-- Screens are still Arabic-only with hard-coded strings; localization, accessibility and theming are planned work.
-- `dart format` has not been applied to the whole project (the first commit to touch a file does not reformat it).
-- iOS: deployment target raised to 13.0 but not built here; bundle identifier is still the placeholder `com.example.mynewapp`.
+- The look is the original one with tokens extracted (`lib/core/design_system`); the redesign in
+  `docs/UX_REDESIGN_PROPOSAL.md` is not applied and needs explicit approval. Only the app-bar title colour changed
+  (white was 1.11:1 on its background).
+- No in-app language switch yet (follows the device).
+- Latin and Arabic digits are not localized (numbers always use Western digits).
+- `assets/backgruond.jpg` still has an unresolved licence question (audit F-05) and is 6.2 MB in the package.
+- iOS: deployment target raised to 13.0 but not built here; bundle identifier is still the placeholder `com.example.mynewapp`;
+  the iOS display name is not localized yet.
 - Web: not a verified target.
