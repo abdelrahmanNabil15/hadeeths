@@ -80,7 +80,7 @@ void main() {
         (o, n) async => jsonResponse(
           hadithPageJson(ids: ['1', '2'], page: 2, lastPage: 5, totalItems: 97),
         ),
-      ).getHadithPage(categoryId: '8', page: 2);
+      ).getHadithPage(categoryId: '8', language: 'ar', page: 2);
       final page = (result as Success<HadithPage>).value;
       expect(page.items.map((h) => h.id), ['1', '2']);
       expect((page.currentPage, page.lastPage, page.totalItems), (2, 5, 97));
@@ -89,7 +89,7 @@ void main() {
     test('details: maps to an entity, source text untouched', () async {
       final result = await repo(
         (o, n) async => jsonResponse(arabicDetailsJson),
-      ).getHadithDetails('2962');
+      ).getHadithDetails('2962', language: 'ar');
       final details = (result as Success<HadithDetails>).value;
       expect(details.hadeeth, arabicDetailsJson['hadeeth']);
       expect(details.wordsMeanings.single.word, 'كلمة');
@@ -98,14 +98,14 @@ void main() {
     test('a 404 becomes an Err(notFound)', () async {
       final result = await repo(
         (o, n) async => emptyResponse(404),
-      ).getHadithDetails('1');
+      ).getHadithDetails('1', language: 'ar');
       expect((result as Err).failure.kind, FailureKind.notFound);
     });
 
     test('a 500 on the list becomes an Err(server)', () async {
       final result = await repo(
         (o, n) async => emptyResponse(500),
-      ).getHadithPage(categoryId: '99999');
+      ).getHadithPage(categoryId: '99999', language: 'ar');
       expect((result as Err).failure.kind, FailureKind.server);
     });
   });

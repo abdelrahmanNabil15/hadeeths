@@ -4,6 +4,7 @@ import 'package:mynewapp/core/result/result.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
 import 'package:mynewapp/features/categories/data/category_dto.dart';
+import 'package:mynewapp/features/categories/domain/hadith_category.dart';
 
 import '../../../support/fake_dio.dart';
 import '../../../support/fixtures.dart';
@@ -67,9 +68,9 @@ void main() {
       final repo = CategoriesRepositoryImpl(
         HttpCategoriesRemoteDataSource(client),
       );
-      final result = await repo.getCategories();
-      expect(result, isA<Success>());
-      final categories = (result as Success).value as List;
+      final result = await repo.getCategories(language: 'ar');
+      expect(result, isA<Success<List<HadithCategory>>>());
+      final categories = (result as Success<List<HadithCategory>>).value;
       expect(categories, hasLength(5));
       expect(categories.first.title, 'جذر أول');
     });
@@ -78,7 +79,7 @@ void main() {
       final repo = CategoriesRepositoryImpl(
         _ThrowingSource(const Failure(FailureKind.noConnection)),
       );
-      final result = await repo.getCategories();
+      final result = await repo.getCategories(language: 'ar');
       expect((result as Err).failure, const Failure(FailureKind.noConnection));
     });
 
@@ -88,7 +89,7 @@ void main() {
         final repo = CategoriesRepositoryImpl(
           _ThrowingSource(StateError('bug')),
         );
-        final result = await repo.getCategories();
+        final result = await repo.getCategories(language: 'ar');
         expect((result as Err).failure.kind, FailureKind.unexpected);
       },
     );

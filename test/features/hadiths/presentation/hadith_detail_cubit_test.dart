@@ -26,7 +26,7 @@ void main() {
       'loads the hadith it was created for, independent of any list',
       () async {
         final api = FakeBackend();
-        final cubit = HadithDetailCubit(api, '2962');
+        final cubit = HadithDetailCubit(api, '2962', language: 'ar');
         final states = await emitted(cubit, cubit.load);
         expect(states.map((s) => s.status), [
           LoadStatus.loading,
@@ -41,7 +41,7 @@ void main() {
     test('not found ends in a non-retryable failure', () async {
       final api = FakeBackend()
         ..detailsFailure = const Failure(FailureKind.notFound, statusCode: 404);
-      final cubit = HadithDetailCubit(api, '1');
+      final cubit = HadithDetailCubit(api, '1', language: 'ar');
       await cubit.load();
       expect(cubit.state.status, LoadStatus.failure);
       expect(cubit.state.failure!.isRetryable, isFalse);
@@ -50,7 +50,7 @@ void main() {
 
     test('load after a failure recovers', () async {
       final api = FakeBackend()..detailsFailure = noConnection;
-      final cubit = HadithDetailCubit(api, '1');
+      final cubit = HadithDetailCubit(api, '1', language: 'ar');
       await cubit.load();
       await cubit.load();
       expect(cubit.state.status, LoadStatus.success);
@@ -59,7 +59,7 @@ void main() {
 
     test('an English response without a reference loads fine', () async {
       final api = FakeBackend(details: sampleDetails(englishDetailsJson));
-      final cubit = HadithDetailCubit(api, '2962');
+      final cubit = HadithDetailCubit(api, '2962', language: 'ar');
       await cubit.load();
       expect(cubit.state.status, LoadStatus.success);
       expect(cubit.state.details!.reference, isEmpty);

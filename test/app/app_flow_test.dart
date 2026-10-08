@@ -6,11 +6,11 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/features/categories/presentation/widgets/category_grid.dart';
-import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
 
 import '../support/fake_backend.dart';
 import '../support/fixtures.dart';
 
+const _credit = 'المصدر: HadeethEnc.com';
 const _retry = 'إعادة المحاولة';
 const _offline = 'لا يوجد اتصال بالإنترنت';
 
@@ -23,7 +23,20 @@ FakeBackend _api({Map<String, dynamic>? details}) => FakeBackend(
   },
 );
 
+/// Pins the device language for a test; the default test locale is English.
+void _useLocale(WidgetTester tester, String code) {
+  tester.platformDispatcher.localesTestValue = [Locale(code)];
+  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+}
+
+/// Taps the app bar's back button. (`tester.pageBack()` looks for the English tooltip.)
+Future<void> _back(WidgetTester tester) async {
+  await tester.tap(find.byType(BackButton));
+  await tester.pumpAndSettle();
+}
+
 Future<void> _pump(WidgetTester tester, FakeBackend api) async {
+  _useLocale(tester, 'ar');
   await tester.pumpWidget(
     MyApp(
       dependencies: AppDependencies(categories: api, hadiths: api),
@@ -59,6 +72,7 @@ void main() {
       tester,
     ) async {
       final api = _api()..gate = Completer<void>();
+      _useLocale(tester, 'ar');
       await tester.pumpWidget(
         MyApp(
           dependencies: AppDependencies(categories: api, hadiths: api),
@@ -95,7 +109,7 @@ void main() {
         await _pump(tester, api);
         await tester.tap(find.text('جذر ثان'));
         await tester.pumpAndSettle();
-        await tester.pageBack();
+        await _back(tester);
         await tester.pumpAndSettle();
         expect(api.categoriesCalls, 1);
       },
@@ -261,7 +275,7 @@ void main() {
         );
         expect(find.text('[صحيح]'), findsOneWidget);
         expect(find.text('[متفق عليه]'), findsOneWidget);
-        expect(find.text(hadeethEncCredit), findsOneWidget);
+        expect(find.text(_credit), findsOneWidget);
         expect(find.text('الشرح'), findsOneWidget);
         expect(find.text('المصادر'), findsOneWidget);
       },
@@ -307,7 +321,7 @@ void main() {
       (tester) async {
         final api = _api();
         await openFirstHadith(tester, api);
-        await tester.pageBack();
+        await _back(tester);
         await tester.pumpAndSettle();
         await tester.tap(find.text('حديث 102'));
         await tester.pumpAndSettle();

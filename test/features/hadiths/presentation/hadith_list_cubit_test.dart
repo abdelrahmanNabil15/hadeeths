@@ -33,7 +33,7 @@ void main() {
 
     test('loads page one and follows last_page', () async {
       final api = twoPages();
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       expect(cubit.state.items.map((h) => h.id), ['1', '2']);
       expect(cubit.state.hasMore, isTrue);
@@ -52,7 +52,7 @@ void main() {
       'never re-requests page one while paging (regression: always fetched page 1)',
       () async {
         final api = twoPages();
-        final cubit = HadithListCubit(api, '8');
+        final cubit = HadithListCubit(api, '8', language: 'ar');
         await cubit.load();
         await cubit.loadMore();
         expect(api.pageRequests.where((r) => r == '8:1'), hasLength(1));
@@ -69,7 +69,7 @@ void main() {
           ),
         },
       );
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       expect(cubit.state.items, hasLength(449));
       expect(cubit.state.totalItems, 450);
@@ -79,7 +79,7 @@ void main() {
 
     test('concurrent loadMore calls fetch the next page once', () async {
       final api = twoPages();
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       api.gate = Completer<void>();
       final a = cubit.loadMore();
@@ -97,7 +97,7 @@ void main() {
           '8:2': samplePage(ids: ['2', '3'], page: 2, lastPage: 2),
         },
       );
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       await cubit.loadMore();
       expect(cubit.state.items.map((h) => h.id), ['1', '2', '3']);
@@ -113,7 +113,7 @@ void main() {
             '8:2': samplePage(ids: [], page: 2, lastPage: 5),
           },
         );
-        final cubit = HadithListCubit(api, '8');
+        final cubit = HadithListCubit(api, '8', language: 'ar');
         await cubit.load();
         await cubit.loadMore();
         expect(cubit.state.hasMore, isFalse);
@@ -127,7 +127,7 @@ void main() {
       'first-page failure ends in failure; retry via load recovers',
       () async {
         final api = twoPages()..pageFailure = noConnection;
-        final cubit = HadithListCubit(api, '8');
+        final cubit = HadithListCubit(api, '8', language: 'ar');
         await cubit.load();
         expect(cubit.state.status, LoadStatus.failure);
         await cubit.load();
@@ -140,7 +140,7 @@ void main() {
       'a failed next page keeps the loaded items and can be retried',
       () async {
         final api = twoPages();
-        final cubit = HadithListCubit(api, '8');
+        final cubit = HadithListCubit(api, '8', language: 'ar');
         await cubit.load();
         api.pageFailure = const Failure(FailureKind.timeout);
         await cubit.loadMore();
@@ -159,7 +159,7 @@ void main() {
       'a failed refresh keeps the list; a good refresh replaces it',
       () async {
         final api = twoPages();
-        final cubit = HadithListCubit(api, '8');
+        final cubit = HadithListCubit(api, '8', language: 'ar');
         await cubit.load();
         await cubit.loadMore();
         api.pageFailure = noConnection;
@@ -176,7 +176,7 @@ void main() {
 
     test('a slow next page that arrives after a refresh is ignored', () async {
       final api = twoPages();
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       api.gate = Completer<void>();
       final slow = cubit.loadMore();
@@ -190,7 +190,7 @@ void main() {
 
     test('an empty category is an empty success', () async {
       final api = FakeBackend(pages: {'8:1': samplePage(ids: [])});
-      final cubit = HadithListCubit(api, '8');
+      final cubit = HadithListCubit(api, '8', language: 'ar');
       await cubit.load();
       expect(cubit.state.status, LoadStatus.success);
       expect(cubit.state.items, isEmpty);

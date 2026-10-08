@@ -34,12 +34,18 @@ class FakeBackend implements CategoriesRepository, HadithsRepository {
   Completer<void>? gate;
 
   int categoriesCalls = 0;
+
+  /// Language code of every call, in order.
+  final languages = <String>[];
   final pageRequests = <String>[];
   final detailsRequests = <String>[];
 
   @override
-  Future<Result<List<HadithCategory>>> getCategories() async {
+  Future<Result<List<HadithCategory>>> getCategories({
+    required String language,
+  }) async {
     categoriesCalls++;
+    languages.add(language);
     await gate?.future;
     final failure = categoriesFailure;
     if (failure != null) {
@@ -52,10 +58,12 @@ class FakeBackend implements CategoriesRepository, HadithsRepository {
   @override
   Future<Result<HadithPage>> getHadithPage({
     required String categoryId,
+    required String language,
     int page = 1,
     int perPage = HadithsRepository.defaultPageSize,
   }) async {
     pageRequests.add('$categoryId:$page');
+    languages.add(language);
     await gate?.future;
     final failure = pageFailure;
     if (failure != null) {
@@ -70,8 +78,12 @@ class FakeBackend implements CategoriesRepository, HadithsRepository {
   }
 
   @override
-  Future<Result<HadithDetails>> getHadithDetails(String id) async {
+  Future<Result<HadithDetails>> getHadithDetails(
+    String id, {
+    required String language,
+  }) async {
     detailsRequests.add(id);
+    languages.add(language);
     await gate?.future;
     final failure = detailsFailure;
     if (failure != null) {

@@ -27,7 +27,7 @@ void main() {
       'loads and exposes the tree: roots, children, grandchildren',
       () async {
         final api = FakeBackend();
-        final cubit = CategoriesCubit(api);
+        final cubit = CategoriesCubit(api, language: 'ar');
         final states = await emitted(cubit, cubit.load);
 
         expect(states.map((s) => s.status), [
@@ -48,7 +48,7 @@ void main() {
     test(
       'roots never include sub-categories (regression: grid showed 20 mixed nodes)',
       () async {
-        final cubit = CategoriesCubit(FakeBackend());
+        final cubit = CategoriesCubit(FakeBackend(), language: 'ar');
         await cubit.load();
         expect(cubit.state.roots.every((c) => c.isRoot), isTrue);
         expect(cubit.state.roots, hasLength(2));
@@ -58,7 +58,7 @@ void main() {
 
     test('loading twice, or concurrently, performs one request', () async {
       final api = FakeBackend()..gate = Completer<void>();
-      final cubit = CategoriesCubit(api);
+      final cubit = CategoriesCubit(api, language: 'ar');
       final first = cubit.load();
       final second = cubit.load();
       api.gate!.complete();
@@ -72,7 +72,7 @@ void main() {
       'failure ends in a failure state (no endless loading) and retry recovers',
       () async {
         final api = FakeBackend()..categoriesFailure = noConnection;
-        final cubit = CategoriesCubit(api);
+        final cubit = CategoriesCubit(api, language: 'ar');
         await cubit.load();
         expect(cubit.state.status, LoadStatus.failure);
         expect(cubit.state.failure!.kind, FailureKind.noConnection);
@@ -87,7 +87,7 @@ void main() {
 
     test('a failed refresh keeps the tree and reports the failure', () async {
       final api = FakeBackend();
-      final cubit = CategoriesCubit(api);
+      final cubit = CategoriesCubit(api, language: 'ar');
       await cubit.load();
       api.categoriesFailure = const Failure(FailureKind.timeout);
       await cubit.refresh();
@@ -99,7 +99,7 @@ void main() {
 
     test('the same refresh failure twice is observable twice', () async {
       final api = FakeBackend();
-      final cubit = CategoriesCubit(api);
+      final cubit = CategoriesCubit(api, language: 'ar');
       await cubit.load();
       final failures = <Failure>[];
       final sub = cubit.stream.listen((s) {

@@ -71,7 +71,7 @@ const englishDetailsJson = {
   'title_ar': 'عنوان',
   'hadeeth_ar': 'نص',
   'grade_ar': 'صحيح',
-  'words_meanings_ar': [],
+  'words_meanings_ar': <Object?>[],
 };
 
 List<HadithCategory> sampleCategories() => [
