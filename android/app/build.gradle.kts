@@ -25,8 +25,9 @@ android {
     }
 
     defaultConfig {
-        // TODO: set the confirmed production application ID.
-        applicationId = "com.example.mynewapp"
+        // Matches the published Google Play listing (play.google.com/store/apps/details?id=com.hadeeths.eg).
+        // The code namespace above intentionally stays com.example.mynewapp.
+        applicationId = "com.hadeeths.eg"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
