@@ -46,6 +46,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            // Lets debug builds install next to the published release without a signature clash.
+            applicationIdSuffix = ".debug"
+        }
         release {
             // Never fall back to the debug key: without key.properties the release
             // artifact is simply left unsigned.
