@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynewapp/core/constants/app_colors.dart';
+import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/custom_text.dart';
@@ -8,6 +8,7 @@ import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
 import 'package:mynewapp/features/hadiths/presentation/state/hadith_list_cubit.dart';
+import 'package:mynewapp/l10n/l10n.dart';
 
 /// Paged list of the hadiths of one category.
 class HadithListPage extends StatelessWidget {
@@ -22,22 +23,23 @@ class HadithListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language = context.apiLanguage;
     return BlocProvider(
-      create: (context) =>
-          HadithListCubit(context.read<HadithsRepository>(), categoryId)
-            ..load(),
+      create: (context) => HadithListCubit(
+        context.read<HadithsRepository>(),
+        categoryId,
+        language: language,
+      )..load(),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: appbarColor,
-          title: Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: CustomText(
-              fontWeight: FontWeight.bold,
-              alignment: Alignment.centerRight,
-              color: Colors.white,
-              text: title,
-              fontSize: 19,
-            ),
+          backgroundColor: AppColors.appBar,
+          title: CustomText(
+            fontWeight: FontWeight.bold,
+            alignment: AlignmentDirectional.centerStart,
+            color: AppColors.onAppBar,
+            text: title,
+            fontSize: AppTextSize.title,
+            isHeader: true,
           ),
         ),
         body: const _HadithListBody(),
@@ -67,7 +69,7 @@ class _HadithListBody extends StatelessWidget {
             return ErrorView(failure: state.failure!, onRetry: cubit.load);
           case LoadStatus.success:
             if (state.items.isEmpty) {
-              return const EmptyView(message: 'لا توجد أحاديث في هذا التصنيف');
+              return EmptyView(message: context.l10n.noHadithsInCategory);
             }
             return _HadithList(state: state);
         }
@@ -92,42 +94,47 @@ class _HadithList extends StatelessWidget {
     return RefreshIndicator(
       onRefresh: cubit.refresh,
       child: SafeArea(
-        child: ListView.builder(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          itemCount: itemCount,
-          itemBuilder: (context, index) {
-            if (index >= state.items.length) {
-              return _Footer(
-                failure: state.loadMoreFailure,
-                onLoadMore: cubit.loadMore,
-              );
-            }
-            final hadith = state.items[index];
-            return Card(
-              elevation: 3,
-              margin: const EdgeInsets.all(10),
-              child: ListTile(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => HadithDetailsPage(id: hadith.id),
-                  ),
-                ),
-                leading: const Icon(Icons.arrow_back_ios),
-                title: Padding(
-                  padding: const EdgeInsets.only(right: 12.0),
-                  child: CustomText(
-                    fontWeight: FontWeight.bold,
-                    alignment: Alignment.centerRight,
-                    color: const Color.fromARGB(250, 40, 82, 122),
-                    text: hadith.title,
-                    fontSize: 16,
-                  ),
-                ),
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxWidth: AppSizes.contentMaxWidth,
+            ),
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
               ),
-            );
-          },
+              itemCount: itemCount,
+              itemBuilder: (context, index) {
+                if (index >= state.items.length) {
+                  return _Footer(
+                    failure: state.loadMoreFailure,
+                    onLoadMore: cubit.loadMore,
+                  );
+                }
+                final hadith = state.items[index];
+                return Card(
+                  elevation: 3,
+                  margin: const EdgeInsets.all(10),
+                  child: ListTile(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => HadithDetailsPage(id: hadith.id),
+                      ),
+                    ),
+                    title: CustomText(
+                      fontWeight: FontWeight.bold,
+                      alignment: AlignmentDirectional.centerStart,
+                      color: AppColors.listTitle,
+                      text: hadith.title,
+                      fontSize: AppTextSize.listTitle,
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios),
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
@@ -161,29 +168,31 @@ class _FooterState extends State<_Footer> {
     final failure = widget.failure;
     if (failure != null) {
       return Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Text(
-              failureMessage(failure),
-              textDirection: TextDirection.rtl,
-              style: const TextStyle(fontFamily: 'Schyler'),
-            ),
-            TextButton.icon(
-              onPressed: widget.onLoadMore,
-              icon: const Icon(Icons.refresh),
-              label: const Text(
-                'إعادة المحاولة',
-                style: TextStyle(fontFamily: 'Schyler'),
+        padding: const EdgeInsets.all(AppSpacing.lg),
+        child: Semantics(
+          liveRegion: true,
+          container: true,
+          child: Column(
+            children: [
+              Text(failureMessage(context.l10n, failure)),
+              TextButton.icon(
+                onPressed: widget.onLoadMore,
+                icon: const Icon(Icons.refresh),
+                label: Text(context.l10n.retry),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
-    return const Padding(
-      padding: EdgeInsets.all(16),
-      child: Center(child: CircularProgressIndicator()),
+    return Padding(
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Center(
+        child: Semantics(
+          label: context.l10n.loading,
+          child: const CircularProgressIndicator(),
+        ),
+      ),
     );
   }
 }

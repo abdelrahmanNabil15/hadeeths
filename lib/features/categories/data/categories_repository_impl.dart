@@ -9,9 +9,12 @@ class CategoriesRepositoryImpl implements CategoriesRepository {
   final CategoriesRemoteDataSource _remote;
 
   @override
-  Future<Result<List<HadithCategory>>> getCategories() => Result.guard(
+  Future<Result<List<HadithCategory>>> getCategories({
+    required String language,
+  }) => Result.guard(
     () async => [
-      for (final dto in await _remote.fetchCategories()) dto.toEntity(),
+      for (final dto in await _remote.fetchCategories(language: language))
+        dto.toEntity(),
     ],
   );
 }

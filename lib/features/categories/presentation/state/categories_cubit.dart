@@ -66,9 +66,13 @@ class CategoriesState extends Equatable {
 /// Holds the category tree for the whole app. One instance lives above the navigator, so
 /// the tree is fetched once and survives navigation.
 class CategoriesCubit extends Cubit<CategoriesState> {
-  CategoriesCubit(this._repository) : super(CategoriesState());
+  CategoriesCubit(this._repository, {required this.language})
+    : super(CategoriesState());
 
   final CategoriesRepository _repository;
+
+  /// API language code the tree is loaded in.
+  final String language;
   bool _inFlight = false;
 
   /// Loads the tree unless it is already loaded or loading. Use [retry] after a failure.
@@ -95,7 +99,7 @@ class CategoriesCubit extends Cubit<CategoriesState> {
       hadData ? state.copyWith() : state.copyWith(status: LoadStatus.loading),
     );
     try {
-      final result = await _repository.getCategories();
+      final result = await _repository.getCategories(language: language);
       if (isClosed) return;
       switch (result) {
         case Success(:final value):

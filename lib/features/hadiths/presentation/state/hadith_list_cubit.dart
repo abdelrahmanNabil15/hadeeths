@@ -74,11 +74,12 @@ class HadithListState extends Equatable {
 
 /// Paged hadith list of one category, following the API's `page` / `last_page` contract.
 class HadithListCubit extends Cubit<HadithListState> {
-  HadithListCubit(this._repository, this.categoryId)
+  HadithListCubit(this._repository, this.categoryId, {required this.language})
     : super(const HadithListState());
 
   final HadithsRepository _repository;
   final String categoryId;
+  final String language;
 
   /// Bumped on every reload so a slow response from before a reload is ignored.
   int _generation = 0;
@@ -87,7 +88,10 @@ class HadithListCubit extends Cubit<HadithListState> {
   Future<void> load() async {
     final generation = ++_generation;
     emit(const HadithListState(status: LoadStatus.loading));
-    final result = await _repository.getHadithPage(categoryId: categoryId);
+    final result = await _repository.getHadithPage(
+      categoryId: categoryId,
+      language: language,
+    );
     if (isClosed || generation != _generation) return;
     switch (result) {
       case Success(:final value):
@@ -104,7 +108,10 @@ class HadithListCubit extends Cubit<HadithListState> {
     emit(
       state.copyWith(isLoadingMore: false),
     ); // clears any previous refresh error
-    final result = await _repository.getHadithPage(categoryId: categoryId);
+    final result = await _repository.getHadithPage(
+      categoryId: categoryId,
+      language: language,
+    );
     if (isClosed || generation != _generation) return;
     switch (result) {
       case Success(:final value):
@@ -126,6 +133,7 @@ class HadithListCubit extends Cubit<HadithListState> {
     emit(state.copyWith(isLoadingMore: true));
     final result = await _repository.getHadithPage(
       categoryId: categoryId,
+      language: language,
       page: requested,
     );
     if (isClosed || generation != _generation) return;

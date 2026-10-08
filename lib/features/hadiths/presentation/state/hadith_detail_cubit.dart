@@ -23,15 +23,19 @@ class HadithDetailState extends Equatable {
 
 /// Loads exactly the hadith it was created for, independent of any list state.
 class HadithDetailCubit extends Cubit<HadithDetailState> {
-  HadithDetailCubit(this._repository, this.hadithId)
+  HadithDetailCubit(this._repository, this.hadithId, {required this.language})
     : super(const HadithDetailState());
 
   final HadithsRepository _repository;
   final String hadithId;
+  final String language;
 
   Future<void> load() async {
     emit(const HadithDetailState(status: LoadStatus.loading));
-    final result = await _repository.getHadithDetails(hadithId);
+    final result = await _repository.getHadithDetails(
+      hadithId,
+      language: language,
+    );
     if (isClosed) return;
     switch (result) {
       case Success(:final value):

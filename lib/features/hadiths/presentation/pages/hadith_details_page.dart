@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mynewapp/core/constants/app_colors.dart';
+import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/custom_text.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
@@ -9,6 +9,7 @@ import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
 import 'package:mynewapp/features/hadiths/presentation/state/hadith_detail_cubit.dart';
 import 'package:mynewapp/features/hadiths/presentation/widgets/text_sheet.dart';
+import 'package:mynewapp/l10n/l10n.dart';
 import 'package:share_plus/share_plus.dart';
 
 /// One hadith, loaded by id with its own cubit (independent of any list).
@@ -19,11 +20,15 @@ class HadithDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final language = context.apiLanguage;
     return BlocProvider(
-      create: (context) =>
-          HadithDetailCubit(context.read<HadithsRepository>(), id)..load(),
+      create: (context) => HadithDetailCubit(
+        context.read<HadithsRepository>(),
+        id,
+        language: language,
+      )..load(),
       child: Scaffold(
-        appBar: AppBar(backgroundColor: appbarColor),
+        appBar: AppBar(backgroundColor: AppColors.appBar),
         body: BlocBuilder<HadithDetailCubit, HadithDetailState>(
           builder: (context, state) {
             switch (state.status) {
@@ -53,136 +58,154 @@ class HadithDetailsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = details;
+    final l10n = context.l10n;
     return SafeArea(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: AppSizes.contentMaxWidth),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.all(10),
+            child: Column(
               children: [
-                IconButton(
-                  tooltip: 'مشاركة الحديث',
-                  icon: const Icon(Icons.share),
-                  onPressed: () => SharePlus.instance.share(
-                    ShareParams(text: hadithShareText(d)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: CustomText(
+                        fontWeight: FontWeight.bold,
+                        alignment: AlignmentDirectional.centerStart,
+                        color: AppColors.heading,
+                        text: l10n.hadithLabel,
+                        fontSize: AppTextSize.heading,
+                        isHeader: true,
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: l10n.shareHadith,
+                      icon: const Icon(Icons.share),
+                      onPressed: () => SharePlus.instance.share(
+                        ShareParams(
+                          text: hadithShareText(d, credit: l10n.sourceCredit),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(AppSpacing.sm),
+                  child: SelectionArea(
+                    child: CustomText(
+                      fontWeight: FontWeight.normal,
+                      alignment: AlignmentDirectional.centerStart,
+                      text: d.hadeeth,
+                      fontSize: AppTextSize.hadith,
+                    ),
                   ),
                 ),
-                CustomText(
-                  fontWeight: FontWeight.bold,
-                  alignment: Alignment.centerRight,
-                  color: mainColor,
-                  text: 'الحديث:',
-                  fontSize: 24,
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SelectionArea(
-                child: CustomText(
-                  fontWeight: FontWeight.normal,
-                  alignment: Alignment.centerRight,
-                  color: Colors.black,
-                  text: d.hadeeth,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            if (d.grade.isNotEmpty || d.attribution.isNotEmpty)
-              Row(
-                children: [
-                  if (d.grade.isNotEmpty)
-                    Expanded(
-                      child: CustomText(
-                        fontWeight: FontWeight.normal,
-                        alignment: Alignment.centerLeft,
-                        color: subColor,
-                        text: '[${d.grade}]',
-                        fontSize: 19,
-                      ),
-                    ),
-                  if (d.attribution.isNotEmpty)
-                    Expanded(
-                      child: CustomText(
-                        fontWeight: FontWeight.normal,
-                        alignment: Alignment.centerLeft,
-                        color: subColor,
-                        text: '[${d.attribution}]',
-                        fontSize: 19,
-                      ),
-                    ),
-                ],
-              ),
-            const SizedBox(height: 8),
-            if (d.explanation.isNotEmpty)
-              _SectionRow(
-                title: 'الشرح',
-                onTap: () => _showTextSheet(context, 'الشرح:', d.explanation),
-              ),
-            if (d.hints.isNotEmpty)
-              _SectionRow(
-                title: 'الفوائد:',
-                onTap: () => _showHintsSheet(context, d.hints),
-              ),
-            if (d.wordsMeanings.isNotEmpty) ...[
-              CustomText(
-                fontWeight: FontWeight.bold,
-                alignment: Alignment.centerRight,
-                color: mainColor,
-                text: 'معاني الكلمات:',
-                fontSize: 24,
-              ),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: d.wordsMeanings.length,
-                separatorBuilder: (context, index) => Divider(color: subColor),
-                itemBuilder: (context, index) {
-                  final w = d.wordsMeanings[index];
-                  return Row(
+                const SizedBox(height: AppSpacing.sm),
+                if (d.grade.isNotEmpty || d.attribution.isNotEmpty)
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: CustomText(
-                          fontWeight: FontWeight.normal,
-                          alignment: Alignment.centerRight,
-                          color: Colors.black,
-                          text: w.meaning,
-                          fontSize: 19,
+                      if (d.attribution.isNotEmpty)
+                        Expanded(
+                          child: CustomText(
+                            fontWeight: FontWeight.normal,
+                            alignment: AlignmentDirectional.centerStart,
+                            color: AppColors.accent,
+                            text: '[${d.attribution}]',
+                            fontSize: AppTextSize.body,
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: CustomText(
-                          fontWeight: FontWeight.bold,
-                          alignment: Alignment.centerRight,
-                          color: subColor,
-                          text: w.word.isEmpty ? '' : '${w.word}:',
-                          fontSize: 19,
+                      if (d.grade.isNotEmpty)
+                        Expanded(
+                          child: CustomText(
+                            fontWeight: FontWeight.normal,
+                            alignment: AlignmentDirectional.centerEnd,
+                            color: AppColors.accent,
+                            text: '[${d.grade}]',
+                            fontSize: AppTextSize.body,
+                          ),
                         ),
-                      ),
                     ],
-                  );
-                },
-              ),
-            ],
-            if (d.reference.isNotEmpty)
-              _SectionRow(
-                title: 'المصادر',
-                onTap: () => _showTextSheet(context, 'المصادر:', d.reference),
-              ),
-            const SizedBox(height: 16),
-            const CustomText(
-              fontWeight: FontWeight.normal,
-              alignment: Alignment.center,
-              color: Colors.black54,
-              text: hadeethEncCredit,
-              fontSize: 14,
+                  ),
+                const SizedBox(height: AppSpacing.sm),
+                if (d.explanation.isNotEmpty)
+                  _SectionRow(
+                    title: l10n.explanation,
+                    onTap: () => _showTextSheet(
+                      context,
+                      l10n.explanationTitle,
+                      d.explanation,
+                    ),
+                  ),
+                if (d.hints.isNotEmpty)
+                  _SectionRow(
+                    title: l10n.benefits,
+                    onTap: () => _showHintsSheet(context, d.hints),
+                  ),
+                if (d.wordsMeanings.isNotEmpty) ...[
+                  CustomText(
+                    fontWeight: FontWeight.bold,
+                    alignment: AlignmentDirectional.centerStart,
+                    color: AppColors.heading,
+                    text: l10n.wordMeanings,
+                    fontSize: AppTextSize.heading,
+                    isHeader: true,
+                  ),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: d.wordsMeanings.length,
+                    separatorBuilder: (context, index) =>
+                        const Divider(color: AppColors.accent),
+                    itemBuilder: (context, index) {
+                      final w = d.wordsMeanings[index];
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: CustomText(
+                              fontWeight: FontWeight.bold,
+                              alignment: AlignmentDirectional.centerStart,
+                              color: AppColors.accent,
+                              text: w.word.isEmpty ? '' : '${w.word}:',
+                              fontSize: AppTextSize.body,
+                            ),
+                          ),
+                          Expanded(
+                            child: CustomText(
+                              fontWeight: FontWeight.normal,
+                              alignment: AlignmentDirectional.centerStart,
+                              text: w.meaning,
+                              fontSize: AppTextSize.body,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ],
+                if (d.reference.isNotEmpty)
+                  _SectionRow(
+                    title: l10n.sources,
+                    onTap: () =>
+                        _showTextSheet(context, l10n.sourcesTitle, d.reference),
+                  ),
+                const SizedBox(height: AppSpacing.lg),
+                CustomText(
+                  fontWeight: FontWeight.normal,
+                  alignment: Alignment.center,
+                  color: AppColors.inkMuted,
+                  text: l10n.sourceCredit,
+                  fontSize: AppTextSize.meta,
+                ),
+                const SizedBox(height: AppSpacing.sm),
+              ],
             ),
-            const SizedBox(height: 8),
-          ],
+          ),
         ),
       ),
     );
@@ -198,24 +221,32 @@ class _SectionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return Semantics(
+      button: true,
+      label: title,
+      excludeSemantics: true,
       onTap: onTap,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(minHeight: 48),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Icon(Icons.arrow_back_ios, color: mainColor),
-              CustomText(
-                fontWeight: FontWeight.bold,
-                alignment: Alignment.centerRight,
-                color: mainColor,
-                text: title,
-                fontSize: 24,
-              ),
-            ],
+      child: InkWell(
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: AppSizes.minTouchTarget),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: CustomText(
+                    fontWeight: FontWeight.bold,
+                    alignment: AlignmentDirectional.centerStart,
+                    color: AppColors.heading,
+                    text: title,
+                    fontSize: AppTextSize.heading,
+                  ),
+                ),
+                const Icon(Icons.arrow_forward_ios, color: AppColors.heading),
+              ],
+            ),
           ),
         ),
       ),
@@ -224,61 +255,43 @@ class _SectionRow extends StatelessWidget {
 }
 
 void _showTextSheet(BuildContext context, String title, String text) {
+  final credit = context.l10n.sourceCredit;
   showModalBottomSheet<void>(
     isScrollControlled: true,
     context: context,
     backgroundColor: Colors.transparent,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppRadius.modal),
+    ),
     builder: (context) => HadithTextSheet(
       title: title,
       text: text,
-      onShare: () =>
-          SharePlus.instance.share(ShareParams(text: sectionShareText(text))),
+      onShare: () => SharePlus.instance.share(
+        ShareParams(text: sectionShareText(text, credit: credit)),
+      ),
     ),
   );
 }
 
 void _showHintsSheet(BuildContext context, List<String> hints) {
+  final credit = context.l10n.sourceCredit;
+  final numbered = [
+    for (var i = 0; i < hints.length; i++) '${i + 1}:  ${hints[i]}',
+  ];
   showModalBottomSheet<void>(
     isScrollControlled: true,
     enableDrag: true,
     context: context,
     backgroundColor: Colors.transparent,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-    builder: (context) => DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      minChildSize: 0.5,
-      maxChildSize: 1.0,
-      builder: (_, controller) => Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: ListView(
-          controller: controller,
-          padding: const EdgeInsets.all(12),
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
-              child: CustomText(
-                fontWeight: FontWeight.bold,
-                alignment: Alignment.centerRight,
-                color: mainColor,
-                text: 'الفوائد:',
-                fontSize: 24,
-              ),
-            ),
-            for (var i = 0; i < hints.length; i++) ...[
-              CustomText(
-                fontWeight: FontWeight.normal,
-                alignment: Alignment.centerRight,
-                color: Colors.black,
-                text: '${i + 1}:  ${hints[i]}',
-                fontSize: 19,
-              ),
-              if (i < hints.length - 1) const Divider(color: Colors.teal),
-            ],
-          ],
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppRadius.modal),
+    ),
+    builder: (context) => HadithTextSheet(
+      title: context.l10n.benefits,
+      text: numbered.join('\n\n'),
+      onShare: () => SharePlus.instance.share(
+        ShareParams(
+          text: sectionShareText(numbered.join('\n'), credit: credit),
         ),
       ),
     ),

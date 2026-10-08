@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default language of the app is Arabic. -->
+    <string name="app_name">الأحاديث النبوية</string>
+</resources>

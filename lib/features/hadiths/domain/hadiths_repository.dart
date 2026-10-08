@@ -9,9 +9,13 @@ abstract interface class HadithsRepository {
   /// One page of the hadiths filed under [categoryId]; pages start at 1.
   Future<Result<HadithPage>> getHadithPage({
     required String categoryId,
+    required String language,
     int page = 1,
     int perPage = defaultPageSize,
   });
 
-  Future<Result<HadithDetails>> getHadithDetails(String id);
+  Future<Result<HadithDetails>> getHadithDetails(
+    String id, {
+    required String language,
+  });
 }

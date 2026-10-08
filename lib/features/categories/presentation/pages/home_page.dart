@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/custom_text.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/categories/presentation/category_navigation.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
 import 'package:mynewapp/features/categories/presentation/widgets/category_grid.dart';
+import 'package:mynewapp/l10n/l10n.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(100, 241, 224, 172),
-        title: const CustomText(
+        backgroundColor: AppColors.homeAppBar,
+        title: CustomText(
           fontWeight: FontWeight.bold,
           alignment: Alignment.center,
-          color: Colors.white,
-          text: 'الأحاديث النبوية',
-          fontSize: 19,
+          color: AppColors.onAppBar,
+          text: l10n.appTitle,
+          fontSize: AppTextSize.title,
+          isHeader: true,
         ),
       ),
       body: BlocConsumer<CategoriesCubit, CategoriesState>(
@@ -40,24 +44,27 @@ class HomePage extends StatelessWidget {
             case LoadStatus.success:
               final roots = state.roots;
               if (roots.isEmpty) {
-                return const EmptyView(message: 'لا توجد تصنيفات');
+                return EmptyView(message: l10n.noCategories);
               }
               return CategoryBackdrop(
                 child: RefreshIndicator(
                   onRefresh: cubit.refresh,
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(AppSpacing.sm),
                     child: Column(
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(right: 10, bottom: 8),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                            start: 10,
+                            bottom: AppSpacing.sm,
+                          ),
                           child: CustomText(
                             fontWeight: FontWeight.bold,
-                            alignment: Alignment.centerRight,
-                            color: Colors.black,
-                            text: 'التصنيفات الرئيسية',
-                            fontSize: 30,
+                            alignment: AlignmentDirectional.centerStart,
+                            text: l10n.mainCategories,
+                            fontSize: AppTextSize.display,
+                            isHeader: true,
                           ),
                         ),
                         CategoryGrid(

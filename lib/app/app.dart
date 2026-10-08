@@ -1,11 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
+import 'package:mynewapp/l10n/l10n.dart';
+
+/// Debug-only way to preview the other language without changing the device language:
+/// `flutter run --dart-define=FORCE_LOCALE=en` (or `ar`). Ignored in release builds.
+const _forcedLocale = String.fromEnvironment('FORCE_LOCALE');
 
 class MyApp extends StatefulWidget {
   /// [dependencies] lets tests and previews supply fakes; production uses
@@ -30,36 +37,34 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider<CategoriesRepository>.value(value: deps.categories),
         RepositoryProvider<HadithsRepository>.value(value: deps.hadiths),
       ],
-      // One category tree for the whole app, above the navigator so it survives navigation.
-      child: BlocProvider(
-        create: (context) =>
-            CategoriesCubit(context.read<CategoriesRepository>())..load(),
-        child: MaterialApp(
-          title: 'My app',
-          theme: ThemeData(
-            scaffoldBackgroundColor: Colors.white,
-            appBarTheme: AppBarTheme(
-              titleTextStyle: const TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-              iconTheme: const IconThemeData(color: Colors.black),
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarColor: Colors.grey.shade100,
-                statusBarBrightness: Brightness.dark,
-              ),
-              backgroundColor: Colors.white,
-              elevation: 2.0,
-            ),
-            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              selectedItemColor: Colors.cyan,
-              elevation: 20.0,
-              type: BottomNavigationBarType.fixed,
-            ),
-          ),
-          home: const HomePage(),
-        ),
+      child: MaterialApp(
+        onGenerateTitle: (context) => context.l10n.appTitle,
+        theme: AppTheme.light(),
+        locale: kDebugMode && _forcedLocale.isNotEmpty
+            ? Locale(_forcedLocale)
+            : null,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        // Arabic is listed first and is the fallback for any other device language.
+        supportedLocales: AppLocalizations.supportedLocales,
+        // One category tree for the whole app, above the navigator so it survives navigation.
+        // It is keyed by language: a language change reloads the tree in the new language.
+        builder: (context, child) {
+          final language = context.apiLanguage;
+          return BlocProvider(
+            key: ValueKey(language),
+            create: (context) => CategoriesCubit(
+              context.read<CategoriesRepository>(),
+              language: language,
+            )..load(),
+            child: child!,
+          );
+        },
+        home: const HomePage(),
       ),
     );
   }

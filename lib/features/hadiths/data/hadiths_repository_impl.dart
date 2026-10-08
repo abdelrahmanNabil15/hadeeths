@@ -12,6 +12,7 @@ class HadithsRepositoryImpl implements HadithsRepository {
   @override
   Future<Result<HadithPage>> getHadithPage({
     required String categoryId,
+    required String language,
     int page = 1,
     int perPage = HadithsRepository.defaultPageSize,
   }) => Result.guard(() async {
@@ -19,14 +20,17 @@ class HadithsRepositoryImpl implements HadithsRepository {
       categoryId: categoryId,
       page: page,
       perPage: perPage,
+      language: language,
     );
     return dto.toEntity();
   });
 
   @override
-  Future<Result<HadithDetails>> getHadithDetails(String id) =>
-      Result.guard(() async {
-        final dto = await _remote.fetchHadithDetails(id);
-        return dto.toEntity();
-      });
+  Future<Result<HadithDetails>> getHadithDetails(
+    String id, {
+    required String language,
+  }) => Result.guard(() async {
+    final dto = await _remote.fetchHadithDetails(id, language: language);
+    return dto.toEntity();
+  });
 }
