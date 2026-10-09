@@ -457,3 +457,36 @@ flagged sections, shared widgets with an off-by-default switch, or has no visibl
 | The fade itself seen in motion, back gesture feel, TalkBack, dark mode on device | NOT RUN (screenshots are single frames; tests check the animation values) |
 | Samsung phone | NOT RUN (disconnected) |
 | iOS (the platform slide and swipe-back through `appRoute`) | NOT RUN |
+
+## 26. Phase C report (branch `ui/c-reading`, from `ui/b-navigation-home`)
+
+**Finding: the reading screens did not need a visual change.** I looked at the released hadith flow on the Android emulator (English, light):
+the category page, the hadith list, and a hadith with its title, reading surface, grade chip, narrator line, collapsed Explanation and Benefits
+sections and the source credit; then the same hadith in **dark mode at 200% system text**. Text is large, readable and unclipped in both; the hierarchy
+is clear (one reading card, secondary material collapsed, credit visible). I did not find a reading problem that a restyle would fix, and the plan's
+priority for these screens is legibility and stability, so **no reading screen was changed**.
+
+**Added (tests only):** `test/features/hadiths/presentation/reading_surface_test.dart` (8 tests): the source text, with vowels and the honorific mark,
+reaches the screen exactly (light and dark); no ellipsis or line limit on it; Arabic uses Amiri at the token size and line height, English the UI font;
+the reading-size setting scales it; it fits a 360x640 phone at 200% text in both themes and stays selectable; nothing inside it animates, blurs or
+fades, with or without reduced motion. The existing `accessibility_test` already walks every screen in both languages and themes at 200% text.
+
+**Noted, not changed:** hadith titles in the list are cut after four lines with an ellipsis (`maxTitleLines`); that is a title preview and the full text is
+on the details page, but if you want the full title always shown, say so.
+
+**Still waiting for your decision (released-app visible, unchanged):**
+1. A fade from loading to content on the home, list and details screens (the state views swap instantly today).
+2. Press feedback on the category and list tiles.
+3. The app page transition for the hadith flow, for every route of that flow at once.
+Reading text itself is excluded from all three.
+
+| Check | Result |
+|---|---|
+| `dart format`, `flutter analyze` | PASS |
+| `flutter test` | PASS, 865 (857 before; 8 new) |
+| Logic coverage (gate 80%) | PASS, 90.5% |
+| Release config check | PASS |
+| Emulator, English: category, list, details, light; details dark at 200% text | PASS (looked at screenshots) |
+| Arabic/RTL on a device this phase | NOT RUN (covered by the existing widget tests only) |
+| Explanation and Benefits sections opened, search screen, text-size sheet, TalkBack on a device | NOT RUN |
+| Samsung phone, iOS | NOT RUN |
