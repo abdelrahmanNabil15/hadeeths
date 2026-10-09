@@ -1,6 +1,6 @@
 # Hadeeths — UI/UX Modernization, Design System and Motion: audit and plan
 
-> **Status (2026-10-09): plan approved by the owner. Phase A implemented on branch `ui/a-foundations`; see section 24.**
+> **Status (2026-10-09): plan approved by the owner. Phases A to F implemented on the branches `ui/a-foundations` to `ui/f-review` (each from the previous one); reports in sections 24 to 29. Nothing is pushed or merged.**
 
 Date: 2026-10-09. **Status: proposal only. No application code, assets, dependencies or configuration were changed to produce it.**
 Evidence: reading the repository (listed per claim), `flutter analyze` / `flutter test` results from the Phase 3C work, and what I saw on a
@@ -550,3 +550,40 @@ The Phase B ledger tests were retired because they described the earlier state. 
 | Emulator, released mode (flags off): app starts, settings opens with the new route and renders | PASS |
 | The transition and fades seen in motion; back gesture feel; TalkBack; Arabic/RTL on a device | NOT RUN |
 | Samsung phone, iOS (platform slide and swipe-back through `AppPageRoute`) | NOT RUN |
+
+## 29. Phase F report: final review (branch `ui/f-review`, from `ui/e-secondary`)
+
+**One code change:** `AppPageRoute` now reads the system's "remove animations" setting from its navigator, so with it on a page is simply there and going back is
+immediate (route durations are zero) instead of waiting out a transition that shows nothing. Five new tests (`test/app/reduced_motion_test.dart`): the hadith flow
+shows each page after two frames with nothing left running; going back is immediate; normal and removed-animation route durations; a section switch with animations removed.
+
+**Whole-app verification**
+
+| Check | Result |
+|---|---|
+| `dart format --set-exit-if-changed .`, `flutter analyze` | PASS (0 issues) |
+| `flutter test` | PASS, 885 tests (805 at the start of the UI work) |
+| Logic coverage (gate 80%) | PASS, 90.6% |
+| Release config check | PASS |
+| `flutter build apk --release` | PASS, 58.3 MB, unsigned (cannot be installed as is, as designed); permissions: internet, coarse and fine location, boot, exact alarm, vibrate, notifications |
+| Existing screen sweeps: every released screen in Arabic and English, light and dark, at 130% and 200% text on a 360x640 phone, with tap-target, label and contrast guidelines | PASS (part of the suite, unchanged and still green) |
+| Flagged sections (prayer, Qibla, reminders) at 130% and 200% text, both languages and themes | PASS (their own widget tests, unchanged and still green) |
+| Reduced motion: hadith flow and a section switch | PASS (new tests) |
+| Emulator (Android, debug build): released mode, English light; Arabic dark at 130% text: home, category, a hadith with its vowels, grade chip, narrator, collapsed sections, credit; English dark at 200% text on a hadith | PASS (looked at screenshots: RTL layout, mirrored chevrons, Arabic-Indic digits, no clipping) |
+| Emulator: prayer, Qibla (static), reminders and city picker pages | PASS (earlier phases) |
+| Profile-mode frame timing on a named device | NOT RUN: only an emulator was connected, and emulator timings do not represent a phone; no frame-rate claim is made |
+| Samsung phone: transitions, fades, compass smoothing and vibration, exact alarms, reboot and time-zone reschedule | NOT RUN (phone not connected) |
+| TalkBack / VoiceOver passes | NOT RUN |
+| iOS: build, platform slide inside `AppPageRoute`, swipe-back | NOT RUN (CI compile only, never run on GitHub for these branches) |
+| Predictive back, edge-to-edge and gesture-navigation insets | NOT RUN |
+| CI on GitHub for `feature/p3c-reminders` and `ui/*` | NOT RUN (nothing pushed) |
+
+**Remaining limitations and open items**
+- Everything marked NOT RUN above, most importantly a phone session and one iPhone/simulator session.
+- Liquid Glass: not built; the optional Mac-based spike is described in section 19 and waits for your approval and a Mac.
+- Proposals not applied: press feedback on released tiles (your decision), countdown to the next prayer (new logic, not requested), search-result fade.
+- The `.claude/skills/hadeeths-ui-modernization/SKILL.md` extension is on disk but `.claude/` is untracked, so it is not in any commit.
+- Open product items from Phase 3C and earlier are unchanged: Play Console exact-alarm declaration, sunrise and test-reminder wording, adhan audio licence, Arabic city names,
+  Jerusalem and Gaza handling, FCNA Hijri calendar validation, magnetic-model licence confirmation, the Egyptian authority's official timetable, compass accuracy away from magnets.
+- Branches are stacked: `feature/p3c-reminders` then `ui/a-foundations`, `ui/b-navigation-home`, `ui/c-reading`, `ui/d-worship`, `ui/e-secondary`, `ui/f-review`. Merge them in that order. Local `master`
+  is 7 commits ahead of `origin/master`, unpushed.

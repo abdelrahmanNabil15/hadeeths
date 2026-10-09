@@ -27,11 +27,21 @@ class AppPageRoute<T> extends MaterialPageRoute<T> {
     super.fullscreenDialog,
   });
 
-  @override
-  Duration get transitionDuration => AppMotion.page;
+  /// Whether the system asks for no animations. Read from the navigator the route lives in, so
+  /// the page is simply there (no waiting for a transition to run its time) when it is on.
+  bool get _removeAnimations {
+    final context = navigator?.context;
+    return context != null &&
+        (MediaQuery.maybeDisableAnimationsOf(context) ?? false);
+  }
 
   @override
-  Duration get reverseTransitionDuration => AppMotion.pageReverse;
+  Duration get transitionDuration =>
+      _removeAnimations ? Duration.zero : AppMotion.page;
+
+  @override
+  Duration get reverseTransitionDuration =>
+      _removeAnimations ? Duration.zero : AppMotion.pageReverse;
 
   @override
   Widget buildTransitions(
