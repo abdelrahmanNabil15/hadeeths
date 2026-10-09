@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
@@ -116,6 +117,64 @@ void main() {
     await tester.pump();
     expect(find.text('أنت متجه نحو القبلة'), findsOneWidget);
     expect(find.byIcon(Icons.check_circle), findsOneWidget);
+  });
+
+  testWidgets(
+    'lining up with the Qibla gives one short vibration, turning does not',
+    (tester) async {
+      final vibrations = <String>[];
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        (call) async {
+          if (call.method == 'HapticFeedback.vibrate') {
+            vibrations.add(call.arguments as String);
+          }
+          return null;
+        },
+      );
+      addTearDown(
+        () => tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+          SystemChannels.platform,
+          null,
+        ),
+      );
+      final f = await _openQibla(tester);
+      await tester.tap(find.text('استخدم البوصلة'));
+      await tester.pump();
+      f.compass.emit(facing(_bearing - 40));
+      await tester.pump();
+      await tester.pump();
+      expect(vibrations, isEmpty);
+      // The readings are averaged, so it takes a few steady ones to settle on the Qibla.
+      for (var i = 0; i < 25; i++) {
+        f.compass.emit(facing(_bearing + 1));
+        await tester.pump();
+      }
+      await tester.pump();
+      expect(vibrations, ['HapticFeedbackType.mediumImpact']);
+      for (var i = 0; i < 5; i++) {
+        f.compass.emit(facing(_bearing + 2));
+        await tester.pump();
+      }
+      expect(vibrations, hasLength(1));
+    },
+  );
+
+  testWidgets('the interference warning is a labelled, announced message', (
+    tester,
+  ) async {
+    final f = await _openQibla(tester);
+    await tester.tap(find.text('استخدم البوصلة'));
+    await tester.pump();
+    f.compass.emit(facing(_bearing - 40, fieldScale: 3));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.error_outline), findsOneWidget);
+    for (var i = 0; i < 25; i++) {
+      f.compass.emit(facing(_bearing - 40));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.error_outline), findsNothing);
   });
 
   testWidgets('interference is reported in words', (tester) async {

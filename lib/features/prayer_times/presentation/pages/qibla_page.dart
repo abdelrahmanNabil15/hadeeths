@@ -1,15 +1,18 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/haptics/haptics.dart';
+import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/qibla.dart';
+import 'package:mynewapp/features/prayer_times/presentation/angle_smoothing.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/qibla_compass_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
@@ -19,7 +22,10 @@ import 'package:mynewapp/l10n/l10n.dart';
 /// never shows a noisy reading. Below it the user can switch on the live compass, which turns the
 /// dial to follow the phone.
 class QiblaPage extends StatelessWidget {
-  const QiblaPage({super.key});
+  const QiblaPage({super.key, this.haptics = const SystemHaptics()});
+
+  /// The short vibration when the compass lines up with the Qibla.
+  final Haptics haptics;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +53,7 @@ class QiblaPage extends StatelessWidget {
             return _QiblaBody(
               key: ValueKey(place.point),
               services: context.read<PrayerServices>(),
+              haptics: haptics,
               place: place.point,
               bearing: bearing,
             );
@@ -76,11 +83,13 @@ class _QiblaBody extends StatefulWidget {
   const _QiblaBody({
     super.key,
     required this.services,
+    required this.haptics,
     required this.place,
     required this.bearing,
   });
 
   final PrayerServices services;
+  final Haptics haptics;
   final GeoPoint place;
   final double bearing;
 
@@ -128,7 +137,7 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
       value: _compass,
       child: BlocConsumer<QiblaCompassCubit, QiblaCompassState>(
         listenWhen: (a, b) => !a.aligned && b.aligned,
-        listener: (context, state) => HapticFeedback.mediumImpact(),
+        listener: (context, state) => widget.haptics.alignment(),
         builder: (context, live) {
           final isLive = live.status == CompassStatus.active;
           return ListView(
@@ -156,18 +165,26 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
                         SizedBox(
                           width: 240,
                           height: 240,
-                          child: CustomPaint(
-                            painter: _DialPainter(
-                              markerAngle: isLive
+                          // Only the drawing is eased towards each reading. A missing marker
+                          // (interference) disappears at once, never fading while it is wrong.
+                          child: SmoothAngle(
+                            angle: isLive ? -live.trueHeading! : null,
+                            builder: (context, north) => SmoothAngle(
+                              angle: isLive
                                   ? (live.interference ? null : live.turn)
                                   : bearing,
-                              northAngle: isLive ? -live.trueHeading! : null,
-                              aligned: live.aligned,
-                              ring: scheme.outline,
-                              accent: live.aligned
-                                  ? scheme.secondary
-                                  : scheme.primary,
-                              tick: scheme.onSurfaceVariant,
+                              builder: (context, marker) => CustomPaint(
+                                painter: _DialPainter(
+                                  markerAngle: marker,
+                                  northAngle: north,
+                                  aligned: live.aligned,
+                                  ring: scheme.outline,
+                                  accent: live.aligned
+                                      ? scheme.secondary
+                                      : scheme.primary,
+                                  tick: scheme.onSurfaceVariant,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -279,35 +296,15 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
         ],
       ),
       const SizedBox(height: AppSpacing.sm),
-      if (live.interference)
-        Semantics(
-          liveRegion: true,
-          container: true,
-          child: Container(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            decoration: BoxDecoration(
-              color: scheme.surfaceContainerLowest,
-              borderRadius: BorderRadius.circular(AppRadius.card),
-              border: Border.all(color: scheme.error),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.warning_amber_rounded, color: scheme.error),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Text(
-                    l10n.compassInterference,
-                    style: TextStyle(
-                      fontSize: AppTextSize.meta,
-                      height: AppLineHeight.body,
-                      color: scheme.onSurface,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      AnimatedStateSwitcher(
+        child: live.interference
+            ? StatusBanner(
+                key: const ValueKey('interference'),
+                message: l10n.compassInterference,
+                kind: StatusKind.error,
+              )
+            : const SizedBox(key: ValueKey('clear'), width: double.infinity),
+      ),
       const SizedBox(height: AppSpacing.sm),
       Text(l10n.compassHoldFlat, textAlign: TextAlign.center, style: small()),
       const SizedBox(height: AppSpacing.xs),

@@ -9,6 +9,7 @@ import 'package:mynewapp/core/time/zone.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
+import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/core/widgets/switch_row.dart';
 import 'package:mynewapp/features/prayer_times/domain/place_zone.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
@@ -268,12 +269,13 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
     ReminderSettings settings,
   ) {
     final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
     final cubit = context.read<RemindersCubit>();
     String? text;
+    var kind = StatusKind.warning;
     var offerSettings = false;
     if (state.problem == ReminderProblem.needsPlace) {
       text = l10n.remindersNeedPlace;
+      kind = StatusKind.info;
     } else if (state.problem == ReminderProblem.denied ||
         state.problem == ReminderProblem.needsSettings ||
         denied) {
@@ -285,41 +287,18 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
       offerSettings = true;
     } else if (state.problem == ReminderProblem.unavailable) {
       text = l10n.locationUnavailable;
+      kind = StatusKind.error;
     } else if (state.status.failed > 0) {
       text = l10n.remindersFailed;
     }
     if (text == null) return const [];
     return [
       const SizedBox(height: AppSpacing.md),
-      Semantics(
-        liveRegion: true,
-        container: true,
-        child: Container(
-          padding: const EdgeInsets.all(AppSpacing.md),
-          decoration: BoxDecoration(
-            color: scheme.surfaceContainerLowest,
-            borderRadius: BorderRadius.circular(AppRadius.card),
-            border: Border.all(color: scheme.outline),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                text,
-                style: TextStyle(
-                  fontSize: AppTextSize.body,
-                  height: AppLineHeight.body,
-                  color: scheme.onSurface,
-                ),
-              ),
-              if (offerSettings)
-                TextButton(
-                  onPressed: cubit.openSettings,
-                  child: Text(l10n.openSettings),
-                ),
-            ],
-          ),
-        ),
+      StatusBanner(
+        message: text,
+        kind: kind,
+        actionLabel: offerSettings ? l10n.openSettings : null,
+        onAction: offerSettings ? cubit.openSettings : null,
       ),
     ];
   }

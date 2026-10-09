@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/design_system/motion.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/clock_format.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
@@ -338,7 +340,11 @@ class _TimeRow extends StatelessWidget {
       container: true,
       label: '$name, $time',
       excludeSemantics: true,
-      child: Container(
+      // The next prayer's emphasis (border and weight) eases in when the next prayer changes. It
+      // is also fully visible with no animation, so nothing depends on the movement.
+      child: AnimatedContainer(
+        duration: context.motion(AppMotion.medium),
+        curve: AppMotion.standard,
         constraints: const BoxConstraints(minHeight: AppSizes.minTileHeight),
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
@@ -366,10 +372,10 @@ class _TimeRow extends StatelessWidget {
             ),
             Text(
               time,
-              style: TextStyle(
+              // Equal-width digits where the font has them, so times line up down the list.
+              style: AppTypography.of(context).number.copyWith(
                 fontSize: AppTextSize.body + 1,
                 fontWeight: isNext ? FontWeight.w700 : FontWeight.w500,
-                color: scheme.onSurface,
               ),
             ),
           ],

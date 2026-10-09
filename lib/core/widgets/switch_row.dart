@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/haptics/haptics.dart';
 
 /// A card with a title, an optional line of explanation and a switch. The whole row is the control,
 /// and a screen reader announces the title, the explanation and the state together.
@@ -10,6 +11,7 @@ class SwitchRow extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.subtitle,
+    this.haptics = const SystemHaptics(),
   });
 
   final String title;
@@ -18,6 +20,9 @@ class SwitchRow extends StatelessWidget {
 
   /// Null disables the row.
   final ValueChanged<bool>? onChanged;
+
+  /// A light tick when the switch is flipped (the system decides whether it is felt).
+  final Haptics haptics;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +58,12 @@ class SwitchRow extends StatelessWidget {
                 ),
               ),
         value: value,
-        onChanged: onChanged,
+        onChanged: onChanged == null
+            ? null
+            : (on) {
+                haptics.selection();
+                onChanged!(on);
+              },
       ),
     );
   }

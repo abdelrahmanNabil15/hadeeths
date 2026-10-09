@@ -490,3 +490,35 @@ Reading text itself is excluded from all three.
 | Arabic/RTL on a device this phase | NOT RUN (covered by the existing widget tests only) |
 | Explanation and Benefits sections opened, search screen, text-size sheet, TalkBack on a device | NOT RUN |
 | Samsung phone, iOS | NOT RUN |
+
+## 27. Phase D report (branch `ui/d-worship`, from `ui/c-reading`)
+
+All of it is in the flagged sections (prayer, Qibla, reminders) or in `SwitchRow`, which only the reminders page uses. **No released screen changed.**
+Prayer calculation, scheduling, saving and the compass maths were not touched.
+
+**Changed:**
+- **Prayer times list:** the next prayer's emphasis (border and weight) eases in over 250 ms when the next prayer changes; it is fully visible
+  with no animation. Times use equal-width digits where the font supports them (`AppTypography.number`; Cairo's support was not checked).
+- **Qibla dial:** the drawing eases to each new reading over 100 ms and takes the short way across north (`unwrapAngle`, `SmoothAngle`). The
+  reading, "aligned" and the spoken instruction are unchanged. A missing marker (magnetic interference) still disappears at once, on purpose.
+  The interference warning is now a `StatusBanner` (error icon, announced) that fades in and out.
+- **Haptics:** the alignment vibration goes through the `Haptics` service (`QiblaPage(haptics: ...)`, default system), and a light tick accompanies the
+  reminders switches. No setting was added; the system decides whether it is felt.
+- **Reminders messages** (no place, permission refused, exact timing missing, unavailable, failed) use `StatusBanner`: same words, the settings action
+  is kept, each kind has its own icon.
+
+**Not done, with reasons:**
+- A live countdown to the next prayer: it needs a timer and new logic, not styling; proposed as its own item if wanted.
+- `AppSheet`: no sheet in these screens needs it.
+- Regrouping the reminders page: it already has headed sections and I saw no problem on the emulator screenshot.
+
+| Check | Result |
+|---|---|
+| `dart format`, `flutter analyze` | PASS |
+| `flutter test` | PASS, 877 (865 before; 12 new tests: angle unwrapping, smoothing, vibration once on alignment, interference banner, switch tick) |
+| Logic coverage (gate 80%) | PASS, 90.6% |
+| Release config check | PASS |
+| Emulator, sections on, Cairo set: prayer page, Qibla page (static dial), reminders page | PASS (rendered; no exceptions in the log) |
+| Compass smoothing and the vibration on a real sensor | NOT RUN (the emulator has no compass; the Samsung phone was not connected) |
+| The emphasis fade seen in motion, TalkBack, dark mode on device | NOT RUN |
+| iOS | NOT RUN |
