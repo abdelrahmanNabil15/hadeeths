@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/core/errors/failure.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 
 import '../support/fake_backend.dart';
@@ -90,14 +91,14 @@ void main() {
             tester.view.physicalSize.width / tester.view.devicePixelRatio;
         await pumpApp(tester, _backend(), locale: 'ar');
         expect(
-          centre(tester, find.byIcon(Icons.arrow_forward_ios)),
+          centre(tester, find.byIcon(AppIcons.chevron)),
           lessThan(width / 2),
         );
         expect(centre(tester, find.byIcon(Icons.tune)), lessThan(width / 2));
 
         await pumpApp(tester, _backend(), locale: 'en');
         expect(
-          centre(tester, find.byIcon(Icons.arrow_forward_ios)),
+          centre(tester, find.byIcon(AppIcons.chevron)),
           greaterThan(width / 2),
         );
         expect(centre(tester, find.byIcon(Icons.tune)), greaterThan(width / 2));
@@ -131,9 +132,7 @@ void main() {
     testWidgets('tile chevrons mirror with the text direction', (tester) async {
       for (final locale in ['ar', 'en']) {
         await pumpApp(tester, _backend(), locale: locale);
-        final icon = tester.widget<Icon>(
-          find.byIcon(Icons.arrow_forward_ios).first,
-        );
+        final icon = tester.widget<Icon>(find.byIcon(AppIcons.chevron).first);
         expect(icon.icon!.matchTextDirection, isTrue);
       }
     });
