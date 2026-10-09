@@ -139,6 +139,9 @@ abstract final class AppTextSize {
   /// size, so Arabic starts larger.
   static const readingArabic = 24.0;
   static const readingLatin = 18.0;
+
+  /// The tasbeeh count inside its circle (it shrinks to fit long numbers).
+  static const counter = 64.0;
 }
 
 abstract final class AppLineHeight {

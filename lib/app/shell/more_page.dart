@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
@@ -51,6 +52,7 @@ class MorePage extends StatelessWidget {
             if (favorites != null) ...[
               AppTile(
                 title: l10n.favoritesTitle,
+                leadingIcon: Icons.bookmark_outline_rounded,
                 pressFeedback: true,
                 onTap: () => open(FavoritesPage(repository: favorites!)),
               ),
@@ -59,6 +61,7 @@ class MorePage extends StatelessWidget {
             if (tracker != null) ...[
               AppTile(
                 title: l10n.trackerTitle,
+                leadingIcon: Icons.event_available_outlined,
                 pressFeedback: true,
                 onTap: () => open(
                   TrackerPage(log: tracker!.log, services: tracker!.services),
@@ -69,19 +72,25 @@ class MorePage extends StatelessWidget {
             if (tasbeeh != null) ...[
               AppTile(
                 title: l10n.tasbeehTitle,
+                leadingIcon: Icons.radio_button_checked_rounded,
                 pressFeedback: true,
                 onTap: () => open(TasbeehPage(repository: tasbeeh!)),
               ),
               const SizedBox(height: AppSpacing.md),
             ],
+            // The app's own pages sit apart from the personal ones.
+            if (favorites != null || tracker != null || tasbeeh != null)
+              const SizedBox(height: AppSpacing.lg),
             AppTile(
               title: l10n.settings,
+              leadingIcon: AppIcons.settings,
               pressFeedback: true,
               onTap: () => open(SettingsPage(onDeleteAll: onDeleteAll)),
             ),
             const SizedBox(height: AppSpacing.md),
             AppTile(
               title: l10n.aboutTitle,
+              leadingIcon: AppIcons.info,
               pressFeedback: true,
               onTap: () => open(const AboutPage(extended: true)),
             ),
