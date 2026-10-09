@@ -1,0 +1,48 @@
+{
+ "about": "Cairo prayer times as published by Egyptian newspapers that attribute them to the Egyptian General Authority of Survey. This is a SECONDARY source: the authority's own timetable could not be reached on 2026-10-09 (egsa.gov.eg is the Egyptian Space Agency, a different body). Times are local clock times, 24-hour. Replace with the primary timetable when the owner supplies it.",
+ "accessed": "2026-10-09",
+ "city": "Cairo",
+ "latitude": 30.0444,
+ "longitude": 31.2357,
+ "cases": [
+  {
+   "date": "2026-02-22",
+   "utcOffsetHours": 2,
+   "local": {
+    "fajr": "05:02",
+    "dhuhr": "12:08",
+    "asr": "15:22",
+    "maghrib": "17:49",
+    "isha": "19:06"
+   },
+   "source": "https://www.dostor.org/5429765",
+   "note": "Al-Dostor, 'مواقيت الصلاة في مصر اليوم الأحد 22 فبراير 2026' (Cairo section)"
+  },
+  {
+   "date": "2026-04-01",
+   "utcOffsetHours": 2,
+   "local": {
+    "fajr": "04:17",
+    "dhuhr": "11:59",
+    "asr": "15:30",
+    "maghrib": "18:14",
+    "isha": "19:32"
+   },
+   "source": "https://www.elwatannews.com/news/details/8256380",
+   "note": "Al-Watan, 'مواقيت الصلاة اليوم الأربعاء 1 إبريل 2026' (says: as announced by the authority on its official website)"
+  },
+  {
+   "date": "2026-08-06",
+   "utcOffsetHours": 3,
+   "local": {
+    "fajr": "04:40",
+    "dhuhr": "13:01",
+    "asr": "16:38",
+    "maghrib": "19:45",
+    "isha": "21:10"
+   },
+   "source": "https://www.dostor.org/5658619",
+   "note": "Al-Dostor, 'مواقيت الصلاة اليوم الخميس 6 أغسطس 2026' (says: according to the Egyptian General Authority of Survey)"
+  }
+ ]
+}

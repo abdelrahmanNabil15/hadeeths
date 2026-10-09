@@ -142,7 +142,33 @@ void main() {
       await tester.tap(find.text('العربية'));
       await tester.pumpAndSettle();
       expect(_tab('الأحاديث'), findsOneWidget);
+      // The reminder reconcile waits 400 ms after a language change. The theme no longer animates
+      // on a settings change, so settling no longer runs past that wait by itself.
+      await tester.pump(const Duration(milliseconds: 500));
     });
+  });
+
+  group('theme', () {
+    testWidgets(
+      'is not rebuilt (and so does not animate) on a settings change',
+      (tester) async {
+        await _pump(tester, locale: 'en');
+        final before = tester
+            .widget<MaterialApp>(find.byType(MaterialApp))
+            .theme;
+        await tester.tap(_tab('More'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Settings'));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('العربية'));
+        await tester.pumpAndSettle();
+        await tester.pump(const Duration(milliseconds: 500));
+        final after = tester
+            .widget<MaterialApp>(find.byType(MaterialApp))
+            .theme;
+        expect(identical(before, after), isTrue);
+      },
+    );
   });
 
   group('navigation stacks', () {

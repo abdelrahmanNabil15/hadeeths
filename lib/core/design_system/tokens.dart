@@ -117,13 +117,43 @@ abstract final class AppSizes {
   /// Bottom navigation bar (Material 3 default is 80).
   static const navigationBarHeight = 72.0;
 
+  /// Icons that sit beside text.
+  static const iconSmall = 20.0;
+
   /// Longest line length on large screens.
   static const contentMaxWidth = 640.0;
 }
 
+/// Durations and curves for every animation in the app.
+///
+/// Animations are feedback and continuity, never a gate: state, saving and navigation never wait for
+/// one to finish. Read durations through `context.motion(...)` (see `motion.dart`) so that the
+/// system's "remove animations" setting turns them off. Starting values, to be tuned on devices.
 abstract final class AppMotion {
+  /// Press feedback, ink, check marks.
+  static const instant = Duration(milliseconds: 100);
+
+  /// Switches, chips, selection indicators.
   static const short = Duration(milliseconds: 150);
+
+  /// Expanding and collapsing, loading to content, a banner appearing.
   static const medium = Duration(milliseconds: 250);
+
+  /// A page entering; leaving is a little faster so going back never feels slow.
+  static const page = Duration(milliseconds: 280);
+  static const pageReverse = Duration(milliseconds: 220);
+
+  /// The longest allowed: only for a first-time reveal that carries meaning.
+  static const emphasis = Duration(milliseconds: 400);
+
+  /// Things that move or change in place.
+  static const standard = Curves.easeInOutCubic;
+
+  /// Things that appear.
+  static const enter = Curves.easeOutCubic;
+
+  /// Things that leave.
+  static const exit = Curves.easeInCubic;
 }
 
 abstract final class AppFonts {

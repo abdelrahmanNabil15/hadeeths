@@ -22,7 +22,8 @@ lib/
     json/json_helpers.dart       defensive JSON readers
     state/load_status.dart       LoadStatus shared by all cubits
     cache/                       ResponseCache (file, in-memory, switchable) and CachedFetcher (read-through policy)
-    time/                        Clock (always UTC), TimeZoneRules (offset at an instant; DST-aware wall-clock helpers)
+    format/                      Digits (Western or Arabic-Indic for the app's own numbers; never applied to source text)
+    time/                        Clock (always UTC), TimeZoneRules (offset at an instant; DST-aware wall-clock helpers), IanaTimeZone (IANA database, offline)
     notifications/               NotificationPlanner: pure, deterministic plan of what to keep pending (window, quiet hours,
                                  dedupe, platform limit, stable ids) and a diff against what is pending. No plugin, no UI yet
     database/                    UserDatabase over sqlite3 (user's own data, on-device only), MigrationRunner (one transaction per
@@ -33,6 +34,13 @@ lib/
     widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
     licences.dart                font licence texts for the licences page
     logging/
+  features/prayer_times/         (Phase 3B; behind the Prayer section flag) domain: CalculationSettings, PrayerDay, PrayerMoment, Qibla,
+                                 PrayerPreferences (method proposed once), CityCatalog, CountryLookup, LocationSetup, PrayerServices;
+                                 data: AdhanPrayerTimesCalculator, GeolocatorLocationService + permission gateway, preferences repository;
+                                 Hijri (HijriConverter, HijriCoreConverter); live compass (WorldMagneticModel, HeadingCalculator,
+                                 CompassSource over sensors_plus); presentation: PrayerCubit, PrayerPage, city picker, method,
+                                 Hijri and Qibla pages (see PRAYER_TIMES_VALIDATION.md)
+  core/text/                     normalizeForSearch (Arabic spelling variants for matching only; shown text is never changed)
   l10n/                          ARB files and generated AppLocalizations (+ context.l10n helper)
   features/
     categories/
@@ -124,6 +132,29 @@ cubits are created per screen with `BlocProvider`.
   the device text size. Cards and tiles use theme colours only; no widget hard-codes a colour.
 - Motion: sections animate for 250 ms; with the system's "remove animations" setting nothing animates (and no
   `AnimatedSize` is built, which would assert with a zero duration).
+
+### Design foundations (UI Phase A, additive)
+
+- `AppMotion` (tokens): `instant` 100, `short` 150, `medium` 250, `page` 280 (`pageReverse` 220), `emphasis` 400 ms, and the curves
+  `standard`, `enter`, `exit`. Read them as `context.motion(AppMotion.medium)` (`design_system/motion.dart`), which returns zero when the
+  system removes animations. `test/core/motion_test.dart` fails if a screen, shell file or shared widget contains a `Duration(...)` literal.
+- `AppColors` (theme extension): success, warning and the reading surface, with contrast-checked pairs; `AppColors.of(context)`.
+- `AppTypography.of(context)`: named styles (display, title, heading, body, meta, label, number). Hadith text keeps `ReadingText`.
+- `appRoute()` (`core/navigation`): opt-in page route per call site. iOS keeps the platform slide; elsewhere a short fade with a 2%
+  vertical move; nothing moves with animations removed. No existing route uses it yet. When a flow adopts it, adopt it for the whole
+  flow including its first route: the page underneath is moved by its own route's transition, so a mixed stack would fade one page
+  while the default transition still slides the other.
+- `Haptics` (`core/haptics`): `selection()` and `alignment()` through the system; no in-app setting. Not yet used (the Qibla cue still
+  calls `HapticFeedback` directly until UI Phase D).
+- Shared widgets added: `StatusBanner`, `AnimatedStateSwitcher`, `PressableScale`. No existing widget changed.
+- Finding: `MaterialApp` is given a new `AppTheme.light()` on every settings rebuild, and the theme contains closures that never compare equal,
+  so the theme animates (about 200 ms) on each settings change. Left as is; to be looked at in UI Phase B.
+- UI Phases B and E: `TabFade` fades a section in on selection. **Every route in the app is an `appRoute()`** (the first page, the shell's
+  section roots and every push); no code builds a `MaterialPageRoute` by hand (`test/app/phase_e_test.dart` fails if one appears). iOS keeps the
+  platform slide inside `AppPageRoute`. `AppTile.pressFeedback` is opt-in and is still off on every released tile. The `MaterialApp` themes are built
+  once in `_MyAppState`. Home and the hadith list fade between loading, error, empty and loaded (`AnimatedStateSwitcher`, one key per state, so
+  loading more pages never fades); the hadith details page fades only between loading and error, never the hadith itself.
+
 
 ## Decisions kept
 

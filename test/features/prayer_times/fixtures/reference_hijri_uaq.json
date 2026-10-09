@@ -1,0 +1,486 @@
+{
+ "about": "Hijri dates for Gregorian dates, from the Aladhan public API with calendarMethod=UAQ (Umm al-Qura), an independent implementation, not an official authority. Retrieved 2026-10-09. Each date is the Gregorian civil day (the Hijri day as shown from midnight).",
+ "retrieved": "2026-10-09",
+ "cases": [
+  {
+   "gregorian": "2025-01-01",
+   "year": 1446,
+   "month": 7,
+   "day": 1
+  },
+  {
+   "gregorian": "2025-01-15",
+   "year": 1446,
+   "month": 7,
+   "day": 15
+  },
+  {
+   "gregorian": "2025-02-01",
+   "year": 1446,
+   "month": 8,
+   "day": 2
+  },
+  {
+   "gregorian": "2025-02-15",
+   "year": 1446,
+   "month": 8,
+   "day": 16
+  },
+  {
+   "gregorian": "2025-03-01",
+   "year": 1446,
+   "month": 9,
+   "day": 1
+  },
+  {
+   "gregorian": "2025-03-15",
+   "year": 1446,
+   "month": 9,
+   "day": 15
+  },
+  {
+   "gregorian": "2025-04-01",
+   "year": 1446,
+   "month": 10,
+   "day": 3
+  },
+  {
+   "gregorian": "2025-04-15",
+   "year": 1446,
+   "month": 10,
+   "day": 17
+  },
+  {
+   "gregorian": "2025-05-01",
+   "year": 1446,
+   "month": 11,
+   "day": 3
+  },
+  {
+   "gregorian": "2025-05-15",
+   "year": 1446,
+   "month": 11,
+   "day": 17
+  },
+  {
+   "gregorian": "2025-06-01",
+   "year": 1446,
+   "month": 12,
+   "day": 5
+  },
+  {
+   "gregorian": "2025-06-15",
+   "year": 1446,
+   "month": 12,
+   "day": 19
+  },
+  {
+   "gregorian": "2025-07-01",
+   "year": 1447,
+   "month": 1,
+   "day": 6
+  },
+  {
+   "gregorian": "2025-07-15",
+   "year": 1447,
+   "month": 1,
+   "day": 20
+  },
+  {
+   "gregorian": "2025-08-01",
+   "year": 1447,
+   "month": 2,
+   "day": 7
+  },
+  {
+   "gregorian": "2025-08-15",
+   "year": 1447,
+   "month": 2,
+   "day": 21
+  },
+  {
+   "gregorian": "2025-09-01",
+   "year": 1447,
+   "month": 3,
+   "day": 9
+  },
+  {
+   "gregorian": "2025-09-15",
+   "year": 1447,
+   "month": 3,
+   "day": 23
+  },
+  {
+   "gregorian": "2025-10-01",
+   "year": 1447,
+   "month": 4,
+   "day": 9
+  },
+  {
+   "gregorian": "2025-10-15",
+   "year": 1447,
+   "month": 4,
+   "day": 23
+  },
+  {
+   "gregorian": "2025-11-01",
+   "year": 1447,
+   "month": 5,
+   "day": 10
+  },
+  {
+   "gregorian": "2025-11-15",
+   "year": 1447,
+   "month": 5,
+   "day": 24
+  },
+  {
+   "gregorian": "2025-12-01",
+   "year": 1447,
+   "month": 6,
+   "day": 10
+  },
+  {
+   "gregorian": "2025-12-15",
+   "year": 1447,
+   "month": 6,
+   "day": 24
+  },
+  {
+   "gregorian": "2026-01-01",
+   "year": 1447,
+   "month": 7,
+   "day": 12
+  },
+  {
+   "gregorian": "2026-01-15",
+   "year": 1447,
+   "month": 7,
+   "day": 26
+  },
+  {
+   "gregorian": "2026-02-01",
+   "year": 1447,
+   "month": 8,
+   "day": 13
+  },
+  {
+   "gregorian": "2026-02-15",
+   "year": 1447,
+   "month": 8,
+   "day": 27
+  },
+  {
+   "gregorian": "2026-02-17",
+   "year": 1447,
+   "month": 8,
+   "day": 29
+  },
+  {
+   "gregorian": "2026-02-18",
+   "year": 1447,
+   "month": 9,
+   "day": 1
+  },
+  {
+   "gregorian": "2026-02-19",
+   "year": 1447,
+   "month": 9,
+   "day": 2
+  },
+  {
+   "gregorian": "2026-03-01",
+   "year": 1447,
+   "month": 9,
+   "day": 12
+  },
+  {
+   "gregorian": "2026-03-15",
+   "year": 1447,
+   "month": 9,
+   "day": 26
+  },
+  {
+   "gregorian": "2026-03-19",
+   "year": 1447,
+   "month": 9,
+   "day": 30
+  },
+  {
+   "gregorian": "2026-03-20",
+   "year": 1447,
+   "month": 10,
+   "day": 1
+  },
+  {
+   "gregorian": "2026-03-21",
+   "year": 1447,
+   "month": 10,
+   "day": 2
+  },
+  {
+   "gregorian": "2026-04-01",
+   "year": 1447,
+   "month": 10,
+   "day": 13
+  },
+  {
+   "gregorian": "2026-04-15",
+   "year": 1447,
+   "month": 10,
+   "day": 27
+  },
+  {
+   "gregorian": "2026-05-01",
+   "year": 1447,
+   "month": 11,
+   "day": 14
+  },
+  {
+   "gregorian": "2026-05-15",
+   "year": 1447,
+   "month": 11,
+   "day": 28
+  },
+  {
+   "gregorian": "2026-06-01",
+   "year": 1447,
+   "month": 12,
+   "day": 15
+  },
+  {
+   "gregorian": "2026-06-15",
+   "year": 1447,
+   "month": 12,
+   "day": 29
+  },
+  {
+   "gregorian": "2026-06-16",
+   "year": 1448,
+   "month": 1,
+   "day": 1
+  },
+  {
+   "gregorian": "2026-06-17",
+   "year": 1448,
+   "month": 1,
+   "day": 2
+  },
+  {
+   "gregorian": "2026-07-01",
+   "year": 1448,
+   "month": 1,
+   "day": 16
+  },
+  {
+   "gregorian": "2026-07-15",
+   "year": 1448,
+   "month": 2,
+   "day": 1
+  },
+  {
+   "gregorian": "2026-08-01",
+   "year": 1448,
+   "month": 2,
+   "day": 18
+  },
+  {
+   "gregorian": "2026-08-15",
+   "year": 1448,
+   "month": 3,
+   "day": 2
+  },
+  {
+   "gregorian": "2026-09-01",
+   "year": 1448,
+   "month": 3,
+   "day": 19
+  },
+  {
+   "gregorian": "2026-09-15",
+   "year": 1448,
+   "month": 4,
+   "day": 4
+  },
+  {
+   "gregorian": "2026-10-01",
+   "year": 1448,
+   "month": 4,
+   "day": 20
+  },
+  {
+   "gregorian": "2026-10-15",
+   "year": 1448,
+   "month": 5,
+   "day": 4
+  },
+  {
+   "gregorian": "2026-11-01",
+   "year": 1448,
+   "month": 5,
+   "day": 21
+  },
+  {
+   "gregorian": "2026-11-15",
+   "year": 1448,
+   "month": 6,
+   "day": 5
+  },
+  {
+   "gregorian": "2026-12-01",
+   "year": 1448,
+   "month": 6,
+   "day": 21
+  },
+  {
+   "gregorian": "2026-12-15",
+   "year": 1448,
+   "month": 7,
+   "day": 6
+  },
+  {
+   "gregorian": "2027-01-01",
+   "year": 1448,
+   "month": 7,
+   "day": 23
+  },
+  {
+   "gregorian": "2027-01-15",
+   "year": 1448,
+   "month": 8,
+   "day": 7
+  },
+  {
+   "gregorian": "2027-02-01",
+   "year": 1448,
+   "month": 8,
+   "day": 24
+  },
+  {
+   "gregorian": "2027-02-15",
+   "year": 1448,
+   "month": 9,
+   "day": 8
+  },
+  {
+   "gregorian": "2027-03-01",
+   "year": 1448,
+   "month": 9,
+   "day": 22
+  },
+  {
+   "gregorian": "2027-03-15",
+   "year": 1448,
+   "month": 10,
+   "day": 7
+  },
+  {
+   "gregorian": "2027-04-01",
+   "year": 1448,
+   "month": 10,
+   "day": 24
+  },
+  {
+   "gregorian": "2027-04-15",
+   "year": 1448,
+   "month": 11,
+   "day": 8
+  },
+  {
+   "gregorian": "2027-05-01",
+   "year": 1448,
+   "month": 11,
+   "day": 24
+  },
+  {
+   "gregorian": "2027-05-15",
+   "year": 1448,
+   "month": 12,
+   "day": 9
+  },
+  {
+   "gregorian": "2027-06-01",
+   "year": 1448,
+   "month": 12,
+   "day": 26
+  },
+  {
+   "gregorian": "2027-06-15",
+   "year": 1449,
+   "month": 1,
+   "day": 10
+  },
+  {
+   "gregorian": "2027-07-01",
+   "year": 1449,
+   "month": 1,
+   "day": 26
+  },
+  {
+   "gregorian": "2027-07-15",
+   "year": 1449,
+   "month": 2,
+   "day": 11
+  },
+  {
+   "gregorian": "2027-08-01",
+   "year": 1449,
+   "month": 2,
+   "day": 28
+  },
+  {
+   "gregorian": "2027-08-15",
+   "year": 1449,
+   "month": 3,
+   "day": 13
+  },
+  {
+   "gregorian": "2027-09-01",
+   "year": 1449,
+   "month": 3,
+   "day": 30
+  },
+  {
+   "gregorian": "2027-09-15",
+   "year": 1449,
+   "month": 4,
+   "day": 14
+  },
+  {
+   "gregorian": "2027-10-01",
+   "year": 1449,
+   "month": 5,
+   "day": 1
+  },
+  {
+   "gregorian": "2027-10-15",
+   "year": 1449,
+   "month": 5,
+   "day": 15
+  },
+  {
+   "gregorian": "2027-11-01",
+   "year": 1449,
+   "month": 6,
+   "day": 2
+  },
+  {
+   "gregorian": "2027-11-15",
+   "year": 1449,
+   "month": 6,
+   "day": 16
+  },
+  {
+   "gregorian": "2027-12-01",
+   "year": 1449,
+   "month": 7,
+   "day": 3
+  },
+  {
+   "gregorian": "2027-12-15",
+   "year": 1449,
+   "month": 7,
+   "day": 17
+  }
+ ]
+}

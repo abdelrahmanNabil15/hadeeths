@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/shell/coming_soon_page.dart';
 import 'package:mynewapp/app/shell/more_page.dart';
+import 'package:mynewapp/core/design_system/motion.dart';
+import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// The top-level sections.
@@ -16,9 +21,12 @@ enum ShellTab { hadiths, quran, prayer, more }
 /// - System back closes the open page, then returns to the first section, then leaves the app.
 /// - Sections are built the first time they are opened.
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.features});
+  const AppShell({super.key, required this.features, this.prayer});
 
   final FeatureFlags features;
+
+  /// The prayer section's services; without them that section shows its placeholder.
+  final PrayerServices? prayer;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -84,16 +92,16 @@ class _AppShellState extends State<AppShell> {
                 offstage: i != _index,
                 child: TickerMode(
                   enabled: i == _index,
-                  child: _opened.contains(i)
-                      ? Navigator(
-                          key: _navigators[i],
-                          observers: [_observers[i]],
-                          onGenerateRoute: (_) => MaterialPageRoute<void>(
-                            settings: const RouteSettings(name: '/'),
-                            builder: (_) => _root(_tabs[i]),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  child: TabFade(
+                    active: i == _index,
+                    child: _opened.contains(i)
+                        ? Navigator(
+                            key: _navigators[i],
+                            observers: [_observers[i]],
+                            onGenerateRoute: (_) => _rootRoute(_tabs[i]),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
                 ),
               ),
           ],
@@ -118,16 +126,26 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
+  /// Every section starts with the app's own transition, so a whole stack moves the same way
+  /// (a page under another one is moved by its own route).
+  Route<void> _rootRoute(ShellTab tab) => appRoute<void>(
+    settings: const RouteSettings(name: '/'),
+    builder: (_) => _root(tab),
+  );
+
   Widget _root(ShellTab tab) => switch (tab) {
     ShellTab.hadiths => const HomePage(inShell: true),
     ShellTab.quran => ComingSoonPage(
       title: context.l10n.navQuran,
       icon: Icons.auto_stories_outlined,
     ),
-    ShellTab.prayer => ComingSoonPage(
-      title: context.l10n.navPrayer,
-      icon: Icons.mosque_outlined,
-    ),
+    ShellTab.prayer =>
+      widget.prayer == null
+          ? ComingSoonPage(
+              title: context.l10n.navPrayer,
+              icon: Icons.mosque_outlined,
+            )
+          : PrayerPage(services: widget.prayer!),
     ShellTab.more => const MorePage(),
   };
 
@@ -170,4 +188,44 @@ class _StackObserver extends NavigatorObserver {
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) =>
       _onChange();
+}
+
+/// Fades a section in when it is selected. The section is built and usable straight away; only its
+/// opacity animates (150 ms), and with "remove animations" on it simply appears.
+class TabFade extends StatefulWidget {
+  const TabFade({super.key, required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<TabFade> createState() => _TabFadeState();
+}
+
+class _TabFadeState extends State<TabFade> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: AppMotion.short,
+    value: 1,
+  );
+
+  @override
+  void didUpdateWidget(TabFade old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !old.active && !context.reduceMotion) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: CurvedAnimation(parent: _controller, curve: AppMotion.enter),
+    child: widget.child,
+  );
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
@@ -33,13 +35,13 @@ class CategoryPage extends StatelessWidget {
                       AppTile(
                         emphasized: true,
                         title: l10n.allHadithsInCategory,
-                        trailingText: '${node.hadithCount}',
+                        trailingText: context.digits.format(node.hadithCount),
                         semanticLabel: l10n.tileSemantics(
                           l10n.allHadithsInCategory,
-                          '${node.hadithCount}',
+                          context.digits.format(node.hadithCount),
                         ),
                         onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
+                          appRoute<void>(
                             builder: (_) => HadithListPage(
                               categoryId: node.id,
                               title: node.title,
@@ -51,10 +53,12 @@ class CategoryPage extends StatelessWidget {
                       for (final child in children) ...[
                         AppTile(
                           title: child.title,
-                          trailingText: '${child.hadithCount}',
+                          trailingText: context.digits.format(
+                            child.hadithCount,
+                          ),
                           semanticLabel: l10n.tileSemantics(
                             child.title,
-                            '${child.hadithCount}',
+                            context.digits.format(child.hadithCount),
                           ),
                           onTap: () => openCategory(context, child),
                         ),

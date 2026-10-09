@@ -98,6 +98,24 @@ Navigation shell built behind feature flags (all off, so the released UI is unch
 bar; the Liquid Glass spike (needs a Mac) will decide whether a native bar replaces it. Deviation from the plan: new prayer-state
 colour tokens are deferred to 3B so they are designed against the real dashboard.
 
+### Update after approval (3B-1)
+Prayer calculation core built and cross-checked: see `docs/PRAYER_TIMES_VALIDATION.md`. Findings that change the plan: a defect in
+`adhan_dart` 2.0.1 (`ishaBefore`/`fajrAfter` wrong at high latitudes, worked around), Fajr/Isha discontinuities at high latitudes
+(to be explained in the UI), Moonsighting Committee deferred. The independent reference used is another implementation (Aladhan),
+not an official authority; the owner still needs to name the authority timetable(s).
+
+### Update after approval (3B-2)
+Owner decisions recorded (method by country at first setup only, Egyptian authority for Egypt, Hijri by country with changeable
+reference and manual adjustment, Arabic-Indic digits by default in Arabic): see `docs/PRAYER_TIMES_VALIDATION.md`. Built so far:
+IANA time zones (`timezone` 0.11.1), offline country lookup, method suggestion, saved prayer preferences, the digits setting.
+Deviations: GPS, permission flow and the native permission entries moved to 3B-3; Hijri to 3B-4.
+
+### Update after approval (3B-5)
+Live Qibla compass built: World Magnetic Model 2025 checked against NOAA's 100 official test points, tilt-compensated heading checked
+with simulated orientations, sensors only while the compass is on, interference detected and never hidden. Real-world accuracy still
+needs a device test away from magnets. The compass package question from the plan is settled: `sensors_plus` with our own maths
+(`flutter_compass` was not used).
+
 ## 6. Feature dependency map
 
 ```text
@@ -109,7 +127,7 @@ colour tokens are deferred to 3B so they are designed against the real dashboard
    └─> 3E Quran (needs DB; blocked on licences, can run in parallel with 3B–3D)
 3H hardening last.  Social v2 backend: design document only.
 ```
-Critical path: 3A → 3B → 3C → 3D. Parallel: Quran (once licences settle), hadith improvements, share cards, Liquid Glass spike.
+Critical path: 3A → 3B → 3C → 3D. **Order change (owner, 2026-10-09): the UI modernization phases A–F (`docs/UI_MODERNIZATION_PLAN.md`) run before 3D; 3D starts on the approved UI foundation and does not run alongside UI work that touches shared widgets or the theme.** Parallel: Quran (once licences settle), hadith improvements, share cards, Liquid Glass spike.
 
 ## 7. Offline matrix (summary)
 

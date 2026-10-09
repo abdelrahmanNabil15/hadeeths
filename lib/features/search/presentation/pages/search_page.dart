@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
@@ -12,7 +14,7 @@ import 'package:mynewapp/l10n/l10n.dart';
 void openSearch(BuildContext context) {
   Navigator.of(
     context,
-  ).push(MaterialPageRoute<void>(builder: (_) => const SearchPage()));
+  ).push(appRoute<void>(builder: (_) => const SearchPage()));
 }
 
 /// Search-as-you-type over the hadith texts (server-side; Arabic diacritics are handled by
@@ -91,7 +93,9 @@ class _SearchViewState extends State<_SearchView> {
               return EmptyView(message: l10n.searchPrompt, icon: Icons.search);
             case SearchStatus.tooShort:
               return EmptyView(
-                message: l10n.searchTooShort(SearchRepository.minPhraseLength),
+                message: context.digits.localize(
+                  l10n.searchTooShort(SearchRepository.minPhraseLength),
+                ),
                 icon: Icons.edit_outlined,
               );
             case SearchStatus.loading:
@@ -116,11 +120,13 @@ class _SearchViewState extends State<_SearchView> {
                       return Semantics(
                         liveRegion: true,
                         child: Text(
-                          state.mayBeTruncated
-                              ? l10n.searchTruncated(
-                                  SearchRepository.maxResults,
-                                )
-                              : l10n.searchResultCount(state.results.length),
+                          context.digits.localize(
+                            state.mayBeTruncated
+                                ? l10n.searchTruncated(
+                                    SearchRepository.maxResults,
+                                  )
+                                : l10n.searchResultCount(state.results.length),
+                          ),
                           style: TextStyle(
                             fontSize: AppTextSize.meta,
                             color: scheme.onSurfaceVariant,
@@ -132,7 +138,7 @@ class _SearchViewState extends State<_SearchView> {
                     return SearchResultTile(
                       result: result,
                       onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
+                        appRoute<void>(
                           builder: (_) => HadithDetailsPage(id: result.id),
                         ),
                       ),

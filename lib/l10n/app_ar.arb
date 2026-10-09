@@ -100,11 +100,278 @@
   "offlineCopiesHint": "احتفظ على هذا الجهاز بالأحاديث التي فتحتها لتقرأها دون إنترنت.",
   "clearSavedCopies": "مسح النسخ المحفوظة",
   "savedCopiesCleared": "تم مسح النسخ المحفوظة",
+  "digitsHeading": "الأرقام",
+  "digitsAutomatic": "حسب اللغة",
+  "digitsArabicIndic": "الأرقام العربية الهندية (٠١٢٣)",
+  "digitsWestern": "الأرقام الغربية (0123)",
   "navHadiths": "الأحاديث",
   "navQuran": "المصحف",
   "navPrayer": "الصلاة",
   "navMore": "المزيد",
   "navigationLabel": "الأقسام الرئيسية",
   "comingSoon": "قريبًا",
-  "comingSoonBody": "هذا القسم قيد الإعداد وليس متاحًا بعد."
+  "comingSoonBody": "هذا القسم قيد الإعداد وليس متاحًا بعد.",
+  "prayerTimesTitle": "مواقيت الصلاة",
+  "prayerSetupTitle": "حدّد موقعك",
+  "prayerSetupBody": "تعتمد مواقيت الصلاة على مكانك. اختر طريقة تحديده.",
+  "useMyLocation": "استخدم موقعي",
+  "chooseCity": "اختر مدينة",
+  "locationExplainTitle": "استخدام موقعك؟",
+  "locationExplainBody": "يقرأ التطبيق موقعك مرة واحدة الآن، لحساب مواقيت الصلاة في مكانك فقط. لا يُتتبَّع ولا يُشارك، ويُحفظ تقريبًا إلى نحو كيلومتر. يمكنك اختيار مدينة بدلًا من ذلك.",
+  "continueAction": "متابعة",
+  "notNow": "ليس الآن",
+  "locating": "جارٍ تحديد موقعك…",
+  "locationDenied": "لم يُمنح إذن الموقع. يمكنك المحاولة مرة أخرى أو اختيار مدينة.",
+  "locationNeedsSettings": "إذن الموقع متوقف لهذا التطبيق. افتح الإعدادات للسماح به، أو اختر مدينة.",
+  "locationServiceDisabled": "خدمة الموقع متوقفة على هذا الجهاز. شغّلها أو اختر مدينة.",
+  "locationTimeout": "تعذّر تحديد موقعك في الوقت المناسب. حاول مرة أخرى أو اختر مدينة.",
+  "locationUnavailable": "موقعك غير متاح الآن. حاول مرة أخرى أو اختر مدينة.",
+  "openSettings": "فتح الإعدادات",
+  "cityPickerTitle": "اختر مدينة",
+  "citySearchHint": "ابحث عن مدينة",
+  "cityNoResults": "لا توجد مدينة تطابق «{query}»",
+  "@cityNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLocation": "الموقع الحالي",
+  "changeLocation": "تغيير الموقع",
+  "nextPrayerLabel": "الصلاة التالية",
+  "prayerFajr": "الفجر",
+  "prayerSunrise": "الشروق",
+  "prayerDhuhr": "الظهر",
+  "prayerAsr": "العصر",
+  "prayerMaghrib": "المغرب",
+  "prayerIsha": "العشاء",
+  "methodHeading": "طريقة الحساب",
+  "methodEgyptian": "الهيئة المصرية العامة للمساحة",
+  "methodUmmAlQura": "جامعة أم القرى، مكة المكرمة",
+  "methodMuslimWorldLeague": "رابطة العالم الإسلامي",
+  "methodKarachi": "جامعة العلوم الإسلامية، كراتشي",
+  "methodNorthAmerica": "الجمعية الإسلامية لأمريكا الشمالية",
+  "methodAngles": "الفجر {fajr}°، العشاء {isha}°",
+  "@methodAngles": {
+    "placeholders": {
+      "fajr": {
+        "type": "String"
+      },
+      "isha": {
+        "type": "String"
+      }
+    }
+  },
+  "methodInterval": "الفجر {fajr}°، العشاء بعد المغرب بـ {minutes} دقيقة",
+  "@methodInterval": {
+    "placeholders": {
+      "fajr": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "methodAutoCountry": "اختيرت تلقائيًا لبلدك",
+  "methodAutoGeneral": "لا تتوفر بعدُ طريقة خاصة ببلدك، لذلك استُخدمت الطريقة العامة",
+  "methodByYou": "اخترتَها أنت",
+  "prayerDisclaimer": "المواقيت محسوبة وقد تختلف بضع دقائق عن مسجدك أو الجهة الرسمية في بلدك.",
+  "calculationFailed": "تعذّر حساب المواقيت لهذا المكان.",
+  "aboutPlacesHeading": "الأماكن",
+  "aboutPlacesBody": "أسماء المدن ومواقعها ومناطقها الزمنية: GeoNames (geonames.org) برخصة CC BY 4.0. حدود الدول: Natural Earth (ملكية عامة). تُحسب مواقيت الصلاة على جهازك بمكتبة adhan_dart (رخصة MIT).",
+  "aboutPrivacyLocation": "إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.",
+  "hijriHeading": "التاريخ الهجري",
+  "hijriReferenceUmmAlQura": "أم القرى (السعودية)",
+  "hijriReferenceUmmAlQuraNote": "التقويم الرسمي في السعودية، من جداول منشورة.",
+  "hijriReferenceFcna": "المجلس الفقهي لأمريكا الشمالية (حسابي)",
+  "hijriReferenceFcnaNote": "محسوب من ولادة الهلال. لم يُتحقق منه بعدُ بجدول رسمي.",
+  "hijriAdjustHeading": "التصحيح بالأيام",
+  "hijriAdjustHint": "استخدمه لمتابعة إعلان بلدك. قد يختلف التقويم المحسوب مسبقًا بيوم عن إعلان رؤية الهلال.",
+  "hijriAdjustMinus2": "قبل بيومين",
+  "hijriAdjustMinus1": "قبل بيوم",
+  "hijriAdjustNone": "بلا تصحيح",
+  "hijriAdjustPlus1": "بعد بيوم",
+  "hijriAdjustPlus2": "بعد يومين",
+  "hijriYearSuffix": "هـ",
+  "hijriChangesAtMaghrib": "يتغير التاريخ الهجري عند المغرب.",
+  "hijriMonth1": "محرم",
+  "hijriMonth2": "صفر",
+  "hijriMonth3": "ربيع الأول",
+  "hijriMonth4": "ربيع الآخر",
+  "hijriMonth5": "جمادى الأولى",
+  "hijriMonth6": "جمادى الآخرة",
+  "hijriMonth7": "رجب",
+  "hijriMonth8": "شعبان",
+  "hijriMonth9": "رمضان",
+  "hijriMonth10": "شوال",
+  "hijriMonth11": "ذو القعدة",
+  "hijriMonth12": "ذو الحجة",
+  "gregMonth1": "يناير",
+  "gregMonth2": "فبراير",
+  "gregMonth3": "مارس",
+  "gregMonth4": "أبريل",
+  "gregMonth5": "مايو",
+  "gregMonth6": "يونيو",
+  "gregMonth7": "يوليو",
+  "gregMonth8": "أغسطس",
+  "gregMonth9": "سبتمبر",
+  "gregMonth10": "أكتوبر",
+  "gregMonth11": "نوفمبر",
+  "gregMonth12": "ديسمبر",
+  "weekday1": "الاثنين",
+  "weekday2": "الثلاثاء",
+  "weekday3": "الأربعاء",
+  "weekday4": "الخميس",
+  "weekday5": "الجمعة",
+  "weekday6": "السبت",
+  "weekday7": "الأحد",
+  "qiblaHeading": "القبلة",
+  "qiblaBearing": "{degrees}° من الشمال الحقيقي مع عقارب الساعة",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaDistance": "نحو {km} كم إلى الكعبة",
+  "@qiblaDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaHere": "أنت عند الكعبة.",
+  "qiblaNote": "هذا هو الاتجاه على الخريطة (الشمال الحقيقي) وليس قراءة بوصلة. بوصلة الهاتف تشير إلى الشمال المغناطيسي، وقد يختلف عنه بعدة درجات أو أكثر بحسب مكانك.",
+  "qiblaNeedsPlace": "حدّد موقعك أولًا لمعرفة اتجاه القبلة.",
+  "compassN": "الشمال",
+  "compassNE": "الشمال الشرقي",
+  "compassE": "الشرق",
+  "compassSE": "الجنوب الشرقي",
+  "compassS": "الجنوب",
+  "compassSW": "الجنوب الغربي",
+  "compassW": "الغرب",
+  "compassNW": "الشمال الغربي",
+  "compassUse": "استخدم البوصلة",
+  "compassStop": "إيقاف البوصلة",
+  "compassStarting": "جارٍ قراءة البوصلة…",
+  "compassUnavailable": "لا يتوفر في هذا الهاتف حسّاس بوصلة أو تعذّرت قراءته. يظل الاتجاه المعروض أعلاه صالحًا.",
+  "compassModelExpired": "بيانات التصحيح المغناطيسي قديمة. حدّث التطبيق لاستخدام البوصلة. يظل الاتجاه المعروض أعلاه صالحًا.",
+  "compassInterference": "شيء قريب يؤثر في البوصلة (معدن أو مغناطيس أو غطاء للهاتف). ابتعد عنه.",
+  "compassCalibrate": "إذا اهتز السهم فحرّك الهاتف ببطء على شكل الرقم ٨.",
+  "compassHoldFlat": "أمسك الهاتف أفقيًا وحافته العلوية للأمام، أو رأسيًا وظهره للأمام.",
+  "compassTurnRight": "استدر يمينًا {degrees}°",
+  "@compassTurnRight": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassTurnLeft": "استدر يسارًا {degrees}°",
+  "@compassTurnLeft": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassAligned": "أنت متجه نحو القبلة",
+  "compassCorrection": "التصحيح من الشمال المغناطيسي إلى الحقيقي: {degrees}°",
+  "@compassCorrection": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassPrivacy": "تستخدم البوصلة حسّاسات الحركة في الهاتف ما دامت قيد التشغيل فقط. لا يُخزَّن شيء ولا يُرسَل.",
+  "compassUnreliable": "البوصلة غير موثوقة هنا الآن",
+  "reminderNow": "حان وقت صلاة {prayer}",
+  "reminderSunriseNow": "الشروق الآن",
+  "reminderTestTitle": "تذكير تجريبي",
+  "reminderTestBody": "هكذا ستظهر تذكيرات الصلاة.",
+  "reminderChannelSoundVibrate": "تذكيرات الصلاة",
+  "reminderChannelSound": "تذكيرات الصلاة (دون اهتزاز)",
+  "reminderChannelVibrate": "تذكيرات الصلاة (صامتة مع اهتزاز)",
+  "reminderChannelSilent": "تذكيرات الصلاة (صامتة)",
+  "reminderChannelDescription": "إشعارات عند أوقات الصلاة",
+  "remindersHeading": "التذكيرات",
+  "remindersSwitch": "ذكّرني عند أوقات الصلاة",
+  "remindersOff": "التذكيرات متوقفة.",
+  "remindersExplainTitle": "السماح بالإشعارات؟",
+  "remindersExplainBody": "لتذكيرك عند أوقات الصلاة يحتاج التطبيق إلى عرض الإشعارات. تُجهَّز التذكيرات على جهازك، ولا يُرسَل شيء إلى أي جهة، ولا تتضمن موقعك أبدًا.",
+  "remindersDenied": "الإشعارات متوقفة لهذا التطبيق، لذلك لن تظهر التذكيرات. افتح الإعدادات للسماح بها.",
+  "remindersNeedPlace": "حدّد موقعك أولًا ليعرف التطبيق أوقات الصلاة.",
+  "remindersWhich": "أي الأوقات",
+  "remindersLead": "قبل الوقت بـ",
+  "remindersLeadNone": "عند دخول الوقت",
+  "remindersSound": "الصوت",
+  "remindersSoundSystem": "صوت إشعارات الهاتف",
+  "remindersSoundSilent": "صامت",
+  "remindersVibrate": "الاهتزاز",
+  "remindersTest": "إرسال تذكير تجريبي",
+  "remindersTiming": "عند إيقاف التوقيت الدقيق قد يتأخر النظام في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة.",
+  "remindersFailed": "تعذّرت جدولة بعض التذكيرات. ستُعاد المحاولة عند فتح التطبيق.",
+  "remindersNext": "التذكير التالي: {prayer}، {time}",
+  "reminderSoon": "{minutes, plural, few{صلاة {prayer} بعد {minutes} دقائق} many{صلاة {prayer} بعد {minutes} دقيقة} other{صلاة {prayer} بعد {minutes} دقيقة}}",
+  "reminderSunriseSoon": "{minutes, plural, few{الشروق بعد {minutes} دقائق} many{الشروق بعد {minutes} دقيقة} other{الشروق بعد {minutes} دقيقة}}",
+  "remindersLeadMinutes": "{minutes, plural, few{قبل {minutes} دقائق} many{قبل {minutes} دقيقة} other{قبل {minutes} دقيقة}}",
+  "remindersCount": "{count, plural, =0{لا توجد تذكيرات مجدولة} =1{تذكير واحد مجدول} two{تذكيران مجدولان} few{{count} تذكيرات مجدولة} many{{count} تذكيرًا مجدولًا} other{{count} تذكير مجدول}}",
+  "@reminderNow": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@reminderSoon": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@reminderSunriseSoon": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersLeadMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersNext": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindersExact": "التوقيت الدقيق",
+  "remindersExactHint": "يطلب من أندرويد إيصال كل تذكير في وقته. يحتاج هذا إلى إذن «المنبهات والتذكيرات» لهذا التطبيق، ومن دونه قد تتأخر التذكيرات.",
+  "remindersExactExplainTitle": "السماح بالتوقيت الدقيق؟",
+  "remindersExactExplainBody": "من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه يستطيع أندرويد إيصال التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن. إن لم تسمح به تبقى التذكيرات تعمل لكنها قد تتأخر.",
+  "remindersExactMissing": "التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات»."
 }

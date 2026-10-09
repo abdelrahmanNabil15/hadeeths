@@ -20,6 +20,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your location is read once, only when you tap "Use my location", to calculate prayer times for where you are. It is not stored precisely, not shared and not tracked. / يُقرأ موقعك مرة واحدة فقط عند الضغط على «استخدم موقعي» لحساب مواقيت الصلاة في مكانك، ولا يُحفظ بدقة ولا يُشارك ولا يُتتبَّع.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>The compass uses the motion sensors only while it is switched on, to show the direction of the Qibla. Nothing is stored or sent. / تستخدم البوصلة حسّاسات الحركة ما دامت قيد التشغيل فقط لإظهار اتجاه القبلة. لا يُخزَّن شيء ولا يُرسَل.</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

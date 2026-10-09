@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
@@ -14,9 +15,8 @@ class MorePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    void open(Widget page) => Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => page));
+    void open(Widget page) =>
+        Navigator.of(context).push(appRoute<void>(builder: (_) => page));
     return Scaffold(
       appBar: AppBar(title: Text(l10n.navMore)),
       body: ContentWidth(
@@ -25,11 +25,13 @@ class MorePage extends StatelessWidget {
           children: [
             AppTile(
               title: l10n.settings,
+              pressFeedback: true,
               onTap: () => open(const SettingsPage()),
             ),
             const SizedBox(height: AppSpacing.md),
             AppTile(
               title: l10n.aboutTitle,
+              pressFeedback: true,
               onTap: () => open(const AboutPage()),
             ),
           ],

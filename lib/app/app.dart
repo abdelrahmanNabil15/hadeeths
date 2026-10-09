@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -5,6 +7,8 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/shell/app_shell.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
+import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -31,10 +35,37 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  // Built once: a new ThemeData on every rebuild never compares equal to the last, which made the
+  // theme animate on each settings change.
+  final _lightTheme = AppTheme.light();
+  final _darkTheme = AppTheme.dark();
+
+  /// Prayer reminders are rebuilt from what is saved whenever the app starts or comes back, so they
+  /// are right after a restart, a new day, or a change of clock, time zone or language.
+  void _reconcileReminders() {
+    final prayer = widget.dependencies.prayer;
+    if (prayer != null && widget.dependencies.features.prayer) {
+      unawaited(prayer.reminders.reconcile());
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _reconcileReminders();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _reconcileReminders();
     // The saved choice is applied before anything is fetched.
     widget.dependencies.cache.enabled = widget.initialSettings.offlineCopies;
   }
@@ -59,45 +90,69 @@ class _MyAppState extends State<MyApp> {
             // Turning saved copies off also removes what is already on the device.
             if (!settings.offlineCopies) deps.cache.clear();
           },
-          child: BlocBuilder<SettingsCubit, AppSettings>(
-            builder: (context, settings) {
-              final languageCode = settings.language.code;
-              return MaterialApp(
-                onGenerateTitle: (context) => context.l10n.appTitle,
-                theme: AppTheme.light(),
-                darkTheme: AppTheme.dark(),
-                themeMode: switch (settings.theme) {
-                  ThemePreference.system => ThemeMode.system,
-                  ThemePreference.light => ThemeMode.light,
-                  ThemePreference.dark => ThemeMode.dark,
-                },
-                locale: languageCode == null ? null : Locale(languageCode),
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate,
-                ],
-                // Arabic is listed first and is the fallback for any other device language.
-                supportedLocales: AppLocalizations.supportedLocales,
-                // One category tree for the whole app, above the navigator so it survives
-                // navigation. It is keyed by language: a language change reloads the tree.
-                builder: (context, child) {
-                  final language = context.apiLanguage;
-                  return BlocProvider(
-                    key: ValueKey(language),
-                    create: (context) => CategoriesCubit(
-                      context.read<CategoriesRepository>(),
-                      language: language,
-                    )..load(),
-                    child: child!,
-                  );
-                },
-                home: deps.features.usesShell
-                    ? AppShell(features: deps.features)
-                    : const HomePage(),
-              );
-            },
+          child: BlocListener<SettingsCubit, AppSettings>(
+            // The words and numerals of a reminder follow the language and numeral settings. The
+            // settings are saved a moment after they change, so wait for that before rebuilding.
+            listenWhen: (previous, current) =>
+                previous.language != current.language ||
+                previous.digits != current.digits,
+            listener: (context, settings) => Future<void>.delayed(
+              const Duration(milliseconds: 400),
+              _reconcileReminders,
+            ),
+            child: BlocBuilder<SettingsCubit, AppSettings>(
+              builder: (context, settings) {
+                final languageCode = settings.language.code;
+                return MaterialApp(
+                  onGenerateTitle: (context) => context.l10n.appTitle,
+                  theme: _lightTheme,
+                  darkTheme: _darkTheme,
+                  themeMode: switch (settings.theme) {
+                    ThemePreference.system => ThemeMode.system,
+                    ThemePreference.light => ThemeMode.light,
+                    ThemePreference.dark => ThemeMode.dark,
+                  },
+                  locale: languageCode == null ? null : Locale(languageCode),
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  // Arabic is listed first and is the fallback for any other device language.
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  // One category tree for the whole app, above the navigator so it survives
+                  // navigation. It is keyed by language: a language change reloads the tree.
+                  builder: (context, child) {
+                    final language = context.apiLanguage;
+                    final arabicIndic = switch (settings.digits) {
+                      DigitStyle.automatic => language == 'ar',
+                      DigitStyle.arabicIndic => true,
+                      DigitStyle.western => false,
+                    };
+                    return DigitScope(
+                      digits: Digits(arabicIndic: arabicIndic),
+                      child: BlocProvider(
+                        key: ValueKey(language),
+                        create: (context) => CategoriesCubit(
+                          context.read<CategoriesRepository>(),
+                          language: language,
+                        )..load(),
+                        child: child!,
+                      ),
+                    );
+                  },
+                  // The first page is an app route too, so the page under a pushed one is not
+                  // moved by a different transition.
+                  onGenerateRoute: (settings) => appRoute<void>(
+                    settings: settings,
+                    builder: (_) => deps.features.usesShell
+                        ? AppShell(features: deps.features, prayer: deps.prayer)
+                        : const HomePage(),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

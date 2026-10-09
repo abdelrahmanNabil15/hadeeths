@@ -1,0 +1,76 @@
+{
+ "about": "Qibla bearings (degrees clockwise from true north) from the Aladhan public API, an independent implementation, not an official authority. Retrieved 2026-10-09.",
+ "retrieved": "2026-10-09",
+ "cases": [
+  {
+   "name": "london",
+   "latitude": 51.5074,
+   "longitude": -0.1278,
+   "bearing": 118.98724251452296,
+   "source": "https://api.aladhan.com/v1/qibla/51.5074/-0.1278"
+  },
+  {
+   "name": "newyork",
+   "latitude": 40.7128,
+   "longitude": -74.006,
+   "bearing": 58.481712034206865,
+   "source": "https://api.aladhan.com/v1/qibla/40.7128/-74.006"
+  },
+  {
+   "name": "sydney",
+   "latitude": -33.8688,
+   "longitude": 151.2093,
+   "bearing": 277.499589412883,
+   "source": "https://api.aladhan.com/v1/qibla/-33.8688/151.2093"
+  },
+  {
+   "name": "cairo",
+   "latitude": 30.0444,
+   "longitude": 31.2357,
+   "bearing": 136.13734265497988,
+   "source": "https://api.aladhan.com/v1/qibla/30.0444/31.2357"
+  },
+  {
+   "name": "jakarta",
+   "latitude": -6.2088,
+   "longitude": 106.8456,
+   "bearing": 295.15174505875416,
+   "source": "https://api.aladhan.com/v1/qibla/-6.2088/106.8456"
+  },
+  {
+   "name": "auckland",
+   "latitude": -36.8485,
+   "longitude": 174.7633,
+   "bearing": 261.19730572127594,
+   "source": "https://api.aladhan.com/v1/qibla/-36.8485/174.7633"
+  },
+  {
+   "name": "raleigh",
+   "latitude": 35.78056,
+   "longitude": -78.6389,
+   "bearing": 55.82096140390267,
+   "source": "https://api.aladhan.com/v1/qibla/35.78056/-78.6389"
+  },
+  {
+   "name": "reykjavik",
+   "latitude": 64.1466,
+   "longitude": -21.9426,
+   "bearing": 106.11766325174096,
+   "source": "https://api.aladhan.com/v1/qibla/64.1466/-21.9426"
+  },
+  {
+   "name": "capetown",
+   "latitude": -33.9249,
+   "longitude": 18.4241,
+   "bearing": 23.35250070951438,
+   "source": "https://api.aladhan.com/v1/qibla/-33.9249/18.4241"
+  },
+  {
+   "name": "tokyo",
+   "latitude": 35.6762,
+   "longitude": 139.6503,
+   "bearing": 292.9987128092997,
+   "source": "https://api.aladhan.com/v1/qibla/35.6762/139.6503"
+  }
+ ]
+}

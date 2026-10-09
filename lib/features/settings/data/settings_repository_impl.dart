@@ -12,6 +12,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   static const themeKey = 'settings.theme';
   static const readingScaleKey = 'settings.readingScale';
   static const offlineCopiesKey = 'settings.offlineCopies';
+  static const digitsKey = 'settings.digits';
 
   @override
   Future<AppSettings> load() async {
@@ -33,6 +34,12 @@ class SettingsRepositoryImpl implements SettingsRepository {
             AppSettings.defaultReadingScale,
       ),
       offlineCopies: _read(() => _prefs.getBool(offlineCopiesKey)) ?? true,
+      digits:
+          _enumByName(
+            DigitStyle.values,
+            _read(() => _prefs.getString(digitsKey)),
+          ) ??
+          DigitStyle.automatic,
     );
   }
 
@@ -42,6 +49,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     await _prefs.setString(themeKey, settings.theme.name);
     await _prefs.setDouble(readingScaleKey, settings.readingScale);
     await _prefs.setBool(offlineCopiesKey, settings.offlineCopies);
+    await _prefs.setString(digitsKey, settings.digits.name);
   }
 
   /// A value of the wrong type (a corrupted or hand-edited store) counts as missing.
