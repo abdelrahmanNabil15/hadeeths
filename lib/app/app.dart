@@ -188,6 +188,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             tasbeeh: deps.tasbeeh,
                             favorites: deps.favoritesIfEnabled,
                             onDeleteAll: _eraseAll,
+                            quran: deps.quran,
+                            quranUserData: deps.quranUserData,
                           )
                         : const HomePage(),
                   ),

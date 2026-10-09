@@ -25,7 +25,7 @@ class QuranText {
 
   /// Verses of sura [sura] (1 to 114).
   List<Verse> sura(int sura) {
-    RangeError.checkValueInInterval(sura, 1, suraCount, 'sura');
+    RangeError.checkValueInInterval(sura, 1, _suras.length, 'sura');
     return _suras[sura - 1];
   }
 
@@ -38,6 +38,9 @@ class QuranText {
   }
 
   int get totalVerses => _suras.fold(0, (sum, s) => sum + s.length);
+
+  /// How many suras this text has (114 for the real file; fewer only in tests).
+  int get suraTotal => _suras.length;
 
   /// Reads a Tanzil "text with aya numbers" file: one `sura|verse|text` line per verse, with the
   /// licence notice in lines starting with `#`. The text after the second `|` is kept byte for

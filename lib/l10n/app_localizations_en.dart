@@ -919,4 +919,96 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutCompassBody =>
       'The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.';
+
+  @override
+  String get quranUnavailable =>
+      'The Quran text is not included in this build yet.';
+
+  @override
+  String get quranContinue => 'Continue reading';
+
+  @override
+  String quranContinueAt(Object sura, Object verse) {
+    return '$sura, verse $verse';
+  }
+
+  @override
+  String get quranBookmarks => 'Bookmarks';
+
+  @override
+  String get quranNoBookmarks =>
+      'No bookmarks yet. In a sura, press and hold a verse to bookmark it.';
+
+  @override
+  String get quranSearchHint => 'Search the Quran';
+
+  @override
+  String get quranSearchTooShort => 'Type at least 2 letters.';
+
+  @override
+  String quranSearchCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count verses found',
+      one: '1 verse found',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get quranNoResults => 'No verse matches.';
+
+  @override
+  String get quranJump => 'Go to a verse';
+
+  @override
+  String get quranJumpSura => 'Sura number (1 to 114)';
+
+  @override
+  String get quranJumpVerseLabel => 'Verse number';
+
+  @override
+  String quranJumpVerse(Object max) {
+    return 'Verse number (1 to $max)';
+  }
+
+  @override
+  String get quranGo => 'Go';
+
+  @override
+  String quranVerses(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count verses',
+      one: '1 verse',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String quranVerseLabel(Object number) {
+    return 'Verse $number';
+  }
+
+  @override
+  String get quranBookmarkAdd => 'Bookmark this verse';
+
+  @override
+  String get quranBookmarkRemove => 'Remove the bookmark';
+
+  @override
+  String get quranSurasHeading => 'Suras';
+
+  @override
+  String get quranCredit =>
+      'Quran text: Tanzil Project (tanzil.net), used unchanged under its licence.';
+
+  @override
+  String get aboutQuranHeading => 'Quran text';
+
+  @override
+  String get aboutQuranBody =>
+      'Tanzil Quran Text, Copyright (C) 2007-2021 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change. Updates: tanzil.net.';
 }

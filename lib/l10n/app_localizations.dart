@@ -1675,6 +1675,138 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.'**
   String get aboutCompassBody;
+
+  /// No description provided for @quranUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص القرآن الكريم غير مضمَّن في هذا الإصدار بعد.'**
+  String get quranUnavailable;
+
+  /// No description provided for @quranContinue.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة القراءة'**
+  String get quranContinue;
+
+  /// No description provided for @quranContinueAt.
+  ///
+  /// In ar, this message translates to:
+  /// **'{sura}، الآية {verse}'**
+  String quranContinueAt(Object sura, Object verse);
+
+  /// No description provided for @quranBookmarks.
+  ///
+  /// In ar, this message translates to:
+  /// **'العلامات'**
+  String get quranBookmarks;
+
+  /// No description provided for @quranNoBookmarks.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد علامات بعد. في السورة، اضغط مطولًا على آية لوضع علامة عليها.'**
+  String get quranNoBookmarks;
+
+  /// No description provided for @quranSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'البحث في القرآن'**
+  String get quranSearchHint;
+
+  /// No description provided for @quranSearchTooShort.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب حرفين على الأقل.'**
+  String get quranSearchTooShort;
+
+  /// No description provided for @quranSearchCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{وُجدت آية واحدة} =2{وُجدت آيتان} few{وُجدت {count} آيات} other{وُجدت {count} آية}}'**
+  String quranSearchCount(num count);
+
+  /// No description provided for @quranNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد آية مطابقة.'**
+  String get quranNoResults;
+
+  /// No description provided for @quranJump.
+  ///
+  /// In ar, this message translates to:
+  /// **'الانتقال إلى آية'**
+  String get quranJump;
+
+  /// No description provided for @quranJumpSura.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم السورة (١ إلى ١١٤)'**
+  String get quranJumpSura;
+
+  /// No description provided for @quranJumpVerseLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الآية'**
+  String get quranJumpVerseLabel;
+
+  /// No description provided for @quranJumpVerse.
+  ///
+  /// In ar, this message translates to:
+  /// **'رقم الآية (١ إلى {max})'**
+  String quranJumpVerse(Object max);
+
+  /// No description provided for @quranGo.
+  ///
+  /// In ar, this message translates to:
+  /// **'انتقال'**
+  String get quranGo;
+
+  /// No description provided for @quranVerses.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{آية واحدة} =2{آيتان} few{{count} آيات} other{{count} آية}}'**
+  String quranVerses(num count);
+
+  /// No description provided for @quranVerseLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية {number}'**
+  String quranVerseLabel(Object number);
+
+  /// No description provided for @quranBookmarkAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع علامة على هذه الآية'**
+  String get quranBookmarkAdd;
+
+  /// No description provided for @quranBookmarkRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة العلامة'**
+  String get quranBookmarkRemove;
+
+  /// No description provided for @quranSurasHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'السور'**
+  String get quranSurasHeading;
+
+  /// No description provided for @quranCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص القرآن: مشروع تنزيل (tanzil.net)، مستخدَم دون أي تغيير وفق ترخيصه.'**
+  String get quranCredit;
+
+  /// No description provided for @aboutQuranHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص القرآن الكريم'**
+  String get aboutQuranHeading;
+
+  /// No description provided for @aboutQuranBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص القرآن من مشروع تنزيل: Tanzil Quran Text, Copyright (C) 2007-2021 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير. التحديثات: tanzil.net.'**
+  String get aboutQuranBody;
 }
 
 class _AppLocalizationsDelegate
