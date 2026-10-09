@@ -285,5 +285,10 @@
   "deleteAllPartial": "Some of your data could not be deleted. Try again.",
   "aboutUserDataBody": "Your place, reminders, the tracker, the counter and favourites are kept only on this phone and are never sent anywhere. Settings, then Delete all my data, removes them.",
   "aboutCompassHeading": "Compass",
-  "aboutCompassBody": "The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device."
+  "aboutCompassBody": "The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.",
+  "shareAsText": "Share as text",
+  "shareAsImage": "Share as image",
+  "shareCardShareOne": "Share the image",
+  "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
+  "shareCardFailed": "The image could not be made or shared. Try again."
 }

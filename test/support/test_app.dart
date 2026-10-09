@@ -5,6 +5,7 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -41,6 +42,7 @@ AppDependencies testDependencies(
   TasbeehRepository? tasbeeh,
   FavoritesRepository? favorites,
   UserDatabase? userData,
+  ImageSharer? imageSharer,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -53,6 +55,7 @@ AppDependencies testDependencies(
   tasbeeh: tasbeeh,
   favorites: favorites,
   userData: userData,
+  imageSharer: imageSharer ?? const SystemImageSharer(),
 );
 
 /// Starts the app against [api].
@@ -73,6 +76,7 @@ Future<void> pumpApp(
   TasbeehRepository? tasbeeh,
   FavoritesRepository? favorites,
   UserDatabase? userData,
+  ImageSharer? imageSharer,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -88,6 +92,7 @@ Future<void> pumpApp(
         tasbeeh: tasbeeh,
         favorites: favorites,
         userData: userData,
+        imageSharer: imageSharer,
       ),
       initialSettings: settings,
     ),

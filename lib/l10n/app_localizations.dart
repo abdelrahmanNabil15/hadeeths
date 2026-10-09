@@ -1675,6 +1675,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.'**
   String get aboutCompassBody;
+
+  /// No description provided for @shareAsText.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كنص'**
+  String get shareAsText;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كصورة'**
+  String get shareAsImage;
+
+  /// No description provided for @shareCardShareOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة الصورة'**
+  String get shareCardShareOne;
+
+  /// No description provided for @shareCardShareMany.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}'**
+  String shareCardShareMany(num count);
+
+  /// No description provided for @shareCardFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
+  String get shareCardFailed;
 }
 
 class _AppLocalizationsDelegate
