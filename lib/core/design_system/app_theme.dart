@@ -164,6 +164,15 @@ abstract final class AppTheme {
         ),
         padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
       ),
+      sliderTheme: SliderThemeData(
+        activeTrackColor: scheme.primary,
+        // The unfilled part of the track still reads as part of the control.
+        inactiveTrackColor: scheme.surfaceContainerHighest,
+        thumbColor: scheme.primary,
+        overlayColor: scheme.primary.withValues(alpha: 0.12),
+        activeTickMarkColor: scheme.onPrimary.withValues(alpha: 0.6),
+        inactiveTickMarkColor: scheme.outline,
+      ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: scheme.primary,
         linearTrackColor: scheme.primaryContainer,

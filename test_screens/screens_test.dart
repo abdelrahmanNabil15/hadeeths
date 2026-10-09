@@ -32,14 +32,24 @@ import '../test/support/tracker_fakes.dart';
 const _set = String.fromEnvironment('SHOTS', defaultValue: 'latest');
 
 class _Config {
-  const _Config(this.locale, this.theme, {this.textScale = 1.0});
+  const _Config(
+    this.locale,
+    this.theme, {
+    this.textScale = 1.0,
+    this.size = const Size(390, 844),
+    this.label = '',
+  });
 
   final String locale;
   final ThemePreference theme;
   final double textScale;
 
+  /// Logical size of the screen.
+  final Size size;
+  final String label;
+
   String get name =>
-      '${locale}_${theme.name}${textScale == 1.0 ? '' : '_x${textScale.toStringAsFixed(0)}'}';
+      '${locale}_${theme.name}${textScale == 1.0 ? '' : '_x${textScale.toStringAsFixed(0)}'}$label';
 }
 
 const _configs = [
@@ -48,6 +58,7 @@ const _configs = [
   _Config('en', ThemePreference.light),
   _Config('en', ThemePreference.dark),
   _Config('ar', ThemePreference.light, textScale: 2.0),
+  _Config('en', ThemePreference.light, size: Size(1024, 768), label: '_tablet'),
 ];
 
 class _Favorites implements FavoritesRepository {
@@ -121,7 +132,7 @@ void main() {
 
   for (final config in _configs) {
     testWidgets('screens ${config.name}', (tester) async {
-      tester.view.physicalSize = const Size(780, 1688);
+      tester.view.physicalSize = config.size * 2;
       tester.view.devicePixelRatio = 2.0;
       tester.platformDispatcher.textScaleFactorTestValue = config.textScale;
       addTearDown(tester.view.reset);
