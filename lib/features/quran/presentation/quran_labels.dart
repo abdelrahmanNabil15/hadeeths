@@ -12,7 +12,7 @@ String suraName(BuildContext context, int sura) => context.apiLanguage == 'ar'
 /// generous line height for the marks. Size follows the reading-size setting.
 TextStyle quranTextStyle(BuildContext context, {required double scale}) =>
     TextStyle(
-      fontFamily: AppFonts.reading,
+      fontFamily: AppFonts.quran,
       fontSize: AppTextSize.readingArabic * 1.15 * scale,
       height: AppLineHeight.readingArabic + 0.2,
       color: Theme.of(context).colorScheme.onSurface,

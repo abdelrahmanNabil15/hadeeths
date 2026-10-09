@@ -162,4 +162,7 @@ abstract final class AppFonts {
 
   /// Reading font for Arabic hadith text, bundled Amiri, SIL OFL 1.1.
   static const reading = 'Amiri';
+
+  /// Quran text: Amiri Quran 1.003, bundled, SIL OFL 1.1 (the Amiri licence file covers it).
+  static const quran = 'AmiriQuran';
 }
