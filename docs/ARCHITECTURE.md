@@ -206,3 +206,19 @@ translation parity, and the architecture rules. Nothing touches the live API.
   is null. A test checks that a normal build shows no bookmark.
 - The bookmark is one screen-reader node with a toggled state and a tooltip that says what tapping will do; a light tick accompanies it; the icon change
   is a short scale that disappears with "remove animations".
+
+## Quran (Phase 3E)
+
+- **Text:** `assets/quran/quran-uthmani.txt`, the Tanzil Quran Text (Uthmani, Version 1.1, CC BY 3.0), downloaded by the owner and bundled
+  **unchanged**, with its copyright notice. `lib/app/quran_wiring.dart` records its size and fingerprint; `BundledQuranSource` refuses any other
+  file, and `QuranText.parseTanzil` refuses any missing, repeated or out-of-order verse and any total other than 114 suras and 6236 verses. A test
+  reads the real file and checks every verse byte for byte against what the app shows. To update the text, replace the file and record the new
+  values (`dart run tool/quran_fingerprint.dart assets/quran/quran-uthmani.txt`).
+- **Line endings:** `.gitattributes` marks the file `-text`, so Git never converts its line endings (this repository uses `core.autocrlf`, which
+  would otherwise change the bytes on a Windows checkout and the app would refuse the file).
+- **Basmala:** the file already starts verse 1 of every sura except al-Fatihah, where it is verse 1, and at-Tawbah, which has none, with the basmala;
+  in suras 95 and 97 it has a shadda on the ba, as published. The reader adds nothing above the verses.
+- **Font:** Amiri Quran 1.003 (`AppFonts.quran`, SIL OFL 1.1).
+- **Screens:** list of suras (names written for owner review), reader (each verse unchanged, right to left in both interface languages, number drawn
+  beside it), go to a verse, bookmarks (long press), continue reading, search (marks ignored for matching only). Positions only are stored
+  (migration 5). Credit in the section and in About.
