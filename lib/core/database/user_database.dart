@@ -84,5 +84,28 @@ class UserDatabase {
   static bool _isUnreadable(SqliteException e) =>
       e.resultCode == 11 || e.resultCode == 26;
 
+  /// Empties every table that holds the user's own data, in one transaction ("Delete all my
+  /// data"). The schema and its version stay, and so does `app_meta`, which only describes the
+  /// database itself. Tables added by later migrations are included without changes here.
+  void clearUserTables() {
+    final tables = [
+      for (final row in db.select(
+        "SELECT name FROM sqlite_master WHERE type = 'table' "
+        "AND name NOT LIKE 'sqlite_%' AND name != 'app_meta'",
+      ))
+        row['name'] as String,
+    ];
+    db.execute('BEGIN');
+    try {
+      for (final table in tables) {
+        db.execute('DELETE FROM "$table"');
+      }
+      db.execute('COMMIT');
+    } catch (_) {
+      db.execute('ROLLBACK');
+      rethrow;
+    }
+  }
+
   void close() => db.close();
 }

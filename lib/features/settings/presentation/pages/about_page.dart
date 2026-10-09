@@ -6,7 +6,11 @@ import 'package:mynewapp/l10n/l10n.dart';
 
 /// Credits and licences: who the content comes from, which fonts are bundled, and privacy.
 class AboutPage extends StatelessWidget {
-  const AboutPage({super.key});
+  const AboutPage({super.key, this.extended = false});
+
+  /// Also describes the newer sections (what they keep, and the compass data). Off in the
+  /// released app, where those sections do not exist.
+  final bool extended;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,13 @@ class AboutPage extends StatelessWidget {
             section(l10n.aboutPrivacyHeading, l10n.aboutPrivacyBody),
             SelectionArea(child: Text(l10n.aboutPrivacyLocation, style: body)),
             const SizedBox(height: AppSpacing.xl),
+            if (extended) ...[
+              SelectionArea(child: Text(l10n.aboutUserDataBody, style: body)),
+              const SizedBox(height: AppSpacing.xl),
+            ],
             section(l10n.aboutPlacesHeading, l10n.aboutPlacesBody),
+            if (extended)
+              section(l10n.aboutCompassHeading, l10n.aboutCompassBody),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: OutlinedButton.icon(

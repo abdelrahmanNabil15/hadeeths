@@ -167,3 +167,54 @@ cubits are created per screen with `BlocProvider`.
 `test/` mirrors `lib/`: DTO parsing, data sources and repositories (fake Dio adapter), cubits (fake repositories),
 widget flows through `MyApp` with fake repositories (both languages), accessibility, text-scale and contrast checks across both languages and both themes, search and settings flows,
 translation parity, and the architecture rules. Nothing touches the live API.
+
+## Prayer tracker (Phase 3D-1)
+
+- `lib/features/tracker/`: `DayKey` (a calendar day with no zone, `yyyy-MM-dd`), `PrayerLogRepository` (interface), `SqlitePrayerLogRepository`
+  (data), `TrackerCubit`, `TrackerPage`. Table `prayer_log(day, prayer)` was added as migration 2 of the user database: one row per prayer marked as
+  prayed, nothing else (no time, place or note); unmarking deletes the row; only the five prayers are accepted (a CHECK in the table and a guard in the code).
+- "Today" is the date on the clock in the zone of the saved place (the phone's zone if there is none), so the day changes at that place's midnight;
+  it is read again when the app comes back to the front. The screen shows today and the six days before it; any of them can be marked.
+- A mark shows at once and is saved after it; saves run in the order of the taps; a failed save is taken back and explained.
+- Reached from More ("Prayer tracker") when the prayer section is on and the user database opened. No streaks, scores, notifications or "missed" wording.
+  "Delete tracker data" (with confirmation) removes everything.
+- Privacy: the tracker code imports no network, location or sharing package (a test scans it); no share card includes it.
+
+## Tasbeeh counter (Phase 3D-2)
+
+- `lib/features/tasbeeh/`: `TasbeehCounter` (count, optional target of 33, 99 or 100, progress per round), `TasbeehRepository`, `SqliteTasbeehRepository`
+  (table `tasbeeh_counter`, a single row, migration 3), `TasbeehCubit`, `TasbeehPage`. Reached from More ("Tasbeeh counter").
+- It is a plain counter with **no words of its own**: the user decides what they are counting, and a test fails if the feature's code contains any Arabic text.
+- The count goes up the moment a finger touches the circle (pointer down), in memory, before anything is saved, so quick taps are never merged or lost
+  (tests: 100 taps in the cubit, 60 in the widget flow). Saves run in order and each writes the count as it is by then, so the last one holds the total.
+  A failed save leaves the count on screen and shows a warning. Taps before the saved count has been read are ignored so they cannot be overwritten by it.
+- Feedback: a light system tick per tap and a firmer one when the count lands on a multiple of the target (through the `Haptics` service; no setting). The
+  ring beside the count is a plain determinate indicator: nothing animates, so nothing waits for an animation.
+- Undo takes one off, reset (with confirmation) zeroes the count and keeps the target; screen readers hear "Count N" as a live region and can activate the circle.
+- Privacy: no network, location or sharing code (tested); nothing is shared.
+
+## Favourite hadiths (Phase 3F-1)
+
+- `lib/features/favorites/`: `FavoritesRepository` (interface), `SqliteFavoritesRepository` (table `favorites(hadith_id, added_at)`, migration 4),
+  `FavoriteButton` (the bookmark in a hadith's app bar) and `FavoritesPage` (the list under More).
+- **Ids only.** No text, title or grade from HadeethEnc is stored in the user's data (that would be keeping content, which the source's terms and the
+  plan do not allow without permission). The list reads each title the same way as opening the hadith, so saved copies make it work offline for hadiths
+  already read; if a title cannot be read the row says "Hadith N" and still opens it. The same id is the same hadith in both languages.
+- Only digits are accepted as an id (anything else is refused before it reaches the database).
+- **Released app unchanged:** a new flag `FeatureFlags.favorites` (on with the preview sections) and `AppDependencies.favoritesIfEnabled` decide whether
+  the bookmark exists at all; the repository is provided as a nullable `RepositoryProvider<FavoritesRepository?>` and the button renders nothing when it
+  is null. A test checks that a normal build shows no bookmark.
+- The bookmark is one screen-reader node with a toggled state and a tooltip that says what tapping will do; a light tick accompanies it; the icon change
+  is a short scale that disappears with "remove animations".
+
+## Share as image (Phase 3G-1)
+
+- With the `shareCards` flag on (preview sections), a hadith's share button asks "Share as text" or "Share as image"; the released app still shares
+  text straight away (a test checks it).
+- `ShareCardPage` lays the hadith out on 360 x 450 cards (saved as 1080 x 1350 PNGs), always in the light palette and without the phone's text
+  scaling. Each card has the app's name, a piece of the hadith, and the HadeethEnc credit; the grade and narrator are on the last card; cards are
+  numbered when there is more than one.
+- `splitIntoPages` breaks the text only at spaces and never changes it: the pieces joined with single spaces equal the original with its spaces
+  collapsed (tested); a word longer than a card gets a card of its own, uncut.
+- `ImageSharer` (core) writes the PNGs to the app's temporary folder and opens the system share sheet; nothing is uploaded by the app. Every card is
+  built (not only those on screen) so each one can be captured; the share button stays at the bottom of the screen.

@@ -764,4 +764,182 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get remindersExactMissing =>
       'Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”.';
+
+  @override
+  String get trackerTitle => 'Prayer tracker';
+
+  @override
+  String get trackerIntro =>
+      'Mark the prayers you have prayed. This stays on your phone only.';
+
+  @override
+  String get trackerToday => 'Today';
+
+  @override
+  String trackerCount(String count, String total) {
+    return '$count of $total marked';
+  }
+
+  @override
+  String get trackerSaveFailed =>
+      'Could not save that change, so it was taken back. Try again.';
+
+  @override
+  String get trackerUnavailable =>
+      'Storage is not available on this phone, so the tracker cannot be used.';
+
+  @override
+  String get trackerDelete => 'Delete tracker data';
+
+  @override
+  String get trackerDeleteTitle => 'Delete all tracker data?';
+
+  @override
+  String get trackerDeleteBody =>
+      'This removes every marked prayer from this phone. It cannot be undone.';
+
+  @override
+  String get trackerDeleteConfirm => 'Delete';
+
+  @override
+  String trackerDayLabel(String day, String count, String total) {
+    return '$day, $count of $total marked';
+  }
+
+  @override
+  String get tasbeehTitle => 'Tasbeeh counter';
+
+  @override
+  String get tasbeehHint =>
+      'Tap the circle to count. The count is kept on this phone.';
+
+  @override
+  String tasbeehCountLabel(Object count) {
+    return 'Count $count';
+  }
+
+  @override
+  String get tasbeehTapHint => 'Tap to count';
+
+  @override
+  String get tasbeehTargetHeading => 'Target';
+
+  @override
+  String get tasbeehNoTarget => 'No target';
+
+  @override
+  String tasbeehRounds(Object rounds) {
+    return 'Rounds completed: $rounds';
+  }
+
+  @override
+  String get tasbeehTargetReached => 'Target reached';
+
+  @override
+  String get tasbeehUndo => 'Undo last';
+
+  @override
+  String get tasbeehReset => 'Reset';
+
+  @override
+  String get tasbeehResetTitle => 'Reset the counter?';
+
+  @override
+  String get tasbeehResetBody => 'The count goes back to zero.';
+
+  @override
+  String get tasbeehSaveFailed =>
+      'The count could not be saved on this phone. You can keep counting, but it may be lost when the app closes.';
+
+  @override
+  String get favoritesTitle => 'Favourites';
+
+  @override
+  String get favoriteAdd => 'Add to favourites';
+
+  @override
+  String get favoriteRemove => 'Remove from favourites';
+
+  @override
+  String get favoritesEmpty =>
+      'No favourites yet. Open a hadith and tap the bookmark to keep it here.';
+
+  @override
+  String favoritesFallbackTitle(Object id) {
+    return 'Hadith $id';
+  }
+
+  @override
+  String get favoritesClear => 'Clear favourites';
+
+  @override
+  String get favoritesClearTitle => 'Remove all favourites?';
+
+  @override
+  String get favoritesClearBody =>
+      'This removes the list from this phone. The hadiths themselves are not affected.';
+
+  @override
+  String get favoritesClearConfirm => 'Remove';
+
+  @override
+  String get deleteAllHeading => 'Your data';
+
+  @override
+  String get deleteAllBody =>
+      'Everything this app keeps about you is on this phone: your place and prayer choices, reminders, the tracker, the counter, favourites, saved copies and these settings.';
+
+  @override
+  String get deleteAllButton => 'Delete all my data';
+
+  @override
+  String get deleteAllTitle => 'Delete all your data?';
+
+  @override
+  String get deleteAllConfirmBody =>
+      'This removes everything listed above from this phone and cancels scheduled reminders. It cannot be undone.';
+
+  @override
+  String get deleteAllConfirm => 'Delete everything';
+
+  @override
+  String get deleteAllDone => 'All your data was deleted.';
+
+  @override
+  String get deleteAllPartial =>
+      'Some of your data could not be deleted. Try again.';
+
+  @override
+  String get aboutUserDataBody =>
+      'Your place, reminders, the tracker, the counter and favourites are kept only on this phone and are never sent anywhere. Settings, then Delete all my data, removes them.';
+
+  @override
+  String get aboutCompassHeading => 'Compass';
+
+  @override
+  String get aboutCompassBody =>
+      'The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.';
+
+  @override
+  String get shareAsText => 'Share as text';
+
+  @override
+  String get shareAsImage => 'Share as image';
+
+  @override
+  String get shareCardShareOne => 'Share the image';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Share the $count images',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'The image could not be made or shared. Try again.';
 }

@@ -39,6 +39,9 @@ class SettingsCubit extends Cubit<AppSettings> {
     );
   }
 
+  /// Back to the defaults (after "Delete all my data"); the defaults are saved too.
+  Future<void> resetToDefaults() => _update(const AppSettings());
+
   Future<void> _update(AppSettings next) async {
     if (next == state) return;
     emit(next);

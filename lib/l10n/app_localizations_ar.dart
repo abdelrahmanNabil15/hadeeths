@@ -766,4 +766,182 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get remindersExactMissing =>
       'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».';
+
+  @override
+  String get trackerTitle => 'متابع الصلاة';
+
+  @override
+  String get trackerIntro =>
+      'علّم على الصلوات التي صلّيتها. يبقى هذا على هاتفك فقط.';
+
+  @override
+  String get trackerToday => 'اليوم';
+
+  @override
+  String trackerCount(String count, String total) {
+    return 'المُعلَّم $count من $total';
+  }
+
+  @override
+  String get trackerSaveFailed =>
+      'تعذّر حفظ هذا التغيير فأُلغي. حاول مرة أخرى.';
+
+  @override
+  String get trackerUnavailable =>
+      'التخزين غير متاح على هذا الهاتف، لذلك لا يمكن استخدام المتابع.';
+
+  @override
+  String get trackerDelete => 'حذف بيانات المتابع';
+
+  @override
+  String get trackerDeleteTitle => 'حذف كل بيانات المتابع؟';
+
+  @override
+  String get trackerDeleteBody =>
+      'يزيل هذا كل صلاة معلَّمة من هذا الهاتف، ولا يمكن التراجع عنه.';
+
+  @override
+  String get trackerDeleteConfirm => 'حذف';
+
+  @override
+  String trackerDayLabel(String day, String count, String total) {
+    return '$day، المُعلَّم $count من $total';
+  }
+
+  @override
+  String get tasbeehTitle => 'عدّاد التسبيح';
+
+  @override
+  String get tasbeehHint => 'المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.';
+
+  @override
+  String tasbeehCountLabel(Object count) {
+    return 'العدد $count';
+  }
+
+  @override
+  String get tasbeehTapHint => 'المس للعدّ';
+
+  @override
+  String get tasbeehTargetHeading => 'الهدف';
+
+  @override
+  String get tasbeehNoTarget => 'بلا هدف';
+
+  @override
+  String tasbeehRounds(Object rounds) {
+    return 'الدورات المكتملة: $rounds';
+  }
+
+  @override
+  String get tasbeehTargetReached => 'اكتمل الهدف';
+
+  @override
+  String get tasbeehUndo => 'تراجع عن الأخيرة';
+
+  @override
+  String get tasbeehReset => 'تصفير';
+
+  @override
+  String get tasbeehResetTitle => 'تصفير العدّاد؟';
+
+  @override
+  String get tasbeehResetBody => 'يعود العدد إلى الصفر.';
+
+  @override
+  String get tasbeehSaveFailed =>
+      'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.';
+
+  @override
+  String get favoritesTitle => 'المفضلة';
+
+  @override
+  String get favoriteAdd => 'إضافة إلى المفضلة';
+
+  @override
+  String get favoriteRemove => 'إزالة من المفضلة';
+
+  @override
+  String get favoritesEmpty =>
+      'لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.';
+
+  @override
+  String favoritesFallbackTitle(Object id) {
+    return 'حديث $id';
+  }
+
+  @override
+  String get favoritesClear => 'مسح المفضلة';
+
+  @override
+  String get favoritesClearTitle => 'إزالة كل المفضلة؟';
+
+  @override
+  String get favoritesClearBody =>
+      'يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.';
+
+  @override
+  String get favoritesClearConfirm => 'إزالة';
+
+  @override
+  String get deleteAllHeading => 'بياناتك';
+
+  @override
+  String get deleteAllBody =>
+      'كل ما يحفظه التطبيق عنك موجود على هذا الهاتف: موقعك واختيارات الصلاة والتذكيرات والمتابع والعدّاد والمفضلة والنسخ المحفوظة وهذه الإعدادات.';
+
+  @override
+  String get deleteAllButton => 'حذف كل بياناتي';
+
+  @override
+  String get deleteAllTitle => 'حذف كل بياناتك؟';
+
+  @override
+  String get deleteAllConfirmBody =>
+      'يزيل هذا كل ما سبق من هذا الهاتف ويلغي التذكيرات المجدولة، ولا يمكن التراجع عنه.';
+
+  @override
+  String get deleteAllConfirm => 'حذف الكل';
+
+  @override
+  String get deleteAllDone => 'حُذفت كل بياناتك.';
+
+  @override
+  String get deleteAllPartial => 'تعذّر حذف بعض بياناتك. حاول مرة أخرى.';
+
+  @override
+  String get aboutUserDataBody =>
+      'موقعك والتذكيرات والمتابع والعدّاد والمفضلة محفوظة على هذا الهاتف فقط ولا تُرسل إلى أي جهة. يمكنك حذفها من الإعدادات ثم حذف كل بياناتي.';
+
+  @override
+  String get aboutCompassHeading => 'البوصلة';
+
+  @override
+  String get aboutCompassBody =>
+      'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.';
+
+  @override
+  String get shareAsText => 'مشاركة كنص';
+
+  @override
+  String get shareAsImage => 'مشاركة كصورة';
+
+  @override
+  String get shareCardShareOne => 'مشاركة الصورة';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'مشاركة الصور الـ$count',
+      few: 'مشاركة الصور الـ$count',
+      two: 'مشاركة الصورتين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
 }

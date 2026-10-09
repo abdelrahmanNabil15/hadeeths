@@ -14,7 +14,12 @@ import 'package:mynewapp/features/settings/presentation/widgets/reading_size_con
 import 'package:mynewapp/l10n/l10n.dart';
 
 class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
+  const SettingsPage({super.key, this.onDeleteAll});
+
+  /// Deletes everything the app keeps about the user; true when all of it went. Only given when
+  /// the newer sections are on (the released app keeps no other data), so the section is hidden
+  /// otherwise. On success the app starts afresh, so this page does not stay open.
+  final Future<bool> Function()? onDeleteAll;
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +81,87 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               AppTile(
                 title: l10n.aboutTitle,
-                onTap: () => Navigator.of(
-                  context,
-                ).push(appRoute<void>(builder: (_) => const AboutPage())),
+                onTap: () => Navigator.of(context).push(
+                  appRoute<void>(
+                    builder: (_) => AboutPage(extended: onDeleteAll != null),
+                  ),
+                ),
               ),
+              if (onDeleteAll != null) ...[
+                const SizedBox(height: AppSpacing.xl),
+                SectionHeading(l10n.deleteAllHeading),
+                const SizedBox(height: AppSpacing.sm),
+                Text(
+                  l10n.deleteAllBody,
+                  style: TextStyle(
+                    fontSize: AppTextSize.meta,
+                    height: AppLineHeight.body,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.md),
+                _DeleteAllButton(onDeleteAll: onDeleteAll!),
+              ],
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Asks first, then deletes everything. A partial failure is reported here; on success the app
+/// restarts from its first page and says so there.
+class _DeleteAllButton extends StatelessWidget {
+  const _DeleteAllButton({required this.onDeleteAll});
+
+  final Future<bool> Function() onDeleteAll;
+
+  Future<void> _confirm(BuildContext context) async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final agreed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteAllTitle),
+        content: Text(l10n.deleteAllConfirmBody),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.notNow),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(dialogContext).colorScheme.error,
+              foregroundColor: Theme.of(dialogContext).colorScheme.onError,
+            ),
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.deleteAllConfirm),
+          ),
+        ],
+      ),
+    );
+    if (!(agreed ?? false)) return;
+    final partial = l10n.deleteAllPartial;
+    final ok = await onDeleteAll();
+    if (!ok) {
+      messenger
+        ..hideCurrentSnackBar()
+        ..showSnackBar(SnackBar(content: Text(partial)));
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return OutlinedButton.icon(
+      style: OutlinedButton.styleFrom(
+        foregroundColor: scheme.error,
+        side: BorderSide(color: scheme.error),
+      ),
+      onPressed: () => _confirm(context),
+      icon: const Icon(Icons.delete_forever_outlined),
+      label: Text(context.l10n.deleteAllButton),
     );
   }
 }

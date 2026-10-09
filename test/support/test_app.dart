@@ -4,9 +4,14 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
+import 'package:mynewapp/core/database/user_database.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
+import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
+import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 
 import 'fake_backend.dart';
 
@@ -33,6 +38,11 @@ AppDependencies testDependencies(
   SwitchableResponseCache? cache,
   FeatureFlags features = const FeatureFlags(),
   PrayerServices? prayer,
+  PrayerLogRepository? prayerLog,
+  TasbeehRepository? tasbeeh,
+  FavoritesRepository? favorites,
+  UserDatabase? userData,
+  ImageSharer? imageSharer,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -41,6 +51,11 @@ AppDependencies testDependencies(
   cache: cache ?? SwitchableResponseCache(InMemoryResponseCache()),
   features: features,
   prayer: prayer,
+  prayerLog: prayerLog,
+  tasbeeh: tasbeeh,
+  favorites: favorites,
+  userData: userData,
+  imageSharer: imageSharer ?? const SystemImageSharer(),
 );
 
 /// Starts the app against [api].
@@ -57,6 +72,11 @@ Future<void> pumpApp(
   bool settle = true,
   FeatureFlags features = const FeatureFlags(),
   PrayerServices? prayer,
+  PrayerLogRepository? prayerLog,
+  TasbeehRepository? tasbeeh,
+  FavoritesRepository? favorites,
+  UserDatabase? userData,
+  ImageSharer? imageSharer,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -68,6 +88,11 @@ Future<void> pumpApp(
         settings: repository ?? InMemorySettingsRepository(settings),
         features: features,
         prayer: prayer,
+        prayerLog: prayerLog,
+        tasbeeh: tasbeeh,
+        favorites: favorites,
+        userData: userData,
+        imageSharer: imageSharer,
       ),
       initialSettings: settings,
     ),

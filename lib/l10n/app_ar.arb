@@ -373,5 +373,77 @@
   "remindersExactHint": "يطلب من أندرويد إيصال كل تذكير في وقته. يحتاج هذا إلى إذن «المنبهات والتذكيرات» لهذا التطبيق، ومن دونه قد تتأخر التذكيرات.",
   "remindersExactExplainTitle": "السماح بالتوقيت الدقيق؟",
   "remindersExactExplainBody": "من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه يستطيع أندرويد إيصال التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن. إن لم تسمح به تبقى التذكيرات تعمل لكنها قد تتأخر.",
-  "remindersExactMissing": "التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات»."
+  "remindersExactMissing": "التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».",
+  "trackerTitle": "متابع الصلاة",
+  "trackerIntro": "علّم على الصلوات التي صلّيتها. يبقى هذا على هاتفك فقط.",
+  "trackerToday": "اليوم",
+  "trackerCount": "المُعلَّم {count} من {total}",
+  "trackerSaveFailed": "تعذّر حفظ هذا التغيير فأُلغي. حاول مرة أخرى.",
+  "trackerUnavailable": "التخزين غير متاح على هذا الهاتف، لذلك لا يمكن استخدام المتابع.",
+  "trackerDelete": "حذف بيانات المتابع",
+  "trackerDeleteTitle": "حذف كل بيانات المتابع؟",
+  "trackerDeleteBody": "يزيل هذا كل صلاة معلَّمة من هذا الهاتف، ولا يمكن التراجع عنه.",
+  "trackerDeleteConfirm": "حذف",
+  "trackerDayLabel": "{day}، المُعلَّم {count} من {total}",
+  "@trackerCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@trackerDayLabel": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "tasbeehTitle": "عدّاد التسبيح",
+  "tasbeehHint": "المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.",
+  "tasbeehCountLabel": "العدد {count}",
+  "tasbeehTapHint": "المس للعدّ",
+  "tasbeehTargetHeading": "الهدف",
+  "tasbeehNoTarget": "بلا هدف",
+  "tasbeehRounds": "الدورات المكتملة: {rounds}",
+  "tasbeehTargetReached": "اكتمل الهدف",
+  "tasbeehUndo": "تراجع عن الأخيرة",
+  "tasbeehReset": "تصفير",
+  "tasbeehResetTitle": "تصفير العدّاد؟",
+  "tasbeehResetBody": "يعود العدد إلى الصفر.",
+  "tasbeehSaveFailed": "تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.",
+  "favoritesTitle": "المفضلة",
+  "favoriteAdd": "إضافة إلى المفضلة",
+  "favoriteRemove": "إزالة من المفضلة",
+  "favoritesEmpty": "لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.",
+  "favoritesFallbackTitle": "حديث {id}",
+  "favoritesClear": "مسح المفضلة",
+  "favoritesClearTitle": "إزالة كل المفضلة؟",
+  "favoritesClearBody": "يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.",
+  "favoritesClearConfirm": "إزالة",
+  "deleteAllHeading": "بياناتك",
+  "deleteAllBody": "كل ما يحفظه التطبيق عنك موجود على هذا الهاتف: موقعك واختيارات الصلاة والتذكيرات والمتابع والعدّاد والمفضلة والنسخ المحفوظة وهذه الإعدادات.",
+  "deleteAllButton": "حذف كل بياناتي",
+  "deleteAllTitle": "حذف كل بياناتك؟",
+  "deleteAllConfirmBody": "يزيل هذا كل ما سبق من هذا الهاتف ويلغي التذكيرات المجدولة، ولا يمكن التراجع عنه.",
+  "deleteAllConfirm": "حذف الكل",
+  "deleteAllDone": "حُذفت كل بياناتك.",
+  "deleteAllPartial": "تعذّر حذف بعض بياناتك. حاول مرة أخرى.",
+  "aboutUserDataBody": "موقعك والتذكيرات والمتابع والعدّاد والمفضلة محفوظة على هذا الهاتف فقط ولا تُرسل إلى أي جهة. يمكنك حذفها من الإعدادات ثم حذف كل بياناتي.",
+  "aboutCompassHeading": "البوصلة",
+  "aboutCompassBody": "يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.",
+  "shareAsText": "مشاركة كنص",
+  "shareAsImage": "مشاركة كصورة",
+  "shareCardShareOne": "مشاركة الصورة",
+  "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
+  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى."
 }

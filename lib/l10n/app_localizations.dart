@@ -1411,6 +1411,300 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».'**
   String get remindersExactMissing;
+
+  /// No description provided for @trackerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابع الصلاة'**
+  String get trackerTitle;
+
+  /// No description provided for @trackerIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم على الصلوات التي صلّيتها. يبقى هذا على هاتفك فقط.'**
+  String get trackerIntro;
+
+  /// No description provided for @trackerToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get trackerToday;
+
+  /// No description provided for @trackerCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المُعلَّم {count} من {total}'**
+  String trackerCount(String count, String total);
+
+  /// No description provided for @trackerSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حفظ هذا التغيير فأُلغي. حاول مرة أخرى.'**
+  String get trackerSaveFailed;
+
+  /// No description provided for @trackerUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'التخزين غير متاح على هذا الهاتف، لذلك لا يمكن استخدام المتابع.'**
+  String get trackerUnavailable;
+
+  /// No description provided for @trackerDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف بيانات المتابع'**
+  String get trackerDelete;
+
+  /// No description provided for @trackerDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بيانات المتابع؟'**
+  String get trackerDeleteTitle;
+
+  /// No description provided for @trackerDeleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا كل صلاة معلَّمة من هذا الهاتف، ولا يمكن التراجع عنه.'**
+  String get trackerDeleteBody;
+
+  /// No description provided for @trackerDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get trackerDeleteConfirm;
+
+  /// No description provided for @trackerDayLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{day}، المُعلَّم {count} من {total}'**
+  String trackerDayLabel(String day, String count, String total);
+
+  /// No description provided for @tasbeehTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّاد التسبيح'**
+  String get tasbeehTitle;
+
+  /// No description provided for @tasbeehHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.'**
+  String get tasbeehHint;
+
+  /// No description provided for @tasbeehCountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العدد {count}'**
+  String tasbeehCountLabel(Object count);
+
+  /// No description provided for @tasbeehTapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المس للعدّ'**
+  String get tasbeehTapHint;
+
+  /// No description provided for @tasbeehTargetHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهدف'**
+  String get tasbeehTargetHeading;
+
+  /// No description provided for @tasbeehNoTarget.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا هدف'**
+  String get tasbeehNoTarget;
+
+  /// No description provided for @tasbeehRounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدورات المكتملة: {rounds}'**
+  String tasbeehRounds(Object rounds);
+
+  /// No description provided for @tasbeehTargetReached.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل الهدف'**
+  String get tasbeehTargetReached;
+
+  /// No description provided for @tasbeehUndo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراجع عن الأخيرة'**
+  String get tasbeehUndo;
+
+  /// No description provided for @tasbeehReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفير'**
+  String get tasbeehReset;
+
+  /// No description provided for @tasbeehResetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفير العدّاد؟'**
+  String get tasbeehResetTitle;
+
+  /// No description provided for @tasbeehResetBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعود العدد إلى الصفر.'**
+  String get tasbeehResetBody;
+
+  /// No description provided for @tasbeehSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.'**
+  String get tasbeehSaveFailed;
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المفضلة'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoriteAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إلى المفضلة'**
+  String get favoriteAdd;
+
+  /// No description provided for @favoriteRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة من المفضلة'**
+  String get favoriteRemove;
+
+  /// No description provided for @favoritesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.'**
+  String get favoritesEmpty;
+
+  /// No description provided for @favoritesFallbackTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حديث {id}'**
+  String favoritesFallbackTitle(Object id);
+
+  /// No description provided for @favoritesClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح المفضلة'**
+  String get favoritesClear;
+
+  /// No description provided for @favoritesClearTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة كل المفضلة؟'**
+  String get favoritesClearTitle;
+
+  /// No description provided for @favoritesClearBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.'**
+  String get favoritesClearBody;
+
+  /// No description provided for @favoritesClearConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get favoritesClearConfirm;
+
+  /// No description provided for @deleteAllHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك'**
+  String get deleteAllHeading;
+
+  /// No description provided for @deleteAllBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل ما يحفظه التطبيق عنك موجود على هذا الهاتف: موقعك واختيارات الصلاة والتذكيرات والمتابع والعدّاد والمفضلة والنسخ المحفوظة وهذه الإعدادات.'**
+  String get deleteAllBody;
+
+  /// No description provided for @deleteAllButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بياناتي'**
+  String get deleteAllButton;
+
+  /// No description provided for @deleteAllTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بياناتك؟'**
+  String get deleteAllTitle;
+
+  /// No description provided for @deleteAllConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا كل ما سبق من هذا الهاتف ويلغي التذكيرات المجدولة، ولا يمكن التراجع عنه.'**
+  String get deleteAllConfirmBody;
+
+  /// No description provided for @deleteAllConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الكل'**
+  String get deleteAllConfirm;
+
+  /// No description provided for @deleteAllDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت كل بياناتك.'**
+  String get deleteAllDone;
+
+  /// No description provided for @deleteAllPartial.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حذف بعض بياناتك. حاول مرة أخرى.'**
+  String get deleteAllPartial;
+
+  /// No description provided for @aboutUserDataBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقعك والتذكيرات والمتابع والعدّاد والمفضلة محفوظة على هذا الهاتف فقط ولا تُرسل إلى أي جهة. يمكنك حذفها من الإعدادات ثم حذف كل بياناتي.'**
+  String get aboutUserDataBody;
+
+  /// No description provided for @aboutCompassHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'البوصلة'**
+  String get aboutCompassHeading;
+
+  /// No description provided for @aboutCompassBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.'**
+  String get aboutCompassBody;
+
+  /// No description provided for @shareAsText.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كنص'**
+  String get shareAsText;
+
+  /// No description provided for @shareAsImage.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة كصورة'**
+  String get shareAsImage;
+
+  /// No description provided for @shareCardShareOne.
+  ///
+  /// In ar, this message translates to:
+  /// **'مشاركة الصورة'**
+  String get shareCardShareOne;
+
+  /// No description provided for @shareCardShareMany.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}'**
+  String shareCardShareMany(num count);
+
+  /// No description provided for @shareCardFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
+  String get shareCardFailed;
 }
 
 class _AppLocalizationsDelegate

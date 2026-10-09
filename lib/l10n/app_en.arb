@@ -218,5 +218,77 @@
   "remindersExactHint": "Asks Android to deliver each reminder at its time. This needs “Alarms & reminders” access for this app; without it, reminders may arrive late.",
   "remindersExactExplainTitle": "Allow exact timing?",
   "remindersExactExplainBody": "Without it, Android may deliver a reminder late, sometimes by up to an hour, when the phone is saving power. With it, Android can deliver reminders at their time. The next screen is Android's own settings page for this permission. If you do not allow it, reminders still work but may be late.",
-  "remindersExactMissing": "Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”."
+  "remindersExactMissing": "Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”.",
+  "trackerTitle": "Prayer tracker",
+  "trackerIntro": "Mark the prayers you have prayed. This stays on your phone only.",
+  "trackerToday": "Today",
+  "trackerCount": "{count} of {total} marked",
+  "trackerSaveFailed": "Could not save that change, so it was taken back. Try again.",
+  "trackerUnavailable": "Storage is not available on this phone, so the tracker cannot be used.",
+  "trackerDelete": "Delete tracker data",
+  "trackerDeleteTitle": "Delete all tracker data?",
+  "trackerDeleteBody": "This removes every marked prayer from this phone. It cannot be undone.",
+  "trackerDeleteConfirm": "Delete",
+  "trackerDayLabel": "{day}, {count} of {total} marked",
+  "@trackerCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@trackerDayLabel": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "tasbeehTitle": "Tasbeeh counter",
+  "tasbeehHint": "Tap the circle to count. The count is kept on this phone.",
+  "tasbeehCountLabel": "Count {count}",
+  "tasbeehTapHint": "Tap to count",
+  "tasbeehTargetHeading": "Target",
+  "tasbeehNoTarget": "No target",
+  "tasbeehRounds": "Rounds completed: {rounds}",
+  "tasbeehTargetReached": "Target reached",
+  "tasbeehUndo": "Undo last",
+  "tasbeehReset": "Reset",
+  "tasbeehResetTitle": "Reset the counter?",
+  "tasbeehResetBody": "The count goes back to zero.",
+  "tasbeehSaveFailed": "The count could not be saved on this phone. You can keep counting, but it may be lost when the app closes.",
+  "favoritesTitle": "Favourites",
+  "favoriteAdd": "Add to favourites",
+  "favoriteRemove": "Remove from favourites",
+  "favoritesEmpty": "No favourites yet. Open a hadith and tap the bookmark to keep it here.",
+  "favoritesFallbackTitle": "Hadith {id}",
+  "favoritesClear": "Clear favourites",
+  "favoritesClearTitle": "Remove all favourites?",
+  "favoritesClearBody": "This removes the list from this phone. The hadiths themselves are not affected.",
+  "favoritesClearConfirm": "Remove",
+  "deleteAllHeading": "Your data",
+  "deleteAllBody": "Everything this app keeps about you is on this phone: your place and prayer choices, reminders, the tracker, the counter, favourites, saved copies and these settings.",
+  "deleteAllButton": "Delete all my data",
+  "deleteAllTitle": "Delete all your data?",
+  "deleteAllConfirmBody": "This removes everything listed above from this phone and cancels scheduled reminders. It cannot be undone.",
+  "deleteAllConfirm": "Delete everything",
+  "deleteAllDone": "All your data was deleted.",
+  "deleteAllPartial": "Some of your data could not be deleted. Try again.",
+  "aboutUserDataBody": "Your place, reminders, the tracker, the counter and favourites are kept only on this phone and are never sent anywhere. Settings, then Delete all my data, removes them.",
+  "aboutCompassHeading": "Compass",
+  "aboutCompassBody": "The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.",
+  "shareAsText": "Share as text",
+  "shareAsImage": "Share as image",
+  "shareCardShareOne": "Share the image",
+  "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
+  "shareCardFailed": "The image could not be made or shared. Try again."
 }

@@ -9,9 +9,11 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -41,6 +43,32 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _lightTheme = AppTheme.light();
   final _darkTheme = AppTheme.dark();
 
+  /// Changed after "Delete all my data": a new key gives the app a fresh navigator and fresh
+  /// screens, so nothing still on screen shows data that no longer exists.
+  int _generation = 0;
+  final _messenger = GlobalKey<ScaffoldMessengerState>();
+
+  /// Kept here (not only in the tree) so that deleting all data can reset it.
+  late final SettingsCubit _settings = SettingsCubit(
+    widget.dependencies.settings,
+    widget.initialSettings,
+  );
+
+  Future<bool> _eraseAll() async {
+    final ok = await widget.dependencies.eraser.eraseAll();
+    if (!ok || !mounted) return ok;
+    await _settings.resetToDefaults();
+    setState(() => _generation++);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final messengerContext = _messenger.currentContext;
+      if (messengerContext == null) return;
+      _messenger.currentState?.showSnackBar(
+        SnackBar(content: Text(messengerContext.l10n.deleteAllDone)),
+      );
+    });
+    return true;
+  }
+
   /// Prayer reminders are rebuilt from what is saved whenever the app starts or comes back, so they
   /// are right after a restart, a new day, or a change of clock, time zone or language.
   void _reconcileReminders() {
@@ -58,6 +86,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _settings.close();
     super.dispose();
   }
 
@@ -79,9 +108,17 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         RepositoryProvider<HadithsRepository>.value(value: deps.hadiths),
         RepositoryProvider<SearchRepository>.value(value: deps.search),
         RepositoryProvider<ResponseCache>.value(value: deps.cache),
+        // Nullable on purpose: screens show the bookmark only when favourites are available.
+        RepositoryProvider<FavoritesRepository?>.value(
+          value: deps.favoritesIfEnabled,
+        ),
+        // Nullable on purpose: without it a hadith is shared as text only, as in the released app.
+        RepositoryProvider<ImageSharer?>.value(
+          value: deps.imageSharerIfEnabled,
+        ),
       ],
-      child: BlocProvider(
-        create: (_) => SettingsCubit(deps.settings, widget.initialSettings),
+      child: BlocProvider.value(
+        value: _settings,
         child: BlocListener<SettingsCubit, AppSettings>(
           listenWhen: (previous, current) =>
               previous.offlineCopies != current.offlineCopies,
@@ -104,6 +141,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               builder: (context, settings) {
                 final languageCode = settings.language.code;
                 return MaterialApp(
+                  key: ValueKey(_generation),
+                  scaffoldMessengerKey: _messenger,
                   onGenerateTitle: (context) => context.l10n.appTitle,
                   theme: _lightTheme,
                   darkTheme: _darkTheme,
@@ -147,7 +186,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   onGenerateRoute: (settings) => appRoute<void>(
                     settings: settings,
                     builder: (_) => deps.features.usesShell
-                        ? AppShell(features: deps.features, prayer: deps.prayer)
+                        ? AppShell(
+                            features: deps.features,
+                            prayer: deps.prayer,
+                            prayerLog: deps.prayerLog,
+                            tasbeeh: deps.tasbeeh,
+                            favorites: deps.favoritesIfEnabled,
+                            onDeleteAll: _eraseAll,
+                          )
                         : const HomePage(),
                   ),
                 );
