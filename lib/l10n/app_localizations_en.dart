@@ -881,4 +881,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get favoritesClearConfirm => 'Remove';
+
+  @override
+  String get deleteAllHeading => 'Your data';
+
+  @override
+  String get deleteAllBody =>
+      'Everything this app keeps about you is on this phone: your place and prayer choices, reminders, the tracker, the counter, favourites, saved copies and these settings.';
+
+  @override
+  String get deleteAllButton => 'Delete all my data';
+
+  @override
+  String get deleteAllTitle => 'Delete all your data?';
+
+  @override
+  String get deleteAllConfirmBody =>
+      'This removes everything listed above from this phone and cancels scheduled reminders. It cannot be undone.';
+
+  @override
+  String get deleteAllConfirm => 'Delete everything';
+
+  @override
+  String get deleteAllDone => 'All your data was deleted.';
+
+  @override
+  String get deleteAllPartial =>
+      'Some of your data could not be deleted. Try again.';
+
+  @override
+  String get aboutUserDataBody =>
+      'Your place, reminders, the tracker, the counter and favourites are kept only on this phone and are never sent anywhere. Settings, then Delete all my data, removes them.';
+
+  @override
+  String get aboutCompassHeading => 'Compass';
+
+  @override
+  String get aboutCompassBody =>
+      'The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.';
 }

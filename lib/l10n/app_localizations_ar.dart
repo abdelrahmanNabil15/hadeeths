@@ -882,4 +882,41 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get favoritesClearConfirm => 'إزالة';
+
+  @override
+  String get deleteAllHeading => 'بياناتك';
+
+  @override
+  String get deleteAllBody =>
+      'كل ما يحفظه التطبيق عنك موجود على هذا الهاتف: موقعك واختيارات الصلاة والتذكيرات والمتابع والعدّاد والمفضلة والنسخ المحفوظة وهذه الإعدادات.';
+
+  @override
+  String get deleteAllButton => 'حذف كل بياناتي';
+
+  @override
+  String get deleteAllTitle => 'حذف كل بياناتك؟';
+
+  @override
+  String get deleteAllConfirmBody =>
+      'يزيل هذا كل ما سبق من هذا الهاتف ويلغي التذكيرات المجدولة، ولا يمكن التراجع عنه.';
+
+  @override
+  String get deleteAllConfirm => 'حذف الكل';
+
+  @override
+  String get deleteAllDone => 'حُذفت كل بياناتك.';
+
+  @override
+  String get deleteAllPartial => 'تعذّر حذف بعض بياناتك. حاول مرة أخرى.';
+
+  @override
+  String get aboutUserDataBody =>
+      'موقعك والتذكيرات والمتابع والعدّاد والمفضلة محفوظة على هذا الهاتف فقط ولا تُرسل إلى أي جهة. يمكنك حذفها من الإعدادات ثم حذف كل بياناتي.';
+
+  @override
+  String get aboutCompassHeading => 'البوصلة';
+
+  @override
+  String get aboutCompassBody =>
+      'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.';
 }

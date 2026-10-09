@@ -1609,6 +1609,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إزالة'**
   String get favoritesClearConfirm;
+
+  /// No description provided for @deleteAllHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'بياناتك'**
+  String get deleteAllHeading;
+
+  /// No description provided for @deleteAllBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'كل ما يحفظه التطبيق عنك موجود على هذا الهاتف: موقعك واختيارات الصلاة والتذكيرات والمتابع والعدّاد والمفضلة والنسخ المحفوظة وهذه الإعدادات.'**
+  String get deleteAllBody;
+
+  /// No description provided for @deleteAllButton.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بياناتي'**
+  String get deleteAllButton;
+
+  /// No description provided for @deleteAllTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بياناتك؟'**
+  String get deleteAllTitle;
+
+  /// No description provided for @deleteAllConfirmBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا كل ما سبق من هذا الهاتف ويلغي التذكيرات المجدولة، ولا يمكن التراجع عنه.'**
+  String get deleteAllConfirmBody;
+
+  /// No description provided for @deleteAllConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الكل'**
+  String get deleteAllConfirm;
+
+  /// No description provided for @deleteAllDone.
+  ///
+  /// In ar, this message translates to:
+  /// **'حُذفت كل بياناتك.'**
+  String get deleteAllDone;
+
+  /// No description provided for @deleteAllPartial.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حذف بعض بياناتك. حاول مرة أخرى.'**
+  String get deleteAllPartial;
+
+  /// No description provided for @aboutUserDataBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقعك والتذكيرات والمتابع والعدّاد والمفضلة محفوظة على هذا الهاتف فقط ولا تُرسل إلى أي جهة. يمكنك حذفها من الإعدادات ثم حذف كل بياناتي.'**
+  String get aboutUserDataBody;
+
+  /// No description provided for @aboutCompassHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'البوصلة'**
+  String get aboutCompassHeading;
+
+  /// No description provided for @aboutCompassBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.'**
+  String get aboutCompassBody;
 }
 
 class _AppLocalizationsDelegate

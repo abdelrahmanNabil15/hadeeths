@@ -17,7 +17,16 @@ import 'package:mynewapp/l10n/l10n.dart';
 /// Secondary destinations. Settings and "Sources and rights" live here once the bottom
 /// navigation is on; later phases add the tracker and the salawat counter.
 class MorePage extends StatelessWidget {
-  const MorePage({super.key, this.tracker, this.tasbeeh, this.favorites});
+  const MorePage({
+    super.key,
+    this.tracker,
+    this.tasbeeh,
+    this.favorites,
+    this.onDeleteAll,
+  });
+
+  /// Deletes everything the app keeps about the user (offered in Settings).
+  final Future<bool> Function()? onDeleteAll;
 
   /// Favourite hadiths; null when they are not available.
   final FavoritesRepository? favorites;
@@ -68,13 +77,13 @@ class MorePage extends StatelessWidget {
             AppTile(
               title: l10n.settings,
               pressFeedback: true,
-              onTap: () => open(const SettingsPage()),
+              onTap: () => open(SettingsPage(onDeleteAll: onDeleteAll)),
             ),
             const SizedBox(height: AppSpacing.md),
             AppTile(
               title: l10n.aboutTitle,
               pressFeedback: true,
-              onTap: () => open(const AboutPage()),
+              onTap: () => open(const AboutPage(extended: true)),
             ),
           ],
         ),

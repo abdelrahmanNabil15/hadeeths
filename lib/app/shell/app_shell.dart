@@ -31,6 +31,7 @@ class AppShell extends StatefulWidget {
     this.prayerLog,
     this.tasbeeh,
     this.favorites,
+    this.onDeleteAll,
   });
 
   final FeatureFlags features;
@@ -47,6 +48,9 @@ class AppShell extends StatefulWidget {
 
   /// Favourite hadiths; without them More does not offer the list.
   final FavoritesRepository? favorites;
+
+  /// Deletes everything the app keeps about the user.
+  final Future<bool> Function()? onDeleteAll;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -172,6 +176,7 @@ class _AppShellState extends State<AppShell> {
           : null,
       tasbeeh: widget.tasbeeh,
       favorites: widget.favorites,
+      onDeleteAll: widget.onDeleteAll,
     ),
   };
 

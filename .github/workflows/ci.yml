@@ -65,3 +65,7 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build ios --no-codesign
+      - name: Privacy manifest is in the app bundle
+        run: |
+          test -f build/ios/iphoneos/Runner.app/PrivacyInfo.xcprivacy
+          plutil -lint build/ios/iphoneos/Runner.app/PrivacyInfo.xcprivacy

@@ -78,3 +78,37 @@ preferably to an environment named `production` with required reviewers: `ANDROI
 - [ ] Reminders: `POST_NOTIFICATIONS` and `SCHEDULE_EXACT_ALARM` are in the manifest; confirm Google Play accepts the exact-alarm permission (declaration form) or remove it, and note that without it reminders can be an hour late; reboot, timezone change and an actual reminder arriving were not run on a device yet; wording needs owner review
 - [ ] iOS only: bundle ID confirmed, signing set up in Xcode, privacy strings reviewed
 - [ ] Play Console data-safety answers match the app (no data collected; network use only)
+
+## Phase 3 release checklist (before switching on any section)
+
+The released app today is the hadith reader only: every Phase 3 section (prayer times, Qibla, reminders, tracker, counter, favourites) is behind
+`HADEETHS_PREVIEW_SECTIONS` and absent from a normal build. Before turning any of them on in a release:
+
+**Owner decisions still open**
+- [ ] Wording reviewed: reminders (sunrise and test texts), tracker, tasbeeh counter, favourites, "Delete all my data", About additions.
+- [ ] Google Play: exact-alarm declaration for `SCHEDULE_EXACT_ALARM` checked against the current policy (or the permission removed).
+- [ ] Adhan audio: none bundled; only add a recording with a verified licence.
+- [ ] Salawat reminders: owner-approved Arabic text (not built yet).
+- [ ] World Magnetic Model: licence statement confirmed (credited in About when sections are on); Arabic city names reviewed; Jerusalem and Gaza handling.
+- [ ] Egyptian General Authority of Survey official timetable obtained for validation (only press reports used so far).
+
+**Store forms**
+- [ ] Play Data safety: location (approximate and precise) used on the device only, not collected or shared; no other data collected. Tracker,
+  counter, favourites and reminders are stored on the device only.
+- [ ] Apple privacy answers: no data collected, no tracking. `ios/Runner/PrivacyInfo.xcprivacy` declares no tracking, no collected data, and the
+  file-timestamp (C617.1, the saved-copies cache) and UserDefaults (CA92.1) API reasons; CI checks the file is in the built app.
+
+**Permissions in the release APK** (checked with `aapt dump permissions`): INTERNET, ACCESS_COARSE_LOCATION, ACCESS_FINE_LOCATION,
+RECEIVE_BOOT_COMPLETED, VIBRATE, POST_NOTIFICATIONS, SCHEDULE_EXACT_ALARM. iOS: location and motion usage strings in `Info.plist`.
+
+**User data**
+- [ ] User database migrations: every upgrade path from version 0 to the latest keeps its data (`test/core/database/upgrade_paths_test.dart`).
+- [ ] "Delete all my data" (Settings, shown with the sections on): cancels reminders, forgets the place and prayer choices, empties the tracker,
+  counter and favourites, removes saved copies, resets settings, and restarts the app on its first page (`test/app/delete_all_flow_test.dart`).
+
+**Device checks still NOT RUN** (do them on a real phone and an iPhone before release)
+- [ ] Reminders: one arriving at its time with and without exact timing; after a reboot; after a time-zone change.
+- [ ] Compass accuracy away from magnets; the alignment vibration.
+- [ ] TalkBack and VoiceOver passes on every new screen; predictive back and edge-to-edge insets.
+- [ ] iOS: every screen once, notifications, location prompt, the platform slide and swipe-back.
+- [ ] Profile-mode frame timing on a named device for the compass, the counter and page transitions.

@@ -42,6 +42,32 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _lightTheme = AppTheme.light();
   final _darkTheme = AppTheme.dark();
 
+  /// Changed after "Delete all my data": a new key gives the app a fresh navigator and fresh
+  /// screens, so nothing still on screen shows data that no longer exists.
+  int _generation = 0;
+  final _messenger = GlobalKey<ScaffoldMessengerState>();
+
+  /// Kept here (not only in the tree) so that deleting all data can reset it.
+  late final SettingsCubit _settings = SettingsCubit(
+    widget.dependencies.settings,
+    widget.initialSettings,
+  );
+
+  Future<bool> _eraseAll() async {
+    final ok = await widget.dependencies.eraser.eraseAll();
+    if (!ok || !mounted) return ok;
+    await _settings.resetToDefaults();
+    setState(() => _generation++);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final messengerContext = _messenger.currentContext;
+      if (messengerContext == null) return;
+      _messenger.currentState?.showSnackBar(
+        SnackBar(content: Text(messengerContext.l10n.deleteAllDone)),
+      );
+    });
+    return true;
+  }
+
   /// Prayer reminders are rebuilt from what is saved whenever the app starts or comes back, so they
   /// are right after a restart, a new day, or a change of clock, time zone or language.
   void _reconcileReminders() {
@@ -59,6 +85,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _settings.close();
     super.dispose();
   }
 
@@ -85,8 +112,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           value: deps.favoritesIfEnabled,
         ),
       ],
-      child: BlocProvider(
-        create: (_) => SettingsCubit(deps.settings, widget.initialSettings),
+      child: BlocProvider.value(
+        value: _settings,
         child: BlocListener<SettingsCubit, AppSettings>(
           listenWhen: (previous, current) =>
               previous.offlineCopies != current.offlineCopies,
@@ -109,6 +136,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               builder: (context, settings) {
                 final languageCode = settings.language.code;
                 return MaterialApp(
+                  key: ValueKey(_generation),
+                  scaffoldMessengerKey: _messenger,
                   onGenerateTitle: (context) => context.l10n.appTitle,
                   theme: _lightTheme,
                   darkTheme: _darkTheme,
@@ -158,6 +187,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             prayerLog: deps.prayerLog,
                             tasbeeh: deps.tasbeeh,
                             favorites: deps.favoritesIfEnabled,
+                            onDeleteAll: _eraseAll,
                           )
                         : const HomePage(),
                   ),

@@ -1,4 +1,5 @@
 import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/app/user_data_eraser.dart';
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
@@ -105,6 +106,14 @@ class AppDependencies {
 
   /// Favourites as the screens should see them: only when their section is on and the bottom
   /// navigation exists.
+  /// Deletes everything the app keeps about the user.
+  UserDataEraser get eraser => UserDataEraser(
+    settings: settings,
+    cache: cache,
+    userData: userData,
+    prayer: prayer,
+  );
+
   FavoritesRepository? get favoritesIfEnabled =>
       features.favorites && features.usesShell ? favorites : null;
 }

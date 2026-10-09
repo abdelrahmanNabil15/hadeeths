@@ -274,5 +274,16 @@
   "favoritesClear": "Clear favourites",
   "favoritesClearTitle": "Remove all favourites?",
   "favoritesClearBody": "This removes the list from this phone. The hadiths themselves are not affected.",
-  "favoritesClearConfirm": "Remove"
+  "favoritesClearConfirm": "Remove",
+  "deleteAllHeading": "Your data",
+  "deleteAllBody": "Everything this app keeps about you is on this phone: your place and prayer choices, reminders, the tracker, the counter, favourites, saved copies and these settings.",
+  "deleteAllButton": "Delete all my data",
+  "deleteAllTitle": "Delete all your data?",
+  "deleteAllConfirmBody": "This removes everything listed above from this phone and cancels scheduled reminders. It cannot be undone.",
+  "deleteAllConfirm": "Delete everything",
+  "deleteAllDone": "All your data was deleted.",
+  "deleteAllPartial": "Some of your data could not be deleted. Try again.",
+  "aboutUserDataBody": "Your place, reminders, the tracker, the counter and favourites are kept only on this phone and are never sent anywhere. Settings, then Delete all my data, removes them.",
+  "aboutCompassHeading": "Compass",
+  "aboutCompassBody": "The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device."
 }
