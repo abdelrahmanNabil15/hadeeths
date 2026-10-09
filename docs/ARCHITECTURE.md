@@ -18,6 +18,9 @@ lib/
     json/json_helpers.dart       defensive JSON readers
     state/load_status.dart       LoadStatus shared by all cubits
     cache/                       ResponseCache (file, in-memory, switchable) and CachedFetcher (read-through policy)
+    time/                        Clock (always UTC), TimeZoneRules (offset at an instant; DST-aware wall-clock helpers)
+    notifications/               NotificationPlanner: pure, deterministic plan of what to keep pending (window, quiet hours,
+                                 dedupe, platform limit, stable ids) and a diff against what is pending. No plugin, no UI yet
     design_system/               tokens.dart (light and dark palettes, spacing, radii, sizes, motion) and AppTheme
     widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
     licences.dart                font licence texts for the licences page
