@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/shell/coming_soon_page.dart';
 import 'package:mynewapp/app/shell/more_page.dart';
+import 'package:mynewapp/core/design_system/motion.dart';
+import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
@@ -89,16 +92,16 @@ class _AppShellState extends State<AppShell> {
                 offstage: i != _index,
                 child: TickerMode(
                   enabled: i == _index,
-                  child: _opened.contains(i)
-                      ? Navigator(
-                          key: _navigators[i],
-                          observers: [_observers[i]],
-                          onGenerateRoute: (_) => MaterialPageRoute<void>(
-                            settings: const RouteSettings(name: '/'),
-                            builder: (_) => _root(_tabs[i]),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
+                  child: TabFade(
+                    active: i == _index,
+                    child: _opened.contains(i)
+                        ? Navigator(
+                            key: _navigators[i],
+                            observers: [_observers[i]],
+                            onGenerateRoute: (_) => _rootRoute(_tabs[i]),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
                 ),
               ),
           ],
@@ -121,6 +124,16 @@ class _AppShellState extends State<AppShell> {
         ),
       ),
     );
+  }
+
+  /// The hadith section keeps the platform's own transitions (it is the released app); the other
+  /// sections use the app's transition for their whole stack, starting with this first page.
+  Route<void> _rootRoute(ShellTab tab) {
+    const settings = RouteSettings(name: '/');
+    Widget build(BuildContext _) => _root(tab);
+    return tab == ShellTab.hadiths
+        ? MaterialPageRoute<void>(settings: settings, builder: build)
+        : appRoute<void>(settings: settings, builder: build);
   }
 
   Widget _root(ShellTab tab) => switch (tab) {
@@ -178,4 +191,44 @@ class _StackObserver extends NavigatorObserver {
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) =>
       _onChange();
+}
+
+/// Fades a section in when it is selected. The section is built and usable straight away; only its
+/// opacity animates (150 ms), and with "remove animations" on it simply appears.
+class TabFade extends StatefulWidget {
+  const TabFade({super.key, required this.active, required this.child});
+
+  final bool active;
+  final Widget child;
+
+  @override
+  State<TabFade> createState() => _TabFadeState();
+}
+
+class _TabFadeState extends State<TabFade> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: AppMotion.short,
+    value: 1,
+  );
+
+  @override
+  void didUpdateWidget(TabFade old) {
+    super.didUpdateWidget(old);
+    if (widget.active && !old.active && !context.reduceMotion) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => FadeTransition(
+    opacity: CurvedAnimation(parent: _controller, curve: AppMotion.enter),
+    child: widget.child,
+  );
 }

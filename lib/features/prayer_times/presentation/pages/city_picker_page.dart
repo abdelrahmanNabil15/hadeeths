@@ -86,6 +86,7 @@ class _CityPickerPageState extends State<CityPickerPage> {
                             final city = results[index];
                             return AppTile(
                               title: city.name(language),
+                              pressFeedback: true,
                               onTap: () => Navigator.of(context).pop(city),
                             );
                           },

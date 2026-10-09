@@ -149,6 +149,11 @@ cubits are created per screen with `BlocProvider`.
 - Shared widgets added: `StatusBanner`, `AnimatedStateSwitcher`, `PressableScale`. No existing widget changed.
 - Finding: `MaterialApp` is given a new `AppTheme.light()` on every settings rebuild, and the theme contains closures that never compare equal,
   so the theme animates (about 200 ms) on each settings change. Left as is; to be looked at in UI Phase B.
+- UI Phase B: `TabFade` fades a section in on selection; the Prayer, Quran-placeholder and More sections use `appRoute()` for their whole
+  stack, including the tab root; the Hadiths section and every released hadith screen keep `MaterialPageRoute`
+  (`test/app/phase_b_test.dart` lists which files may use which). `AppTile.pressFeedback` is opt-in. The `MaterialApp` themes are built
+  once in `_MyAppState`.
+
 
 ## Decisions kept
 

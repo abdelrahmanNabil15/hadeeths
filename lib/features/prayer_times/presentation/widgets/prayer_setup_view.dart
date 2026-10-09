@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_setup.dart';
@@ -159,7 +160,7 @@ class PrayerSetupView extends StatelessWidget {
     final services = context.read<PrayerServices>();
     final language = context.apiLanguage;
     final city = await Navigator.of(context).push<City>(
-      MaterialPageRoute<City>(
+      appRoute<City>(
         builder: (_) => CityPickerPage(loadCities: services.loadCities),
       ),
     );

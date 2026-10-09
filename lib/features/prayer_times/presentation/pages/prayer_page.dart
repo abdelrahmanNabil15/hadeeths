@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/clock_format.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/time/zone.dart';
+import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
@@ -38,11 +40,18 @@ class PrayerPage extends StatelessWidget {
         child: Scaffold(
           appBar: AppBar(title: Text(context.l10n.prayerTimesTitle)),
           body: BlocBuilder<PrayerCubit, PrayerState>(
-            builder: (context, state) => switch (state.status) {
-              PrayerStatus.loading => const LoadingView(),
-              PrayerStatus.needsSetup => const PrayerSetupView(),
-              PrayerStatus.ready => const _TimesView(),
-            },
+            // Each state has its own key, so a change fades; the new state is usable at once.
+            builder: (context, state) => AnimatedStateSwitcher(
+              child: switch (state.status) {
+                PrayerStatus.loading => const LoadingView(
+                  key: ValueKey('loading'),
+                ),
+                PrayerStatus.needsSetup => const PrayerSetupView(
+                  key: ValueKey('setup'),
+                ),
+                PrayerStatus.ready => const _TimesView(key: ValueKey('ready')),
+              },
+            ),
           ),
         ),
       ),
@@ -51,7 +60,7 @@ class PrayerPage extends StatelessWidget {
 }
 
 class _TimesView extends StatelessWidget {
-  const _TimesView();
+  const _TimesView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +104,7 @@ class _TimesView extends StatelessWidget {
                 alignment: AlignmentDirectional.centerStart,
                 child: TextButton(
                   onPressed: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
+                    appRoute<void>(
                       builder: (_) => BlocProvider.value(
                         value: context.read<PrayerCubit>(),
                         child: RepositoryProvider.value(
@@ -156,8 +165,9 @@ class _TimesView extends StatelessWidget {
               const SizedBox(height: AppSpacing.sm),
               AppTile(
                 title: methodName(l10n, state.preferences.settings.method),
+                pressFeedback: true,
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
+                  appRoute<void>(
                     builder: (_) => BlocProvider.value(
                       value: context.read<PrayerCubit>(),
                       child: const MethodPage(),
@@ -178,16 +188,19 @@ class _TimesView extends StatelessWidget {
               const SizedBox(height: AppSpacing.lg),
               AppTile(
                 title: l10n.remindersHeading,
+                pressFeedback: true,
                 onTap: () => _open(context, const RemindersPage()),
               ),
               const SizedBox(height: AppSpacing.sm),
               AppTile(
                 title: l10n.qiblaHeading,
+                pressFeedback: true,
                 onTap: () => _open(context, const QiblaPage()),
               ),
               const SizedBox(height: AppSpacing.sm),
               AppTile(
                 title: l10n.hijriHeading,
+                pressFeedback: true,
                 onTap: () => _open(context, const HijriPage()),
               ),
               const SizedBox(height: AppSpacing.lg),
@@ -209,7 +222,7 @@ class _TimesView extends StatelessWidget {
   /// Opens a sub-page that shares this screen's state.
   static void _open(BuildContext context, Widget page) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(
+      appRoute<void>(
         builder: (_) => BlocProvider.value(
           value: context.read<PrayerCubit>(),
           child: RepositoryProvider.value(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/widgets/pressable_scale.dart';
 
 /// A full-width tappable row: title, optional muted trailing text (for example a count) and
 /// a chevron that follows the text direction. At least 56 dp high; grows with the text.
@@ -12,6 +13,7 @@ class AppTile extends StatelessWidget {
     this.semanticLabel,
     this.emphasized = false,
     this.maxTitleLines,
+    this.pressFeedback = false,
   });
 
   final String title;
@@ -25,6 +27,9 @@ class AppTile extends StatelessWidget {
   final bool emphasized;
   final int? maxTitleLines;
 
+  /// Shrinks the tile slightly while pressed. Off by default so existing screens look as before.
+  final bool pressFeedback;
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -37,7 +42,7 @@ class AppTile extends StatelessWidget {
     final muted = emphasized
         ? scheme.onPrimaryContainer
         : scheme.onSurfaceVariant;
-    return Semantics(
+    final tile = Semantics(
       button: true,
       label: semanticLabel ?? title,
       excludeSemantics: true,
@@ -100,5 +105,6 @@ class AppTile extends StatelessWidget {
         ),
       ),
     );
+    return pressFeedback ? PressableScale(child: tile) : tile;
   }
 }

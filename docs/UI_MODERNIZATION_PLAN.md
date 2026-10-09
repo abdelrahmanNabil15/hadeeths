@@ -422,3 +422,38 @@ theme extension (success, warning, reading surface); `AppTypography`; `appRoute(
 
 **Notes for Phase B:** adopt `appRoute()` per whole flow (see section 17 and `ARCHITECTURE.md`); decide what to do about the theme being rebuilt
 on every settings change; cross-fade for tabs.
+
+## 25. Phase B report (branch `ui/b-navigation-home`, from `ui/a-foundations`)
+
+**Rule applied:** released hadith screens were not restyled and keep the platform transition (a test lists them). Everything below touches
+flagged sections, shared widgets with an off-by-default switch, or has no visible effect.
+
+**Changed:**
+- **Tab cross-fade** (`TabFade` in the shell): a section fades in over 150 ms when selected; usable at once; nothing with animations removed.
+  The shell structure, per-tab navigators and back handling are unchanged. Flagged (the shell only exists with sections on).
+- **App transition for the whole prayer and More flows**: the Prayer, Quran-placeholder and More tab root routes, the four pushes in the prayer
+  pages, the city picker and the More page pushes use `appRoute()`. The Hadiths tab root and all hadith/search/settings/about routes stay on
+  `MaterialPageRoute`. Pages opened from More (Settings, Sources) are released pages: they open with the new transition but their own inner pushes
+  are unchanged. Flagged.
+- **`AppTile(pressFeedback: true)`** (new, default false): used by the prayer, city picker and More tiles; every released use is unchanged.
+- **Prayer page** loading, setup and times states fade between each other (`AnimatedStateSwitcher`). Flagged.
+- **Theme object built once** (`app.dart`): the theme no longer animates for about 200 ms on every settings change (language, digits, offline copies)
+  because a new, never-equal theme was handed to `MaterialApp` each time. **This is the only change that reaches the released app**: a language
+  change now swaps without that extra animation. It changes no look. One existing test relied on that animation to outlast a 400 ms reminder wait; it
+  now waits explicitly.
+
+**Not done, with reasons:**
+- `ScreenHeader`: no concrete problem found that it solves, and adding it without a consumer would be dead code. Dropped unless a later phase needs it.
+- Loading-to-content fade on the released home, list and details screens, tile press feedback on released tiles, and platform transitions for the
+  hadith flow: **proposed, not applied** (released-app visible changes; they need your approval, shown on the emulator first).
+
+| Check | Result |
+|---|---|
+| `dart format`, `flutter analyze` | PASS |
+| `flutter test` | PASS, 857 (846 before; 11 new, 1 adjusted) |
+| Logic coverage (gate 80%) | PASS, 90.5% |
+| Release config check | PASS |
+| Debug run on the Android emulator with sections on: Prayer tab, city picker via the new route | PASS (no exceptions in the log; screens render) |
+| The fade itself seen in motion, back gesture feel, TalkBack, dark mode on device | NOT RUN (screenshots are single frames; tests check the animation values) |
+| Samsung phone | NOT RUN (disconnected) |
+| iOS (the platform slide and swipe-back through `appRoute`) | NOT RUN |

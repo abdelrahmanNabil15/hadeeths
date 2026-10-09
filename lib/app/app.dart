@@ -35,6 +35,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  // Built once: a new ThemeData on every rebuild never compares equal to the last, which made the
+  // theme animate on each settings change.
+  final _lightTheme = AppTheme.light();
+  final _darkTheme = AppTheme.dark();
+
   /// Prayer reminders are rebuilt from what is saved whenever the app starts or comes back, so they
   /// are right after a restart, a new day, or a change of clock, time zone or language.
   void _reconcileReminders() {
@@ -99,8 +104,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 final languageCode = settings.language.code;
                 return MaterialApp(
                   onGenerateTitle: (context) => context.l10n.appTitle,
-                  theme: AppTheme.light(),
-                  darkTheme: AppTheme.dark(),
+                  theme: _lightTheme,
+                  darkTheme: _darkTheme,
                   themeMode: switch (settings.theme) {
                     ThemePreference.system => ThemeMode.system,
                     ThemePreference.light => ThemeMode.light,
