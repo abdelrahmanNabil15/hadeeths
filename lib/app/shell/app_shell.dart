@@ -133,17 +133,28 @@ class _AppShellState extends State<AppShell> {
         bottomNavigationBar: Semantics(
           container: true,
           label: l10n.navigationLabel,
-          child: NavigationBar(
-            selectedIndex: _index,
-            onDestinationSelected: _select,
-            destinations: [
-              for (final tab in _tabs)
-                NavigationDestination(
-                  icon: Icon(_icon(tab, selected: false)),
-                  selectedIcon: Icon(_icon(tab, selected: true)),
-                  label: _label(l10n, tab),
+          // A hairline above the bar instead of a shadow.
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Theme.of(context).colorScheme.outlineVariant,
+                  width: AppBorders.hairline,
                 ),
-            ],
+              ),
+            ),
+            child: NavigationBar(
+              selectedIndex: _index,
+              onDestinationSelected: _select,
+              destinations: [
+                for (final tab in _tabs)
+                  NavigationDestination(
+                    icon: Icon(_icon(tab, selected: false)),
+                    selectedIcon: Icon(_icon(tab, selected: true)),
+                    label: _label(l10n, tab),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -194,7 +205,8 @@ class _AppShellState extends State<AppShell> {
         ShellTab.quran =>
           selected ? Icons.auto_stories : Icons.auto_stories_outlined,
         ShellTab.prayer => selected ? Icons.mosque : Icons.mosque_outlined,
-        ShellTab.more => Icons.menu,
+        ShellTab.more =>
+          selected ? Icons.grid_view_rounded : Icons.grid_view_outlined,
       };
 }
 
