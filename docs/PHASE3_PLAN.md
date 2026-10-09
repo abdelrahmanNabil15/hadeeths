@@ -110,6 +110,12 @@ reference and manual adjustment, Arabic-Indic digits by default in Arabic): see 
 IANA time zones (`timezone` 0.11.1), offline country lookup, method suggestion, saved prayer preferences, the digits setting.
 Deviations: GPS, permission flow and the native permission entries moved to 3B-3; Hijri to 3B-4.
 
+### Update after approval (3B-5)
+Live Qibla compass built: World Magnetic Model 2025 checked against NOAA's 100 official test points, tilt-compensated heading checked
+with simulated orientations, sensors only while the compass is on, interference detected and never hidden. Real-world accuracy still
+needs a device test away from magnets. The compass package question from the plan is settled: `sensors_plus` with our own maths
+(`flutter_compass` was not used).
+
 ## 6. Feature dependency map
 
 ```text

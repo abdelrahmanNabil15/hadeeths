@@ -204,8 +204,13 @@ class _TimesView extends StatelessWidget {
   static void _open(BuildContext context, Widget page) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) =>
-            BlocProvider.value(value: context.read<PrayerCubit>(), child: page),
+        builder: (_) => BlocProvider.value(
+          value: context.read<PrayerCubit>(),
+          child: RepositoryProvider.value(
+            value: context.read<PrayerServices>(),
+            child: page,
+          ),
+        ),
       ),
     );
   }

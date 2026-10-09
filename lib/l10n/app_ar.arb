@@ -254,5 +254,40 @@
   "compassS": "الجنوب",
   "compassSW": "الجنوب الغربي",
   "compassW": "الغرب",
-  "compassNW": "الشمال الغربي"
+  "compassNW": "الشمال الغربي",
+  "compassUse": "استخدم البوصلة",
+  "compassStop": "إيقاف البوصلة",
+  "compassStarting": "جارٍ قراءة البوصلة…",
+  "compassUnavailable": "لا يتوفر في هذا الهاتف حسّاس بوصلة أو تعذّرت قراءته. يظل الاتجاه المعروض أعلاه صالحًا.",
+  "compassModelExpired": "بيانات التصحيح المغناطيسي قديمة. حدّث التطبيق لاستخدام البوصلة. يظل الاتجاه المعروض أعلاه صالحًا.",
+  "compassInterference": "شيء قريب يؤثر في البوصلة (معدن أو مغناطيس أو غطاء للهاتف). ابتعد عنه.",
+  "compassCalibrate": "إذا اهتز السهم فحرّك الهاتف ببطء على شكل الرقم ٨.",
+  "compassHoldFlat": "أمسك الهاتف أفقيًا وحافته العلوية للأمام، أو رأسيًا وظهره للأمام.",
+  "compassTurnRight": "استدر يمينًا {degrees}°",
+  "@compassTurnRight": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassTurnLeft": "استدر يسارًا {degrees}°",
+  "@compassTurnLeft": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassAligned": "أنت متجه نحو القبلة",
+  "compassCorrection": "التصحيح من الشمال المغناطيسي إلى الحقيقي: {degrees}°",
+  "@compassCorrection": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "compassPrivacy": "تستخدم البوصلة حسّاسات الحركة في الهاتف ما دامت قيد التشغيل فقط. لا يُخزَّن شيء ولا يُرسَل.",
+  "compassUnreliable": "البوصلة غير موثوقة هنا الآن"
 }

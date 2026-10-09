@@ -101,10 +101,35 @@ source you trust; none was invented).
 - **Qibla screen:** the bearing in degrees from **true** north, the nearest of eight compass words, the distance, and a map-style dial
   with north at the top. It does not read the phone's compass, so it needs no sensor and never shows a noisy value. The note on the
   screen says that a phone compass points to magnetic north.
-- **Not done yet (needs the phone and one more decision):** a live compass arrow. A compass gives a magnetic heading; the Qibla bearing
+- **Live compass (3B-5, below)** replaces the earlier plan. The paragraph that follows is kept for the reasoning only:
+- ~~Not done yet (needs the phone and one more decision): a live compass arrow.~~ A compass gives a magnetic heading; the Qibla bearing
   is relative to true north, so a live arrow needs the local magnetic declination (the World Magnetic Model, public domain, needs
   its coefficients and the official test values to be checked), and a sensor package that works with the project's current Android
   build tools (`flutter_compass` 0.8.1 is 23 months old and was not tried).
+
+## Live compass (3B-5)
+
+- **Magnetic declination:** the World Magnetic Model 2025 (NOAA/NCEI and the British Geological Survey), implemented from the technical
+  report in `world_magnetic_model.dart` with the official coefficients (`assets/data/wmm2025.cof`, 93 lines). **All 100 official test points
+  in NOAA's `WMM2025_TestValues.txt` match** for north, east and down components (within 0.01 nT) and for declination and inclination
+  (within 0.01 degree). Valid from 2025.0 for five years: after that the compass is switched off with a message to update the app,
+  rather than showing a heading that may be wrong. The licence of the coefficient file is not stated on the NOAA page; it is a US
+  government publication and the model is widely redistributed, but this should be confirmed (see decisions).
+- **Heading:** `HeadingCalculator` combines the accelerometer and the magnetometer with tilt compensation. Tested with simulated phone
+  orientations (every heading in 10 degree steps, pitch and roll up to 30 degrees, five magnetic dips, the upright pose with the back
+  pointing ahead, the 45 degree switch-over): exact to 1e-6 degrees. Smoothing averages the sensor vectors, so there is no jump at north.
+- **Sensors:** `sensors_plus` 7.1.1 (BSD-3, Flutter Community; needs AGP 8.12.1+, which this project meets). Started only when the
+  user taps "Use the compass", stopped when they tap stop, leave the screen or send the app to the background; never restarted by
+  itself. No Android permission is needed (the release APK still declares only INTERNET and the two location permissions). iOS
+  needs `NSMotionUsageDescription` (added; its own text says the sensors are used only while the compass is on).
+- **Honesty rules:** if the measured field differs from the expected one by more than 40 percent (metal, a magnet, a case), the screen
+  says the compass is unreliable, hides the arrow and never says "you are facing the Qibla". No sensor, or no reading within four
+  seconds, gives a clear message and the numeric direction stays. Instructions are rounded to 5 degrees so a screen reader is not
+  interrupted constantly; a short vibration marks the moment of alignment (within 5 degrees).
+- **On the Samsung phone:** the sensor stream works and the interference rule fired correctly: the phone, lying on the desk, measured
+  about 760 microtesla where the Earth alone gives about 44 here, so something next to it (a magnet, stand or charger) dominates. The
+  absolute accuracy of the heading therefore **has not been verified on the device**; it needs the phone held away from metal and
+  compared with a known direction (see decisions).
 
 ## Owner decisions (2026-10-09) and where they stand
 

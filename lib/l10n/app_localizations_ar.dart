@@ -553,4 +553,58 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get compassNW => 'الشمال الغربي';
+
+  @override
+  String get compassUse => 'استخدم البوصلة';
+
+  @override
+  String get compassStop => 'إيقاف البوصلة';
+
+  @override
+  String get compassStarting => 'جارٍ قراءة البوصلة…';
+
+  @override
+  String get compassUnavailable =>
+      'لا يتوفر في هذا الهاتف حسّاس بوصلة أو تعذّرت قراءته. يظل الاتجاه المعروض أعلاه صالحًا.';
+
+  @override
+  String get compassModelExpired =>
+      'بيانات التصحيح المغناطيسي قديمة. حدّث التطبيق لاستخدام البوصلة. يظل الاتجاه المعروض أعلاه صالحًا.';
+
+  @override
+  String get compassInterference =>
+      'شيء قريب يؤثر في البوصلة (معدن أو مغناطيس أو غطاء للهاتف). ابتعد عنه.';
+
+  @override
+  String get compassCalibrate =>
+      'إذا اهتز السهم فحرّك الهاتف ببطء على شكل الرقم ٨.';
+
+  @override
+  String get compassHoldFlat =>
+      'أمسك الهاتف أفقيًا وحافته العلوية للأمام، أو رأسيًا وظهره للأمام.';
+
+  @override
+  String compassTurnRight(String degrees) {
+    return 'استدر يمينًا $degrees°';
+  }
+
+  @override
+  String compassTurnLeft(String degrees) {
+    return 'استدر يسارًا $degrees°';
+  }
+
+  @override
+  String get compassAligned => 'أنت متجه نحو القبلة';
+
+  @override
+  String compassCorrection(String degrees) {
+    return 'التصحيح من الشمال المغناطيسي إلى الحقيقي: $degrees°';
+  }
+
+  @override
+  String get compassPrivacy =>
+      'تستخدم البوصلة حسّاسات الحركة في الهاتف ما دامت قيد التشغيل فقط. لا يُخزَّن شيء ولا يُرسَل.';
+
+  @override
+  String get compassUnreliable => 'البوصلة غير موثوقة هنا الآن';
 }

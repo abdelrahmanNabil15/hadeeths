@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -6,12 +7,15 @@ import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
+import 'package:mynewapp/features/prayer_times/domain/compass_source.dart';
 import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
+import 'package:mynewapp/features/prayer_times/domain/heading_calculator.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_service.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
 
 import 'fake_permissions.dart';
 import 'time_support.dart';
@@ -74,6 +78,45 @@ CityCatalog realCityCatalog() =>
 CountryLookup realCountryLookup() =>
     CountryLookup.fromJson(_json('assets/data/countries_110m.json'));
 
+/// Motion sensors the test drives by hand. Counts how many times they were started and stopped.
+class FakeCompassSource implements CompassSource {
+  StreamController<CompassSample>? _controller;
+  int starts = 0;
+  int stops = 0;
+
+  /// When set, listening fails with this error as soon as it starts (no sensor).
+  Object? failWith;
+
+  bool get running => _controller != null;
+
+  @override
+  Stream<CompassSample> samples() {
+    // ignore: close_sinks
+    late StreamController<CompassSample> c;
+    c = StreamController<CompassSample>(
+      onListen: () {
+        starts++;
+        _controller = c;
+        if (failWith != null) c.addError(failWith!);
+      },
+      onCancel: () {
+        stops++;
+        _controller = null;
+      },
+    );
+    return c.stream;
+  }
+
+  void emit(CompassSample sample) => _controller?.add(sample);
+
+  /// Ends the stream, as a closed sensor would.
+  Future<void> dispose() async => _controller?.close();
+}
+
+WorldMagneticModel realMagneticModel() => WorldMagneticModel.parse(
+  File('assets/data/wmm2025.cof').readAsStringSync(),
+);
+
 /// Prayer services with the real calculator and the real bundled data, but a controllable clock,
 /// permission gateway, location and storage.
 class PrayerFixture {
@@ -85,7 +128,8 @@ class PrayerFixture {
   }) : clock = FakeClock(now ?? DateTime.utc(2026, 4, 1, 10)),
        preferences = InMemoryPrayerPreferences(saved),
        location = FakeLocationService(position),
-       gateway = FakePermissionGateway(permissions) {
+       gateway = FakePermissionGateway(permissions),
+       compass = FakeCompassSource() {
     services = PrayerServices(
       preferences: preferences,
       calculator: const AdhanPrayerTimesCalculator(),
@@ -94,6 +138,8 @@ class PrayerFixture {
       location: location,
       loadCities: () async => realCityCatalog(),
       loadCountries: () async => realCountryLookup(),
+      compass: compass,
+      loadMagneticModel: () async => realMagneticModel(),
       clock: clock,
     );
   }
@@ -102,5 +148,6 @@ class PrayerFixture {
   final InMemoryPrayerPreferences preferences;
   final FakeLocationService location;
   final FakePermissionGateway gateway;
+  final FakeCompassSource compass;
   late final PrayerServices services;
 }

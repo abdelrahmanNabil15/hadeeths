@@ -6,9 +6,11 @@ import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculato
 import 'package:mynewapp/features/prayer_times/data/geolocator_location_service.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
 import 'package:mynewapp/features/prayer_times/data/prayer_preferences_repository_impl.dart';
+import 'package:mynewapp/features/prayer_times/data/sensors_plus_compass_source.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Builds the real prayer services. The city list and the country borders are read from the
@@ -18,6 +20,7 @@ PrayerServices buildPrayerServices({required SharedPreferences preferences}) {
       jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
   Future<CityCatalog>? cities;
   Future<CountryLookup>? countries;
+  Future<WorldMagneticModel>? magnetic;
   return PrayerServices(
     preferences: PrayerPreferencesRepositoryImpl(preferences),
     calculator: const AdhanPrayerTimesCalculator(),
@@ -29,5 +32,9 @@ PrayerServices buildPrayerServices({required SharedPreferences preferences}) {
     loadCountries: () => countries ??= asset(
       'assets/data/countries_110m.json',
     ).then(CountryLookup.fromJson),
+    compass: const SensorsPlusCompassSource(),
+    loadMagneticModel: () => magnetic ??= rootBundle
+        .loadString('assets/data/wmm2025.cof')
+        .then(WorldMagneticModel.parse),
   );
 }

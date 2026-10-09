@@ -1111,6 +1111,90 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'الشمال الغربي'**
   String get compassNW;
+
+  /// No description provided for @compassUse.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم البوصلة'**
+  String get compassUse;
+
+  /// No description provided for @compassStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف البوصلة'**
+  String get compassStop;
+
+  /// No description provided for @compassStarting.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ قراءة البوصلة…'**
+  String get compassStarting;
+
+  /// No description provided for @compassUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يتوفر في هذا الهاتف حسّاس بوصلة أو تعذّرت قراءته. يظل الاتجاه المعروض أعلاه صالحًا.'**
+  String get compassUnavailable;
+
+  /// No description provided for @compassModelExpired.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات التصحيح المغناطيسي قديمة. حدّث التطبيق لاستخدام البوصلة. يظل الاتجاه المعروض أعلاه صالحًا.'**
+  String get compassModelExpired;
+
+  /// No description provided for @compassInterference.
+  ///
+  /// In ar, this message translates to:
+  /// **'شيء قريب يؤثر في البوصلة (معدن أو مغناطيس أو غطاء للهاتف). ابتعد عنه.'**
+  String get compassInterference;
+
+  /// No description provided for @compassCalibrate.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا اهتز السهم فحرّك الهاتف ببطء على شكل الرقم ٨.'**
+  String get compassCalibrate;
+
+  /// No description provided for @compassHoldFlat.
+  ///
+  /// In ar, this message translates to:
+  /// **'أمسك الهاتف أفقيًا وحافته العلوية للأمام، أو رأسيًا وظهره للأمام.'**
+  String get compassHoldFlat;
+
+  /// No description provided for @compassTurnRight.
+  ///
+  /// In ar, this message translates to:
+  /// **'استدر يمينًا {degrees}°'**
+  String compassTurnRight(String degrees);
+
+  /// No description provided for @compassTurnLeft.
+  ///
+  /// In ar, this message translates to:
+  /// **'استدر يسارًا {degrees}°'**
+  String compassTurnLeft(String degrees);
+
+  /// No description provided for @compassAligned.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت متجه نحو القبلة'**
+  String get compassAligned;
+
+  /// No description provided for @compassCorrection.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصحيح من الشمال المغناطيسي إلى الحقيقي: {degrees}°'**
+  String compassCorrection(String degrees);
+
+  /// No description provided for @compassPrivacy.
+  ///
+  /// In ar, this message translates to:
+  /// **'تستخدم البوصلة حسّاسات الحركة في الهاتف ما دامت قيد التشغيل فقط. لا يُخزَّن شيء ولا يُرسَل.'**
+  String get compassPrivacy;
+
+  /// No description provided for @compassUnreliable.
+  ///
+  /// In ar, this message translates to:
+  /// **'البوصلة غير موثوقة هنا الآن'**
+  String get compassUnreliable;
 }
 
 class _AppLocalizationsDelegate

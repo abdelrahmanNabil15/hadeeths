@@ -168,5 +168,19 @@
   "compassS": "South",
   "compassSW": "South-west",
   "compassW": "West",
-  "compassNW": "North-west"
+  "compassNW": "North-west",
+  "compassUse": "Use the compass",
+  "compassStop": "Stop the compass",
+  "compassStarting": "Reading the compass…",
+  "compassUnavailable": "This phone has no compass sensor, or it could not be read. The direction above still works.",
+  "compassModelExpired": "The magnetic correction data is out of date. Update the app to use the compass. The direction above still works.",
+  "compassInterference": "Something nearby is disturbing the compass (metal, a magnet or a phone case). Move away from it.",
+  "compassCalibrate": "If the arrow jumps, move the phone slowly in a figure 8.",
+  "compassHoldFlat": "Hold the phone flat with its top edge pointing ahead, or upright with its back pointing ahead.",
+  "compassTurnRight": "Turn right {degrees}°",
+  "compassTurnLeft": "Turn left {degrees}°",
+  "compassAligned": "You are facing the Qibla",
+  "compassCorrection": "Correction from magnetic to true north: {degrees}°",
+  "compassPrivacy": "The compass uses the phone's motion sensors only while it is on. Nothing is stored or sent.",
+  "compassUnreliable": "The compass is not reliable here right now"
 }

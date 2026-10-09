@@ -557,4 +557,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassNW => 'North-west';
+
+  @override
+  String get compassUse => 'Use the compass';
+
+  @override
+  String get compassStop => 'Stop the compass';
+
+  @override
+  String get compassStarting => 'Reading the compass…';
+
+  @override
+  String get compassUnavailable =>
+      'This phone has no compass sensor, or it could not be read. The direction above still works.';
+
+  @override
+  String get compassModelExpired =>
+      'The magnetic correction data is out of date. Update the app to use the compass. The direction above still works.';
+
+  @override
+  String get compassInterference =>
+      'Something nearby is disturbing the compass (metal, a magnet or a phone case). Move away from it.';
+
+  @override
+  String get compassCalibrate =>
+      'If the arrow jumps, move the phone slowly in a figure 8.';
+
+  @override
+  String get compassHoldFlat =>
+      'Hold the phone flat with its top edge pointing ahead, or upright with its back pointing ahead.';
+
+  @override
+  String compassTurnRight(String degrees) {
+    return 'Turn right $degrees°';
+  }
+
+  @override
+  String compassTurnLeft(String degrees) {
+    return 'Turn left $degrees°';
+  }
+
+  @override
+  String get compassAligned => 'You are facing the Qibla';
+
+  @override
+  String compassCorrection(String degrees) {
+    return 'Correction from magnetic to true north: $degrees°';
+  }
+
+  @override
+  String get compassPrivacy =>
+      'The compass uses the phone\'s motion sensors only while it is on. Nothing is stored or sent.';
+
+  @override
+  String get compassUnreliable => 'The compass is not reliable here right now';
 }
