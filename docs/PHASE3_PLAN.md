@@ -104,6 +104,12 @@ Prayer calculation core built and cross-checked: see `docs/PRAYER_TIMES_VALIDATI
 (to be explained in the UI), Moonsighting Committee deferred. The independent reference used is another implementation (Aladhan),
 not an official authority; the owner still needs to name the authority timetable(s).
 
+### Update after approval (3B-2)
+Owner decisions recorded (method by country at first setup only, Egyptian authority for Egypt, Hijri by country with changeable
+reference and manual adjustment, Arabic-Indic digits by default in Arabic): see `docs/PRAYER_TIMES_VALIDATION.md`. Built so far:
+IANA time zones (`timezone` 0.11.1), offline country lookup, method suggestion, saved prayer preferences, the digits setting.
+Deviations: GPS, permission flow and the native permission entries moved to 3B-3; Hijri to 3B-4.
+
 ## 6. Feature dependency map
 
 ```text
