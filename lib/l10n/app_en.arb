@@ -218,5 +218,39 @@
   "remindersExactHint": "Asks Android to deliver each reminder at its time. This needs “Alarms & reminders” access for this app; without it, reminders may arrive late.",
   "remindersExactExplainTitle": "Allow exact timing?",
   "remindersExactExplainBody": "Without it, Android may deliver a reminder late, sometimes by up to an hour, when the phone is saving power. With it, Android can deliver reminders at their time. The next screen is Android's own settings page for this permission. If you do not allow it, reminders still work but may be late.",
-  "remindersExactMissing": "Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”."
+  "remindersExactMissing": "Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”.",
+  "trackerTitle": "Prayer tracker",
+  "trackerIntro": "Mark the prayers you have prayed. This stays on your phone only.",
+  "trackerToday": "Today",
+  "trackerCount": "{count} of {total} marked",
+  "trackerSaveFailed": "Could not save that change, so it was taken back. Try again.",
+  "trackerUnavailable": "Storage is not available on this phone, so the tracker cannot be used.",
+  "trackerDelete": "Delete tracker data",
+  "trackerDeleteTitle": "Delete all tracker data?",
+  "trackerDeleteBody": "This removes every marked prayer from this phone. It cannot be undone.",
+  "trackerDeleteConfirm": "Delete",
+  "trackerDayLabel": "{day}, {count} of {total} marked",
+  "@trackerCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "@trackerDayLabel": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  }
 }

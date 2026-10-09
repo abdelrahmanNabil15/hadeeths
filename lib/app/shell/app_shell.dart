@@ -8,6 +8,7 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
+import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// The top-level sections.
@@ -21,12 +22,21 @@ enum ShellTab { hadiths, quran, prayer, more }
 /// - System back closes the open page, then returns to the first section, then leaves the app.
 /// - Sections are built the first time they are opened.
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.features, this.prayer});
+  const AppShell({
+    super.key,
+    required this.features,
+    this.prayer,
+    this.prayerLog,
+  });
 
   final FeatureFlags features;
 
   /// The prayer section's services; without them that section shows its placeholder.
   final PrayerServices? prayer;
+
+  /// The prayer tracker's storage; without it (or without the prayer section) "More" does not
+  /// offer the tracker.
+  final PrayerLogRepository? prayerLog;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -146,7 +156,11 @@ class _AppShellState extends State<AppShell> {
               icon: Icons.mosque_outlined,
             )
           : PrayerPage(services: widget.prayer!),
-    ShellTab.more => const MorePage(),
+    ShellTab.more => MorePage(
+      tracker: widget.prayer != null && widget.prayerLog != null
+          ? (log: widget.prayerLog!, services: widget.prayer!)
+          : null,
+    ),
   };
 
   static String _label(AppLocalizations l10n, ShellTab tab) => switch (tab) {

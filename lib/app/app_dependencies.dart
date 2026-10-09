@@ -15,6 +15,8 @@ import 'package:mynewapp/features/search/data/search_repository_impl.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
 import 'package:mynewapp/features/settings/data/settings_repository_impl.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
+import 'package:mynewapp/features/tracker/data/prayer_log_repository_impl.dart';
+import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// The app's repositories, built once at startup and handed to the widget tree through
@@ -29,6 +31,7 @@ class AppDependencies {
     this.userData,
     this.features = const FeatureFlags(),
     this.prayer,
+    this.prayerLog,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -56,6 +59,9 @@ class AppDependencies {
       userData: userData,
       features: features,
       prayer: prayer,
+      prayerLog: userData == null
+          ? null
+          : SqlitePrayerLogRepository(userData.db),
     );
   }
 
@@ -76,4 +82,8 @@ class AppDependencies {
 
   /// Prayer times (Phase 3B). `null` in tests that do not exercise them.
   final PrayerServices? prayer;
+
+  /// Which prayers the user marked as prayed (the tracker). `null` when the user database
+  /// could not be opened; the tracker is then not offered.
+  final PrayerLogRepository? prayerLog;
 }

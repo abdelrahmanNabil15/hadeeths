@@ -12,4 +12,14 @@ CREATE TABLE app_meta (
   value TEXT NOT NULL
 ) WITHOUT ROWID''');
   }),
+  Migration(2, 'prayer log', (db) {
+    // One row per prayer marked as prayed on a calendar day (yyyy-MM-dd). Nothing else is
+    // kept: no time, no place. Unmarking deletes the row.
+    db.execute('''
+CREATE TABLE prayer_log (
+  day TEXT NOT NULL,
+  prayer TEXT NOT NULL CHECK (prayer IN ('fajr', 'dhuhr', 'asr', 'maghrib', 'isha')),
+  PRIMARY KEY (day, prayer)
+) WITHOUT ROWID''');
+  }),
 ];

@@ -167,3 +167,15 @@ cubits are created per screen with `BlocProvider`.
 `test/` mirrors `lib/`: DTO parsing, data sources and repositories (fake Dio adapter), cubits (fake repositories),
 widget flows through `MyApp` with fake repositories (both languages), accessibility, text-scale and contrast checks across both languages and both themes, search and settings flows,
 translation parity, and the architecture rules. Nothing touches the live API.
+
+## Prayer tracker (Phase 3D-1)
+
+- `lib/features/tracker/`: `DayKey` (a calendar day with no zone, `yyyy-MM-dd`), `PrayerLogRepository` (interface), `SqlitePrayerLogRepository`
+  (data), `TrackerCubit`, `TrackerPage`. Table `prayer_log(day, prayer)` was added as migration 2 of the user database: one row per prayer marked as
+  prayed, nothing else (no time, place or note); unmarking deletes the row; only the five prayers are accepted (a CHECK in the table and a guard in the code).
+- "Today" is the date on the clock in the zone of the saved place (the phone's zone if there is none), so the day changes at that place's midnight;
+  it is read again when the app comes back to the front. The screen shows today and the six days before it; any of them can be marked.
+- A mark shows at once and is saved after it; saves run in the order of the taps; a failed save is taken back and explained.
+- Reached from More ("Prayer tracker") when the prayer section is on and the user database opened. No streaks, scores, notifications or "missed" wording.
+  "Delete tracker data" (with confirmation) removes everything.
+- Privacy: the tracker code imports no network, location or sharing package (a test scans it); no share card includes it.

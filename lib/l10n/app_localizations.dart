@@ -1411,6 +1411,72 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».'**
   String get remindersExactMissing;
+
+  /// No description provided for @trackerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابع الصلاة'**
+  String get trackerTitle;
+
+  /// No description provided for @trackerIntro.
+  ///
+  /// In ar, this message translates to:
+  /// **'علّم على الصلوات التي صلّيتها. يبقى هذا على هاتفك فقط.'**
+  String get trackerIntro;
+
+  /// No description provided for @trackerToday.
+  ///
+  /// In ar, this message translates to:
+  /// **'اليوم'**
+  String get trackerToday;
+
+  /// No description provided for @trackerCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'المُعلَّم {count} من {total}'**
+  String trackerCount(String count, String total);
+
+  /// No description provided for @trackerSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حفظ هذا التغيير فأُلغي. حاول مرة أخرى.'**
+  String get trackerSaveFailed;
+
+  /// No description provided for @trackerUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'التخزين غير متاح على هذا الهاتف، لذلك لا يمكن استخدام المتابع.'**
+  String get trackerUnavailable;
+
+  /// No description provided for @trackerDelete.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف بيانات المتابع'**
+  String get trackerDelete;
+
+  /// No description provided for @trackerDeleteTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف كل بيانات المتابع؟'**
+  String get trackerDeleteTitle;
+
+  /// No description provided for @trackerDeleteBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا كل صلاة معلَّمة من هذا الهاتف، ولا يمكن التراجع عنه.'**
+  String get trackerDeleteBody;
+
+  /// No description provided for @trackerDeleteConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف'**
+  String get trackerDeleteConfirm;
+
+  /// No description provided for @trackerDayLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'{day}، المُعلَّم {count} من {total}'**
+  String trackerDayLabel(String day, String count, String total);
 }
 
 class _AppLocalizationsDelegate

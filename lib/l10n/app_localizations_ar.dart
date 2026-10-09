@@ -766,4 +766,45 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get remindersExactMissing =>
       'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».';
+
+  @override
+  String get trackerTitle => 'متابع الصلاة';
+
+  @override
+  String get trackerIntro =>
+      'علّم على الصلوات التي صلّيتها. يبقى هذا على هاتفك فقط.';
+
+  @override
+  String get trackerToday => 'اليوم';
+
+  @override
+  String trackerCount(String count, String total) {
+    return 'المُعلَّم $count من $total';
+  }
+
+  @override
+  String get trackerSaveFailed =>
+      'تعذّر حفظ هذا التغيير فأُلغي. حاول مرة أخرى.';
+
+  @override
+  String get trackerUnavailable =>
+      'التخزين غير متاح على هذا الهاتف، لذلك لا يمكن استخدام المتابع.';
+
+  @override
+  String get trackerDelete => 'حذف بيانات المتابع';
+
+  @override
+  String get trackerDeleteTitle => 'حذف كل بيانات المتابع؟';
+
+  @override
+  String get trackerDeleteBody =>
+      'يزيل هذا كل صلاة معلَّمة من هذا الهاتف، ولا يمكن التراجع عنه.';
+
+  @override
+  String get trackerDeleteConfirm => 'حذف';
+
+  @override
+  String trackerDayLabel(String day, String count, String total) {
+    return '$day، المُعلَّم $count من $total';
+  }
 }

@@ -147,7 +147,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   onGenerateRoute: (settings) => appRoute<void>(
                     settings: settings,
                     builder: (_) => deps.features.usesShell
-                        ? AppShell(features: deps.features, prayer: deps.prayer)
+                        ? AppShell(
+                            features: deps.features,
+                            prayer: deps.prayer,
+                            prayerLog: deps.prayerLog,
+                          )
                         : const HomePage(),
                   ),
                 );

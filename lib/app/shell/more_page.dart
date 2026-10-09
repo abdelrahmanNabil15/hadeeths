@@ -3,14 +3,20 @@ import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
 import 'package:mynewapp/features/settings/presentation/pages/settings_page.dart';
+import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
+import 'package:mynewapp/features/tracker/presentation/pages/tracker_page.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// Secondary destinations. Settings and "Sources and rights" live here once the bottom
 /// navigation is on; later phases add the tracker and the salawat counter.
 class MorePage extends StatelessWidget {
-  const MorePage({super.key});
+  const MorePage({super.key, this.tracker});
+
+  /// What the prayer tracker needs; null when it is not available.
+  final ({PrayerLogRepository log, PrayerServices services})? tracker;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +29,16 @@ class MorePage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.lg),
           children: [
+            if (tracker != null) ...[
+              AppTile(
+                title: l10n.trackerTitle,
+                pressFeedback: true,
+                onTap: () => open(
+                  TrackerPage(log: tracker!.log, services: tracker!.services),
+                ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
             AppTile(
               title: l10n.settings,
               pressFeedback: true,

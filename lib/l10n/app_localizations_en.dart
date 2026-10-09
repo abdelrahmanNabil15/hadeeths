@@ -764,4 +764,45 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get remindersExactMissing =>
       'Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”.';
+
+  @override
+  String get trackerTitle => 'Prayer tracker';
+
+  @override
+  String get trackerIntro =>
+      'Mark the prayers you have prayed. This stays on your phone only.';
+
+  @override
+  String get trackerToday => 'Today';
+
+  @override
+  String trackerCount(String count, String total) {
+    return '$count of $total marked';
+  }
+
+  @override
+  String get trackerSaveFailed =>
+      'Could not save that change, so it was taken back. Try again.';
+
+  @override
+  String get trackerUnavailable =>
+      'Storage is not available on this phone, so the tracker cannot be used.';
+
+  @override
+  String get trackerDelete => 'Delete tracker data';
+
+  @override
+  String get trackerDeleteTitle => 'Delete all tracker data?';
+
+  @override
+  String get trackerDeleteBody =>
+      'This removes every marked prayer from this phone. It cannot be undone.';
+
+  @override
+  String get trackerDeleteConfirm => 'Delete';
+
+  @override
+  String trackerDayLabel(String day, String count, String total) {
+    return '$day, $count of $total marked';
+  }
 }
