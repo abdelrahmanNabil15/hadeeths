@@ -206,3 +206,15 @@ translation parity, and the architecture rules. Nothing touches the live API.
   is null. A test checks that a normal build shows no bookmark.
 - The bookmark is one screen-reader node with a toggled state and a tooltip that says what tapping will do; a light tick accompanies it; the icon change
   is a short scale that disappears with "remove animations".
+
+## Share as image (Phase 3G-1)
+
+- With the `shareCards` flag on (preview sections), a hadith's share button asks "Share as text" or "Share as image"; the released app still shares
+  text straight away (a test checks it).
+- `ShareCardPage` lays the hadith out on 360 x 450 cards (saved as 1080 x 1350 PNGs), always in the light palette and without the phone's text
+  scaling. Each card has the app's name, a piece of the hadith, and the HadeethEnc credit; the grade and narrator are on the last card; cards are
+  numbered when there is more than one.
+- `splitIntoPages` breaks the text only at spaces and never changes it: the pieces joined with single spaces equal the original with its spaces
+  collapsed (tested); a word longer than a card gets a card of its own, uncut.
+- `ImageSharer` (core) writes the PNGs to the app's temporary folder and opens the system share sheet; nothing is uploaded by the app. Every card is
+  built (not only those on screen) so each one can be captured; the share button stays at the bottom of the screen.

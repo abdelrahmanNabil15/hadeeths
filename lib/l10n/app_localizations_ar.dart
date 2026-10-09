@@ -919,4 +919,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get aboutCompassBody =>
       'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.';
+
+  @override
+  String get shareAsText => 'مشاركة كنص';
+
+  @override
+  String get shareAsImage => 'مشاركة كصورة';
+
+  @override
+  String get shareCardShareOne => 'مشاركة الصورة';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'مشاركة الصور الـ$count',
+      few: 'مشاركة الصور الـ$count',
+      two: 'مشاركة الصورتين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
 }

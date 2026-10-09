@@ -9,6 +9,7 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -110,6 +111,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // Nullable on purpose: screens show the bookmark only when favourites are available.
         RepositoryProvider<FavoritesRepository?>.value(
           value: deps.favoritesIfEnabled,
+        ),
+        // Nullable on purpose: without it a hadith is shared as text only, as in the released app.
+        RepositoryProvider<ImageSharer?>.value(
+          value: deps.imageSharerIfEnabled,
         ),
       ],
       child: BlocProvider.value(

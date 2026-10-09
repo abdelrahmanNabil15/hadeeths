@@ -919,4 +919,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutCompassBody =>
       'The correction from magnetic to true north uses the World Magnetic Model 2025 (NOAA and the British Geological Survey), calculated on your device.';
+
+  @override
+  String get shareAsText => 'Share as text';
+
+  @override
+  String get shareAsImage => 'Share as image';
+
+  @override
+  String get shareCardShareOne => 'Share the image';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Share the $count images',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'The image could not be made or shared. Try again.';
 }
