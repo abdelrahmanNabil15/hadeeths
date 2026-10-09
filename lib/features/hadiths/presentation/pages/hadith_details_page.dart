@@ -7,6 +7,7 @@ import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/expandable_section.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/features/favorites/presentation/favorite_button.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
@@ -37,6 +38,7 @@ class HadithDetailsPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           actions: [
+            FavoriteButton(hadithId: id),
             const ReadingSizeButton(),
             BlocBuilder<HadithDetailCubit, HadithDetailState>(
               builder: (context, state) {

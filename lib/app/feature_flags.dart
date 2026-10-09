@@ -7,10 +7,14 @@
 /// To preview the navigation on a device or emulator:
 /// `flutter run --dart-define=HADEETHS_PREVIEW_SECTIONS=true`.
 class FeatureFlags {
-  const FeatureFlags({this.quran = false, this.prayer = false});
+  const FeatureFlags({
+    this.quran = false,
+    this.prayer = false,
+    this.favorites = false,
+  });
 
   /// Everything on (previews and tests).
-  const FeatureFlags.all() : quran = true, prayer = true;
+  const FeatureFlags.all() : quran = true, prayer = true, favorites = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -20,6 +24,10 @@ class FeatureFlags {
 
   final bool quran;
   final bool prayer;
+
+  /// Favourite hadiths: the bookmark on a hadith and the list under More. The list lives under
+  /// More, so favourites are only offered together with the bottom navigation.
+  final bool favorites;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

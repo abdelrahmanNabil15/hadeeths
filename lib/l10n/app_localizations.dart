@@ -1555,6 +1555,60 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.'**
   String get tasbeehSaveFailed;
+
+  /// No description provided for @favoritesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'المفضلة'**
+  String get favoritesTitle;
+
+  /// No description provided for @favoriteAdd.
+  ///
+  /// In ar, this message translates to:
+  /// **'إضافة إلى المفضلة'**
+  String get favoriteAdd;
+
+  /// No description provided for @favoriteRemove.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة من المفضلة'**
+  String get favoriteRemove;
+
+  /// No description provided for @favoritesEmpty.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.'**
+  String get favoritesEmpty;
+
+  /// No description provided for @favoritesFallbackTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حديث {id}'**
+  String favoritesFallbackTitle(Object id);
+
+  /// No description provided for @favoritesClear.
+  ///
+  /// In ar, this message translates to:
+  /// **'مسح المفضلة'**
+  String get favoritesClear;
+
+  /// No description provided for @favoritesClearTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة كل المفضلة؟'**
+  String get favoritesClearTitle;
+
+  /// No description provided for @favoritesClearBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.'**
+  String get favoritesClearBody;
+
+  /// No description provided for @favoritesClearConfirm.
+  ///
+  /// In ar, this message translates to:
+  /// **'إزالة'**
+  String get favoritesClearConfirm;
 }
 
 class _AppLocalizationsDelegate

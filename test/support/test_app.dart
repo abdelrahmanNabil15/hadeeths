@@ -4,6 +4,7 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
@@ -37,6 +38,7 @@ AppDependencies testDependencies(
   PrayerServices? prayer,
   PrayerLogRepository? prayerLog,
   TasbeehRepository? tasbeeh,
+  FavoritesRepository? favorites,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -47,6 +49,7 @@ AppDependencies testDependencies(
   prayer: prayer,
   prayerLog: prayerLog,
   tasbeeh: tasbeeh,
+  favorites: favorites,
 );
 
 /// Starts the app against [api].
@@ -65,6 +68,7 @@ Future<void> pumpApp(
   PrayerServices? prayer,
   PrayerLogRepository? prayerLog,
   TasbeehRepository? tasbeeh,
+  FavoritesRepository? favorites,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -78,6 +82,7 @@ Future<void> pumpApp(
         prayer: prayer,
         prayerLog: prayerLog,
         tasbeeh: tasbeeh,
+        favorites: favorites,
       ),
       initialSettings: settings,
     ),

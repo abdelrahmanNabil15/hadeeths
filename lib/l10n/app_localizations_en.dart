@@ -850,4 +850,35 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get tasbeehSaveFailed =>
       'The count could not be saved on this phone. You can keep counting, but it may be lost when the app closes.';
+
+  @override
+  String get favoritesTitle => 'Favourites';
+
+  @override
+  String get favoriteAdd => 'Add to favourites';
+
+  @override
+  String get favoriteRemove => 'Remove from favourites';
+
+  @override
+  String get favoritesEmpty =>
+      'No favourites yet. Open a hadith and tap the bookmark to keep it here.';
+
+  @override
+  String favoritesFallbackTitle(Object id) {
+    return 'Hadith $id';
+  }
+
+  @override
+  String get favoritesClear => 'Clear favourites';
+
+  @override
+  String get favoritesClearTitle => 'Remove all favourites?';
+
+  @override
+  String get favoritesClearBody =>
+      'This removes the list from this phone. The hadiths themselves are not affected.';
+
+  @override
+  String get favoritesClearConfirm => 'Remove';
 }

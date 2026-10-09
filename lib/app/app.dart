@@ -12,6 +12,7 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -79,6 +80,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         RepositoryProvider<HadithsRepository>.value(value: deps.hadiths),
         RepositoryProvider<SearchRepository>.value(value: deps.search),
         RepositoryProvider<ResponseCache>.value(value: deps.cache),
+        // Nullable on purpose: screens show the bookmark only when favourites are available.
+        RepositoryProvider<FavoritesRepository?>.value(
+          value: deps.favoritesIfEnabled,
+        ),
       ],
       child: BlocProvider(
         create: (_) => SettingsCubit(deps.settings, widget.initialSettings),
@@ -152,6 +157,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             prayer: deps.prayer,
                             prayerLog: deps.prayerLog,
                             tasbeeh: deps.tasbeeh,
+                            favorites: deps.favoritesIfEnabled,
                           )
                         : const HomePage(),
                   ),

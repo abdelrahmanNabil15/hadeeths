@@ -6,6 +6,7 @@ import 'package:mynewapp/core/design_system/motion.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
@@ -29,6 +30,7 @@ class AppShell extends StatefulWidget {
     this.prayer,
     this.prayerLog,
     this.tasbeeh,
+    this.favorites,
   });
 
   final FeatureFlags features;
@@ -42,6 +44,9 @@ class AppShell extends StatefulWidget {
 
   /// The tasbeeh counter's storage; without it "More" does not offer the counter.
   final TasbeehRepository? tasbeeh;
+
+  /// Favourite hadiths; without them More does not offer the list.
+  final FavoritesRepository? favorites;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -166,6 +171,7 @@ class _AppShellState extends State<AppShell> {
           ? (log: widget.prayerLog!, services: widget.prayer!)
           : null,
       tasbeeh: widget.tasbeeh,
+      favorites: widget.favorites,
     ),
   };
 

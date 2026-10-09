@@ -420,5 +420,14 @@
   "tasbeehReset": "تصفير",
   "tasbeehResetTitle": "تصفير العدّاد؟",
   "tasbeehResetBody": "يعود العدد إلى الصفر.",
-  "tasbeehSaveFailed": "تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق."
+  "tasbeehSaveFailed": "تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.",
+  "favoritesTitle": "المفضلة",
+  "favoriteAdd": "إضافة إلى المفضلة",
+  "favoriteRemove": "إزالة من المفضلة",
+  "favoritesEmpty": "لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.",
+  "favoritesFallbackTitle": "حديث {id}",
+  "favoritesClear": "مسح المفضلة",
+  "favoritesClearTitle": "إزالة كل المفضلة؟",
+  "favoritesClearBody": "يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.",
+  "favoritesClearConfirm": "إزالة"
 }

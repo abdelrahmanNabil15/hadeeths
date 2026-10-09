@@ -6,6 +6,8 @@ import 'package:mynewapp/core/network/hadeeth_client.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
+import 'package:mynewapp/features/favorites/data/favorites_repository_impl.dart';
+import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_remote_data_source.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_repository_impl.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
@@ -35,6 +37,7 @@ class AppDependencies {
     this.prayer,
     this.prayerLog,
     this.tasbeeh,
+    this.favorites,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -66,6 +69,9 @@ class AppDependencies {
           ? null
           : SqlitePrayerLogRepository(userData.db),
       tasbeeh: userData == null ? null : SqliteTasbeehRepository(userData.db),
+      favorites: userData == null
+          ? null
+          : SqliteFavoritesRepository(userData.db),
     );
   }
 
@@ -93,4 +99,12 @@ class AppDependencies {
 
   /// The tasbeeh counter's storage; `null` when the user database could not be opened.
   final TasbeehRepository? tasbeeh;
+
+  /// Favourite hadith ids; `null` when the user database could not be opened.
+  final FavoritesRepository? favorites;
+
+  /// Favourites as the screens should see them: only when their section is on and the bottom
+  /// navigation exists.
+  FavoritesRepository? get favoritesIfEnabled =>
+      features.favorites && features.usesShell ? favorites : null;
 }

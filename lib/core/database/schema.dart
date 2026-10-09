@@ -31,4 +31,12 @@ CREATE TABLE tasbeeh_counter (
   target INTEGER CHECK (target IS NULL OR target IN (33, 99, 100))
 ) WITHOUT ROWID''');
   }),
+  Migration(4, 'favourite hadiths', (db) {
+    // Ids only (no text from the source), with when they were added, for the order of the list.
+    db.execute('''
+CREATE TABLE favorites (
+  hadith_id TEXT NOT NULL PRIMARY KEY,
+  added_at INTEGER NOT NULL
+) WITHOUT ROWID''');
+  }),
 ];

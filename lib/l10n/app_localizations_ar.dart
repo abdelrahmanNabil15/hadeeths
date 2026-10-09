@@ -851,4 +851,35 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get tasbeehSaveFailed =>
       'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.';
+
+  @override
+  String get favoritesTitle => 'المفضلة';
+
+  @override
+  String get favoriteAdd => 'إضافة إلى المفضلة';
+
+  @override
+  String get favoriteRemove => 'إزالة من المفضلة';
+
+  @override
+  String get favoritesEmpty =>
+      'لا توجد أحاديث في المفضلة بعد. افتح حديثًا والمس علامة الحفظ لتبقيه هنا.';
+
+  @override
+  String favoritesFallbackTitle(Object id) {
+    return 'حديث $id';
+  }
+
+  @override
+  String get favoritesClear => 'مسح المفضلة';
+
+  @override
+  String get favoritesClearTitle => 'إزالة كل المفضلة؟';
+
+  @override
+  String get favoritesClearBody =>
+      'يزيل هذا القائمة من هذا الهاتف، ولا تتأثر الأحاديث نفسها.';
+
+  @override
+  String get favoritesClearConfirm => 'إزالة';
 }

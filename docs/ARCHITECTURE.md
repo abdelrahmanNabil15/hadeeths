@@ -192,3 +192,17 @@ translation parity, and the architecture rules. Nothing touches the live API.
   ring beside the count is a plain determinate indicator: nothing animates, so nothing waits for an animation.
 - Undo takes one off, reset (with confirmation) zeroes the count and keeps the target; screen readers hear "Count N" as a live region and can activate the circle.
 - Privacy: no network, location or sharing code (tested); nothing is shared.
+
+## Favourite hadiths (Phase 3F-1)
+
+- `lib/features/favorites/`: `FavoritesRepository` (interface), `SqliteFavoritesRepository` (table `favorites(hadith_id, added_at)`, migration 4),
+  `FavoriteButton` (the bookmark in a hadith's app bar) and `FavoritesPage` (the list under More).
+- **Ids only.** No text, title or grade from HadeethEnc is stored in the user's data (that would be keeping content, which the source's terms and the
+  plan do not allow without permission). The list reads each title the same way as opening the hadith, so saved copies make it work offline for hadiths
+  already read; if a title cannot be read the row says "Hadith N" and still opens it. The same id is the same hadith in both languages.
+- Only digits are accepted as an id (anything else is refused before it reaches the database).
+- **Released app unchanged:** a new flag `FeatureFlags.favorites` (on with the preview sections) and `AppDependencies.favoritesIfEnabled` decide whether
+  the bookmark exists at all; the repository is provided as a nullable `RepositoryProvider<FavoritesRepository?>` and the button renders nothing when it
+  is null. A test checks that a normal build shows no bookmark.
+- The bookmark is one screen-reader node with a toggled state and a tooltip that says what tapping will do; a light tick accompanies it; the icon change
+  is a short scale that disappears with "remove animations".
