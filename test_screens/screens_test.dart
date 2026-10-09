@@ -7,7 +7,6 @@
 // fixtures used by the tests, never real religious text.
 
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -213,10 +212,10 @@ void main() {
 
       // Hadiths section.
       await shot('home');
-      await tap(find.text(categoriesJson[0]['title']! as String).first);
+      await tap(find.text(categoriesJson[0]['title']!).first);
       await shot('category');
       await back();
-      await tap(find.text(categoriesJson[1]['title']! as String).first);
+      await tap(find.text(categoriesJson[1]['title']!).first);
       await shot('hadith_list');
       await tap(find.text('حديث 100').first);
       await shot('hadith_details');
