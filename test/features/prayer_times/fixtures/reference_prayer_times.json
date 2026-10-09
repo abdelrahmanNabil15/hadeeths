@@ -1,0 +1,309 @@
+{
+ "about": "Cross-check values from the Aladhan public API (api.aladhan.com), an independent implementation, NOT an official authority. Retrieved 2026-10-09. Times are rounded to the minute by the source. Where Isha falls after midnight the source gives it the same date, so one day was added (marked in 'note').",
+ "retrieved": "2026-10-09",
+ "cases": [
+  {
+   "id": "cairo-jun-egyptian",
+   "latitude": 30.0444,
+   "longitude": 31.2357,
+   "date": "2026-06-21",
+   "zone": "Africa/Cairo",
+   "method": "egyptian",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=30.0444&longitude=31.2357&method=5&school=0&latitudeAdjustmentMethod=1&timezonestring=Africa/Cairo&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-21T01:08:00Z",
+    "sunrise": "2026-06-21T02:54:00Z",
+    "dhuhr": "2026-06-21T09:57:00Z",
+    "asr": "2026-06-21T13:32:00Z",
+    "maghrib": "2026-06-21T16:59:00Z",
+    "isha": "2026-06-21T18:33:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "04:08:00+03:00",
+    "sunrise": "05:54:00+03:00",
+    "dhuhr": "12:57:00+03:00",
+    "asr": "16:32:00+03:00",
+    "maghrib": "19:59:00+03:00",
+    "isha": "21:33:00+03:00"
+   }
+  },
+  {
+   "id": "cairo-dec-egyptian",
+   "latitude": 30.0444,
+   "longitude": 31.2357,
+   "date": "2026-12-21",
+   "zone": "Africa/Cairo",
+   "method": "egyptian",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-12-2026?latitude=30.0444&longitude=31.2357&method=5&school=0&latitudeAdjustmentMethod=1&timezonestring=Africa/Cairo&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-12-21T03:14:00Z",
+    "sunrise": "2026-12-21T04:47:00Z",
+    "dhuhr": "2026-12-21T09:53:00Z",
+    "asr": "2026-12-21T12:41:00Z",
+    "maghrib": "2026-12-21T14:59:00Z",
+    "isha": "2026-12-21T16:23:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "05:14:00+02:00",
+    "sunrise": "06:47:00+02:00",
+    "dhuhr": "11:53:00+02:00",
+    "asr": "14:41:00+02:00",
+    "maghrib": "16:59:00+02:00",
+    "isha": "18:23:00+02:00"
+   }
+  },
+  {
+   "id": "makkah-jun-ummalqura",
+   "latitude": 21.4225,
+   "longitude": 39.8262,
+   "date": "2026-06-21",
+   "zone": "Asia/Riyadh",
+   "method": "ummAlQura",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=21.4225&longitude=39.8262&method=4&school=0&latitudeAdjustmentMethod=1&timezonestring=Asia/Riyadh&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-21T01:11:00Z",
+    "sunrise": "2026-06-21T02:39:00Z",
+    "dhuhr": "2026-06-21T09:22:00Z",
+    "asr": "2026-06-21T12:42:00Z",
+    "maghrib": "2026-06-21T16:06:00Z",
+    "isha": "2026-06-21T17:36:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "04:11:00+03:00",
+    "sunrise": "05:39:00+03:00",
+    "dhuhr": "12:22:00+03:00",
+    "asr": "15:42:00+03:00",
+    "maghrib": "19:06:00+03:00",
+    "isha": "20:36:00+03:00"
+   }
+  },
+  {
+   "id": "karachi-jun-karachi-hanafi",
+   "latitude": 24.8607,
+   "longitude": 67.0011,
+   "date": "2026-06-21",
+   "zone": "Asia/Karachi",
+   "method": "karachi",
+   "madhab": "hanafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=24.8607&longitude=67.0011&method=1&school=1&latitudeAdjustmentMethod=1&timezonestring=Asia/Karachi&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-20T23:14:00Z",
+    "sunrise": "2026-06-21T00:43:00Z",
+    "dhuhr": "2026-06-21T07:34:00Z",
+    "asr": "2026-06-21T12:16:00Z",
+    "maghrib": "2026-06-21T14:24:00Z",
+    "isha": "2026-06-21T15:53:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "04:14:00+05:00",
+    "sunrise": "05:43:00+05:00",
+    "dhuhr": "12:34:00+05:00",
+    "asr": "17:16:00+05:00",
+    "maghrib": "19:24:00+05:00",
+    "isha": "20:53:00+05:00"
+   }
+  },
+  {
+   "id": "london-jun-mwl",
+   "latitude": 51.5074,
+   "longitude": -0.1278,
+   "date": "2026-06-21",
+   "zone": "Europe/London",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=51.5074&longitude=-0.1278&method=3&school=0&latitudeAdjustmentMethod=1&timezonestring=Europe/London&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-21T00:02:00Z",
+    "sunrise": "2026-06-21T03:43:00Z",
+    "dhuhr": "2026-06-21T12:02:00Z",
+    "asr": "2026-06-21T16:25:00Z",
+    "maghrib": "2026-06-21T20:22:00Z",
+    "isha": "2026-06-22T00:02:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "01:02:00+01:00",
+    "sunrise": "04:43:00+01:00",
+    "dhuhr": "13:02:00+01:00",
+    "asr": "17:25:00+01:00",
+    "maghrib": "21:22:00+01:00",
+    "isha": "01:02:00+01:00"
+   },
+   "note": "Isha is after midnight; the source labels it with the same date, so one day was added when saving."
+  },
+  {
+   "id": "london-dst-start-mwl",
+   "latitude": 51.5074,
+   "longitude": -0.1278,
+   "date": "2026-03-29",
+   "zone": "Europe/London",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/29-03-2026?latitude=51.5074&longitude=-0.1278&method=3&school=0&latitudeAdjustmentMethod=1&timezonestring=Europe/London&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-03-29T03:46:00Z",
+    "sunrise": "2026-03-29T05:43:00Z",
+    "dhuhr": "2026-03-29T12:05:00Z",
+    "asr": "2026-03-29T15:33:00Z",
+    "maghrib": "2026-03-29T18:29:00Z",
+    "isha": "2026-03-29T20:19:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "04:46:00+01:00",
+    "sunrise": "06:43:00+01:00",
+    "dhuhr": "13:05:00+01:00",
+    "asr": "16:33:00+01:00",
+    "maghrib": "19:29:00+01:00",
+    "isha": "21:19:00+01:00"
+   },
+   "asrIndependentCheckUtc": "2026-03-29T15:34:13Z",
+   "asrNote": "On this clock-change day the source's Asr differs from adhan_dart by 2 to 4 minutes. A third calculation (Meeus low-precision solar position, written for this check, accurate to about 1 minute) agrees with adhan_dart to within 2 minutes, so Asr is checked against that value instead."
+  },
+  {
+   "id": "london-dst-end-mwl",
+   "latitude": 51.5074,
+   "longitude": -0.1278,
+   "date": "2026-10-25",
+   "zone": "Europe/London",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/25-10-2026?latitude=51.5074&longitude=-0.1278&method=3&school=0&latitudeAdjustmentMethod=1&timezonestring=Europe/London&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-10-25T04:49:00Z",
+    "sunrise": "2026-10-25T06:42:00Z",
+    "dhuhr": "2026-10-25T11:45:00Z",
+    "asr": "2026-10-25T14:19:00Z",
+    "maghrib": "2026-10-25T16:47:00Z",
+    "isha": "2026-10-25T18:32:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "04:49:00+00:00",
+    "sunrise": "06:42:00+00:00",
+    "dhuhr": "11:45:00+00:00",
+    "asr": "14:19:00+00:00",
+    "maghrib": "16:47:00+00:00",
+    "isha": "18:32:00+00:00"
+   },
+   "asrIndependentCheckUtc": "2026-10-25T14:16:34Z",
+   "asrNote": "On this clock-change day the source's Asr differs from adhan_dart by 2 to 4 minutes. A third calculation (Meeus low-precision solar position, written for this check, accurate to about 1 minute) agrees with adhan_dart to within 2 minutes, so Asr is checked against that value instead."
+  },
+  {
+   "id": "newyork-dec-isna",
+   "latitude": 40.7128,
+   "longitude": -74.006,
+   "date": "2026-12-21",
+   "zone": "America/New_York",
+   "method": "northAmerica",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-12-2026?latitude=40.7128&longitude=-74.006&method=2&school=0&latitudeAdjustmentMethod=1&timezonestring=America/New_York&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-12-21T10:54:00Z",
+    "sunrise": "2026-12-21T12:17:00Z",
+    "dhuhr": "2026-12-21T16:54:00Z",
+    "asr": "2026-12-21T19:14:00Z",
+    "maghrib": "2026-12-21T21:32:00Z",
+    "isha": "2026-12-21T22:54:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "05:54:00-05:00",
+    "sunrise": "07:17:00-05:00",
+    "dhuhr": "11:54:00-05:00",
+    "asr": "14:14:00-05:00",
+    "maghrib": "16:32:00-05:00",
+    "isha": "17:54:00-05:00"
+   }
+  },
+  {
+   "id": "auckland-jun-mwl",
+   "latitude": -36.8485,
+   "longitude": 174.7633,
+   "date": "2026-06-21",
+   "zone": "Pacific/Auckland",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "middleOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=-36.8485&longitude=174.7633&method=3&school=0&latitudeAdjustmentMethod=1&timezonestring=Pacific/Auckland&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-20T18:01:00Z",
+    "sunrise": "2026-06-20T19:34:00Z",
+    "dhuhr": "2026-06-21T00:23:00Z",
+    "asr": "2026-06-21T02:54:00Z",
+    "maghrib": "2026-06-21T05:12:00Z",
+    "isha": "2026-06-21T06:40:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "06:01:00+12:00",
+    "sunrise": "07:34:00+12:00",
+    "dhuhr": "12:23:00+12:00",
+    "asr": "14:54:00+12:00",
+    "maghrib": "17:12:00+12:00",
+    "isha": "18:40:00+12:00"
+   }
+  },
+  {
+   "id": "oslo-jun-mwl-seventh",
+   "latitude": 59.9139,
+   "longitude": 10.7522,
+   "date": "2026-06-21",
+   "zone": "Europe/Oslo",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "seventhOfTheNight",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=59.9139&longitude=10.7522&method=3&school=0&latitudeAdjustmentMethod=2&timezonestring=Europe/Oslo&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-21T01:10:00Z",
+    "sunrise": "2026-06-21T01:54:00Z",
+    "dhuhr": "2026-06-21T11:19:00Z",
+    "asr": "2026-06-21T16:00:00Z",
+    "maghrib": "2026-06-21T20:44:00Z",
+    "isha": "2026-06-21T21:28:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "03:10:00+02:00",
+    "sunrise": "03:54:00+02:00",
+    "dhuhr": "13:19:00+02:00",
+    "asr": "18:00:00+02:00",
+    "maghrib": "22:44:00+02:00",
+    "isha": "23:28:00+02:00"
+   }
+  },
+  {
+   "id": "oslo-jun-mwl-angle",
+   "latitude": 59.9139,
+   "longitude": 10.7522,
+   "date": "2026-06-21",
+   "zone": "Europe/Oslo",
+   "method": "muslimWorldLeague",
+   "madhab": "shafi",
+   "highLatitudeRule": "twilightAngle",
+   "source": "https://api.aladhan.com/v1/timings/21-06-2026?latitude=59.9139&longitude=10.7522&method=3&school=0&latitudeAdjustmentMethod=3&timezonestring=Europe/Oslo&iso8601=true",
+   "timingsUtc": {
+    "fajr": "2026-06-21T00:21:00Z",
+    "sunrise": "2026-06-21T01:54:00Z",
+    "dhuhr": "2026-06-21T11:19:00Z",
+    "asr": "2026-06-21T16:00:00Z",
+    "maghrib": "2026-06-21T20:44:00Z",
+    "isha": "2026-06-21T22:12:00Z"
+   },
+   "localAsPublished": {
+    "fajr": "02:21:00+02:00",
+    "sunrise": "03:54:00+02:00",
+    "dhuhr": "13:19:00+02:00",
+    "asr": "18:00:00+02:00",
+    "maghrib": "22:44:00+02:00",
+    "isha": "00:12:00+02:00"
+   },
+   "note": "Isha is after midnight; the source labels it with the same date, so one day was added when saving."
+  }
+ ]
+}

@@ -98,6 +98,12 @@ Navigation shell built behind feature flags (all off, so the released UI is unch
 bar; the Liquid Glass spike (needs a Mac) will decide whether a native bar replaces it. Deviation from the plan: new prayer-state
 colour tokens are deferred to 3B so they are designed against the real dashboard.
 
+### Update after approval (3B-1)
+Prayer calculation core built and cross-checked: see `docs/PRAYER_TIMES_VALIDATION.md`. Findings that change the plan: a defect in
+`adhan_dart` 2.0.1 (`ishaBefore`/`fajrAfter` wrong at high latitudes, worked around), Fajr/Isha discontinuities at high latitudes
+(to be explained in the UI), Moonsighting Committee deferred. The independent reference used is another implementation (Aladhan),
+not an official authority; the owner still needs to name the authority timetable(s).
+
 ## 6. Feature dependency map
 
 ```text

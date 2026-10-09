@@ -33,6 +33,8 @@ lib/
     widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
     licences.dart                font licence texts for the licences page
     logging/
+  features/prayer_times/         (Phase 3B, calculation core only so far) domain: CalculationSettings, PrayerDay, PrayerMoment,
+                                 Qibla, PrayerTimesCalculator; data: AdhanPrayerTimesCalculator (see PRAYER_TIMES_VALIDATION.md)
   l10n/                          ARB files and generated AppLocalizations (+ context.l10n helper)
   features/
     categories/
