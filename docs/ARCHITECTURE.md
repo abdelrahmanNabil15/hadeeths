@@ -21,6 +21,10 @@ lib/
     time/                        Clock (always UTC), TimeZoneRules (offset at an instant; DST-aware wall-clock helpers)
     notifications/               NotificationPlanner: pure, deterministic plan of what to keep pending (window, quiet hours,
                                  dedupe, platform limit, stable ids) and a diff against what is pending. No plugin, no UI yet
+    database/                    UserDatabase over sqlite3 (user's own data, on-device only), MigrationRunner (one transaction per
+                                 version, refuses a newer schema, corrupt file is set aside not deleted), schema.dart (released migrations)
+    permissions/                 PermissionGateway (platform wrapper, implemented per feature) and PermissionFlow (explain first,
+                                 then the system prompt; denial is an outcome, never an error)
     design_system/               tokens.dart (light and dark palettes, spacing, radii, sizes, motion) and AppTheme
     widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
     licences.dart                font licence texts for the licences page

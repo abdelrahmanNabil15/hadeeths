@@ -7,6 +7,7 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/core/cache/file_response_cache.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
+import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/licences.dart';
 import 'package:mynewapp/core/logging/app_bloc_observer.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,9 +27,29 @@ Future<void> main() async {
     ),
   );
 
+  // The user's own data. If it cannot be opened the app still works; features that need it
+  // report that storage is unavailable.
+  UserDatabase? userData;
+  try {
+    userData = UserDatabase.openFile(
+      File(
+        '${support.path}${Platform.pathSeparator}user_data${Platform.pathSeparator}user_data.db',
+      ),
+    );
+    if (kDebugMode) {
+      debugPrint(
+        'user database ready (opened at schema v${userData.migratedFrom}, '
+        'recovered: ${userData.recoveredFrom != null})',
+      );
+    }
+  } on Object catch (error) {
+    if (kDebugMode) debugPrint('user database unavailable: $error');
+  }
+
   final dependencies = AppDependencies.live(
     preferences: await SharedPreferences.getInstance(),
     cache: cache,
+    userData: userData,
   );
   // Saved language, theme and the offline setting are known before the first frame.
   final settings = await dependencies.settings.load();

@@ -86,6 +86,13 @@ Daily hadith, favorites (ids only) and search-history features are compatible; *
 | P3-11 iOS native UI | small Swift boundary; **candidate** package `native_liquid_glass` 0.3.1 (MIT, 12 likes, *unverified uploader*, iOS-only, falls back to system styling below iOS 26, each widget is a platform view) vs own thin platform view. **Not accepted** until a spike on a Mac | Cupertino widgets (no official evidence they adopt Liquid Glass) | see section 12 |
 | P3-12 Widgets | `home_widget` 0.10.0 (BSD-3, verified publisher) as data bridge; widgets themselves written in Kotlin (Glance/RemoteViews) and Swift (WidgetKit) | – | iOS needs App Group + a second Xcode target (Mac) |
 
+### Update after approval (3A-2)
+ADR P3-4 resolved: **`sqlite3` ^3.5.2** (MIT, verified publisher simonbinder.eu; bundles SQLite through build hooks, no
+`sqlite3_flutter_libs`, no code generation). Checked: unit tests run in `flutter test`; the release APK contains
+`libsqlite3.so` for arm64-v8a, armeabi-v7a and x86_64 (about 1.7 MB each compressed); opened and migrated on a Samsung SM A155F (Android 16).
+iOS build NOT RUN here (CI macOS job will exercise it). Permissions facade: interface and flow only; the plugin-backed
+implementations arrive with the features that use them, so no permission plugin was added yet.
+
 ## 6. Feature dependency map
 
 ```text

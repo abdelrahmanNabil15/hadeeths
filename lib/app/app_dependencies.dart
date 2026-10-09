@@ -1,5 +1,6 @@
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
+import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
@@ -23,6 +24,7 @@ class AppDependencies {
     required this.search,
     required this.settings,
     required this.cache,
+    this.userData,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -31,6 +33,7 @@ class AppDependencies {
     required SharedPreferences preferences,
     required SwitchableResponseCache cache,
     HadeethClient? client,
+    UserDatabase? userData,
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -44,6 +47,7 @@ class AppDependencies {
       search: SearchRepositoryImpl(HttpSearchRemoteDataSource(http)),
       settings: SettingsRepositoryImpl(preferences),
       cache: cache,
+      userData: userData,
     );
   }
 
@@ -54,4 +58,8 @@ class AppDependencies {
 
   /// Saved copies of opened content; switched on and off by the user's setting.
   final SwitchableResponseCache cache;
+
+  /// The user's own data (favourites, tracker, ...). `null` when it could not be opened;
+  /// features that need it must then show an unavailable state rather than crash.
+  final UserDatabase? userData;
 }
