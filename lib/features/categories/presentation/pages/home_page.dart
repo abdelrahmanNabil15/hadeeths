@@ -151,7 +151,6 @@ class HomePage extends StatelessWidget {
                       for (final root in roots) ...[
                         AppTile(
                           title: root.title,
-                          pressFeedback: true,
                           trailingText: context.digits.format(root.hadithCount),
                           semanticLabel: l10n.tileSemantics(
                             root.title,
