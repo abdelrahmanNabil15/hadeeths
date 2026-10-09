@@ -15,7 +15,11 @@ import 'package:mynewapp/features/settings/presentation/pages/settings_page.dart
 import 'package:mynewapp/l10n/l10n.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  /// [inShell] is true when the bottom navigation is showing: settings and "Sources and
+  /// rights" then live under "More", so this page does not repeat them.
+  const HomePage({super.key, this.inShell = false});
+
+  final bool inShell;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +28,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(l10n.appTitle),
         actions: [
-          IconButton(
-            tooltip: l10n.settings,
-            icon: const Icon(Icons.tune),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const SettingsPage()),
+          if (!inShell)
+            IconButton(
+              tooltip: l10n.settings,
+              icon: const Icon(Icons.tune),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(builder: (_) => const SettingsPage()),
+              ),
             ),
-          ),
         ],
       ),
       body: BlocConsumer<CategoriesCubit, CategoriesState>(
@@ -90,19 +95,21 @@ class HomePage extends StatelessWidget {
                         ),
                         const SizedBox(height: AppSpacing.md),
                       ],
-                      const SizedBox(height: AppSpacing.sm),
-                      Align(
-                        alignment: AlignmentDirectional.centerStart,
-                        child: TextButton.icon(
-                          onPressed: () => Navigator.of(context).push(
-                            MaterialPageRoute<void>(
-                              builder: (_) => const AboutPage(),
+                      if (!inShell) ...[
+                        const SizedBox(height: AppSpacing.sm),
+                        Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: TextButton.icon(
+                            onPressed: () => Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => const AboutPage(),
+                              ),
                             ),
+                            icon: const Icon(Icons.info_outline),
+                            label: Text(l10n.aboutTitle),
                           ),
-                          icon: const Icon(Icons.info_outline),
-                          label: Text(l10n.aboutTitle),
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),

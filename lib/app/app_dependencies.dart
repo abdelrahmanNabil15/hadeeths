@@ -1,3 +1,4 @@
+import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
@@ -25,6 +26,7 @@ class AppDependencies {
     required this.settings,
     required this.cache,
     this.userData,
+    this.features = const FeatureFlags(),
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -34,6 +36,7 @@ class AppDependencies {
     required SwitchableResponseCache cache,
     HadeethClient? client,
     UserDatabase? userData,
+    FeatureFlags features = const FeatureFlags(),
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -48,6 +51,7 @@ class AppDependencies {
       settings: SettingsRepositoryImpl(preferences),
       cache: cache,
       userData: userData,
+      features: features,
     );
   }
 
@@ -62,4 +66,7 @@ class AppDependencies {
   /// The user's own data (favourites, tracker, ...). `null` when it could not be opened;
   /// features that need it must then show an unavailable state rather than crash.
   final UserDatabase? userData;
+
+  /// Which Phase 3 sections are switched on. All off in a normal build.
+  final FeatureFlags features;
 }

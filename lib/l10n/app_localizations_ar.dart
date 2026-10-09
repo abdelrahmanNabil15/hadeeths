@@ -186,4 +186,25 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get savedCopiesCleared => 'تم مسح النسخ المحفوظة';
+
+  @override
+  String get navHadiths => 'الأحاديث';
+
+  @override
+  String get navQuran => 'المصحف';
+
+  @override
+  String get navPrayer => 'الصلاة';
+
+  @override
+  String get navMore => 'المزيد';
+
+  @override
+  String get navigationLabel => 'الأقسام الرئيسية';
+
+  @override
+  String get comingSoon => 'قريبًا';
+
+  @override
+  String get comingSoonBody => 'هذا القسم قيد الإعداد وليس متاحًا بعد.';
 }

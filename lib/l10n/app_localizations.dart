@@ -427,6 +427,48 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تم مسح النسخ المحفوظة'**
   String get savedCopiesCleared;
+
+  /// No description provided for @navHadiths.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحاديث'**
+  String get navHadiths;
+
+  /// No description provided for @navQuran.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصحف'**
+  String get navQuran;
+
+  /// No description provided for @navPrayer.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة'**
+  String get navPrayer;
+
+  /// No description provided for @navMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'المزيد'**
+  String get navMore;
+
+  /// No description provided for @navigationLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأقسام الرئيسية'**
+  String get navigationLabel;
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'قريبًا'**
+  String get comingSoon;
+
+  /// No description provided for @comingSoonBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا القسم قيد الإعداد وليس متاحًا بعد.'**
+  String get comingSoonBody;
 }
 
 class _AppLocalizationsDelegate

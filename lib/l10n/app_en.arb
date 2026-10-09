@@ -54,5 +54,12 @@
   "offlineCopies": "Offline reading",
   "offlineCopiesHint": "Keep the hadiths you open on this device so you can read them without internet.",
   "clearSavedCopies": "Clear saved copies",
-  "savedCopiesCleared": "Saved copies cleared"
+  "savedCopiesCleared": "Saved copies cleared",
+  "navHadiths": "Hadiths",
+  "navQuran": "Quran",
+  "navPrayer": "Prayer",
+  "navMore": "More",
+  "navigationLabel": "Main sections",
+  "comingSoon": "Coming soon",
+  "comingSoonBody": "This section is being prepared and is not available yet."
 }

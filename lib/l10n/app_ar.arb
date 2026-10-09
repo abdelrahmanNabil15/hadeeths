@@ -99,5 +99,12 @@
   "offlineCopies": "القراءة دون اتصال",
   "offlineCopiesHint": "احتفظ على هذا الجهاز بالأحاديث التي فتحتها لتقرأها دون إنترنت.",
   "clearSavedCopies": "مسح النسخ المحفوظة",
-  "savedCopiesCleared": "تم مسح النسخ المحفوظة"
+  "savedCopiesCleared": "تم مسح النسخ المحفوظة",
+  "navHadiths": "الأحاديث",
+  "navQuran": "المصحف",
+  "navPrayer": "الصلاة",
+  "navMore": "المزيد",
+  "navigationLabel": "الأقسام الرئيسية",
+  "comingSoon": "قريبًا",
+  "comingSoonBody": "هذا القسم قيد الإعداد وليس متاحًا بعد."
 }

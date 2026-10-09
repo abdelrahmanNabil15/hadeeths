@@ -114,6 +114,9 @@ abstract final class AppSizes {
   /// Minimum height of a list row.
   static const minTileHeight = 56.0;
 
+  /// Bottom navigation bar (Material 3 default is 80).
+  static const navigationBarHeight = 72.0;
+
   /// Longest line length on large screens.
   static const contentMaxWidth = 640.0;
 }

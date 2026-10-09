@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/file_response_cache.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
@@ -50,6 +51,7 @@ Future<void> main() async {
     preferences: await SharedPreferences.getInstance(),
     cache: cache,
     userData: userData,
+    features: FeatureFlags.fromEnvironment(),
   );
   // Saved language, theme and the offline setting are known before the first frame.
   final settings = await dependencies.settings.load();
