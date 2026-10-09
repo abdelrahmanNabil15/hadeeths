@@ -11,6 +11,10 @@ lib/
   app/
     app.dart                     MyApp: providers, theme, home
     app_dependencies.dart        builds the repositories once (live) or takes fakes (tests)
+    feature_flags.dart           which Phase 3 sections are on (all off in a normal build; preview with
+                                 --dart-define=HADEETHS_PREVIEW_SECTIONS=true)
+    shell/                       AppShell (bottom navigation, one Navigator per section, back handling), MorePage,
+                                 ComingSoonPage. Used only when a section flag is on; otherwise the app opens on HomePage as before
   core/                          shared infrastructure; knows nothing about features
     errors/failure.dart          Failure + FailureKind (what went wrong, no raw exceptions)
     result/result.dart           Result<T> = Success | Err, Result.guard(...)
@@ -87,6 +91,16 @@ Copies are the decoded JSON exactly as received, one small file each in the app'
 atomic writes, each file records its own key, least-recently-used eviction above 20 MB, any I/O problem behaves like a miss).
 Search is never cached. The user's "Offline reading" setting switches the cache (`SwitchableResponseCache`) and clearing
 it removes the files. Repositories, cubits and screens are unaware of the cache apart from the `refresh` flag.
+
+## Navigation shell (Phase 3A-3)
+
+With every section flag off the app is unchanged: `HomePage` is the home and there is no bottom bar. When a section is on,
+`AppShell` shows a Material 3 `NavigationBar` (Hadiths, Quran, Prayer, More; only the sections that are on) and keeps one
+`Navigator` per section, so pages opened inside a section keep the bar visible and a section keeps its place when you leave it.
+System back closes the open page, then returns to Hadiths, then leaves the app (`PopScope.canPop` is true only at the very first
+page, so Android's back-to-home animation still works). Settings and "Sources and rights" move to More while the bar is showing.
+The navigation bar colours come from the existing palette and are covered by the contrast tests. Prayer-state colours are not
+added yet: they will be designed with the prayer dashboard in 3B, where they can be judged in context.
 
 ## Dependency injection
 

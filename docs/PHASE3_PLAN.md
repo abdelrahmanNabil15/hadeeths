@@ -93,6 +93,11 @@ ADR P3-4 resolved: **`sqlite3` ^3.5.2** (MIT, verified publisher simonbinder.eu;
 iOS build NOT RUN here (CI macOS job will exercise it). Permissions facade: interface and flow only; the plugin-backed
 implementations arrive with the features that use them, so no permission plugin was added yet.
 
+### Update after approval (3A-3)
+Navigation shell built behind feature flags (all off, so the released UI is unchanged). iOS presentation is still the Material
+bar; the Liquid Glass spike (needs a Mac) will decide whether a native bar replaces it. Deviation from the plan: new prayer-state
+colour tokens are deferred to 3B so they are designed against the real dashboard.
+
 ## 6. Feature dependency map
 
 ```text

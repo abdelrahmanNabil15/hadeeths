@@ -232,6 +232,15 @@ void main() {
         'gold on canvas': (s.secondary, s.surface),
         'error text on canvas': (s.error, s.surface),
         'snackbar text': (s.onInverseSurface, s.inverseSurface),
+        'navigation bar: unselected label': (
+          s.onSurfaceVariant,
+          s.surfaceContainer,
+        ),
+        'navigation bar: selected label': (s.onSurface, s.surfaceContainer),
+        'navigation bar: selected icon': (
+          s.onPrimaryContainer,
+          s.primaryContainer,
+        ),
       };
       text.forEach((name, pair) {
         test('${entry.key}: $name is at least 4.5:1', () {

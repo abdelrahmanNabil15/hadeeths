@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/app/shell/app_shell.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
@@ -92,7 +93,9 @@ class _MyAppState extends State<MyApp> {
                     child: child!,
                   );
                 },
-                home: const HomePage(),
+                home: deps.features.usesShell
+                    ? AppShell(features: deps.features)
+                    : const HomePage(),
               );
             },
           ),

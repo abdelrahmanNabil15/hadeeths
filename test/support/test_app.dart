@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
@@ -29,12 +30,14 @@ AppDependencies testDependencies(
   FakeBackend api, {
   SettingsRepository? settings,
   SwitchableResponseCache? cache,
+  FeatureFlags features = const FeatureFlags(),
 }) => AppDependencies(
   categories: api,
   hadiths: api,
   search: api,
   settings: settings ?? InMemorySettingsRepository(),
   cache: cache ?? SwitchableResponseCache(InMemoryResponseCache()),
+  features: features,
 );
 
 /// Starts the app against [api].
@@ -49,6 +52,7 @@ Future<void> pumpApp(
   AppSettings settings = const AppSettings(),
   SettingsRepository? repository,
   bool settle = true,
+  FeatureFlags features = const FeatureFlags(),
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -58,6 +62,7 @@ Future<void> pumpApp(
       dependencies: testDependencies(
         api,
         settings: repository ?? InMemorySettingsRepository(settings),
+        features: features,
       ),
       initialSettings: settings,
     ),

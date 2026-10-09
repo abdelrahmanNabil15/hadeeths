@@ -188,4 +188,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savedCopiesCleared => 'Saved copies cleared';
+
+  @override
+  String get navHadiths => 'Hadiths';
+
+  @override
+  String get navQuran => 'Quran';
+
+  @override
+  String get navPrayer => 'Prayer';
+
+  @override
+  String get navMore => 'More';
+
+  @override
+  String get navigationLabel => 'Main sections';
+
+  @override
+  String get comingSoon => 'Coming soon';
+
+  @override
+  String get comingSoonBody =>
+      'This section is being prepared and is not available yet.';
 }
