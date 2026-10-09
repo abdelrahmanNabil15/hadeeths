@@ -63,6 +63,27 @@ verified here and the library does not apply it, so the app must not claim to fo
 official source and added), and times against any official national timetable (needs a
 source you trust; none was invented).
 
+## Location and place (3B-3)
+
+- **Two ways to set the place:** "Use my location" (an explanation first, then the system prompt only if the user agrees, then one
+  low-accuracy read, no tracking) or a city picked by name (no permission). The place is stored rounded to about 1 km. A device
+  position keeps the zone of the device; a city keeps its IANA zone.
+- **Android permissions added:** `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` only (verified in the release APK with
+  `aapt dump permissions`: INTERNET plus these two). No background location, no foreground service.
+- **iOS:** `NSLocationWhenInUseUsageDescription` added to `Info.plist` (Arabic and English in one string). Not run on an iPhone; CI
+  only compiles it. Localised `InfoPlist.strings` need the Xcode project and are left for a Mac session.
+- **City list:** 119 cities chosen by hand (27 in Egypt, the main ones in the Gulf, the Levant, North Africa, South and South-East
+  Asia, Europe, the Americas, Oceania and Africa). Names, coordinates, zones and country codes come from GeoNames `cities15000`
+  (CC BY 4.0, credited on the About page); the Arabic names were written for this app and should be reviewed by an Arabic speaker.
+  Search ignores diacritics and common spelling variants (`normalizeForSearch`).
+- **Time zone data:** the compact database in `timezone` lacks 14 zone names that GeoNames uses (aliases such as `Europe/Oslo` and
+  `Asia/Kuwait`), found by a test, so the full database is bundled (about 190 KB more).
+- **Contested places:** القدس and غزة use the names and zones GeoNames gives (Jerusalem: `Asia/Jerusalem`; Gaza: `Asia/Gaza`). Their
+  country codes are never shown and only influence the proposed method (which is the general one for both). The owner should decide
+  whether to keep, rename or drop them.
+- **Not on a device yet:** the real GPS read and permission prompt on the Android phone (the phone was locked during the session).
+  Covered by tests with fakes only.
+
 ## Owner decisions (2026-10-09) and where they stand
 
 | # | Decision | Status |

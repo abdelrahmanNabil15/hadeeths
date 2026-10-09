@@ -3,6 +3,7 @@ import 'package:mynewapp/core/time/iana_time_zone.dart';
 import 'package:mynewapp/core/time/zone.dart';
 
 void main() {
+  aliasTests();
   test('Cairo: +2 in winter, +3 in summer (daylight saving since 2023)', () {
     final cairo = IanaTimeZone('Africa/Cairo');
     expect(cairo.offsetAt(DateTime.utc(2026, 1, 15)), const Duration(hours: 2));
@@ -84,4 +85,34 @@ void main() {
     final TimeZoneRules zone = IanaTimeZone('Africa/Cairo');
     expect(zone.id, 'Africa/Cairo');
   });
+}
+
+void aliasTests() {
+  test(
+    'alias zone names that place data uses are known and behave like their neighbours',
+    () {
+      final cases = {
+        'Asia/Kuwait': 'Asia/Riyadh',
+        'Europe/Oslo': 'Europe/Berlin',
+        'Europe/Amsterdam': 'Europe/Berlin',
+        'Africa/Addis_Ababa': 'Africa/Nairobi',
+        'Asia/Kuala_Lumpur': 'Asia/Singapore',
+      };
+      cases.forEach((alias, canonical) {
+        final a = IanaTimeZone.tryParse(alias);
+        final c = IanaTimeZone(canonical);
+        expect(a, isNotNull, reason: alias);
+        for (final instant in [
+          DateTime.utc(2026, 1, 15),
+          DateTime.utc(2026, 7, 15),
+        ]) {
+          expect(
+            a!.offsetAt(instant),
+            c.offsetAt(instant),
+            reason: '$alias $instant',
+          );
+        }
+      });
+    },
+  );
 }

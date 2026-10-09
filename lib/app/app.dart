@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                   );
                 },
                 home: deps.features.usesShell
-                    ? AppShell(features: deps.features)
+                    ? AppShell(features: deps.features, prayer: deps.prayer)
                     : const HomePage(),
               );
             },

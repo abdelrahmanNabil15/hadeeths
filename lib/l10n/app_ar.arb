@@ -110,5 +110,76 @@
   "navMore": "المزيد",
   "navigationLabel": "الأقسام الرئيسية",
   "comingSoon": "قريبًا",
-  "comingSoonBody": "هذا القسم قيد الإعداد وليس متاحًا بعد."
+  "comingSoonBody": "هذا القسم قيد الإعداد وليس متاحًا بعد.",
+  "prayerTimesTitle": "مواقيت الصلاة",
+  "prayerSetupTitle": "حدّد موقعك",
+  "prayerSetupBody": "تعتمد مواقيت الصلاة على مكانك. اختر طريقة تحديده.",
+  "useMyLocation": "استخدم موقعي",
+  "chooseCity": "اختر مدينة",
+  "locationExplainTitle": "استخدام موقعك؟",
+  "locationExplainBody": "يقرأ التطبيق موقعك مرة واحدة الآن، لحساب مواقيت الصلاة في مكانك فقط. لا يُتتبَّع ولا يُشارك، ويُحفظ تقريبًا إلى نحو كيلومتر. يمكنك اختيار مدينة بدلًا من ذلك.",
+  "continueAction": "متابعة",
+  "notNow": "ليس الآن",
+  "locating": "جارٍ تحديد موقعك…",
+  "locationDenied": "لم يُمنح إذن الموقع. يمكنك المحاولة مرة أخرى أو اختيار مدينة.",
+  "locationNeedsSettings": "إذن الموقع متوقف لهذا التطبيق. افتح الإعدادات للسماح به، أو اختر مدينة.",
+  "locationServiceDisabled": "خدمة الموقع متوقفة على هذا الجهاز. شغّلها أو اختر مدينة.",
+  "locationTimeout": "تعذّر تحديد موقعك في الوقت المناسب. حاول مرة أخرى أو اختر مدينة.",
+  "locationUnavailable": "موقعك غير متاح الآن. حاول مرة أخرى أو اختر مدينة.",
+  "openSettings": "فتح الإعدادات",
+  "cityPickerTitle": "اختر مدينة",
+  "citySearchHint": "ابحث عن مدينة",
+  "cityNoResults": "لا توجد مدينة تطابق «{query}»",
+  "@cityNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "currentLocation": "الموقع الحالي",
+  "changeLocation": "تغيير الموقع",
+  "nextPrayerLabel": "الصلاة التالية",
+  "prayerFajr": "الفجر",
+  "prayerSunrise": "الشروق",
+  "prayerDhuhr": "الظهر",
+  "prayerAsr": "العصر",
+  "prayerMaghrib": "المغرب",
+  "prayerIsha": "العشاء",
+  "methodHeading": "طريقة الحساب",
+  "methodEgyptian": "الهيئة المصرية العامة للمساحة",
+  "methodUmmAlQura": "جامعة أم القرى، مكة المكرمة",
+  "methodMuslimWorldLeague": "رابطة العالم الإسلامي",
+  "methodKarachi": "جامعة العلوم الإسلامية، كراتشي",
+  "methodNorthAmerica": "الجمعية الإسلامية لأمريكا الشمالية",
+  "methodAngles": "الفجر {fajr}°، العشاء {isha}°",
+  "@methodAngles": {
+    "placeholders": {
+      "fajr": {
+        "type": "String"
+      },
+      "isha": {
+        "type": "String"
+      }
+    }
+  },
+  "methodInterval": "الفجر {fajr}°، العشاء بعد المغرب بـ {minutes} دقيقة",
+  "@methodInterval": {
+    "placeholders": {
+      "fajr": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "methodAutoCountry": "اختيرت تلقائيًا لبلدك",
+  "methodAutoGeneral": "لا تتوفر بعدُ طريقة خاصة ببلدك، لذلك استُخدمت الطريقة العامة",
+  "methodByYou": "اخترتَها أنت",
+  "prayerDisclaimer": "المواقيت محسوبة وقد تختلف بضع دقائق عن مسجدك أو الجهة الرسمية في بلدك.",
+  "calculationFailed": "تعذّر حساب المواقيت لهذا المكان.",
+  "aboutPlacesHeading": "الأماكن",
+  "aboutPlacesBody": "أسماء المدن ومواقعها ومناطقها الزمنية: GeoNames (geonames.org) برخصة CC BY 4.0. حدود الدول: Natural Earth (ملكية عامة). تُحسب مواقيت الصلاة على جهازك بمكتبة adhan_dart (رخصة MIT).",
+  "aboutPrivacyLocation": "إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن."
 }

@@ -1,12 +1,14 @@
 import 'package:mynewapp/core/time/zone.dart';
-import 'package:timezone/data/latest.dart' as tzdata;
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:timezone/timezone.dart' as tz;
 
 /// A time zone from the IANA database (for example `Africa/Cairo`), with its daylight-saving
 /// rules, from the `timezone` package. Used for a place the user picked by hand, whose zone may
 /// differ from the device's.
 ///
-/// The database is bundled with the app, so this works offline. It reflects the rules known when
+/// The database is bundled with the app, so this works offline. The full variant is used (not
+/// the compact one) because place data names zones that the compact one leaves out, such as
+/// `Europe/Oslo` and `Asia/Kuwait`, which are aliases of other zones. It reflects the rules known when
 /// the package was released; a country that changes its rules later (Egypt did in 2023) needs an
 /// app update.
 class IanaTimeZone implements TimeZoneRules {

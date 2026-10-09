@@ -219,4 +219,153 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get comingSoonBody => 'هذا القسم قيد الإعداد وليس متاحًا بعد.';
+
+  @override
+  String get prayerTimesTitle => 'مواقيت الصلاة';
+
+  @override
+  String get prayerSetupTitle => 'حدّد موقعك';
+
+  @override
+  String get prayerSetupBody =>
+      'تعتمد مواقيت الصلاة على مكانك. اختر طريقة تحديده.';
+
+  @override
+  String get useMyLocation => 'استخدم موقعي';
+
+  @override
+  String get chooseCity => 'اختر مدينة';
+
+  @override
+  String get locationExplainTitle => 'استخدام موقعك؟';
+
+  @override
+  String get locationExplainBody =>
+      'يقرأ التطبيق موقعك مرة واحدة الآن، لحساب مواقيت الصلاة في مكانك فقط. لا يُتتبَّع ولا يُشارك، ويُحفظ تقريبًا إلى نحو كيلومتر. يمكنك اختيار مدينة بدلًا من ذلك.';
+
+  @override
+  String get continueAction => 'متابعة';
+
+  @override
+  String get notNow => 'ليس الآن';
+
+  @override
+  String get locating => 'جارٍ تحديد موقعك…';
+
+  @override
+  String get locationDenied =>
+      'لم يُمنح إذن الموقع. يمكنك المحاولة مرة أخرى أو اختيار مدينة.';
+
+  @override
+  String get locationNeedsSettings =>
+      'إذن الموقع متوقف لهذا التطبيق. افتح الإعدادات للسماح به، أو اختر مدينة.';
+
+  @override
+  String get locationServiceDisabled =>
+      'خدمة الموقع متوقفة على هذا الجهاز. شغّلها أو اختر مدينة.';
+
+  @override
+  String get locationTimeout =>
+      'تعذّر تحديد موقعك في الوقت المناسب. حاول مرة أخرى أو اختر مدينة.';
+
+  @override
+  String get locationUnavailable =>
+      'موقعك غير متاح الآن. حاول مرة أخرى أو اختر مدينة.';
+
+  @override
+  String get openSettings => 'فتح الإعدادات';
+
+  @override
+  String get cityPickerTitle => 'اختر مدينة';
+
+  @override
+  String get citySearchHint => 'ابحث عن مدينة';
+
+  @override
+  String cityNoResults(String query) {
+    return 'لا توجد مدينة تطابق «$query»';
+  }
+
+  @override
+  String get currentLocation => 'الموقع الحالي';
+
+  @override
+  String get changeLocation => 'تغيير الموقع';
+
+  @override
+  String get nextPrayerLabel => 'الصلاة التالية';
+
+  @override
+  String get prayerFajr => 'الفجر';
+
+  @override
+  String get prayerSunrise => 'الشروق';
+
+  @override
+  String get prayerDhuhr => 'الظهر';
+
+  @override
+  String get prayerAsr => 'العصر';
+
+  @override
+  String get prayerMaghrib => 'المغرب';
+
+  @override
+  String get prayerIsha => 'العشاء';
+
+  @override
+  String get methodHeading => 'طريقة الحساب';
+
+  @override
+  String get methodEgyptian => 'الهيئة المصرية العامة للمساحة';
+
+  @override
+  String get methodUmmAlQura => 'جامعة أم القرى، مكة المكرمة';
+
+  @override
+  String get methodMuslimWorldLeague => 'رابطة العالم الإسلامي';
+
+  @override
+  String get methodKarachi => 'جامعة العلوم الإسلامية، كراتشي';
+
+  @override
+  String get methodNorthAmerica => 'الجمعية الإسلامية لأمريكا الشمالية';
+
+  @override
+  String methodAngles(String fajr, String isha) {
+    return 'الفجر $fajr°، العشاء $isha°';
+  }
+
+  @override
+  String methodInterval(String fajr, String minutes) {
+    return 'الفجر $fajr°، العشاء بعد المغرب بـ $minutes دقيقة';
+  }
+
+  @override
+  String get methodAutoCountry => 'اختيرت تلقائيًا لبلدك';
+
+  @override
+  String get methodAutoGeneral =>
+      'لا تتوفر بعدُ طريقة خاصة ببلدك، لذلك استُخدمت الطريقة العامة';
+
+  @override
+  String get methodByYou => 'اخترتَها أنت';
+
+  @override
+  String get prayerDisclaimer =>
+      'المواقيت محسوبة وقد تختلف بضع دقائق عن مسجدك أو الجهة الرسمية في بلدك.';
+
+  @override
+  String get calculationFailed => 'تعذّر حساب المواقيت لهذا المكان.';
+
+  @override
+  String get aboutPlacesHeading => 'الأماكن';
+
+  @override
+  String get aboutPlacesBody =>
+      'أسماء المدن ومواقعها ومناطقها الزمنية: GeoNames (geonames.org) برخصة CC BY 4.0. حدود الدول: Natural Earth (ملكية عامة). تُحسب مواقيت الصلاة على جهازك بمكتبة adhan_dart (رخصة MIT).';
+
+  @override
+  String get aboutPrivacyLocation =>
+      'إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.';
 }

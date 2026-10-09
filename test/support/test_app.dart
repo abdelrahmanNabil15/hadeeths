@@ -4,6 +4,7 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
 
@@ -31,6 +32,7 @@ AppDependencies testDependencies(
   SettingsRepository? settings,
   SwitchableResponseCache? cache,
   FeatureFlags features = const FeatureFlags(),
+  PrayerServices? prayer,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -38,6 +40,7 @@ AppDependencies testDependencies(
   settings: settings ?? InMemorySettingsRepository(),
   cache: cache ?? SwitchableResponseCache(InMemoryResponseCache()),
   features: features,
+  prayer: prayer,
 );
 
 /// Starts the app against [api].
@@ -53,6 +56,7 @@ Future<void> pumpApp(
   SettingsRepository? repository,
   bool settle = true,
   FeatureFlags features = const FeatureFlags(),
+  PrayerServices? prayer,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -63,6 +67,7 @@ Future<void> pumpApp(
         api,
         settings: repository ?? InMemorySettingsRepository(settings),
         features: features,
+        prayer: prayer,
       ),
       initialSettings: settings,
     ),

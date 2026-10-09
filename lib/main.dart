@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/app/prayer_wiring.dart';
 import 'package:mynewapp/core/cache/file_response_cache.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
@@ -47,8 +48,10 @@ Future<void> main() async {
     if (kDebugMode) debugPrint('user database unavailable: $error');
   }
 
+  final preferences = await SharedPreferences.getInstance();
   final dependencies = AppDependencies.live(
-    preferences: await SharedPreferences.getInstance(),
+    preferences: preferences,
+    prayer: buildPrayerServices(preferences: preferences),
     cache: cache,
     userData: userData,
     features: FeatureFlags.fromEnvironment(),

@@ -71,6 +71,9 @@ preferably to an environment named `production` with required reviewers: `ANDROI
 - [ ] Both languages and both themes checked (Settings > Language / Appearance)
 - [ ] No stock imagery is bundled (guarded by `test/architecture_test.dart`; the Rawpixel backdrop was removed)
 - [ ] HadeethEnc terms still say what the audit recorded; credit line is visible on every hadith
+- [ ] Location (prayer times): declare it in Google Play's Data safety form (approximate and precise location, used on the device only, not
+  collected or shared) and in Apple's privacy answers; keep the privacy text on the About page in step; the Prayer section flag
+  stays off until the owner approves the release
 - [ ] Offline reading was shipped **without** HadeethEnc's written permission (owner's decision): re-read their terms before release and keep the Settings switch and clear button
 - [ ] iOS only: bundle ID confirmed, signing set up in Xcode, privacy strings reviewed
 - [ ] Play Console data-safety answers match the app (no data collected; network use only)

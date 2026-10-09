@@ -42,6 +42,9 @@ class AboutPage extends StatelessWidget {
             const SizedBox(height: AppSpacing.xl),
             section(l10n.aboutFontsHeading, l10n.aboutFontsBody),
             section(l10n.aboutPrivacyHeading, l10n.aboutPrivacyBody),
+            SelectionArea(child: Text(l10n.aboutPrivacyLocation, style: body)),
+            const SizedBox(height: AppSpacing.xl),
+            section(l10n.aboutPlacesHeading, l10n.aboutPlacesBody),
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: OutlinedButton.icon(

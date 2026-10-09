@@ -37,6 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.6
   flutter_localizations:
     sdk: flutter
+  geolocator: ^14.1.1
   intl: ^0.20.2
   path_provider: ^2.1.5
   share_plus: ^13.3.1
@@ -60,6 +61,8 @@ flutter:
   assets:
     # OFL texts for the bundled fonts, shown on the licences page.
     - assets/licenses/
+    # City list (GeoNames, CC BY 4.0) and country borders (Natural Earth, public domain) for prayer times.
+    - assets/data/
 
   fonts:
     # UI font (Arabic and Latin). SIL OFL 1.1.

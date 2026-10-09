@@ -3,6 +3,8 @@ import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/shell/coming_soon_page.dart';
 import 'package:mynewapp/app/shell/more_page.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// The top-level sections.
@@ -16,9 +18,12 @@ enum ShellTab { hadiths, quran, prayer, more }
 /// - System back closes the open page, then returns to the first section, then leaves the app.
 /// - Sections are built the first time they are opened.
 class AppShell extends StatefulWidget {
-  const AppShell({super.key, required this.features});
+  const AppShell({super.key, required this.features, this.prayer});
 
   final FeatureFlags features;
+
+  /// The prayer section's services; without them that section shows its placeholder.
+  final PrayerServices? prayer;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -124,10 +129,13 @@ class _AppShellState extends State<AppShell> {
       title: context.l10n.navQuran,
       icon: Icons.auto_stories_outlined,
     ),
-    ShellTab.prayer => ComingSoonPage(
-      title: context.l10n.navPrayer,
-      icon: Icons.mosque_outlined,
-    ),
+    ShellTab.prayer =>
+      widget.prayer == null
+          ? ComingSoonPage(
+              title: context.l10n.navPrayer,
+              icon: Icons.mosque_outlined,
+            )
+          : PrayerPage(services: widget.prayer!),
     ShellTab.more => const MorePage(),
   };
 

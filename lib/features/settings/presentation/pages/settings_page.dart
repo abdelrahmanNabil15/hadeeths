@@ -4,6 +4,7 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
@@ -27,7 +28,7 @@ class SettingsPage extends StatelessWidget {
             children: [
               SectionHeading(l10n.language),
               const SizedBox(height: AppSpacing.sm),
-              _OptionGroup<AppLanguage>(
+              OptionGroup<AppLanguage>(
                 selected: settings.language,
                 onSelected: cubit.setLanguage,
                 options: [
@@ -39,7 +40,7 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               SectionHeading(l10n.theme),
               const SizedBox(height: AppSpacing.sm),
-              _OptionGroup<ThemePreference>(
+              OptionGroup<ThemePreference>(
                 selected: settings.theme,
                 onSelected: cubit.setTheme,
                 options: [
@@ -51,7 +52,7 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               SectionHeading(l10n.digitsHeading),
               const SizedBox(height: AppSpacing.sm),
-              _OptionGroup<DigitStyle>(
+              OptionGroup<DigitStyle>(
                 selected: settings.digits,
                 onSelected: cubit.setDigits,
                 options: [
@@ -81,79 +82,6 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// A mutually exclusive list of choices; the chosen one shows a check mark (not colour alone).
-class _OptionGroup<T> extends StatelessWidget {
-  const _OptionGroup({
-    required this.options,
-    required this.selected,
-    required this.onSelected,
-  });
-
-  final List<(T, String)> options;
-  final T selected;
-  final ValueChanged<T> onSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Column(
-        children: [
-          for (var i = 0; i < options.length; i++) ...[
-            if (i > 0) const Divider(),
-            Semantics(
-              inMutuallyExclusiveGroup: true,
-              selected: options[i].$1 == selected,
-              button: true,
-              label: options[i].$2,
-              excludeSemantics: true,
-              onTap: () => onSelected(options[i].$1),
-              child: InkWell(
-                onTap: () => onSelected(options[i].$1),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    minHeight: AppSizes.minTileHeight,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.lg,
-                      vertical: AppSpacing.md,
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            options[i].$2,
-                            style: TextStyle(
-                              fontSize: AppTextSize.body + 1,
-                              fontWeight: options[i].$1 == selected
-                                  ? FontWeight.w700
-                                  : FontWeight.w500,
-                              color: scheme.onSurface,
-                            ),
-                          ),
-                        ),
-                        if (options[i].$1 == selected)
-                          Icon(Icons.check_circle, color: scheme.primary),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ],
       ),
     );
   }

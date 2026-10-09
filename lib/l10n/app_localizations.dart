@@ -493,6 +493,270 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'هذا القسم قيد الإعداد وليس متاحًا بعد.'**
   String get comingSoonBody;
+
+  /// No description provided for @prayerTimesTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'مواقيت الصلاة'**
+  String get prayerTimesTitle;
+
+  /// No description provided for @prayerSetupTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد موقعك'**
+  String get prayerSetupTitle;
+
+  /// No description provided for @prayerSetupBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعتمد مواقيت الصلاة على مكانك. اختر طريقة تحديده.'**
+  String get prayerSetupBody;
+
+  /// No description provided for @useMyLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم موقعي'**
+  String get useMyLocation;
+
+  /// No description provided for @chooseCity.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مدينة'**
+  String get chooseCity;
+
+  /// No description provided for @locationExplainTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدام موقعك؟'**
+  String get locationExplainTitle;
+
+  /// No description provided for @locationExplainBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقرأ التطبيق موقعك مرة واحدة الآن، لحساب مواقيت الصلاة في مكانك فقط. لا يُتتبَّع ولا يُشارك، ويُحفظ تقريبًا إلى نحو كيلومتر. يمكنك اختيار مدينة بدلًا من ذلك.'**
+  String get locationExplainBody;
+
+  /// No description provided for @continueAction.
+  ///
+  /// In ar, this message translates to:
+  /// **'متابعة'**
+  String get continueAction;
+
+  /// No description provided for @notNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'ليس الآن'**
+  String get notNow;
+
+  /// No description provided for @locating.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ تحديد موقعك…'**
+  String get locating;
+
+  /// No description provided for @locationDenied.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُمنح إذن الموقع. يمكنك المحاولة مرة أخرى أو اختيار مدينة.'**
+  String get locationDenied;
+
+  /// No description provided for @locationNeedsSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذن الموقع متوقف لهذا التطبيق. افتح الإعدادات للسماح به، أو اختر مدينة.'**
+  String get locationNeedsSettings;
+
+  /// No description provided for @locationServiceDisabled.
+  ///
+  /// In ar, this message translates to:
+  /// **'خدمة الموقع متوقفة على هذا الجهاز. شغّلها أو اختر مدينة.'**
+  String get locationServiceDisabled;
+
+  /// No description provided for @locationTimeout.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحديد موقعك في الوقت المناسب. حاول مرة أخرى أو اختر مدينة.'**
+  String get locationTimeout;
+
+  /// No description provided for @locationUnavailable.
+  ///
+  /// In ar, this message translates to:
+  /// **'موقعك غير متاح الآن. حاول مرة أخرى أو اختر مدينة.'**
+  String get locationUnavailable;
+
+  /// No description provided for @openSettings.
+  ///
+  /// In ar, this message translates to:
+  /// **'فتح الإعدادات'**
+  String get openSettings;
+
+  /// No description provided for @cityPickerTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر مدينة'**
+  String get cityPickerTitle;
+
+  /// No description provided for @citySearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن مدينة'**
+  String get citySearchHint;
+
+  /// No description provided for @cityNoResults.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد مدينة تطابق «{query}»'**
+  String cityNoResults(String query);
+
+  /// No description provided for @currentLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الموقع الحالي'**
+  String get currentLocation;
+
+  /// No description provided for @changeLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'تغيير الموقع'**
+  String get changeLocation;
+
+  /// No description provided for @nextPrayerLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصلاة التالية'**
+  String get nextPrayerLabel;
+
+  /// No description provided for @prayerFajr.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفجر'**
+  String get prayerFajr;
+
+  /// No description provided for @prayerSunrise.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروق'**
+  String get prayerSunrise;
+
+  /// No description provided for @prayerDhuhr.
+  ///
+  /// In ar, this message translates to:
+  /// **'الظهر'**
+  String get prayerDhuhr;
+
+  /// No description provided for @prayerAsr.
+  ///
+  /// In ar, this message translates to:
+  /// **'العصر'**
+  String get prayerAsr;
+
+  /// No description provided for @prayerMaghrib.
+  ///
+  /// In ar, this message translates to:
+  /// **'المغرب'**
+  String get prayerMaghrib;
+
+  /// No description provided for @prayerIsha.
+  ///
+  /// In ar, this message translates to:
+  /// **'العشاء'**
+  String get prayerIsha;
+
+  /// No description provided for @methodHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'طريقة الحساب'**
+  String get methodHeading;
+
+  /// No description provided for @methodEgyptian.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهيئة المصرية العامة للمساحة'**
+  String get methodEgyptian;
+
+  /// No description provided for @methodUmmAlQura.
+  ///
+  /// In ar, this message translates to:
+  /// **'جامعة أم القرى، مكة المكرمة'**
+  String get methodUmmAlQura;
+
+  /// No description provided for @methodMuslimWorldLeague.
+  ///
+  /// In ar, this message translates to:
+  /// **'رابطة العالم الإسلامي'**
+  String get methodMuslimWorldLeague;
+
+  /// No description provided for @methodKarachi.
+  ///
+  /// In ar, this message translates to:
+  /// **'جامعة العلوم الإسلامية، كراتشي'**
+  String get methodKarachi;
+
+  /// No description provided for @methodNorthAmerica.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجمعية الإسلامية لأمريكا الشمالية'**
+  String get methodNorthAmerica;
+
+  /// No description provided for @methodAngles.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفجر {fajr}°، العشاء {isha}°'**
+  String methodAngles(String fajr, String isha);
+
+  /// No description provided for @methodInterval.
+  ///
+  /// In ar, this message translates to:
+  /// **'الفجر {fajr}°، العشاء بعد المغرب بـ {minutes} دقيقة'**
+  String methodInterval(String fajr, String minutes);
+
+  /// No description provided for @methodAutoCountry.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختيرت تلقائيًا لبلدك'**
+  String get methodAutoCountry;
+
+  /// No description provided for @methodAutoGeneral.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تتوفر بعدُ طريقة خاصة ببلدك، لذلك استُخدمت الطريقة العامة'**
+  String get methodAutoGeneral;
+
+  /// No description provided for @methodByYou.
+  ///
+  /// In ar, this message translates to:
+  /// **'اخترتَها أنت'**
+  String get methodByYou;
+
+  /// No description provided for @prayerDisclaimer.
+  ///
+  /// In ar, this message translates to:
+  /// **'المواقيت محسوبة وقد تختلف بضع دقائق عن مسجدك أو الجهة الرسمية في بلدك.'**
+  String get prayerDisclaimer;
+
+  /// No description provided for @calculationFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حساب المواقيت لهذا المكان.'**
+  String get calculationFailed;
+
+  /// No description provided for @aboutPlacesHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأماكن'**
+  String get aboutPlacesHeading;
+
+  /// No description provided for @aboutPlacesBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'أسماء المدن ومواقعها ومناطقها الزمنية: GeoNames (geonames.org) برخصة CC BY 4.0. حدود الدول: Natural Earth (ملكية عامة). تُحسب مواقيت الصلاة على جهازك بمكتبة adhan_dart (رخصة MIT).'**
+  String get aboutPlacesBody;
+
+  /// No description provided for @aboutPrivacyLocation.
+  ///
+  /// In ar, this message translates to:
+  /// **'إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.'**
+  String get aboutPrivacyLocation;
 }
 
 class _AppLocalizationsDelegate

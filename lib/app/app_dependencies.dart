@@ -9,6 +9,7 @@ import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_remote_data_source.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_repository_impl.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/search/data/search_remote_data_source.dart';
 import 'package:mynewapp/features/search/data/search_repository_impl.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
@@ -27,6 +28,7 @@ class AppDependencies {
     required this.cache,
     this.userData,
     this.features = const FeatureFlags(),
+    this.prayer,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -37,6 +39,7 @@ class AppDependencies {
     HadeethClient? client,
     UserDatabase? userData,
     FeatureFlags features = const FeatureFlags(),
+    PrayerServices? prayer,
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -52,6 +55,7 @@ class AppDependencies {
       cache: cache,
       userData: userData,
       features: features,
+      prayer: prayer,
     );
   }
 
@@ -69,4 +73,7 @@ class AppDependencies {
 
   /// Which Phase 3 sections are switched on. All off in a normal build.
   final FeatureFlags features;
+
+  /// Prayer times (Phase 3B). `null` in tests that do not exercise them.
+  final PrayerServices? prayer;
 }
