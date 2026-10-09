@@ -1805,7 +1805,7 @@ abstract class AppLocalizations {
   /// No description provided for @aboutQuranBody.
   ///
   /// In ar, this message translates to:
-  /// **'نص القرآن من مشروع تنزيل: Tanzil Quran Text, Copyright (C) 2007-2021 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير. التحديثات: tanzil.net.'**
+  /// **'نص القرآن من مشروع تنزيل: Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير، مع إشعار حقوقه. التحديثات: tanzil.net.'**
   String get aboutQuranBody;
 }
 

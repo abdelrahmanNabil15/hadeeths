@@ -62,13 +62,13 @@ void main() {
   );
 
   testWidgets(
-    'a sura shows every verse exactly as in the file, with the opening line from 1:1',
+    'a sura shows every verse exactly as in the file, and adds nothing above them',
     (tester) async {
       await _openQuran(tester);
       await tester.tap(find.text('٢. البقرة'));
       await tester.pumpAndSettle();
-      // The opening line comes from the file, never typed.
-      expect(find.text(placeholderVerse(1, 1)), findsOneWidget);
+      // Nothing is added above the first verse: the file itself carries any opening line.
+      expect(find.text(placeholderVerse(1, 1)), findsNothing);
       for (var v = 1; v <= 12; v++) {
         expect(
           find.text(placeholderVerse(2, v)),
@@ -80,7 +80,7 @@ void main() {
     },
   );
 
-  testWidgets('al-Fatihah has no separate opening line', (tester) async {
+  testWidgets('al-Fatihah shows its first verse once', (tester) async {
     await _openQuran(tester);
     await tester.tap(find.text('١. الفاتحة'));
     await tester.pumpAndSettle();

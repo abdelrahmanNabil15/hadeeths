@@ -1010,5 +1010,5 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get aboutQuranBody =>
-      'Tanzil Quran Text, Copyright (C) 2007-2021 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change. Updates: tanzil.net.';
+      'Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change, with its copyright notice. Updates: tanzil.net.';
 }

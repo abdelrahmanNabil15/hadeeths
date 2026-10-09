@@ -25,7 +25,8 @@ void openSura(BuildContext context, int sura, {int verse = 1}) {
 }
 
 /// One sura, verse by verse. The text of each verse is shown exactly as in the source; the verse
-/// number is drawn beside it and is never added to the text. The page remembers where the reader
+/// number is drawn beside it and is never added to the text. The Tanzil file already begins verse 1
+/// of every sura except al-Fatihah and at-Tawbah with the basmala, so nothing is added above it. The page remembers where the reader
 /// stopped. Long-press a verse to bookmark it.
 class SuraReaderPage extends StatefulWidget {
   const SuraReaderPage({super.key, required this.sura, this.initialVerse = 1});
@@ -104,7 +105,6 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     final scale = context.select((SettingsCubit c) => c.state.readingScale);
     final style = quranTextStyle(context, scale: scale);
     final bookmarks = context.select((QuranCubit c) => c.state.bookmarks);
-    final showBasmala = widget.sura != 1 && widget.sura != 9;
     return Scaffold(
       appBar: AppBar(title: Text(suraName(context, widget.sura))),
       body: NotificationListener<ScrollEndNotification>(
@@ -119,16 +119,6 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  if (showBasmala) ...[
-                    // The opening line is the first verse of al-Fatihah, taken from the same
-                    // file, never typed.
-                    Text(
-                      _text.verse(1, 1).text,
-                      textAlign: TextAlign.center,
-                      style: style,
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
-                  ],
                   for (final verse in _verses)
                     _VerseBlock(
                       key: _keys[verse.number - 1],

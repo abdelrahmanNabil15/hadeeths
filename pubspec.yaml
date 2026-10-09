@@ -66,6 +66,8 @@ flutter:
     - assets/licenses/
     # City list (GeoNames, CC BY 4.0) and country borders (Natural Earth, public domain) for prayer times.
     - assets/data/
+    # Tanzil Quran text, verbatim (CC BY 3.0, changing it is not allowed).
+    - assets/quran/
 
   fonts:
     # UI font (Arabic and Latin). SIL OFL 1.1.
