@@ -249,8 +249,26 @@ void main() {
       // Prayer section.
       await tab(l10n.navPrayer);
       await shot('prayer');
+      await tap(find.text(l10n.changeLocation));
+      await shot('change_location');
+      await back();
       await tap(find.text(l10n.remindersHeading));
       await shot('reminders');
+      await back();
+      await tap(
+        find.text(
+          l10n.localeName.startsWith('ar')
+              ? 'الهيئة المصرية العامة للمساحة'
+              : 'Egyptian General Authority of Survey',
+        ),
+      );
+      await shot('method');
+      await back();
+      await tap(find.text(l10n.hijriHeading));
+      await shot('hijri');
+      await back();
+      await tap(find.text(l10n.qiblaHeading));
+      await shot('qibla');
       await back();
 
       // More section.

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_setup.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
@@ -30,21 +32,15 @@ class PrayerSetupView extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(AppSpacing.lg),
             children: [
-              Icon(
-                Icons.location_on_outlined,
-                size: 48,
-                color: scheme.onSurfaceVariant,
+              const Center(
+                child: StateMedallion(icon: Icons.location_on_outlined),
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               Semantics(
                 header: true,
                 child: Text(
                   l10n.prayerSetupTitle,
-                  style: TextStyle(
-                    fontSize: AppTextSize.title,
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
-                  ),
+                  style: AppTypography.of(context).editorial,
                 ),
               ),
               const SizedBox(height: AppSpacing.sm),
