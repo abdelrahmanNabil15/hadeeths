@@ -17,6 +17,7 @@ void main() {
       );
       await HttpHadithsRemoteDataSource(
         client,
+        uncachedFetcher(),
       ).fetchHadithPage(categoryId: '8', page: 3, perPage: 20);
       expect(adapter.requests.single.path, 'hadeeths/list');
       expect(adapter.requests.single.queryParameters, {
@@ -33,6 +34,7 @@ void main() {
       );
       final dto = await HttpHadithsRemoteDataSource(
         client,
+        uncachedFetcher(),
       ).fetchHadithDetails('2962', language: 'en');
       expect(dto.grade, 'Sahih');
       expect(adapter.requests.single.path, 'hadeeths/one');
@@ -45,7 +47,10 @@ void main() {
     test('an empty 200 body is a parse failure', () async {
       final (client, _) = fakeClient((o, n) async => emptyResponse(200));
       expect(
-        HttpHadithsRemoteDataSource(client).fetchHadithDetails('1'),
+        HttpHadithsRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchHadithDetails('1'),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.parse),
         ),
@@ -61,6 +66,7 @@ void main() {
       expect(
         HttpHadithsRemoteDataSource(
           client,
+          uncachedFetcher(),
         ).fetchHadithPage(categoryId: '1', page: 1, perPage: 20),
         throwsA(
           isA<Failure>().having((f) => f.kind, 'kind', FailureKind.parse),
@@ -72,7 +78,9 @@ void main() {
   group('HadithsRepositoryImpl', () {
     HadithsRepositoryImpl repo(FakeHandler handler) {
       final (client, _) = fakeClient(handler);
-      return HadithsRepositoryImpl(HttpHadithsRemoteDataSource(client));
+      return HadithsRepositoryImpl(
+        HttpHadithsRemoteDataSource(client, uncachedFetcher()),
+      );
     }
 
     test('page: maps to entities and keeps paging metadata', () async {

@@ -111,6 +111,8 @@ class HadithListCubit extends Cubit<HadithListState> {
     final result = await _repository.getHadithPage(
       categoryId: categoryId,
       language: language,
+      refresh:
+          true, // pull-to-refresh asks the server even if a saved copy is recent
     );
     if (isClosed || generation != _generation) return;
     switch (result) {

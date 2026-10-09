@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
 
@@ -27,11 +28,13 @@ class InMemorySettingsRepository implements SettingsRepository {
 AppDependencies testDependencies(
   FakeBackend api, {
   SettingsRepository? settings,
+  SwitchableResponseCache? cache,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
   search: api,
   settings: settings ?? InMemorySettingsRepository(),
+  cache: cache ?? SwitchableResponseCache(InMemoryResponseCache()),
 );
 
 /// Starts the app against [api].

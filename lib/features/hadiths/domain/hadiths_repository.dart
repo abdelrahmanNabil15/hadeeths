@@ -12,6 +12,7 @@ abstract interface class HadithsRepository {
     required String language,
     int page = 1,
     int perPage = defaultPageSize,
+    bool refresh = false,
   });
 
   Future<Result<HadithDetails>> getHadithDetails(

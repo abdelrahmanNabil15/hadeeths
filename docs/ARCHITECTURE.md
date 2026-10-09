@@ -17,6 +17,14 @@ lib/
     network/                     HadeethClient (timeouts, retries, error mapping), endpoints
     json/json_helpers.dart       defensive JSON readers
     state/load_status.dart       LoadStatus shared by all cubits
+    cache/                       ResponseCache (file, in-memory, switchable) and CachedFetcher (read-through policy)
+    time/                        Clock (always UTC), TimeZoneRules (offset at an instant; DST-aware wall-clock helpers)
+    notifications/               NotificationPlanner: pure, deterministic plan of what to keep pending (window, quiet hours,
+                                 dedupe, platform limit, stable ids) and a diff against what is pending. No plugin, no UI yet
+    database/                    UserDatabase over sqlite3 (user's own data, on-device only), MigrationRunner (one transaction per
+                                 version, refuses a newer schema, corrupt file is set aside not deleted), schema.dart (released migrations)
+    permissions/                 PermissionGateway (platform wrapper, implemented per feature) and PermissionFlow (explain first,
+                                 then the system prompt; denial is an outcome, never an error)
     design_system/               tokens.dart (light and dark palettes, spacing, radii, sizes, motion) and AppTheme
     widgets/                     AppTile, ExpandableSection, state views (loading, skeleton, error, empty), ...
     licences.dart                font licence texts for the licences page
@@ -65,6 +73,20 @@ Widget -> Cubit -> Repository (interface, domain)
 - The repository maps DTOs to domain entities and returns a `Result` (`Result.guard` catches `Failure` and also turns any
   unexpected exception into `FailureKind.unexpected`).
 - Cubits switch on the `Result` and expose explicit states (`LoadStatus` plus data and failures).
+
+## Saved copies (offline reading of opened content)
+
+`CachedFetcher` sits between the data sources and `HadeethClient`:
+
+1. a saved copy younger than the policy's `fresh` age is returned without a request (categories and lists 1 day, a hadith 7 days);
+2. otherwise the server is asked, the answer is parsed first and saved only if it parses (a bad answer never replaces a good copy);
+3. if the server cannot be reached (no connection, timeout, 5xx) an older copy is used, up to 60 days;
+4. "not found" deletes the copy; pull-to-refresh (`refresh: true`) skips step 1.
+
+Copies are the decoded JSON exactly as received, one small file each in the app's private storage (`FileResponseCache`:
+atomic writes, each file records its own key, least-recently-used eviction above 20 MB, any I/O problem behaves like a miss).
+Search is never cached. The user's "Offline reading" setting switches the cache (`SwitchableResponseCache`) and clearing
+it removes the files. Repositories, cubits and screens are unaware of the cache apart from the `refresh` flag.
 
 ## Dependency injection
 

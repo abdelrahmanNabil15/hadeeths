@@ -11,6 +11,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   static const languageKey = 'settings.language';
   static const themeKey = 'settings.theme';
   static const readingScaleKey = 'settings.readingScale';
+  static const offlineCopiesKey = 'settings.offlineCopies';
 
   @override
   Future<AppSettings> load() async {
@@ -31,6 +32,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
         _read(() => _prefs.getDouble(readingScaleKey)) ??
             AppSettings.defaultReadingScale,
       ),
+      offlineCopies: _read(() => _prefs.getBool(offlineCopiesKey)) ?? true,
     );
   }
 
@@ -39,6 +41,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     await _prefs.setString(languageKey, settings.language.name);
     await _prefs.setString(themeKey, settings.theme.name);
     await _prefs.setDouble(readingScaleKey, settings.readingScale);
+    await _prefs.setBool(offlineCopiesKey, settings.offlineCopies);
   }
 
   /// A value of the wrong type (a corrupted or hand-edited store) counts as missing.

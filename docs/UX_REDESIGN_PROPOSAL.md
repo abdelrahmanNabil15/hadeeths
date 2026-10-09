@@ -20,7 +20,8 @@ screenshot is the only list/detail evidence), any Android/iOS device, text scali
 >   repeat text.
 > - Details sections start collapsed so the hadith stays the focus; explanation and sources can still be shared.
 > - No bottom navigation and no onboarding screen (one browse path plus search did not justify them).
-> - No offline banner: errors are reported by the request itself; offline reading is blocked on HadeethEnc permission.
+> - No offline banner: errors are reported by the request itself. Opened content is available offline from saved copies (no banner;
+>   a screen simply works, and what was never opened shows the offline error).
 > - The photographic backdrop was removed (it removed the unresolved Rawpixel licence question and 36 MB of decoded memory).
 > - Digits stay Western in both languages (decision not given).
 >

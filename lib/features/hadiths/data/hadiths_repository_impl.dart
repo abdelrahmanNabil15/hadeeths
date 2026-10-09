@@ -15,12 +15,14 @@ class HadithsRepositoryImpl implements HadithsRepository {
     required String language,
     int page = 1,
     int perPage = HadithsRepository.defaultPageSize,
+    bool refresh = false,
   }) => Result.guard(() async {
     final dto = await _remote.fetchHadithPage(
       categoryId: categoryId,
       page: page,
       perPage: perPage,
       language: language,
+      refresh: refresh,
     );
     return dto.toEntity();
   });

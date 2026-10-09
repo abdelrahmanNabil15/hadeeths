@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
@@ -51,6 +52,13 @@ class SettingsPage extends StatelessWidget {
               SectionHeading(l10n.textSize),
               const SizedBox(height: AppSpacing.sm),
               const ReadingSizeControl(),
+              const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.offlineCopies),
+              const SizedBox(height: AppSpacing.sm),
+              _OfflineCopies(
+                enabled: settings.offlineCopies,
+                onChanged: (v) => cubit.setOfflineCopies(enabled: v),
+              ),
               const SizedBox(height: AppSpacing.xl),
               AppTile(
                 title: l10n.aboutTitle,
@@ -133,6 +141,64 @@ class _OptionGroup<T> extends StatelessWidget {
               ),
             ),
           ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The switch for saved copies, with a button that removes them.
+class _OfflineCopies extends StatelessWidget {
+  const _OfflineCopies({required this.enabled, required this.onChanged});
+
+  final bool enabled;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
+    return Material(
+      color: scheme.surfaceContainerLowest,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        side: BorderSide(color: scheme.outlineVariant),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SwitchListTile(
+            value: enabled,
+            onChanged: onChanged,
+            title: Text(
+              l10n.offlineCopies,
+              style: const TextStyle(
+                fontSize: AppTextSize.body + 1,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            subtitle: Text(
+              l10n.offlineCopiesHint,
+              style: TextStyle(color: scheme.onSurfaceVariant),
+            ),
+          ),
+          const Divider(),
+          Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: TextButton.icon(
+              onPressed: () async {
+                final messenger = ScaffoldMessenger.of(context);
+                final message = l10n.savedCopiesCleared;
+                await context.read<ResponseCache>().clear();
+                messenger
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text(message)));
+              },
+              icon: const Icon(Icons.delete_outline),
+              label: Text(l10n.clearSavedCopies),
+            ),
+          ),
         ],
       ),
     );

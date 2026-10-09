@@ -94,6 +94,10 @@
   "aboutFontsHeading": "الخطوط",
   "aboutFontsBody": "خط Cairo وخط Amiri، برخصة SIL Open Font License 1.1.",
   "aboutPrivacyHeading": "الخصوصية",
-  "aboutPrivacyBody": "لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى.",
-  "openSourceLicences": "تراخيص البرمجيات مفتوحة المصدر"
+  "aboutPrivacyBody": "لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى، ويحفظ على جهازك نسخًا مما فتحته لتقرأه دون اتصال، ويمكنك إيقاف ذلك أو مسحه من الإعدادات.",
+  "openSourceLicences": "تراخيص البرمجيات مفتوحة المصدر",
+  "offlineCopies": "القراءة دون اتصال",
+  "offlineCopiesHint": "احتفظ على هذا الجهاز بالأحاديث التي فتحتها لتقرأها دون إنترنت.",
+  "clearSavedCopies": "مسح النسخ المحفوظة",
+  "savedCopiesCleared": "تم مسح النسخ المحفوظة"
 }
