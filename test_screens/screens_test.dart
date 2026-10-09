@@ -130,6 +130,28 @@ void main() {
     await _loadFonts();
   });
 
+  // The released build: every section flag off, no bottom navigation.
+  for (final theme in [ThemePreference.light, ThemePreference.dark]) {
+    testWidgets('released home ${theme.name}', (tester) async {
+      tester.view.physicalSize = const Size(780, 1688);
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.reset);
+      await pumpApp(tester, FakeBackend(), settings: AppSettings(theme: theme));
+      await tester.pumpAndSettle();
+      final view = tester.binding.renderViews.first;
+      final layer = view.debugLayer! as OffsetLayer;
+      await tester.runAsync(() async {
+        final image = await layer.toImage(
+          Offset.zero & tester.view.physicalSize,
+        );
+        final png = await image.toByteData(format: ui.ImageByteFormat.png);
+        File('build/screens/$_set/released/home_${theme.name}.png')
+          ..createSync(recursive: true)
+          ..writeAsBytesSync(png!.buffer.asUint8List());
+      });
+    });
+  }
+
   for (final config in _configs) {
     testWidgets('screens ${config.name}', (tester) async {
       tester.view.physicalSize = config.size * 2;
