@@ -8,6 +8,7 @@ import 'package:mynewapp/features/prayer_times/domain/location_service.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_setup.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_times_calculator.dart';
+import 'package:mynewapp/features/prayer_times/domain/reminder_service.dart';
 import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
 
 /// Everything the prayer screens need, built once by the app and handed to them. Tests give
@@ -23,6 +24,7 @@ class PrayerServices {
     required this.loadCountries,
     required this.compass,
     required this.loadMagneticModel,
+    required this.reminders,
     this.clock = const SystemClock(),
   }) : locationSetup = LocationSetup(permissions, location);
 
@@ -42,4 +44,7 @@ class PrayerServices {
 
   /// The World Magnetic Model, read on first use.
   final Future<WorldMagneticModel> Function() loadMagneticModel;
+
+  /// Keeps the system's prayer reminders in line with everything saved.
+  final ReminderService reminders;
 }

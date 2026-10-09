@@ -289,5 +289,89 @@
     }
   },
   "compassPrivacy": "تستخدم البوصلة حسّاسات الحركة في الهاتف ما دامت قيد التشغيل فقط. لا يُخزَّن شيء ولا يُرسَل.",
-  "compassUnreliable": "البوصلة غير موثوقة هنا الآن"
+  "compassUnreliable": "البوصلة غير موثوقة هنا الآن",
+  "reminderNow": "حان وقت صلاة {prayer}",
+  "reminderSunriseNow": "الشروق الآن",
+  "reminderTestTitle": "تذكير تجريبي",
+  "reminderTestBody": "هكذا ستظهر تذكيرات الصلاة.",
+  "reminderChannelSoundVibrate": "تذكيرات الصلاة",
+  "reminderChannelSound": "تذكيرات الصلاة (دون اهتزاز)",
+  "reminderChannelVibrate": "تذكيرات الصلاة (صامتة مع اهتزاز)",
+  "reminderChannelSilent": "تذكيرات الصلاة (صامتة)",
+  "reminderChannelDescription": "إشعارات عند أوقات الصلاة",
+  "remindersHeading": "التذكيرات",
+  "remindersSwitch": "ذكّرني عند أوقات الصلاة",
+  "remindersOff": "التذكيرات متوقفة.",
+  "remindersExplainTitle": "السماح بالإشعارات؟",
+  "remindersExplainBody": "لتذكيرك عند أوقات الصلاة يحتاج التطبيق إلى عرض الإشعارات. تُجهَّز التذكيرات على جهازك، ولا يُرسَل شيء إلى أي جهة، ولا تتضمن موقعك أبدًا.",
+  "remindersDenied": "الإشعارات متوقفة لهذا التطبيق، لذلك لن تظهر التذكيرات. افتح الإعدادات للسماح بها.",
+  "remindersNeedPlace": "حدّد موقعك أولًا ليعرف التطبيق أوقات الصلاة.",
+  "remindersWhich": "أي الأوقات",
+  "remindersLead": "قبل الوقت بـ",
+  "remindersLeadNone": "عند دخول الوقت",
+  "remindersSound": "الصوت",
+  "remindersSoundSystem": "صوت إشعارات الهاتف",
+  "remindersSoundSilent": "صامت",
+  "remindersVibrate": "الاهتزاز",
+  "remindersTest": "إرسال تذكير تجريبي",
+  "remindersTiming": "عند إيقاف التوقيت الدقيق قد يتأخر النظام في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة.",
+  "remindersFailed": "تعذّرت جدولة بعض التذكيرات. ستُعاد المحاولة عند فتح التطبيق.",
+  "remindersNext": "التذكير التالي: {prayer}، {time}",
+  "reminderSoon": "{minutes, plural, few{صلاة {prayer} بعد {minutes} دقائق} many{صلاة {prayer} بعد {minutes} دقيقة} other{صلاة {prayer} بعد {minutes} دقيقة}}",
+  "reminderSunriseSoon": "{minutes, plural, few{الشروق بعد {minutes} دقائق} many{الشروق بعد {minutes} دقيقة} other{الشروق بعد {minutes} دقيقة}}",
+  "remindersLeadMinutes": "{minutes, plural, few{قبل {minutes} دقائق} many{قبل {minutes} دقيقة} other{قبل {minutes} دقيقة}}",
+  "remindersCount": "{count, plural, =0{لا توجد تذكيرات مجدولة} =1{تذكير واحد مجدول} two{تذكيران مجدولان} few{{count} تذكيرات مجدولة} many{{count} تذكيرًا مجدولًا} other{{count} تذكير مجدول}}",
+  "@reminderNow": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@reminderSoon": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "prayer": {
+        "type": "String"
+      }
+    }
+  },
+  "@reminderSunriseSoon": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersLeadMinutes": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "@remindersNext": {
+    "placeholders": {
+      "prayer": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "remindersExact": "التوقيت الدقيق",
+  "remindersExactHint": "يوصل كل تذكير في دقيقته. سيطلب منك أندرويد السماح بـ«المنبهات والتذكيرات» لهذا التطبيق.",
+  "remindersExactExplainTitle": "السماح بالتوقيت الدقيق؟",
+  "remindersExactExplainBody": "من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه تصل التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن.",
+  "remindersExactMissing": "التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات»."
 }

@@ -3,6 +3,7 @@ import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart'
 import 'package:mynewapp/features/prayer_times/domain/hijri_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/method_suggestion.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
+import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
 
 /// Who decided the calculation method.
 enum MethodOrigin {
@@ -27,8 +28,10 @@ class PrayerPreferences extends Equatable {
     CalculationSettings? settings,
     this.methodOrigin = MethodOrigin.notSet,
     HijriSettings? hijri,
+    ReminderSettings? reminders,
   }) : settings = settings ?? CalculationSettings(),
-       hijri = hijri ?? HijriSettings();
+       hijri = hijri ?? HijriSettings(),
+       reminders = reminders ?? ReminderSettings();
 
   final PrayerLocation? location;
   final CalculationSettings settings;
@@ -37,6 +40,9 @@ class PrayerPreferences extends Equatable {
   /// Which Hijri reference to use and the manual day correction. Unlike the method it is never
   /// proposed by the app: it starts as Umm al-Qura with no correction and only the user changes it.
   final HijriSettings hijri;
+
+  /// Prayer reminders. Off until the user switches them on.
+  final ReminderSettings reminders;
 
   bool get isSetUp => location != null;
 
@@ -49,6 +55,7 @@ class PrayerPreferences extends Equatable {
         settings: settings,
         methodOrigin: methodOrigin,
         hijri: hijri,
+        reminders: reminders,
       );
     }
     final suggestion = MethodSuggestion.forCountry(
@@ -59,6 +66,7 @@ class PrayerPreferences extends Equatable {
       settings: settings.copyWith(method: suggestion.method),
       methodOrigin: MethodOrigin.suggested,
       hijri: hijri,
+      reminders: reminders,
     );
   }
 
@@ -68,6 +76,7 @@ class PrayerPreferences extends Equatable {
     settings: settings.copyWith(method: method),
     methodOrigin: MethodOrigin.user,
     hijri: hijri,
+    reminders: reminders,
   );
 
   /// Any other calculation choice (Asr school, high-latitude rule, adjustments). Never touches
@@ -78,6 +87,7 @@ class PrayerPreferences extends Equatable {
         settings: changed.copyWith(method: settings.method),
         methodOrigin: methodOrigin,
         hijri: hijri,
+        reminders: reminders,
       );
 
   /// The user changed the Hijri reference or the day correction.
@@ -86,8 +96,25 @@ class PrayerPreferences extends Equatable {
     settings: settings,
     methodOrigin: methodOrigin,
     hijri: changed,
+    reminders: reminders,
   );
 
+  /// The user changed the reminder choices.
+  PrayerPreferences withReminders(ReminderSettings changed) =>
+      PrayerPreferences(
+        location: location,
+        settings: settings,
+        methodOrigin: methodOrigin,
+        hijri: hijri,
+        reminders: changed,
+      );
+
   @override
-  List<Object?> get props => [location, settings, methodOrigin, hijri];
+  List<Object?> get props => [
+    location,
+    settings,
+    methodOrigin,
+    hijri,
+    reminders,
+  ];
 }

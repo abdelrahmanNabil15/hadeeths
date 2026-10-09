@@ -16,6 +16,7 @@ import 'package:mynewapp/features/prayer_times/presentation/date_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/hijri_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/method_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/qibla_page.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/reminders_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/prayer_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/widgets/prayer_setup_view.dart';
@@ -175,6 +176,11 @@ class _TimesView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
+              AppTile(
+                title: l10n.remindersHeading,
+                onTap: () => _open(context, const RemindersPage()),
+              ),
+              const SizedBox(height: AppSpacing.sm),
               AppTile(
                 title: l10n.qiblaHeading,
                 onTap: () => _open(context, const QiblaPage()),

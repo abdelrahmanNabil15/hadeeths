@@ -1195,6 +1195,222 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'البوصلة غير موثوقة هنا الآن'**
   String get compassUnreliable;
+
+  /// No description provided for @reminderNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'حان وقت صلاة {prayer}'**
+  String reminderNow(String prayer);
+
+  /// No description provided for @reminderSunriseNow.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشروق الآن'**
+  String get reminderSunriseNow;
+
+  /// No description provided for @reminderTestTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكير تجريبي'**
+  String get reminderTestTitle;
+
+  /// No description provided for @reminderTestBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'هكذا ستظهر تذكيرات الصلاة.'**
+  String get reminderTestBody;
+
+  /// No description provided for @reminderChannelSoundVibrate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الصلاة'**
+  String get reminderChannelSoundVibrate;
+
+  /// No description provided for @reminderChannelSound.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الصلاة (دون اهتزاز)'**
+  String get reminderChannelSound;
+
+  /// No description provided for @reminderChannelVibrate.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الصلاة (صامتة مع اهتزاز)'**
+  String get reminderChannelVibrate;
+
+  /// No description provided for @reminderChannelSilent.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الصلاة (صامتة)'**
+  String get reminderChannelSilent;
+
+  /// No description provided for @reminderChannelDescription.
+  ///
+  /// In ar, this message translates to:
+  /// **'إشعارات عند أوقات الصلاة'**
+  String get reminderChannelDescription;
+
+  /// No description provided for @remindersHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات'**
+  String get remindersHeading;
+
+  /// No description provided for @remindersSwitch.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذكّرني عند أوقات الصلاة'**
+  String get remindersSwitch;
+
+  /// No description provided for @remindersOff.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكيرات متوقفة.'**
+  String get remindersOff;
+
+  /// No description provided for @remindersExplainTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بالإشعارات؟'**
+  String get remindersExplainTitle;
+
+  /// No description provided for @remindersExplainBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتذكيرك عند أوقات الصلاة يحتاج التطبيق إلى عرض الإشعارات. تُجهَّز التذكيرات على جهازك، ولا يُرسَل شيء إلى أي جهة، ولا تتضمن موقعك أبدًا.'**
+  String get remindersExplainBody;
+
+  /// No description provided for @remindersDenied.
+  ///
+  /// In ar, this message translates to:
+  /// **'الإشعارات متوقفة لهذا التطبيق، لذلك لن تظهر التذكيرات. افتح الإعدادات للسماح بها.'**
+  String get remindersDenied;
+
+  /// No description provided for @remindersNeedPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد موقعك أولًا ليعرف التطبيق أوقات الصلاة.'**
+  String get remindersNeedPlace;
+
+  /// No description provided for @remindersWhich.
+  ///
+  /// In ar, this message translates to:
+  /// **'أي الأوقات'**
+  String get remindersWhich;
+
+  /// No description provided for @remindersLead.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل الوقت بـ'**
+  String get remindersLead;
+
+  /// No description provided for @remindersLeadNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند دخول الوقت'**
+  String get remindersLeadNone;
+
+  /// No description provided for @remindersSound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصوت'**
+  String get remindersSound;
+
+  /// No description provided for @remindersSoundSystem.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوت إشعارات الهاتف'**
+  String get remindersSoundSystem;
+
+  /// No description provided for @remindersSoundSilent.
+  ///
+  /// In ar, this message translates to:
+  /// **'صامت'**
+  String get remindersSoundSilent;
+
+  /// No description provided for @remindersVibrate.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاهتزاز'**
+  String get remindersVibrate;
+
+  /// No description provided for @remindersTest.
+  ///
+  /// In ar, this message translates to:
+  /// **'إرسال تذكير تجريبي'**
+  String get remindersTest;
+
+  /// No description provided for @remindersTiming.
+  ///
+  /// In ar, this message translates to:
+  /// **'عند إيقاف التوقيت الدقيق قد يتأخر النظام في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة.'**
+  String get remindersTiming;
+
+  /// No description provided for @remindersFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّرت جدولة بعض التذكيرات. ستُعاد المحاولة عند فتح التطبيق.'**
+  String get remindersFailed;
+
+  /// No description provided for @remindersNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'التذكير التالي: {prayer}، {time}'**
+  String remindersNext(String prayer, String time);
+
+  /// No description provided for @reminderSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes, plural, few{صلاة {prayer} بعد {minutes} دقائق} many{صلاة {prayer} بعد {minutes} دقيقة} other{صلاة {prayer} بعد {minutes} دقيقة}}'**
+  String reminderSoon(int minutes, String prayer);
+
+  /// No description provided for @reminderSunriseSoon.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes, plural, few{الشروق بعد {minutes} دقائق} many{الشروق بعد {minutes} دقيقة} other{الشروق بعد {minutes} دقيقة}}'**
+  String reminderSunriseSoon(int minutes);
+
+  /// No description provided for @remindersLeadMinutes.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes, plural, few{قبل {minutes} دقائق} many{قبل {minutes} دقيقة} other{قبل {minutes} دقيقة}}'**
+  String remindersLeadMinutes(int minutes);
+
+  /// No description provided for @remindersCount.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا توجد تذكيرات مجدولة} =1{تذكير واحد مجدول} two{تذكيران مجدولان} few{{count} تذكيرات مجدولة} many{{count} تذكيرًا مجدولًا} other{{count} تذكير مجدول}}'**
+  String remindersCount(int count);
+
+  /// No description provided for @remindersExact.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوقيت الدقيق'**
+  String get remindersExact;
+
+  /// No description provided for @remindersExactHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوصل كل تذكير في دقيقته. سيطلب منك أندرويد السماح بـ«المنبهات والتذكيرات» لهذا التطبيق.'**
+  String get remindersExactHint;
+
+  /// No description provided for @remindersExactExplainTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'السماح بالتوقيت الدقيق؟'**
+  String get remindersExactExplainTitle;
+
+  /// No description provided for @remindersExactExplainBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه تصل التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن.'**
+  String get remindersExactExplainBody;
+
+  /// No description provided for @remindersExactMissing.
+  ///
+  /// In ar, this message translates to:
+  /// **'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».'**
+  String get remindersExactMissing;
 }
 
 class _AppLocalizationsDelegate

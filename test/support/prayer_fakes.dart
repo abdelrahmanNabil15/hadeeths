@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:mynewapp/app/reminder_coordinator.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
@@ -16,8 +17,10 @@ import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
+import 'package:mynewapp/features/settings/domain/app_settings.dart';
 
 import 'fake_permissions.dart';
+import 'notification_fakes.dart';
 import 'time_support.dart';
 
 /// Preferences kept in memory; counts saves and can be told to fail.
@@ -125,11 +128,14 @@ class PrayerFixture {
     PrayerPreferences? saved,
     LocationResult? position,
     Map<AppPermission, PermissionState>? permissions,
+    this.appSettings = const AppSettings(),
+    bool use24Hour = false,
   }) : clock = FakeClock(now ?? DateTime.utc(2026, 4, 1, 10)),
        preferences = InMemoryPrayerPreferences(saved),
        location = FakeLocationService(position),
        gateway = FakePermissionGateway(permissions),
-       compass = FakeCompassSource() {
+       compass = FakeCompassSource(),
+       notifications = FakeNotificationGateway() {
     services = PrayerServices(
       preferences: preferences,
       calculator: const AdhanPrayerTimesCalculator(),
@@ -140,6 +146,15 @@ class PrayerFixture {
       loadCountries: () async => realCountryLookup(),
       compass: compass,
       loadMagneticModel: () async => realMagneticModel(),
+      reminders: ReminderCoordinator(
+        preferences: preferences,
+        calculator: const AdhanPrayerTimesCalculator(),
+        gateway: notifications,
+        loadAppSettings: () async => appSettings,
+        environment: () =>
+            ReminderEnvironment(deviceLanguageCode: 'ar', use24Hour: use24Hour),
+        clock: clock,
+      ),
       clock: clock,
     );
   }
@@ -149,5 +164,7 @@ class PrayerFixture {
   final FakeLocationService location;
   final FakePermissionGateway gateway;
   final FakeCompassSource compass;
+  final FakeNotificationGateway notifications;
+  final AppSettings appSettings;
   late final PrayerServices services;
 }

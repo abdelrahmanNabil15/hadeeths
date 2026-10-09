@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/result/result.dart';
-import 'package:mynewapp/core/time/iana_time_zone.dart';
 import 'package:mynewapp/core/time/zone.dart';
 import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
@@ -10,11 +11,14 @@ import 'package:mynewapp/features/prayer_times/domain/hijri_converter.dart';
 import 'package:mynewapp/features/prayer_times/domain/hijri_date.dart';
 import 'package:mynewapp/features/prayer_times/domain/hijri_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_setup.dart';
+import 'package:mynewapp/features/prayer_times/domain/place_zone.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_day.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_moment.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/domain/reminder_service.dart';
+import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
 
 enum PrayerStatus { loading, needsSetup, ready }
 
@@ -159,6 +163,15 @@ class PrayerCubit extends Cubit<PrayerState> {
     await _save(next);
   }
 
+  /// The user changed the reminder choices. Saves them, then makes the system's reminders match, and
+  /// returns what is scheduled afterwards.
+  Future<ReminderStatus> setReminders(ReminderSettings settings) async {
+    final next = state.preferences.withReminders(settings);
+    _apply(next);
+    await _save(next, reconcile: false);
+    return _services.reminders.reconcile();
+  }
+
   Future<void> openAppSettings() => _services.locationSetup.openAppSettings();
 
   Future<void> openLocationSettings() =>
@@ -170,12 +183,17 @@ class PrayerCubit extends Cubit<PrayerState> {
     await _save(next);
   }
 
-  Future<void> _save(PrayerPreferences preferences) async {
+  Future<void> _save(
+    PrayerPreferences preferences, {
+    bool reconcile = true,
+  }) async {
     try {
       await _services.preferences.save(preferences);
     } on Object {
       // Still applies for this session.
     }
+    // A new place, method or day correction moves the prayer times, so the reminders move too.
+    if (reconcile) unawaited(_services.reminders.reconcile());
   }
 
   void _apply(PrayerPreferences preferences) {
@@ -226,10 +244,6 @@ class PrayerCubit extends Cubit<PrayerState> {
     );
   }
 
-  /// The zone to show a place's times in: the device's own for a device position, otherwise the
-  /// IANA zone saved with the place (the device's if that name is no longer known).
-  static TimeZoneRules zoneFor(PrayerLocation place) {
-    if (place.usesDeviceZone) return const DeviceTimeZone();
-    return IanaTimeZone.tryParse(place.zoneId) ?? const DeviceTimeZone();
-  }
+  /// See [zoneForPlace].
+  static TimeZoneRules zoneFor(PrayerLocation place) => zoneForPlace(place);
 }

@@ -131,6 +131,41 @@ source you trust; none was invented).
   absolute accuracy of the heading therefore **has not been verified on the device**; it needs the phone held away from metal and
   compared with a known direction (see decisions).
 
+## Phase 3C: prayer reminders
+
+- **What it does.** Optional reminders for the chosen prayer times (the five prayers by default, sunrise optional), at the time or
+  5, 10, 15 or 30 minutes before, with the phone's notification sound or silence, and vibration on or off. Everything is off until the
+  user switches it on; switching on explains first, then shows the system permission prompt (Android 13+ `POST_NOTIFICATIONS`, iOS).
+- **How it is scheduled.** Seven days ahead, at most 60 at once (iOS keeps 64 pending), as absolute UTC instants, so a change of
+  the phone's zone does not move them. `NotificationSync` compares what is planned with what is pending and only adds, removes or
+  keeps; running it twice changes nothing. It runs on start, on resume, after a change of place, method, language or digits, and after a
+  restart (boot receiver). Reminders are always for the saved place, not for where the phone happens to be.
+- **Timing on Android.** Without exact alarms the system may deliver late. On the Samsung phone the alarms were registered with a
+  window of one hour (`window=+1h0m0s`), so a reminder can be up to an hour late when the phone is saving power; the first text
+  that said "a few minutes" was wrong and was corrected. The optional "Exact timing" switch asks Android for "Alarms & reminders"
+  (`SCHEDULE_EXACT_ALARM`); with it on, all 35 of the app's alarms showed `window=0, exactAllowReason=permission`. It is off by default.
+- **Wording.** Only functional text ("it is time for X", "X in N minutes"). No invented supplications or quotations. The wording
+  has not been reviewed by the owner or a religious reviewer.
+- **Bug found only on the real phone.** The production permission wiring had no route for the exact-alarm permission, so the switch
+  failed silently while tests (which use fakes) passed. Fixed in `buildPermissionGateway`; `permission_wiring_test.dart` now
+  checks that every `AppPermission` has a route.
+
+| Check | Result |
+|---|---|
+| `dart format`, `flutter analyze` | PASS (0 issues) |
+| `flutter test` | PASS (805 tests) |
+| Logic-layer coverage (gate 80%) | PASS (90.5%) |
+| Release config check, release APK build | PASS; permissions: INTERNET, COARSE/FINE location, RECEIVE_BOOT_COMPLETED, SCHEDULE_EXACT_ALARM, VIBRATE, POST_NOTIFICATIONS |
+| Notification permission flow on the phone | PASS |
+| 35 reminders scheduled; exact timing gives `window=0` | PASS (Samsung, Android) |
+| Explanation dialog for exact timing on the phone | NOT RUN (permission was already granted from an earlier run) |
+| Reminder actually arriving at its time | NOT RUN |
+| Reboot reschedule, timezone change on the device | NOT RUN |
+| iOS notifications | NOT RUN (CI compiles only; no Mac) |
+
+Decisions for the owner: Adhan audio (none bundled; a licensed recording is needed first), whether to ship `SCHEDULE_EXACT_ALARM`
+(Google Play may require a declaration for it), and approval of the reminder wording.
+
 ## Owner decisions (2026-10-09) and where they stand
 
 | # | Decision | Status |

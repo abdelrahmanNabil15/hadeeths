@@ -75,5 +75,6 @@ preferably to an environment named `production` with required reviewers: `ANDROI
   collected or shared) and in Apple's privacy answers; keep the privacy text on the About page in step; the Prayer section flag
   stays off until the owner approves the release
 - [ ] Offline reading was shipped **without** HadeethEnc's written permission (owner's decision): re-read their terms before release and keep the Settings switch and clear button
+- [ ] Reminders: `POST_NOTIFICATIONS` and `SCHEDULE_EXACT_ALARM` are in the manifest; confirm Google Play accepts the exact-alarm permission (declaration form) or remove it, and note that without it reminders can be an hour late; reboot, timezone change and an actual reminder arriving were not run on a device yet; wording needs owner review
 - [ ] iOS only: bundle ID confirmed, signing set up in Xcode, privacy strings reviewed
 - [ ] Play Console data-safety answers match the app (no data collected; network use only)

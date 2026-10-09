@@ -49,9 +49,15 @@ Future<void> main() async {
   }
 
   final preferences = await SharedPreferences.getInstance();
-  final dependencies = AppDependencies.live(
+  // The reminders read the saved language and numerals through the app's own settings
+  // repository, which exists once the dependencies are built; they only look when asked, later.
+  late final AppDependencies dependencies;
+  dependencies = AppDependencies.live(
     preferences: preferences,
-    prayer: buildPrayerServices(preferences: preferences),
+    prayer: buildPrayerServices(
+      preferences: preferences,
+      loadAppSettings: () => dependencies.settings.load(),
+    ),
     cache: cache,
     userData: userData,
     features: FeatureFlags.fromEnvironment(),

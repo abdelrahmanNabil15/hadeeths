@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:mynewapp/core/notifications/notification_gateway.dart';
 import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
 import 'package:mynewapp/features/prayer_times/domain/hijri_settings.dart';
@@ -7,6 +8,7 @@ import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences_repository.dart';
+import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Keeps the preferences as one small JSON text in `shared_preferences`.
@@ -55,6 +57,17 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
       },
       'hijriReference': p.hijri.reference.name,
       'hijriAdjustment': p.hijri.adjustmentDays,
+      'reminders': {
+        'enabled': p.reminders.enabled,
+        'prayers': [
+          for (final x in Prayer.values)
+            if (p.reminders.prayers.contains(x)) x.name,
+        ],
+        'leadMinutes': p.reminders.leadMinutes,
+        'sound': p.reminders.sound.name,
+        'vibrate': p.reminders.vibrate,
+        'exactTiming': p.reminders.exactTiming,
+      },
       'location': place == null
           ? null
           : {
@@ -114,6 +127,27 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
       settings: settings,
       methodOrigin: origin,
       hijri: hijri,
+      reminders: _decodeReminders(json['reminders']),
+    );
+  }
+
+  static ReminderSettings _decodeReminders(Object? json) {
+    if (json is! Map<String, dynamic>) return ReminderSettings();
+    final prayers = json['prayers'];
+    final lead = json['leadMinutes'];
+    return ReminderSettings(
+      enabled: json['enabled'] == true,
+      prayers: prayers is List
+          ? {for (final name in prayers) ?_byName(Prayer.values, name)}
+          : null,
+      leadMinutes: lead is int && ReminderSettings.leadOptions.contains(lead)
+          ? lead
+          : 0,
+      sound:
+          _byName(NotificationSound.values, json['sound']) ??
+          NotificationSound.system,
+      vibrate: json['vibrate'] != false,
+      exactTiming: json['exactTiming'] == true,
     );
   }
 

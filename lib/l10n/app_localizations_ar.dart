@@ -607,4 +607,163 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get compassUnreliable => 'البوصلة غير موثوقة هنا الآن';
+
+  @override
+  String reminderNow(String prayer) {
+    return 'حان وقت صلاة $prayer';
+  }
+
+  @override
+  String get reminderSunriseNow => 'الشروق الآن';
+
+  @override
+  String get reminderTestTitle => 'تذكير تجريبي';
+
+  @override
+  String get reminderTestBody => 'هكذا ستظهر تذكيرات الصلاة.';
+
+  @override
+  String get reminderChannelSoundVibrate => 'تذكيرات الصلاة';
+
+  @override
+  String get reminderChannelSound => 'تذكيرات الصلاة (دون اهتزاز)';
+
+  @override
+  String get reminderChannelVibrate => 'تذكيرات الصلاة (صامتة مع اهتزاز)';
+
+  @override
+  String get reminderChannelSilent => 'تذكيرات الصلاة (صامتة)';
+
+  @override
+  String get reminderChannelDescription => 'إشعارات عند أوقات الصلاة';
+
+  @override
+  String get remindersHeading => 'التذكيرات';
+
+  @override
+  String get remindersSwitch => 'ذكّرني عند أوقات الصلاة';
+
+  @override
+  String get remindersOff => 'التذكيرات متوقفة.';
+
+  @override
+  String get remindersExplainTitle => 'السماح بالإشعارات؟';
+
+  @override
+  String get remindersExplainBody =>
+      'لتذكيرك عند أوقات الصلاة يحتاج التطبيق إلى عرض الإشعارات. تُجهَّز التذكيرات على جهازك، ولا يُرسَل شيء إلى أي جهة، ولا تتضمن موقعك أبدًا.';
+
+  @override
+  String get remindersDenied =>
+      'الإشعارات متوقفة لهذا التطبيق، لذلك لن تظهر التذكيرات. افتح الإعدادات للسماح بها.';
+
+  @override
+  String get remindersNeedPlace =>
+      'حدّد موقعك أولًا ليعرف التطبيق أوقات الصلاة.';
+
+  @override
+  String get remindersWhich => 'أي الأوقات';
+
+  @override
+  String get remindersLead => 'قبل الوقت بـ';
+
+  @override
+  String get remindersLeadNone => 'عند دخول الوقت';
+
+  @override
+  String get remindersSound => 'الصوت';
+
+  @override
+  String get remindersSoundSystem => 'صوت إشعارات الهاتف';
+
+  @override
+  String get remindersSoundSilent => 'صامت';
+
+  @override
+  String get remindersVibrate => 'الاهتزاز';
+
+  @override
+  String get remindersTest => 'إرسال تذكير تجريبي';
+
+  @override
+  String get remindersTiming =>
+      'عند إيقاف التوقيت الدقيق قد يتأخر النظام في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة.';
+
+  @override
+  String get remindersFailed =>
+      'تعذّرت جدولة بعض التذكيرات. ستُعاد المحاولة عند فتح التطبيق.';
+
+  @override
+  String remindersNext(String prayer, String time) {
+    return 'التذكير التالي: $prayer، $time';
+  }
+
+  @override
+  String reminderSoon(int minutes, String prayer) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'صلاة $prayer بعد $minutes دقيقة',
+      many: 'صلاة $prayer بعد $minutes دقيقة',
+      few: 'صلاة $prayer بعد $minutes دقائق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reminderSunriseSoon(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'الشروق بعد $minutes دقيقة',
+      many: 'الشروق بعد $minutes دقيقة',
+      few: 'الشروق بعد $minutes دقائق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remindersLeadMinutes(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'قبل $minutes دقيقة',
+      many: 'قبل $minutes دقيقة',
+      few: 'قبل $minutes دقائق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remindersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count تذكير مجدول',
+      many: '$count تذكيرًا مجدولًا',
+      few: '$count تذكيرات مجدولة',
+      two: 'تذكيران مجدولان',
+      one: 'تذكير واحد مجدول',
+      zero: 'لا توجد تذكيرات مجدولة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get remindersExact => 'التوقيت الدقيق';
+
+  @override
+  String get remindersExactHint =>
+      'يوصل كل تذكير في دقيقته. سيطلب منك أندرويد السماح بـ«المنبهات والتذكيرات» لهذا التطبيق.';
+
+  @override
+  String get remindersExactExplainTitle => 'السماح بالتوقيت الدقيق؟';
+
+  @override
+  String get remindersExactExplainBody =>
+      'من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه تصل التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن.';
+
+  @override
+  String get remindersExactMissing =>
+      'التوقيت الدقيق غير مسموح لهذا التطبيق، لذلك قد تتأخر التذكيرات. افتح الإعدادات للسماح بـ«المنبهات والتذكيرات».';
 }

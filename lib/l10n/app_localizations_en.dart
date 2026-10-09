@@ -611,4 +611,157 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get compassUnreliable => 'The compass is not reliable here right now';
+
+  @override
+  String reminderNow(String prayer) {
+    return 'Time for $prayer prayer';
+  }
+
+  @override
+  String get reminderSunriseNow => 'Sunrise now';
+
+  @override
+  String get reminderTestTitle => 'Test reminder';
+
+  @override
+  String get reminderTestBody => 'This is how prayer reminders will appear.';
+
+  @override
+  String get reminderChannelSoundVibrate => 'Prayer reminders';
+
+  @override
+  String get reminderChannelSound => 'Prayer reminders (no vibration)';
+
+  @override
+  String get reminderChannelVibrate => 'Prayer reminders (silent, vibrating)';
+
+  @override
+  String get reminderChannelSilent => 'Prayer reminders (silent)';
+
+  @override
+  String get reminderChannelDescription => 'Notifications at prayer times';
+
+  @override
+  String get remindersHeading => 'Reminders';
+
+  @override
+  String get remindersSwitch => 'Remind me at prayer times';
+
+  @override
+  String get remindersOff => 'Reminders are off.';
+
+  @override
+  String get remindersExplainTitle => 'Allow notifications?';
+
+  @override
+  String get remindersExplainBody =>
+      'To remind you at prayer times, the app needs to show notifications. The reminders are made on your device, nothing is sent anywhere, and they never contain your location.';
+
+  @override
+  String get remindersDenied =>
+      'Notifications are turned off for this app, so reminders cannot appear. Open the settings to allow them.';
+
+  @override
+  String get remindersNeedPlace =>
+      'Set your location first, so the app knows the prayer times.';
+
+  @override
+  String get remindersWhich => 'Which times';
+
+  @override
+  String get remindersLead => 'How long before';
+
+  @override
+  String get remindersLeadNone => 'At the time';
+
+  @override
+  String get remindersSound => 'Sound';
+
+  @override
+  String get remindersSoundSystem => 'The phone\'s notification sound';
+
+  @override
+  String get remindersSoundSilent => 'Silent';
+
+  @override
+  String get remindersVibrate => 'Vibrate';
+
+  @override
+  String get remindersTest => 'Send a test reminder';
+
+  @override
+  String get remindersTiming =>
+      'With exact timing off, the system can deliver a reminder late, sometimes by up to an hour, when the phone is saving power.';
+
+  @override
+  String get remindersFailed =>
+      'Some reminders could not be scheduled. They will be tried again when the app is opened.';
+
+  @override
+  String remindersNext(String prayer, String time) {
+    return 'Next reminder: $prayer, $time';
+  }
+
+  @override
+  String reminderSoon(int minutes, String prayer) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$prayer prayer in $minutes minutes',
+      one: '$prayer prayer in 1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String reminderSunriseSoon(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'Sunrise in $minutes minutes',
+      one: 'Sunrise in 1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remindersLeadMinutes(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes before',
+      one: '1 minute before',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String remindersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count reminders scheduled',
+      one: '1 reminder scheduled',
+      zero: 'No reminders scheduled',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get remindersExact => 'Exact timing';
+
+  @override
+  String get remindersExactHint =>
+      'Delivers each reminder on the minute. Android asks you to allow “Alarms & reminders” for this app.';
+
+  @override
+  String get remindersExactExplainTitle => 'Allow exact timing?';
+
+  @override
+  String get remindersExactExplainBody =>
+      'Without it, Android may deliver a reminder late, sometimes by up to an hour, when the phone is saving power. With it, reminders arrive on time. The next screen is Android\'s own settings page for this permission.';
+
+  @override
+  String get remindersExactMissing =>
+      'Exact timing is not allowed for this app, so reminders may arrive late. Open the settings to allow “Alarms & reminders”.';
 }
