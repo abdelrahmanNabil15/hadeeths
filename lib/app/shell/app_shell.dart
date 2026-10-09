@@ -8,6 +8,7 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
+import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
 import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
@@ -27,6 +28,7 @@ class AppShell extends StatefulWidget {
     required this.features,
     this.prayer,
     this.prayerLog,
+    this.tasbeeh,
   });
 
   final FeatureFlags features;
@@ -37,6 +39,9 @@ class AppShell extends StatefulWidget {
   /// The prayer tracker's storage; without it (or without the prayer section) "More" does not
   /// offer the tracker.
   final PrayerLogRepository? prayerLog;
+
+  /// The tasbeeh counter's storage; without it "More" does not offer the counter.
+  final TasbeehRepository? tasbeeh;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -160,6 +165,7 @@ class _AppShellState extends State<AppShell> {
       tracker: widget.prayer != null && widget.prayerLog != null
           ? (log: widget.prayerLog!, services: widget.prayer!)
           : null,
+      tasbeeh: widget.tasbeeh,
     ),
   };
 

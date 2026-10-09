@@ -151,6 +151,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             features: deps.features,
                             prayer: deps.prayer,
                             prayerLog: deps.prayerLog,
+                            tasbeeh: deps.tasbeeh,
                           )
                         : const HomePage(),
                   ),

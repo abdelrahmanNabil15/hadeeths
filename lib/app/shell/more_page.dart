@@ -6,6 +6,8 @@ import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
 import 'package:mynewapp/features/settings/presentation/pages/settings_page.dart';
+import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
+import 'package:mynewapp/features/tasbeeh/presentation/pages/tasbeeh_page.dart';
 import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:mynewapp/features/tracker/presentation/pages/tracker_page.dart';
 import 'package:mynewapp/l10n/l10n.dart';
@@ -13,7 +15,10 @@ import 'package:mynewapp/l10n/l10n.dart';
 /// Secondary destinations. Settings and "Sources and rights" live here once the bottom
 /// navigation is on; later phases add the tracker and the salawat counter.
 class MorePage extends StatelessWidget {
-  const MorePage({super.key, this.tracker});
+  const MorePage({super.key, this.tracker, this.tasbeeh});
+
+  /// The counter's storage; null when it is not available.
+  final TasbeehRepository? tasbeeh;
 
   /// What the prayer tracker needs; null when it is not available.
   final ({PrayerLogRepository log, PrayerServices services})? tracker;
@@ -36,6 +41,14 @@ class MorePage extends StatelessWidget {
                 onTap: () => open(
                   TrackerPage(log: tracker!.log, services: tracker!.services),
                 ),
+              ),
+              const SizedBox(height: AppSpacing.md),
+            ],
+            if (tasbeeh != null) ...[
+              AppTile(
+                title: l10n.tasbeehTitle,
+                pressFeedback: true,
+                onTap: () => open(TasbeehPage(repository: tasbeeh!)),
               ),
               const SizedBox(height: AppSpacing.md),
             ],

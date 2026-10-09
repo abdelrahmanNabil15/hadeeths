@@ -807,4 +807,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String trackerDayLabel(String day, String count, String total) {
     return '$day، المُعلَّم $count من $total';
   }
+
+  @override
+  String get tasbeehTitle => 'عدّاد التسبيح';
+
+  @override
+  String get tasbeehHint => 'المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.';
+
+  @override
+  String tasbeehCountLabel(Object count) {
+    return 'العدد $count';
+  }
+
+  @override
+  String get tasbeehTapHint => 'المس للعدّ';
+
+  @override
+  String get tasbeehTargetHeading => 'الهدف';
+
+  @override
+  String get tasbeehNoTarget => 'بلا هدف';
+
+  @override
+  String tasbeehRounds(Object rounds) {
+    return 'الدورات المكتملة: $rounds';
+  }
+
+  @override
+  String get tasbeehTargetReached => 'اكتمل الهدف';
+
+  @override
+  String get tasbeehUndo => 'تراجع عن الأخيرة';
+
+  @override
+  String get tasbeehReset => 'تصفير';
+
+  @override
+  String get tasbeehResetTitle => 'تصفير العدّاد؟';
+
+  @override
+  String get tasbeehResetBody => 'يعود العدد إلى الصفر.';
+
+  @override
+  String get tasbeehSaveFailed =>
+      'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.';
 }

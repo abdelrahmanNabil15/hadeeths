@@ -15,6 +15,8 @@ import 'package:mynewapp/features/search/data/search_repository_impl.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
 import 'package:mynewapp/features/settings/data/settings_repository_impl.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
+import 'package:mynewapp/features/tasbeeh/data/tasbeeh_repository_impl.dart';
+import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
 import 'package:mynewapp/features/tracker/data/prayer_log_repository_impl.dart';
 import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,6 +34,7 @@ class AppDependencies {
     this.features = const FeatureFlags(),
     this.prayer,
     this.prayerLog,
+    this.tasbeeh,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -62,6 +65,7 @@ class AppDependencies {
       prayerLog: userData == null
           ? null
           : SqlitePrayerLogRepository(userData.db),
+      tasbeeh: userData == null ? null : SqliteTasbeehRepository(userData.db),
     );
   }
 
@@ -86,4 +90,7 @@ class AppDependencies {
   /// Which prayers the user marked as prayed (the tracker). `null` when the user database
   /// could not be opened; the tracker is then not offered.
   final PrayerLogRepository? prayerLog;
+
+  /// The tasbeeh counter's storage; `null` when the user database could not be opened.
+  final TasbeehRepository? tasbeeh;
 }

@@ -252,5 +252,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tasbeehTitle": "Tasbeeh counter",
+  "tasbeehHint": "Tap the circle to count. The count is kept on this phone.",
+  "tasbeehCountLabel": "Count {count}",
+  "tasbeehTapHint": "Tap to count",
+  "tasbeehTargetHeading": "Target",
+  "tasbeehNoTarget": "No target",
+  "tasbeehRounds": "Rounds completed: {rounds}",
+  "tasbeehTargetReached": "Target reached",
+  "tasbeehUndo": "Undo last",
+  "tasbeehReset": "Reset",
+  "tasbeehResetTitle": "Reset the counter?",
+  "tasbeehResetBody": "The count goes back to zero.",
+  "tasbeehSaveFailed": "The count could not be saved on this phone. You can keep counting, but it may be lost when the app closes."
 }

@@ -303,5 +303,5 @@ KFGQPC licence listing https://scancode-licensedb.aboutcode.org/kfgqpc-uthmanic-
 ## Progress note (2026-10-09)
 
 3A, 3B, 3C and the UI modernization phases A to F are merged to `master`. 3D is split into smaller steps, one branch each:
-**3D-1 prayer tracker** (branch `feature/p3d-tracker`, report in `docs/ARCHITECTURE.md`), then quiet hours, tasbeeh counter, and salawat intervals.
+**3D-1 prayer tracker** (branch `feature/p3d-tracker`, pushed) and **3D-2 tasbeeh counter** (branch `feature/p3d-tasbeeh`, stacked on 3D-1); reports in `docs/ARCHITECTURE.md`. Still to do: quiet hours and salawat intervals.
 Salawat reminders and any tasbeeh phrase need wording approved by the owner; nothing religious is authored by the app.

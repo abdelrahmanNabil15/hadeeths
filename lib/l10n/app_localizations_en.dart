@@ -805,4 +805,49 @@ class AppLocalizationsEn extends AppLocalizations {
   String trackerDayLabel(String day, String count, String total) {
     return '$day, $count of $total marked';
   }
+
+  @override
+  String get tasbeehTitle => 'Tasbeeh counter';
+
+  @override
+  String get tasbeehHint =>
+      'Tap the circle to count. The count is kept on this phone.';
+
+  @override
+  String tasbeehCountLabel(Object count) {
+    return 'Count $count';
+  }
+
+  @override
+  String get tasbeehTapHint => 'Tap to count';
+
+  @override
+  String get tasbeehTargetHeading => 'Target';
+
+  @override
+  String get tasbeehNoTarget => 'No target';
+
+  @override
+  String tasbeehRounds(Object rounds) {
+    return 'Rounds completed: $rounds';
+  }
+
+  @override
+  String get tasbeehTargetReached => 'Target reached';
+
+  @override
+  String get tasbeehUndo => 'Undo last';
+
+  @override
+  String get tasbeehReset => 'Reset';
+
+  @override
+  String get tasbeehResetTitle => 'Reset the counter?';
+
+  @override
+  String get tasbeehResetBody => 'The count goes back to zero.';
+
+  @override
+  String get tasbeehSaveFailed =>
+      'The count could not be saved on this phone. You can keep counting, but it may be lost when the app closes.';
 }

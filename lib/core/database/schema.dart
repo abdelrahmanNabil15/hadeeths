@@ -22,4 +22,13 @@ CREATE TABLE prayer_log (
   PRIMARY KEY (day, prayer)
 ) WITHOUT ROWID''');
   }),
+  Migration(3, 'tasbeeh counter', (db) {
+    // A single row: the count the user has reached and the target they chose (none if null).
+    db.execute('''
+CREATE TABLE tasbeeh_counter (
+  id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1),
+  count INTEGER NOT NULL CHECK (count >= 0),
+  target INTEGER CHECK (target IS NULL OR target IN (33, 99, 100))
+) WITHOUT ROWID''');
+  }),
 ];

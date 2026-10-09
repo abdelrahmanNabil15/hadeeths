@@ -407,5 +407,18 @@
         "type": "String"
       }
     }
-  }
+  },
+  "tasbeehTitle": "عدّاد التسبيح",
+  "tasbeehHint": "المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.",
+  "tasbeehCountLabel": "العدد {count}",
+  "tasbeehTapHint": "المس للعدّ",
+  "tasbeehTargetHeading": "الهدف",
+  "tasbeehNoTarget": "بلا هدف",
+  "tasbeehRounds": "الدورات المكتملة: {rounds}",
+  "tasbeehTargetReached": "اكتمل الهدف",
+  "tasbeehUndo": "تراجع عن الأخيرة",
+  "tasbeehReset": "تصفير",
+  "tasbeehResetTitle": "تصفير العدّاد؟",
+  "tasbeehResetBody": "يعود العدد إلى الصفر.",
+  "tasbeehSaveFailed": "تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق."
 }

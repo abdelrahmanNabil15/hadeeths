@@ -1477,6 +1477,84 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{day}، المُعلَّم {count} من {total}'**
   String trackerDayLabel(String day, String count, String total);
+
+  /// No description provided for @tasbeehTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'عدّاد التسبيح'**
+  String get tasbeehTitle;
+
+  /// No description provided for @tasbeehHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المس الدائرة للعدّ. يُحفظ العدد على هذا الهاتف.'**
+  String get tasbeehHint;
+
+  /// No description provided for @tasbeehCountLabel.
+  ///
+  /// In ar, this message translates to:
+  /// **'العدد {count}'**
+  String tasbeehCountLabel(Object count);
+
+  /// No description provided for @tasbeehTapHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'المس للعدّ'**
+  String get tasbeehTapHint;
+
+  /// No description provided for @tasbeehTargetHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الهدف'**
+  String get tasbeehTargetHeading;
+
+  /// No description provided for @tasbeehNoTarget.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا هدف'**
+  String get tasbeehNoTarget;
+
+  /// No description provided for @tasbeehRounds.
+  ///
+  /// In ar, this message translates to:
+  /// **'الدورات المكتملة: {rounds}'**
+  String tasbeehRounds(Object rounds);
+
+  /// No description provided for @tasbeehTargetReached.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتمل الهدف'**
+  String get tasbeehTargetReached;
+
+  /// No description provided for @tasbeehUndo.
+  ///
+  /// In ar, this message translates to:
+  /// **'تراجع عن الأخيرة'**
+  String get tasbeehUndo;
+
+  /// No description provided for @tasbeehReset.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفير'**
+  String get tasbeehReset;
+
+  /// No description provided for @tasbeehResetTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصفير العدّاد؟'**
+  String get tasbeehResetTitle;
+
+  /// No description provided for @tasbeehResetBody.
+  ///
+  /// In ar, this message translates to:
+  /// **'يعود العدد إلى الصفر.'**
+  String get tasbeehResetBody;
+
+  /// No description provided for @tasbeehSaveFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر حفظ العدد على هذا الهاتف. يمكنك متابعة العدّ لكنه قد يضيع عند إغلاق التطبيق.'**
+  String get tasbeehSaveFailed;
 }
 
 class _AppLocalizationsDelegate

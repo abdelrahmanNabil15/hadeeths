@@ -179,3 +179,16 @@ translation parity, and the architecture rules. Nothing touches the live API.
 - Reached from More ("Prayer tracker") when the prayer section is on and the user database opened. No streaks, scores, notifications or "missed" wording.
   "Delete tracker data" (with confirmation) removes everything.
 - Privacy: the tracker code imports no network, location or sharing package (a test scans it); no share card includes it.
+
+## Tasbeeh counter (Phase 3D-2)
+
+- `lib/features/tasbeeh/`: `TasbeehCounter` (count, optional target of 33, 99 or 100, progress per round), `TasbeehRepository`, `SqliteTasbeehRepository`
+  (table `tasbeeh_counter`, a single row, migration 3), `TasbeehCubit`, `TasbeehPage`. Reached from More ("Tasbeeh counter").
+- It is a plain counter with **no words of its own**: the user decides what they are counting, and a test fails if the feature's code contains any Arabic text.
+- The count goes up the moment a finger touches the circle (pointer down), in memory, before anything is saved, so quick taps are never merged or lost
+  (tests: 100 taps in the cubit, 60 in the widget flow). Saves run in order and each writes the count as it is by then, so the last one holds the total.
+  A failed save leaves the count on screen and shows a warning. Taps before the saved count has been read are ignored so they cannot be overwritten by it.
+- Feedback: a light system tick per tap and a firmer one when the count lands on a multiple of the target (through the `Haptics` service; no setting). The
+  ring beside the count is a plain determinate indicator: nothing animates, so nothing waits for an animation.
+- Undo takes one off, reset (with confirmation) zeroes the count and keeps the target; screen readers hear "Count N" as a live region and can activate the circle.
+- Privacy: no network, location or sharing code (tested); nothing is shared.
