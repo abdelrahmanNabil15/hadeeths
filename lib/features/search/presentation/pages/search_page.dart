@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
@@ -13,7 +14,7 @@ import 'package:mynewapp/l10n/l10n.dart';
 void openSearch(BuildContext context) {
   Navigator.of(
     context,
-  ).push(MaterialPageRoute<void>(builder: (_) => const SearchPage()));
+  ).push(appRoute<void>(builder: (_) => const SearchPage()));
 }
 
 /// Search-as-you-type over the hadith texts (server-side; Arabic diacritics are handled by
@@ -137,7 +138,7 @@ class _SearchViewState extends State<_SearchView> {
                     return SearchResultTile(
                       result: result,
                       onTap: () => Navigator.of(context).push(
-                        MaterialPageRoute<void>(
+                        appRoute<void>(
                           builder: (_) => HadithDetailsPage(id: result.id),
                         ),
                       ),

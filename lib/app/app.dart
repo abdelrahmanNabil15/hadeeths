@@ -8,6 +8,7 @@ import 'package:mynewapp/app/shell/app_shell.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -141,9 +142,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                       ),
                     );
                   },
-                  home: deps.features.usesShell
-                      ? AppShell(features: deps.features, prayer: deps.prayer)
-                      : const HomePage(),
+                  // The first page is an app route too, so the page under a pushed one is not
+                  // moved by a different transition.
+                  onGenerateRoute: (settings) => appRoute<void>(
+                    settings: settings,
+                    builder: (_) => deps.features.usesShell
+                        ? AppShell(features: deps.features, prayer: deps.prayer)
+                        : const HomePage(),
+                  ),
                 );
               },
             ),

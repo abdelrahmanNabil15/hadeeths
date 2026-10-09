@@ -126,15 +126,12 @@ class _AppShellState extends State<AppShell> {
     );
   }
 
-  /// The hadith section keeps the platform's own transitions (it is the released app); the other
-  /// sections use the app's transition for their whole stack, starting with this first page.
-  Route<void> _rootRoute(ShellTab tab) {
-    const settings = RouteSettings(name: '/');
-    Widget build(BuildContext _) => _root(tab);
-    return tab == ShellTab.hadiths
-        ? MaterialPageRoute<void>(settings: settings, builder: build)
-        : appRoute<void>(settings: settings, builder: build);
-  }
+  /// Every section starts with the app's own transition, so a whole stack moves the same way
+  /// (a page under another one is moved by its own route).
+  Route<void> _rootRoute(ShellTab tab) => appRoute<void>(
+    settings: const RouteSettings(name: '/'),
+    builder: (_) => _root(tab),
+  );
 
   Widget _root(ShellTab tab) => switch (tab) {
     ShellTab.hadiths => const HomePage(inShell: true),

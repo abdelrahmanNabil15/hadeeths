@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/state/load_status.dart';
+import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/expandable_section.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
@@ -56,18 +57,20 @@ class HadithDetailsPage extends StatelessWidget {
         ),
         body: BlocBuilder<HadithDetailCubit, HadithDetailState>(
           builder: (context, state) {
-            switch (state.status) {
-              case LoadStatus.initial:
-              case LoadStatus.loading:
-                return const LoadingView();
-              case LoadStatus.failure:
-                return ErrorView(
-                  failure: state.failure!,
-                  onRetry: context.read<HadithDetailCubit>().load,
-                );
-              case LoadStatus.success:
-                return HadithDetailsBody(details: state.details!);
+            // The hadith itself is never faded: it appears exactly as before. Only the loading
+            // and error states fade into each other (for example after a retry).
+            if (state.status == LoadStatus.success) {
+              return HadithDetailsBody(details: state.details!);
             }
+            return AnimatedStateSwitcher(
+              child: state.status == LoadStatus.failure
+                  ? ErrorView(
+                      key: const ValueKey('failure'),
+                      failure: state.failure!,
+                      onRetry: context.read<HadithDetailCubit>().load,
+                    )
+                  : const LoadingView(key: ValueKey('loading')),
+            );
           },
         ),
       ),

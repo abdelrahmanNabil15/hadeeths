@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/option_group.dart';
@@ -75,9 +76,9 @@ class SettingsPage extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
               AppTile(
                 title: l10n.aboutTitle,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const AboutPage()),
-                ),
+                onTap: () => Navigator.of(
+                  context,
+                ).push(appRoute<void>(builder: (_) => const AboutPage())),
               ),
             ],
           ),

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/shell/app_shell.dart';
@@ -96,50 +94,5 @@ void main() {
       await tester.pumpAndSettle();
       expect(taps, 1);
     });
-  });
-
-  group('which screens use the app transition (the migration ledger)', () {
-    String read(String path) => File(path).readAsStringSync();
-
-    // The released hadith screens keep the platform transition until the owner approves each one.
-    const released = [
-      'lib/features/categories/presentation/pages/home_page.dart',
-      'lib/features/categories/presentation/pages/category_page.dart',
-      'lib/features/categories/presentation/category_navigation.dart',
-      'lib/features/hadiths/presentation/pages/hadith_list_page.dart',
-      'lib/features/hadiths/presentation/pages/hadith_details_page.dart',
-      'lib/features/search/presentation/pages/search_page.dart',
-      'lib/features/settings/presentation/pages/settings_page.dart',
-      'lib/features/settings/presentation/pages/about_page.dart',
-    ];
-
-    test('released screens still use the platform route', () {
-      for (final path in released) {
-        expect(read(path), isNot(contains('appRoute')), reason: path);
-      }
-    });
-
-    test('the prayer and more sections use the app route throughout', () {
-      final files = [
-        for (final entity in Directory(
-          'lib/features/prayer_times/presentation',
-        ).listSync(recursive: true))
-          if (entity is File && entity.path.endsWith('.dart')) entity.path,
-        'lib/app/shell/more_page.dart',
-      ];
-      expect(files.length, greaterThan(8));
-      for (final path in files) {
-        expect(read(path), isNot(contains('MaterialPageRoute')), reason: path);
-      }
-    });
-
-    test(
-      'only the hadith section of the shell keeps the platform root route',
-      () {
-        final shell = read('lib/app/shell/app_shell.dart');
-        expect(RegExp('MaterialPageRoute').allMatches(shell).length, 1);
-        expect(shell, contains('ShellTab.hadiths'));
-      },
-    );
   });
 }

@@ -522,3 +522,31 @@ Prayer calculation, scheduling, saving and the compass maths were not touched.
 | Compass smoothing and the vibration on a real sensor | NOT RUN (the emulator has no compass; the Samsung phone was not connected) |
 | The emphasis fade seen in motion, TalkBack, dark mode on device | NOT RUN |
 | iOS | NOT RUN |
+
+## 28. Phase E report (branch `ui/e-secondary`, from `ui/d-worship`)
+
+**Approved by the owner (2026-10-09), following the recommendation message: the app page transition for the hadith flow and the loading-to-content fade; press
+feedback on released tiles was skipped.** Those are the only released-app visible changes in this phase.
+
+**Changed:**
+- **App transition across the hadith flow, all at once:** home, category, list, details, search, settings and sources pushes, the shell's Hadiths section root, and
+  the app's first page (so the page under a pushed one is not moved by a different transition). No code builds a platform route by hand any more. On Android the
+  new page fades in with a 2% upward move (280 ms in, 220 ms out); on iOS the platform slide and swipe-back are kept inside the route; with animations off nothing moves.
+- **Loading-to-content fade:** home and the hadith list fade between skeleton, error, empty and loaded states; loading further pages keeps the same state, so a growing list
+  does not fade or jump. The hadith details page fades only between loading and error: **the hadith itself appears exactly as before**, because reading text is excluded from
+  motion. Search was not changed: its results change with every typed query and a fade each time would feel slow.
+- Nothing else on settings, sources or search needed a change (emulator check of settings: consistent with the rest).
+
+**Tests:** `test/app/phase_e_test.dart` (7): no hand-built platform route anywhere; the first page, category, list and details are all app routes; going back returns
+to the same list; home fades from the skeleton to the categories; the list does not animate while it stays loaded; the hadith is never inside a fading switcher.
+The Phase B ledger tests were retired because they described the earlier state. The Phase B route tests for the sections remain.
+
+| Check | Result |
+|---|---|
+| `dart format`, `flutter analyze` | PASS |
+| `flutter test` | PASS, 880 (877 before) |
+| Logic coverage (gate 80%) | PASS, 90.6% |
+| Release config check | PASS |
+| Emulator, released mode (flags off): app starts, settings opens with the new route and renders | PASS |
+| The transition and fades seen in motion; back gesture feel; TalkBack; Arabic/RTL on a device | NOT RUN |
+| Samsung phone, iOS (platform slide and swipe-back through `AppPageRoute`) | NOT RUN |

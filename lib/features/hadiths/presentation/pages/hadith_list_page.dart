@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/errors/failure.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/state/load_status.dart';
+import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
@@ -50,30 +52,43 @@ class _HadithListBody extends StatelessWidget {
           current.refreshFailure != previous.refreshFailure,
       listener: (context, state) =>
           showFailureSnackBar(context, state.refreshFailure!),
-      builder: (context, state) {
-        final cubit = context.read<HadithListCubit>();
-        switch (state.status) {
-          case LoadStatus.initial:
-          case LoadStatus.loading:
-            return const ContentWidth(child: SkeletonList(rowHeight: 72));
-          case LoadStatus.failure:
-            return ErrorView(failure: state.failure!, onRetry: cubit.load);
-          case LoadStatus.success:
-            if (state.items.isEmpty) {
-              return EmptyView(
-                message: context.l10n.noHadithsInCategory,
-                icon: Icons.menu_book_outlined,
-              );
-            }
-            return _HadithList(state: state);
-        }
-      },
+      // Each state has its own key, so a change of state fades. Loading more pages keeps the
+      // same state, so the list never fades or jumps while it grows.
+      builder: (context, state) =>
+          AnimatedStateSwitcher(child: _content(context, state)),
     );
+  }
+
+  Widget _content(BuildContext context, HadithListState state) {
+    final cubit = context.read<HadithListCubit>();
+    switch (state.status) {
+      case LoadStatus.initial:
+      case LoadStatus.loading:
+        return const ContentWidth(
+          key: ValueKey('loading'),
+          child: SkeletonList(rowHeight: 72),
+        );
+      case LoadStatus.failure:
+        return ErrorView(
+          key: const ValueKey('failure'),
+          failure: state.failure!,
+          onRetry: cubit.load,
+        );
+      case LoadStatus.success:
+        if (state.items.isEmpty) {
+          return EmptyView(
+            key: const ValueKey('empty'),
+            message: context.l10n.noHadithsInCategory,
+            icon: Icons.menu_book_outlined,
+          );
+        }
+        return _HadithList(key: const ValueKey('content'), state: state);
+    }
   }
 }
 
 class _HadithList extends StatelessWidget {
-  const _HadithList({required this.state});
+  const _HadithList({super.key, required this.state});
 
   final HadithListState state;
 
@@ -107,7 +122,7 @@ class _HadithList extends StatelessWidget {
                 title: hadith.title,
                 maxTitleLines: 4,
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
+                  appRoute<void>(
                     builder: (_) => HadithDetailsPage(id: hadith.id),
                   ),
                 ),

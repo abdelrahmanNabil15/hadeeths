@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/features/categories/domain/hadith_category.dart';
 import 'package:mynewapp/features/categories/presentation/pages/category_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -11,7 +12,7 @@ void openCategory(BuildContext context, HadithCategory node) {
     node.id,
   );
   Navigator.of(context).push(
-    MaterialPageRoute<void>(
+    appRoute<void>(
       builder: (_) => hasChildren
           ? CategoryPage(categoryId: node.id)
           : HadithListPage(categoryId: node.id, title: node.title),
