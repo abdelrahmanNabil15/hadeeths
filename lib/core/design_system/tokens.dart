@@ -1,66 +1,72 @@
 import 'package:flutter/material.dart';
 
-/// Design tokens: ivory and deep emerald for light, a dark green for dark.
+/// Design tokens: warm ivory and midnight emerald for light; charcoal with emerald-tinted steps for
+/// dark (designed on its own, not an inverted light theme). Muted gold is an accent only.
 ///
 /// Every text/background pair used on screen is checked against WCAG AA (4.5:1) in
 /// `test/app/accessibility_test.dart`; control borders ([ColorScheme.outline]) reach 3:1.
 abstract final class AppPalette {
   static const light = ColorScheme(
     brightness: Brightness.light,
-    primary: Color(0xFF0E5A47),
+    // Midnight emerald.
+    primary: Color(0xFF0B4A3B),
     onPrimary: Color(0xFFFFFFFF),
-    primaryContainer: Color(0xFFDDEBE4),
-    onPrimaryContainer: Color(0xFF0A3D30),
+    // Soft sage: selected states and the emphasised tile.
+    primaryContainer: Color(0xFFDCE8E0),
+    onPrimaryContainer: Color(0xFF083A2E),
     // Muted gold: grade chips and other small marks, never large areas.
-    secondary: Color(0xFF8A6A1F),
+    secondary: Color(0xFF86651B),
     onSecondary: Color(0xFFFFFFFF),
-    secondaryContainer: Color(0xFFF3E9CC),
-    onSecondaryContainer: Color(0xFF4A3A0E),
+    secondaryContainer: Color(0xFFF2E7C8),
+    onSecondaryContainer: Color(0xFF47370C),
     error: Color(0xFFA12A2A),
     onError: Color(0xFFFFFFFF),
-    // surface = canvas, surfaceContainerLowest = reading surface and cards.
+    // surface = canvas (warm ivory), surfaceContainerLowest = reading surface and cards.
     surface: Color(0xFFFAF6EC),
-    onSurface: Color(0xFF1C1B17),
-    onSurfaceVariant: Color(0xFF5B5446),
-    outline: Color(0xFF8B8372),
-    outlineVariant: Color(0xFFE4DCC8),
+    // Charcoal with a trace of green, softer than black on ivory.
+    onSurface: Color(0xFF1E2320),
+    onSurfaceVariant: Color(0xFF585B53),
+    outline: Color(0xFF8A8371),
+    outlineVariant: Color(0xFFE6DFCD),
     surfaceContainerLowest: Color(0xFFFFFDF8),
-    surfaceContainerLow: Color(0xFFF7F2E5),
-    surfaceContainer: Color(0xFFF3EEDF),
-    surfaceContainerHigh: Color(0xFFECE6D3),
-    surfaceContainerHighest: Color(0xFFE6DFCB),
-    inverseSurface: Color(0xFF1C1B17),
+    surfaceContainerLow: Color(0xFFF6F1E5),
+    surfaceContainer: Color(0xFFF2EDE0),
+    surfaceContainerHigh: Color(0xFFEBE5D3),
+    surfaceContainerHighest: Color(0xFFE5DECA),
+    inverseSurface: Color(0xFF1E2320),
     onInverseSurface: Color(0xFFFAF6EC),
-    inversePrimary: Color(0xFF6FCBAA),
-    shadow: Color(0xFF000000),
+    inversePrimary: Color(0xFF7FD2B1),
+    shadow: Color(0xFF1E2320),
     scrim: Color(0xFF000000),
   );
 
   static const dark = ColorScheme(
     brightness: Brightness.dark,
-    primary: Color(0xFF6FCBAA),
-    onPrimary: Color(0xFF06231B),
-    primaryContainer: Color(0xFF1D4A3C),
-    onPrimaryContainer: Color(0xFFD4F0E4),
-    secondary: Color(0xFFD9B35B),
+    primary: Color(0xFF7FD2B1),
+    onPrimary: Color(0xFF04261C),
+    // Midnight emerald as a container.
+    primaryContainer: Color(0xFF143F33),
+    onPrimaryContainer: Color(0xFFCDEEE0),
+    secondary: Color(0xFFD9B666),
     onSecondary: Color(0xFF2E2307),
-    secondaryContainer: Color(0xFF4A3A14),
+    secondaryContainer: Color(0xFF46381A),
     onSecondaryContainer: Color(0xFFF3E3B5),
     error: Color(0xFFF29A9A),
     onError: Color(0xFF3B0A0A),
-    surface: Color(0xFF0F1512),
-    onSurface: Color(0xFFECE6D6),
-    onSurfaceVariant: Color(0xFFB3AC9B),
-    outline: Color(0xFF76837B),
-    outlineVariant: Color(0xFF2A3731),
-    surfaceContainerLowest: Color(0xFF161F1A),
-    surfaceContainerLow: Color(0xFF19231E),
-    surfaceContainer: Color(0xFF1C2721),
-    surfaceContainerHigh: Color(0xFF22302A),
-    surfaceContainerHighest: Color(0xFF283A33),
-    inverseSurface: Color(0xFFECE6D6),
-    onInverseSurface: Color(0xFF0F1512),
-    inversePrimary: Color(0xFF0E5A47),
+    // Charcoal canvas; each container step adds a little emerald, so depth reads as light, not grey.
+    surface: Color(0xFF0D1311),
+    onSurface: Color(0xFFEDE8DA),
+    onSurfaceVariant: Color(0xFFB6B1A1),
+    outline: Color(0xFF7B877F),
+    outlineVariant: Color(0xFF26332D),
+    surfaceContainerLowest: Color(0xFF131B18),
+    surfaceContainerLow: Color(0xFF16201C),
+    surfaceContainer: Color(0xFF1A2420),
+    surfaceContainerHigh: Color(0xFF202B26),
+    surfaceContainerHighest: Color(0xFF27342E),
+    inverseSurface: Color(0xFFEDE8DA),
+    onInverseSurface: Color(0xFF0D1311),
+    inversePrimary: Color(0xFF0B4A3B),
     shadow: Color(0xFF000000),
     scrim: Color(0xFF000000),
   );
@@ -77,13 +83,48 @@ abstract final class AppSpacing {
 
 abstract final class AppRadius {
   /// Tiles, cards and the reading surface.
-  static const card = 12.0;
+  static const card = 16.0;
 
   /// Inputs and buttons.
-  static const control = 8.0;
+  static const control = 12.0;
 
-  /// Bottom sheets.
-  static const sheet = 16.0;
+  /// Bottom sheets (top corners).
+  static const sheet = 24.0;
+
+  /// Dialogs.
+  static const dialog = 24.0;
+
+  /// Chips, count pills and the navigation indicator: fully rounded.
+  static const pill = 999.0;
+}
+
+/// Line widths. Surfaces are separated by hairlines, not by shadows.
+abstract final class AppBorders {
+  /// Card and divider edges ([ColorScheme.outlineVariant]).
+  static const hairline = 1.0;
+
+  /// A focused field or the selected item in a list.
+  static const emphasis = 1.5;
+}
+
+/// Depth. The app is flat by default; only a raised card (the hero search field, the reading
+/// surface) gets this one soft, wide, low shadow.
+abstract final class AppShadows {
+  static List<BoxShadow> soft(ColorScheme scheme) {
+    final isLight = scheme.brightness == Brightness.light;
+    return [
+      BoxShadow(
+        color: scheme.shadow.withValues(alpha: isLight ? 0.07 : 0.28),
+        blurRadius: 24,
+        offset: const Offset(0, 8),
+      ),
+      BoxShadow(
+        color: scheme.shadow.withValues(alpha: isLight ? 0.04 : 0.18),
+        blurRadius: 3,
+        offset: const Offset(0, 1),
+      ),
+    ];
+  }
 }
 
 /// Type sizes in logical pixels; they scale with the user's device text-size setting.
@@ -119,6 +160,12 @@ abstract final class AppSizes {
 
   /// Icons that sit beside text.
   static const iconSmall = 20.0;
+
+  /// Icons in app bars, rows and the navigation bar.
+  static const icon = 24.0;
+
+  /// The icon medallion in empty and error states.
+  static const stateMedallion = 88.0;
 
   /// Longest line length on large screens.
   static const contentMaxWidth = 640.0;
@@ -162,4 +209,8 @@ abstract final class AppFonts {
 
   /// Reading font for Arabic hadith text, bundled Amiri, SIL OFL 1.1.
   static const reading = 'Amiri';
+
+  /// Editorial display face for large titles: Amiri's Naskh for Arabic and its serif Latin for
+  /// English. Same bundled file, no new font.
+  static const editorial = 'Amiri';
 }
