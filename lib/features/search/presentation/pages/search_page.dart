@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
@@ -91,7 +92,9 @@ class _SearchViewState extends State<_SearchView> {
               return EmptyView(message: l10n.searchPrompt, icon: Icons.search);
             case SearchStatus.tooShort:
               return EmptyView(
-                message: l10n.searchTooShort(SearchRepository.minPhraseLength),
+                message: context.digits.localize(
+                  l10n.searchTooShort(SearchRepository.minPhraseLength),
+                ),
                 icon: Icons.edit_outlined,
               );
             case SearchStatus.loading:
@@ -116,11 +119,13 @@ class _SearchViewState extends State<_SearchView> {
                       return Semantics(
                         liveRegion: true,
                         child: Text(
-                          state.mayBeTruncated
-                              ? l10n.searchTruncated(
-                                  SearchRepository.maxResults,
-                                )
-                              : l10n.searchResultCount(state.results.length),
+                          context.digits.localize(
+                            state.mayBeTruncated
+                                ? l10n.searchTruncated(
+                                    SearchRepository.maxResults,
+                                  )
+                                : l10n.searchResultCount(state.results.length),
+                          ),
                           style: TextStyle(
                             fontSize: AppTextSize.meta,
                             color: scheme.onSurfaceVariant,

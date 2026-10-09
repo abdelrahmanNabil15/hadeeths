@@ -5,6 +5,7 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/shell/app_shell.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
+import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -84,13 +85,21 @@ class _MyAppState extends State<MyApp> {
                 // navigation. It is keyed by language: a language change reloads the tree.
                 builder: (context, child) {
                   final language = context.apiLanguage;
-                  return BlocProvider(
-                    key: ValueKey(language),
-                    create: (context) => CategoriesCubit(
-                      context.read<CategoriesRepository>(),
-                      language: language,
-                    )..load(),
-                    child: child!,
+                  final arabicIndic = switch (settings.digits) {
+                    DigitStyle.automatic => language == 'ar',
+                    DigitStyle.arabicIndic => true,
+                    DigitStyle.western => false,
+                  };
+                  return DigitScope(
+                    digits: Digits(arabicIndic: arabicIndic),
+                    child: BlocProvider(
+                      key: ValueKey(language),
+                      create: (context) => CategoriesCubit(
+                        context.read<CategoriesRepository>(),
+                        language: language,
+                      )..load(),
+                      child: child!,
+                    ),
                   );
                 },
                 home: deps.features.usesShell

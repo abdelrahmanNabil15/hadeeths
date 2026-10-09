@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
@@ -86,10 +87,10 @@ class HomePage extends StatelessWidget {
                       for (final root in roots) ...[
                         AppTile(
                           title: root.title,
-                          trailingText: '${root.hadithCount}',
+                          trailingText: context.digits.format(root.hadithCount),
                           semanticLabel: l10n.tileSemantics(
                             root.title,
-                            '${root.hadithCount}',
+                            context.digits.format(root.hadithCount),
                           ),
                           onTap: () => openCategory(context, root),
                         ),

@@ -428,6 +428,30 @@ abstract class AppLocalizations {
   /// **'تم مسح النسخ المحفوظة'**
   String get savedCopiesCleared;
 
+  /// No description provided for @digitsHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرقام'**
+  String get digitsHeading;
+
+  /// No description provided for @digitsAutomatic.
+  ///
+  /// In ar, this message translates to:
+  /// **'حسب اللغة'**
+  String get digitsAutomatic;
+
+  /// No description provided for @digitsArabicIndic.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرقام العربية الهندية (٠١٢٣)'**
+  String get digitsArabicIndic;
+
+  /// No description provided for @digitsWestern.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأرقام الغربية (0123)'**
+  String get digitsWestern;
+
   /// No description provided for @navHadiths.
   ///
   /// In ar, this message translates to:

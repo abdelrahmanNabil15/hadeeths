@@ -190,6 +190,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get savedCopiesCleared => 'Saved copies cleared';
 
   @override
+  String get digitsHeading => 'Numerals';
+
+  @override
+  String get digitsAutomatic => 'Match the language';
+
+  @override
+  String get digitsArabicIndic => 'Arabic-Indic (٠١٢٣)';
+
+  @override
+  String get digitsWestern => 'Western (0123)';
+
+  @override
   String get navHadiths => 'Hadiths';
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/presentation/state/settings_cubit.dart';
 import 'package:mynewapp/features/settings/presentation/widgets/reading_text.dart';
@@ -36,9 +37,12 @@ class ReadingSizeControl extends StatelessWidget {
                     min: 0,
                     max: lastIndex.toDouble(),
                     divisions: lastIndex,
-                    label: '${(settings.readingScale * 100).round()}%',
-                    semanticFormatterCallback: (value) =>
-                        '${(AppSettings.readingScales[value.round()] * 100).round()}%',
+                    label: context.digits.localize(
+                      '${(settings.readingScale * 100).round()}%',
+                    ),
+                    semanticFormatterCallback: (value) => context.digits.localize(
+                      '${(AppSettings.readingScales[value.round()] * 100).round()}%',
+                    ),
                     onChanged: (value) => cubit.setReadingScale(
                       AppSettings.readingScales[value.round()],
                     ),

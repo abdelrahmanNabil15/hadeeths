@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/expandable_section.dart';
@@ -145,7 +146,7 @@ class HadithDetailsBody extends StatelessWidget {
                               bottom: AppSpacing.md,
                             ),
                             child: Text(
-                              '${i + 1}. ${d.hints[i]}',
+                              '${context.digits.format(i + 1)}. ${d.hints[i]}',
                               style: secondary,
                             ),
                           ),

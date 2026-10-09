@@ -63,8 +63,8 @@ void main() {
       );
       await _openSettings(tester);
       final checks = find.byIcon(Icons.check_circle);
-      // one for the language, one for the appearance (system by default)
-      expect(checks, findsNWidgets(2));
+      // one each for the language, the appearance and the numerals (system / automatic by default)
+      expect(checks, findsNWidgets(3));
     });
   });
 

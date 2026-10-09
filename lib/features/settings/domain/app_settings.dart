@@ -17,6 +17,14 @@ enum AppLanguage {
 
 enum ThemePreference { system, light, dark }
 
+/// How the app writes its own numbers.
+enum DigitStyle {
+  /// Arabic-Indic digits (٠١٢٣) when the interface is Arabic, Western digits (0123) otherwise.
+  automatic,
+  arabicIndic,
+  western,
+}
+
 /// User preferences. They are plain settings; no hadith content is ever stored here.
 class AppSettings extends Equatable {
   const AppSettings({
@@ -24,6 +32,7 @@ class AppSettings extends Equatable {
     this.theme = ThemePreference.system,
     this.readingScale = defaultReadingScale,
     this.offlineCopies = true,
+    this.digits = DigitStyle.automatic,
   });
 
   /// Allowed multipliers for the reading text (hadith and explanation), smallest first.
@@ -39,6 +48,9 @@ class AppSettings extends Equatable {
 
   /// Keep hadiths the user opens on the device so they can be read again without a connection.
   final bool offlineCopies;
+
+  /// Which digits the app's own numbers use. Content from sources is never changed.
+  final DigitStyle digits;
 
   /// Index of [readingScale] in [readingScales].
   int get readingScaleIndex => readingScales.indexOf(readingScale);
@@ -61,13 +73,21 @@ class AppSettings extends Equatable {
     ThemePreference? theme,
     double? readingScale,
     bool? offlineCopies,
+    DigitStyle? digits,
   }) => AppSettings(
     language: language ?? this.language,
     theme: theme ?? this.theme,
     readingScale: readingScale ?? this.readingScale,
     offlineCopies: offlineCopies ?? this.offlineCopies,
+    digits: digits ?? this.digits,
   );
 
   @override
-  List<Object?> get props => [language, theme, readingScale, offlineCopies];
+  List<Object?> get props => [
+    language,
+    theme,
+    readingScale,
+    offlineCopies,
+    digits,
+  ];
 }

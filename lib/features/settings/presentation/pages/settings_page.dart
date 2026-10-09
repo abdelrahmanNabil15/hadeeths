@@ -49,6 +49,18 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.digitsHeading),
+              const SizedBox(height: AppSpacing.sm),
+              _OptionGroup<DigitStyle>(
+                selected: settings.digits,
+                onSelected: cubit.setDigits,
+                options: [
+                  (DigitStyle.automatic, l10n.digitsAutomatic),
+                  (DigitStyle.arabicIndic, l10n.digitsArabicIndic),
+                  (DigitStyle.western, l10n.digitsWestern),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
               SectionHeading(l10n.textSize),
               const SizedBox(height: AppSpacing.sm),
               const ReadingSizeControl(),

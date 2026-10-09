@@ -30,7 +30,8 @@ void main() {
       await pumpApp(tester, _api());
       expect(find.text('جذر أول'), findsOneWidget);
       expect(find.text('جذر ثان'), findsOneWidget);
-      expect(find.text('197'), findsOneWidget);
+      // Arabic interface: the app's own numbers are Arabic-Indic by default.
+      expect(find.text('١٩٧'), findsOneWidget);
       expect(find.text('فرع ثمانية'), findsNothing);
       expect(find.text('حفيد'), findsNothing);
     });
@@ -250,8 +251,8 @@ void main() {
         expect(find.text(title), findsOneWidget, reason: title);
       }
       await tapText(tester, 'الفوائد');
-      expect(find.text('1. فائدة أولى'), findsOneWidget);
-      expect(find.text('2. فائدة ثانية'), findsOneWidget);
+      expect(find.text('١. فائدة أولى'), findsOneWidget);
+      expect(find.text('٢. فائدة ثانية'), findsOneWidget);
       await tapText(tester, 'المصادر');
       expect(find.text('صحيح البخاري'), findsOneWidget);
     });

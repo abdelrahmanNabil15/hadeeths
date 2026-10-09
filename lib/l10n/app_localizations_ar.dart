@@ -188,6 +188,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get savedCopiesCleared => 'تم مسح النسخ المحفوظة';
 
   @override
+  String get digitsHeading => 'الأرقام';
+
+  @override
+  String get digitsAutomatic => 'حسب اللغة';
+
+  @override
+  String get digitsArabicIndic => 'الأرقام العربية الهندية (٠١٢٣)';
+
+  @override
+  String get digitsWestern => 'الأرقام الغربية (0123)';
+
+  @override
   String get navHadiths => 'الأحاديث';
 
   @override
