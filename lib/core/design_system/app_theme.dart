@@ -167,7 +167,7 @@ abstract final class AppTheme {
       sliderTheme: SliderThemeData(
         activeTrackColor: scheme.primary,
         // The unfilled part of the track still reads as part of the control.
-        inactiveTrackColor: scheme.surfaceContainerHighest,
+        inactiveTrackColor: scheme.outline.withValues(alpha: 0.4),
         thumbColor: scheme.primary,
         overlayColor: scheme.primary.withValues(alpha: 0.12),
         activeTickMarkColor: scheme.onPrimary.withValues(alpha: 0.6),
