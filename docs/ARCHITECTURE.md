@@ -37,7 +37,8 @@ lib/
   features/prayer_times/         (Phase 3B; behind the Prayer section flag) domain: CalculationSettings, PrayerDay, PrayerMoment, Qibla,
                                  PrayerPreferences (method proposed once), CityCatalog, CountryLookup, LocationSetup, PrayerServices;
                                  data: AdhanPrayerTimesCalculator, GeolocatorLocationService + permission gateway, preferences repository;
-                                 presentation: PrayerCubit, PrayerPage, city picker, method page (see PRAYER_TIMES_VALIDATION.md)
+                                 Hijri (HijriConverter, HijriCoreConverter); presentation: PrayerCubit, PrayerPage, city picker, method,
+                                 Hijri and Qibla pages (see PRAYER_TIMES_VALIDATION.md)
   core/text/                     normalizeForSearch (Arabic spelling variants for matching only; shown text is never changed)
   l10n/                          ARB files and generated AppLocalizations (+ context.l10n helper)
   features/

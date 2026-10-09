@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/geolocator_location_service.dart';
+import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
 import 'package:mynewapp/features/prayer_times/data/prayer_preferences_repository_impl.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
@@ -20,6 +21,7 @@ PrayerServices buildPrayerServices({required SharedPreferences preferences}) {
   return PrayerServices(
     preferences: PrayerPreferencesRepositoryImpl(preferences),
     calculator: const AdhanPrayerTimesCalculator(),
+    hijri: const HijriCoreConverter(),
     permissions: const PermissionFlow(GeolocatorPermissionGateway()),
     location: const GeolocatorLocationService(),
     loadCities: () =>

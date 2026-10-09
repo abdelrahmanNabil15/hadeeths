@@ -181,5 +181,78 @@
   "calculationFailed": "تعذّر حساب المواقيت لهذا المكان.",
   "aboutPlacesHeading": "الأماكن",
   "aboutPlacesBody": "أسماء المدن ومواقعها ومناطقها الزمنية: GeoNames (geonames.org) برخصة CC BY 4.0. حدود الدول: Natural Earth (ملكية عامة). تُحسب مواقيت الصلاة على جهازك بمكتبة adhan_dart (رخصة MIT).",
-  "aboutPrivacyLocation": "إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن."
+  "aboutPrivacyLocation": "إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.",
+  "hijriHeading": "التاريخ الهجري",
+  "hijriReferenceUmmAlQura": "أم القرى (السعودية)",
+  "hijriReferenceUmmAlQuraNote": "التقويم الرسمي في السعودية، من جداول منشورة.",
+  "hijriReferenceFcna": "المجلس الفقهي لأمريكا الشمالية (حسابي)",
+  "hijriReferenceFcnaNote": "محسوب من ولادة الهلال. لم يُتحقق منه بعدُ بجدول رسمي.",
+  "hijriAdjustHeading": "التصحيح بالأيام",
+  "hijriAdjustHint": "استخدمه لمتابعة إعلان بلدك. قد يختلف التقويم المحسوب مسبقًا بيوم عن إعلان رؤية الهلال.",
+  "hijriAdjustMinus2": "قبل بيومين",
+  "hijriAdjustMinus1": "قبل بيوم",
+  "hijriAdjustNone": "بلا تصحيح",
+  "hijriAdjustPlus1": "بعد بيوم",
+  "hijriAdjustPlus2": "بعد يومين",
+  "hijriYearSuffix": "هـ",
+  "hijriChangesAtMaghrib": "يتغير التاريخ الهجري عند المغرب.",
+  "hijriMonth1": "محرم",
+  "hijriMonth2": "صفر",
+  "hijriMonth3": "ربيع الأول",
+  "hijriMonth4": "ربيع الآخر",
+  "hijriMonth5": "جمادى الأولى",
+  "hijriMonth6": "جمادى الآخرة",
+  "hijriMonth7": "رجب",
+  "hijriMonth8": "شعبان",
+  "hijriMonth9": "رمضان",
+  "hijriMonth10": "شوال",
+  "hijriMonth11": "ذو القعدة",
+  "hijriMonth12": "ذو الحجة",
+  "gregMonth1": "يناير",
+  "gregMonth2": "فبراير",
+  "gregMonth3": "مارس",
+  "gregMonth4": "أبريل",
+  "gregMonth5": "مايو",
+  "gregMonth6": "يونيو",
+  "gregMonth7": "يوليو",
+  "gregMonth8": "أغسطس",
+  "gregMonth9": "سبتمبر",
+  "gregMonth10": "أكتوبر",
+  "gregMonth11": "نوفمبر",
+  "gregMonth12": "ديسمبر",
+  "weekday1": "الاثنين",
+  "weekday2": "الثلاثاء",
+  "weekday3": "الأربعاء",
+  "weekday4": "الخميس",
+  "weekday5": "الجمعة",
+  "weekday6": "السبت",
+  "weekday7": "الأحد",
+  "qiblaHeading": "القبلة",
+  "qiblaBearing": "{degrees}° من الشمال الحقيقي مع عقارب الساعة",
+  "@qiblaBearing": {
+    "placeholders": {
+      "degrees": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaDistance": "نحو {km} كم إلى الكعبة",
+  "@qiblaDistance": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "qiblaHere": "أنت عند الكعبة.",
+  "qiblaNote": "هذا هو الاتجاه على الخريطة (الشمال الحقيقي) وليس قراءة بوصلة. بوصلة الهاتف تشير إلى الشمال المغناطيسي، وقد يختلف عنه بعدة درجات أو أكثر بحسب مكانك.",
+  "qiblaNeedsPlace": "حدّد موقعك أولًا لمعرفة اتجاه القبلة.",
+  "compassN": "الشمال",
+  "compassNE": "الشمال الشرقي",
+  "compassE": "الشرق",
+  "compassSE": "الجنوب الشرقي",
+  "compassS": "الجنوب",
+  "compassSW": "الجنوب الغربي",
+  "compassW": "الغرب",
+  "compassNW": "الشمال الغربي"
 }

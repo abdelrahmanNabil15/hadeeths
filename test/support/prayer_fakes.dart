@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
+import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
@@ -88,6 +89,7 @@ class PrayerFixture {
     services = PrayerServices(
       preferences: preferences,
       calculator: const AdhanPrayerTimesCalculator(),
+      hijri: const HijriCoreConverter(),
       permissions: PermissionFlow(gateway),
       location: location,
       loadCities: () async => realCityCatalog(),

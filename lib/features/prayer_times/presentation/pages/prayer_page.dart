@@ -12,7 +12,10 @@ import 'package:mynewapp/features/prayer_times/domain/method_suggestion.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/presentation/date_labels.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/hijri_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/method_page.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/qibla_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/prayer_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/widgets/prayer_setup_view.dart';
@@ -104,6 +107,23 @@ class _TimesView extends StatelessWidget {
                   child: Text(l10n.changeLocation),
                 ),
               ),
+              if (day != null) ...[
+                Text(
+                  gregorianDateText(l10n, digits, day.date),
+                  style: TextStyle(
+                    fontSize: AppTextSize.body,
+                    color: scheme.onSurface,
+                  ),
+                ),
+                if (state.hijriDate != null)
+                  Text(
+                    hijriDateText(l10n, digits, state.hijriDate!),
+                    style: TextStyle(
+                      fontSize: AppTextSize.body,
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+              ],
               const SizedBox(height: AppSpacing.md),
               if (day == null || state.calculationFailed)
                 SizedBox(
@@ -155,6 +175,16 @@ class _TimesView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppSpacing.lg),
+              AppTile(
+                title: l10n.qiblaHeading,
+                onTap: () => _open(context, const QiblaPage()),
+              ),
+              const SizedBox(height: AppSpacing.sm),
+              AppTile(
+                title: l10n.hijriHeading,
+                onTap: () => _open(context, const HijriPage()),
+              ),
+              const SizedBox(height: AppSpacing.lg),
               Text(
                 l10n.prayerDisclaimer,
                 style: TextStyle(
@@ -167,6 +197,16 @@ class _TimesView extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  /// Opens a sub-page that shares this screen's state.
+  static void _open(BuildContext context, Widget page) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            BlocProvider.value(value: context.read<PrayerCubit>(), child: page),
+      ),
     );
   }
 
@@ -209,10 +249,18 @@ class _NextBanner extends StatelessWidget {
           color: scheme.primaryContainer,
           borderRadius: BorderRadius.circular(AppRadius.card),
         ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
+        // A Wrap, not a Row: with very large text the time moves under the name instead of
+        // running out of the box.
+        child: SizedBox(
+          width: double.infinity,
+          child: Wrap(
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: AppSpacing.md,
+            runSpacing: AppSpacing.xs,
+            children: [
+              Column(
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -232,16 +280,16 @@ class _NextBanner extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            Text(
-              time,
-              style: TextStyle(
-                fontSize: AppTextSize.title,
-                fontWeight: FontWeight.w700,
-                color: scheme.onPrimaryContainer,
+              Text(
+                time,
+                style: TextStyle(
+                  fontSize: AppTextSize.title,
+                  fontWeight: FontWeight.w700,
+                  color: scheme.onPrimaryContainer,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

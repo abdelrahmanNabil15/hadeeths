@@ -84,13 +84,35 @@ source you trust; none was invented).
 - **Not on a device yet:** the real GPS read and permission prompt on the Android phone (the phone was locked during the session).
   Covered by tests with fakes only.
 
+## Hijri date and Qibla screen (3B-4)
+
+- **Engine:** `hijri_core` 1.1.0 (MIT, zero dependencies; table-driven Umm al-Qura for Hijri years 1318 to 1500, that is 1900-04-30 to the end
+  of 2077, and a calculated FCNA criterion). Dates outside the Umm al-Qura tables are reported as unknown, never guessed.
+- **Umm al-Qura check:** 80 Gregorian dates between 2025 and 2027 (two per month, plus the days around 1 Muharram 1448, 1 Ramadan and 1
+  Shawwal 1447) compared with Aladhan's `calendarMethod=UAQ`: all 80 match exactly (fixture `reference_hijri_uaq.json`). Aladhan is an
+  independent program, not an official authority; the package says its table comes from KACST data.
+- **FCNA:** only checked for internal consistency (months of 29 or 30 days that follow each other from 2025 to 2030) and that it stays
+  within about two days of Umm al-Qura. It has **not** been compared with an official FCNA calendar, so the screen says so and it is
+  never the default. To validate it, the owner needs to supply the Fiqh Council's published calendar.
+- **Policy implemented:** the default reference is Umm al-Qura for every country, with a manual correction of up to two days either way
+  (this is how a country that announces months after moon sighting, such as Egypt, can be followed). The app does not propose a
+  reference by country: no second reference is validated yet, so there is nothing safe to propose. The Hijri date changes at Maghrib,
+  not at midnight (a test checks the minute of the change); the screen says so. The Gregorian date shown is the calendar day at the place.
+- **Qibla screen:** the bearing in degrees from **true** north, the nearest of eight compass words, the distance, and a map-style dial
+  with north at the top. It does not read the phone's compass, so it needs no sensor and never shows a noisy value. The note on the
+  screen says that a phone compass points to magnetic north.
+- **Not done yet (needs the phone and one more decision):** a live compass arrow. A compass gives a magnetic heading; the Qibla bearing
+  is relative to true north, so a live arrow needs the local magnetic declination (the World Magnetic Model, public domain, needs
+  its coefficients and the official test values to be checked), and a sensor package that works with the project's current Android
+  build tools (`flutter_compass` 0.8.1 is 23 months old and was not tried).
+
 ## Owner decisions (2026-10-09) and where they stand
 
 | # | Decision | Status |
 |---|---|---|
 | 1 | Method chosen **by country at first setup only**, then fixed | Built (3B-2): `MethodSuggestion` maps Egypt to Egyptian, Saudi Arabia to Umm al-Qura, Pakistan, Bangladesh, India and Afghanistan to Karachi, the US and Canada to North America; any other country gets Muslim World League and the screen must say no country-specific method exists. `PrayerPreferences` proposes once from the first place set and never again; only the user can change it. The mapping is the app's own convention over the five methods offered; countries whose authorities use other methods (Kuwait, Qatar, UAE, Turkey, Morocco, Indonesia, Malaysia...) are not covered until those methods are added and validated. Country comes from the place, or offline from simplified borders (Natural Earth 1:110m, public domain). |
 | 2 | Validation authority: Egyptian General Authority of Survey, for Egypt | **Partly done.** The authority's own timetable was not reachable (egsa.gov.eg is the Egyptian Space Agency, a different body). Three Cairo days that Egyptian newspapers attribute to the authority (22 Feb, 1 Apr, 6 Aug 2026; fixture `egsa_press_reports.json`) match the Egyptian method within 2 minutes (Fajr, Maghrib and Isha mostly to the minute; Dhuhr 1 to 2 minutes later in the app because of the library's 1-minute margin). This is a secondary source. **Needed from the owner:** the authority's official timetable (PDF or table) or its web address, to replace the press reports. |
-| 3 | Hijri date: calendar suited to the country, with a changeable reference and manual adjustment | **Not built yet** (3B-4). Findings: Umm al-Qura and tabular civil can be computed offline; Egypt's official months follow moon-sighting announcements that cannot be computed offline, so for Egypt the app can offer a reference plus a manual correction of a day or two and must say it may differ from the announcement. A package must be chosen and checked (candidates seen on pub.dev: `hijri_core`, `hijri_plus`, `hijri_date`; none verified yet). |
+| 3 | Hijri date: calendar suited to the country, with a changeable reference and manual adjustment | **Built (3B-4)**: Umm al-Qura and FCNA references, manual correction of up to two days, date changes at Maghrib; see the section above. No reference is proposed by country, because only Umm al-Qura is validated. Egypt's official months follow moon-sighting announcements that cannot be computed offline, so for Egypt the manual correction is the way to follow them and the screen says the calendar may differ from the announcement. The package `hijri_core` was chosen and its Umm al-Qura output checked (80 of 80 dates). |
 | 4 | Digits: Arabic-Indic by default in the Arabic interface, with an option to change | Built (3B-2): Settings has "Numerals" (match the language, Arabic-Indic, Western). It applies to the app's own numbers only (category counts, search messages, hint numbering, text-size percentage) and never to text from sources, which is shown exactly as received (a test checks this). Times and dates will use it when the dashboard is built. |
 
 ## Open decisions for the owner

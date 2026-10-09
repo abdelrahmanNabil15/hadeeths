@@ -368,4 +368,189 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get aboutPrivacyLocation =>
       'إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.';
+
+  @override
+  String get hijriHeading => 'التاريخ الهجري';
+
+  @override
+  String get hijriReferenceUmmAlQura => 'أم القرى (السعودية)';
+
+  @override
+  String get hijriReferenceUmmAlQuraNote =>
+      'التقويم الرسمي في السعودية، من جداول منشورة.';
+
+  @override
+  String get hijriReferenceFcna => 'المجلس الفقهي لأمريكا الشمالية (حسابي)';
+
+  @override
+  String get hijriReferenceFcnaNote =>
+      'محسوب من ولادة الهلال. لم يُتحقق منه بعدُ بجدول رسمي.';
+
+  @override
+  String get hijriAdjustHeading => 'التصحيح بالأيام';
+
+  @override
+  String get hijriAdjustHint =>
+      'استخدمه لمتابعة إعلان بلدك. قد يختلف التقويم المحسوب مسبقًا بيوم عن إعلان رؤية الهلال.';
+
+  @override
+  String get hijriAdjustMinus2 => 'قبل بيومين';
+
+  @override
+  String get hijriAdjustMinus1 => 'قبل بيوم';
+
+  @override
+  String get hijriAdjustNone => 'بلا تصحيح';
+
+  @override
+  String get hijriAdjustPlus1 => 'بعد بيوم';
+
+  @override
+  String get hijriAdjustPlus2 => 'بعد يومين';
+
+  @override
+  String get hijriYearSuffix => 'هـ';
+
+  @override
+  String get hijriChangesAtMaghrib => 'يتغير التاريخ الهجري عند المغرب.';
+
+  @override
+  String get hijriMonth1 => 'محرم';
+
+  @override
+  String get hijriMonth2 => 'صفر';
+
+  @override
+  String get hijriMonth3 => 'ربيع الأول';
+
+  @override
+  String get hijriMonth4 => 'ربيع الآخر';
+
+  @override
+  String get hijriMonth5 => 'جمادى الأولى';
+
+  @override
+  String get hijriMonth6 => 'جمادى الآخرة';
+
+  @override
+  String get hijriMonth7 => 'رجب';
+
+  @override
+  String get hijriMonth8 => 'شعبان';
+
+  @override
+  String get hijriMonth9 => 'رمضان';
+
+  @override
+  String get hijriMonth10 => 'شوال';
+
+  @override
+  String get hijriMonth11 => 'ذو القعدة';
+
+  @override
+  String get hijriMonth12 => 'ذو الحجة';
+
+  @override
+  String get gregMonth1 => 'يناير';
+
+  @override
+  String get gregMonth2 => 'فبراير';
+
+  @override
+  String get gregMonth3 => 'مارس';
+
+  @override
+  String get gregMonth4 => 'أبريل';
+
+  @override
+  String get gregMonth5 => 'مايو';
+
+  @override
+  String get gregMonth6 => 'يونيو';
+
+  @override
+  String get gregMonth7 => 'يوليو';
+
+  @override
+  String get gregMonth8 => 'أغسطس';
+
+  @override
+  String get gregMonth9 => 'سبتمبر';
+
+  @override
+  String get gregMonth10 => 'أكتوبر';
+
+  @override
+  String get gregMonth11 => 'نوفمبر';
+
+  @override
+  String get gregMonth12 => 'ديسمبر';
+
+  @override
+  String get weekday1 => 'الاثنين';
+
+  @override
+  String get weekday2 => 'الثلاثاء';
+
+  @override
+  String get weekday3 => 'الأربعاء';
+
+  @override
+  String get weekday4 => 'الخميس';
+
+  @override
+  String get weekday5 => 'الجمعة';
+
+  @override
+  String get weekday6 => 'السبت';
+
+  @override
+  String get weekday7 => 'الأحد';
+
+  @override
+  String get qiblaHeading => 'القبلة';
+
+  @override
+  String qiblaBearing(String degrees) {
+    return '$degrees° من الشمال الحقيقي مع عقارب الساعة';
+  }
+
+  @override
+  String qiblaDistance(String km) {
+    return 'نحو $km كم إلى الكعبة';
+  }
+
+  @override
+  String get qiblaHere => 'أنت عند الكعبة.';
+
+  @override
+  String get qiblaNote =>
+      'هذا هو الاتجاه على الخريطة (الشمال الحقيقي) وليس قراءة بوصلة. بوصلة الهاتف تشير إلى الشمال المغناطيسي، وقد يختلف عنه بعدة درجات أو أكثر بحسب مكانك.';
+
+  @override
+  String get qiblaNeedsPlace => 'حدّد موقعك أولًا لمعرفة اتجاه القبلة.';
+
+  @override
+  String get compassN => 'الشمال';
+
+  @override
+  String get compassNE => 'الشمال الشرقي';
+
+  @override
+  String get compassE => 'الشرق';
+
+  @override
+  String get compassSE => 'الجنوب الشرقي';
+
+  @override
+  String get compassS => 'الجنوب';
+
+  @override
+  String get compassSW => 'الجنوب الغربي';
+
+  @override
+  String get compassW => 'الغرب';
+
+  @override
+  String get compassNW => 'الشمال الغربي';
 }

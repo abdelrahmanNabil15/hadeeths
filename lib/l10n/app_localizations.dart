@@ -757,6 +757,360 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'إذا اخترت «استخدم موقعي» يُقرأ موقعك مرة واحدة ويُحفظ على هذا الجهاز تقريبًا إلى نحو كيلومتر ولا يُرسَل إلى أي جهة. واختيار مدينة لا يحتاج إلى أي إذن.'**
   String get aboutPrivacyLocation;
+
+  /// No description provided for @hijriHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'التاريخ الهجري'**
+  String get hijriHeading;
+
+  /// No description provided for @hijriReferenceUmmAlQura.
+  ///
+  /// In ar, this message translates to:
+  /// **'أم القرى (السعودية)'**
+  String get hijriReferenceUmmAlQura;
+
+  /// No description provided for @hijriReferenceUmmAlQuraNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'التقويم الرسمي في السعودية، من جداول منشورة.'**
+  String get hijriReferenceUmmAlQuraNote;
+
+  /// No description provided for @hijriReferenceFcna.
+  ///
+  /// In ar, this message translates to:
+  /// **'المجلس الفقهي لأمريكا الشمالية (حسابي)'**
+  String get hijriReferenceFcna;
+
+  /// No description provided for @hijriReferenceFcnaNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'محسوب من ولادة الهلال. لم يُتحقق منه بعدُ بجدول رسمي.'**
+  String get hijriReferenceFcnaNote;
+
+  /// No description provided for @hijriAdjustHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'التصحيح بالأيام'**
+  String get hijriAdjustHeading;
+
+  /// No description provided for @hijriAdjustHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدمه لمتابعة إعلان بلدك. قد يختلف التقويم المحسوب مسبقًا بيوم عن إعلان رؤية الهلال.'**
+  String get hijriAdjustHint;
+
+  /// No description provided for @hijriAdjustMinus2.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل بيومين'**
+  String get hijriAdjustMinus2;
+
+  /// No description provided for @hijriAdjustMinus1.
+  ///
+  /// In ar, this message translates to:
+  /// **'قبل بيوم'**
+  String get hijriAdjustMinus1;
+
+  /// No description provided for @hijriAdjustNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تصحيح'**
+  String get hijriAdjustNone;
+
+  /// No description provided for @hijriAdjustPlus1.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد بيوم'**
+  String get hijriAdjustPlus1;
+
+  /// No description provided for @hijriAdjustPlus2.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد يومين'**
+  String get hijriAdjustPlus2;
+
+  /// No description provided for @hijriYearSuffix.
+  ///
+  /// In ar, this message translates to:
+  /// **'هـ'**
+  String get hijriYearSuffix;
+
+  /// No description provided for @hijriChangesAtMaghrib.
+  ///
+  /// In ar, this message translates to:
+  /// **'يتغير التاريخ الهجري عند المغرب.'**
+  String get hijriChangesAtMaghrib;
+
+  /// No description provided for @hijriMonth1.
+  ///
+  /// In ar, this message translates to:
+  /// **'محرم'**
+  String get hijriMonth1;
+
+  /// No description provided for @hijriMonth2.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفر'**
+  String get hijriMonth2;
+
+  /// No description provided for @hijriMonth3.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربيع الأول'**
+  String get hijriMonth3;
+
+  /// No description provided for @hijriMonth4.
+  ///
+  /// In ar, this message translates to:
+  /// **'ربيع الآخر'**
+  String get hijriMonth4;
+
+  /// No description provided for @hijriMonth5.
+  ///
+  /// In ar, this message translates to:
+  /// **'جمادى الأولى'**
+  String get hijriMonth5;
+
+  /// No description provided for @hijriMonth6.
+  ///
+  /// In ar, this message translates to:
+  /// **'جمادى الآخرة'**
+  String get hijriMonth6;
+
+  /// No description provided for @hijriMonth7.
+  ///
+  /// In ar, this message translates to:
+  /// **'رجب'**
+  String get hijriMonth7;
+
+  /// No description provided for @hijriMonth8.
+  ///
+  /// In ar, this message translates to:
+  /// **'شعبان'**
+  String get hijriMonth8;
+
+  /// No description provided for @hijriMonth9.
+  ///
+  /// In ar, this message translates to:
+  /// **'رمضان'**
+  String get hijriMonth9;
+
+  /// No description provided for @hijriMonth10.
+  ///
+  /// In ar, this message translates to:
+  /// **'شوال'**
+  String get hijriMonth10;
+
+  /// No description provided for @hijriMonth11.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذو القعدة'**
+  String get hijriMonth11;
+
+  /// No description provided for @hijriMonth12.
+  ///
+  /// In ar, this message translates to:
+  /// **'ذو الحجة'**
+  String get hijriMonth12;
+
+  /// No description provided for @gregMonth1.
+  ///
+  /// In ar, this message translates to:
+  /// **'يناير'**
+  String get gregMonth1;
+
+  /// No description provided for @gregMonth2.
+  ///
+  /// In ar, this message translates to:
+  /// **'فبراير'**
+  String get gregMonth2;
+
+  /// No description provided for @gregMonth3.
+  ///
+  /// In ar, this message translates to:
+  /// **'مارس'**
+  String get gregMonth3;
+
+  /// No description provided for @gregMonth4.
+  ///
+  /// In ar, this message translates to:
+  /// **'أبريل'**
+  String get gregMonth4;
+
+  /// No description provided for @gregMonth5.
+  ///
+  /// In ar, this message translates to:
+  /// **'مايو'**
+  String get gregMonth5;
+
+  /// No description provided for @gregMonth6.
+  ///
+  /// In ar, this message translates to:
+  /// **'يونيو'**
+  String get gregMonth6;
+
+  /// No description provided for @gregMonth7.
+  ///
+  /// In ar, this message translates to:
+  /// **'يوليو'**
+  String get gregMonth7;
+
+  /// No description provided for @gregMonth8.
+  ///
+  /// In ar, this message translates to:
+  /// **'أغسطس'**
+  String get gregMonth8;
+
+  /// No description provided for @gregMonth9.
+  ///
+  /// In ar, this message translates to:
+  /// **'سبتمبر'**
+  String get gregMonth9;
+
+  /// No description provided for @gregMonth10.
+  ///
+  /// In ar, this message translates to:
+  /// **'أكتوبر'**
+  String get gregMonth10;
+
+  /// No description provided for @gregMonth11.
+  ///
+  /// In ar, this message translates to:
+  /// **'نوفمبر'**
+  String get gregMonth11;
+
+  /// No description provided for @gregMonth12.
+  ///
+  /// In ar, this message translates to:
+  /// **'ديسمبر'**
+  String get gregMonth12;
+
+  /// No description provided for @weekday1.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاثنين'**
+  String get weekday1;
+
+  /// No description provided for @weekday2.
+  ///
+  /// In ar, this message translates to:
+  /// **'الثلاثاء'**
+  String get weekday2;
+
+  /// No description provided for @weekday3.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأربعاء'**
+  String get weekday3;
+
+  /// No description provided for @weekday4.
+  ///
+  /// In ar, this message translates to:
+  /// **'الخميس'**
+  String get weekday4;
+
+  /// No description provided for @weekday5.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجمعة'**
+  String get weekday5;
+
+  /// No description provided for @weekday6.
+  ///
+  /// In ar, this message translates to:
+  /// **'السبت'**
+  String get weekday6;
+
+  /// No description provided for @weekday7.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأحد'**
+  String get weekday7;
+
+  /// No description provided for @qiblaHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'القبلة'**
+  String get qiblaHeading;
+
+  /// No description provided for @qiblaBearing.
+  ///
+  /// In ar, this message translates to:
+  /// **'{degrees}° من الشمال الحقيقي مع عقارب الساعة'**
+  String qiblaBearing(String degrees);
+
+  /// No description provided for @qiblaDistance.
+  ///
+  /// In ar, this message translates to:
+  /// **'نحو {km} كم إلى الكعبة'**
+  String qiblaDistance(String km);
+
+  /// No description provided for @qiblaHere.
+  ///
+  /// In ar, this message translates to:
+  /// **'أنت عند الكعبة.'**
+  String get qiblaHere;
+
+  /// No description provided for @qiblaNote.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا هو الاتجاه على الخريطة (الشمال الحقيقي) وليس قراءة بوصلة. بوصلة الهاتف تشير إلى الشمال المغناطيسي، وقد يختلف عنه بعدة درجات أو أكثر بحسب مكانك.'**
+  String get qiblaNote;
+
+  /// No description provided for @qiblaNeedsPlace.
+  ///
+  /// In ar, this message translates to:
+  /// **'حدّد موقعك أولًا لمعرفة اتجاه القبلة.'**
+  String get qiblaNeedsPlace;
+
+  /// No description provided for @compassN.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشمال'**
+  String get compassN;
+
+  /// No description provided for @compassNE.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشمال الشرقي'**
+  String get compassNE;
+
+  /// No description provided for @compassE.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشرق'**
+  String get compassE;
+
+  /// No description provided for @compassSE.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجنوب الشرقي'**
+  String get compassSE;
+
+  /// No description provided for @compassS.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجنوب'**
+  String get compassS;
+
+  /// No description provided for @compassSW.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجنوب الغربي'**
+  String get compassSW;
+
+  /// No description provided for @compassW.
+  ///
+  /// In ar, this message translates to:
+  /// **'الغرب'**
+  String get compassW;
+
+  /// No description provided for @compassNW.
+  ///
+  /// In ar, this message translates to:
+  /// **'الشمال الغربي'**
+  String get compassNW;
 }
 
 class _AppLocalizationsDelegate

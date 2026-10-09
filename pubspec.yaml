@@ -38,6 +38,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   geolocator: ^14.1.1
+  hijri_core: ^1.1.0
   intl: ^0.20.2
   path_provider: ^2.1.5
   share_plus: ^13.3.1

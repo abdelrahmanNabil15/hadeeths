@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
+import 'package:mynewapp/features/prayer_times/domain/hijri_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
@@ -52,6 +53,8 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
       'adjustments': {
         for (final e in p.settings.adjustments.entries) e.key.name: e.value,
       },
+      'hijriReference': p.hijri.reference.name,
+      'hijriAdjustment': p.hijri.adjustmentDays,
       'location': place == null
           ? null
           : {
@@ -95,10 +98,22 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
     final origin = location == null
         ? MethodOrigin.notSet
         : _byName(MethodOrigin.values, json['origin']) ?? MethodOrigin.user;
+    final adjustment = json['hijriAdjustment'];
+    final hijri = HijriSettings(
+      reference:
+          _byName(HijriReference.values, json['hijriReference']) ??
+          HijriReference.ummAlQura,
+      adjustmentDays:
+          adjustment is int &&
+              adjustment.abs() <= HijriSettings.maxAdjustmentDays
+          ? adjustment
+          : 0,
+    );
     return PrayerPreferences(
       location: location,
       settings: settings,
       methodOrigin: origin,
+      hijri: hijri,
     );
   }
 

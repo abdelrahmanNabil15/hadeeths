@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart';
+import 'package:mynewapp/features/prayer_times/domain/hijri_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/method_suggestion.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 
@@ -25,11 +26,17 @@ class PrayerPreferences extends Equatable {
     this.location,
     CalculationSettings? settings,
     this.methodOrigin = MethodOrigin.notSet,
-  }) : settings = settings ?? CalculationSettings();
+    HijriSettings? hijri,
+  }) : settings = settings ?? CalculationSettings(),
+       hijri = hijri ?? HijriSettings();
 
   final PrayerLocation? location;
   final CalculationSettings settings;
   final MethodOrigin methodOrigin;
+
+  /// Which Hijri reference to use and the manual day correction. Unlike the method it is never
+  /// proposed by the app: it starts as Umm al-Qura with no correction and only the user changes it.
+  final HijriSettings hijri;
 
   bool get isSetUp => location != null;
 
@@ -41,6 +48,7 @@ class PrayerPreferences extends Equatable {
         location: place,
         settings: settings,
         methodOrigin: methodOrigin,
+        hijri: hijri,
       );
     }
     final suggestion = MethodSuggestion.forCountry(
@@ -50,6 +58,7 @@ class PrayerPreferences extends Equatable {
       location: place,
       settings: settings.copyWith(method: suggestion.method),
       methodOrigin: MethodOrigin.suggested,
+      hijri: hijri,
     );
   }
 
@@ -58,6 +67,7 @@ class PrayerPreferences extends Equatable {
     location: location,
     settings: settings.copyWith(method: method),
     methodOrigin: MethodOrigin.user,
+    hijri: hijri,
   );
 
   /// Any other calculation choice (Asr school, high-latitude rule, adjustments). Never touches
@@ -67,8 +77,17 @@ class PrayerPreferences extends Equatable {
         location: location,
         settings: changed.copyWith(method: settings.method),
         methodOrigin: methodOrigin,
+        hijri: hijri,
       );
 
+  /// The user changed the Hijri reference or the day correction.
+  PrayerPreferences withHijri(HijriSettings changed) => PrayerPreferences(
+    location: location,
+    settings: settings,
+    methodOrigin: methodOrigin,
+    hijri: changed,
+  );
+
   @override
-  List<Object?> get props => [location, settings, methodOrigin];
+  List<Object?> get props => [location, settings, methodOrigin, hijri];
 }

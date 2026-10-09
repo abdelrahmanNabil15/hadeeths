@@ -372,4 +372,189 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutPrivacyLocation =>
       'If you choose “Use my location”, your position is read once, kept only to about a kilometre on this device, and never sent anywhere. Choosing a city needs no permission.';
+
+  @override
+  String get hijriHeading => 'Hijri date';
+
+  @override
+  String get hijriReferenceUmmAlQura => 'Umm al-Qura (Saudi Arabia)';
+
+  @override
+  String get hijriReferenceUmmAlQuraNote =>
+      'The official calendar of Saudi Arabia, from published tables.';
+
+  @override
+  String get hijriReferenceFcna => 'FCNA (calculated)';
+
+  @override
+  String get hijriReferenceFcnaNote =>
+      'Calculated from the new moon. Not yet checked against an official table.';
+
+  @override
+  String get hijriAdjustHeading => 'Correct by days';
+
+  @override
+  String get hijriAdjustHint =>
+      'Use this to follow your country\'s announcement. A calendar worked out in advance can differ by a day from the moon-sighting announcement.';
+
+  @override
+  String get hijriAdjustMinus2 => '2 days earlier';
+
+  @override
+  String get hijriAdjustMinus1 => '1 day earlier';
+
+  @override
+  String get hijriAdjustNone => 'No correction';
+
+  @override
+  String get hijriAdjustPlus1 => '1 day later';
+
+  @override
+  String get hijriAdjustPlus2 => '2 days later';
+
+  @override
+  String get hijriYearSuffix => 'AH';
+
+  @override
+  String get hijriChangesAtMaghrib => 'The Hijri date changes at Maghrib.';
+
+  @override
+  String get hijriMonth1 => 'Muharram';
+
+  @override
+  String get hijriMonth2 => 'Safar';
+
+  @override
+  String get hijriMonth3 => 'Rabi al-Awwal';
+
+  @override
+  String get hijriMonth4 => 'Rabi al-Thani';
+
+  @override
+  String get hijriMonth5 => 'Jumada al-Ula';
+
+  @override
+  String get hijriMonth6 => 'Jumada al-Akhira';
+
+  @override
+  String get hijriMonth7 => 'Rajab';
+
+  @override
+  String get hijriMonth8 => 'Shaban';
+
+  @override
+  String get hijriMonth9 => 'Ramadan';
+
+  @override
+  String get hijriMonth10 => 'Shawwal';
+
+  @override
+  String get hijriMonth11 => 'Dhu al-Qada';
+
+  @override
+  String get hijriMonth12 => 'Dhu al-Hijja';
+
+  @override
+  String get gregMonth1 => 'January';
+
+  @override
+  String get gregMonth2 => 'February';
+
+  @override
+  String get gregMonth3 => 'March';
+
+  @override
+  String get gregMonth4 => 'April';
+
+  @override
+  String get gregMonth5 => 'May';
+
+  @override
+  String get gregMonth6 => 'June';
+
+  @override
+  String get gregMonth7 => 'July';
+
+  @override
+  String get gregMonth8 => 'August';
+
+  @override
+  String get gregMonth9 => 'September';
+
+  @override
+  String get gregMonth10 => 'October';
+
+  @override
+  String get gregMonth11 => 'November';
+
+  @override
+  String get gregMonth12 => 'December';
+
+  @override
+  String get weekday1 => 'Monday';
+
+  @override
+  String get weekday2 => 'Tuesday';
+
+  @override
+  String get weekday3 => 'Wednesday';
+
+  @override
+  String get weekday4 => 'Thursday';
+
+  @override
+  String get weekday5 => 'Friday';
+
+  @override
+  String get weekday6 => 'Saturday';
+
+  @override
+  String get weekday7 => 'Sunday';
+
+  @override
+  String get qiblaHeading => 'Qibla';
+
+  @override
+  String qiblaBearing(String degrees) {
+    return '$degrees° from true north, clockwise';
+  }
+
+  @override
+  String qiblaDistance(String km) {
+    return 'About $km km to the Kaaba';
+  }
+
+  @override
+  String get qiblaHere => 'You are at the Kaaba.';
+
+  @override
+  String get qiblaNote =>
+      'This is the direction on the map (true north), not a compass reading. A phone compass points to magnetic north, which can differ by several degrees or more depending on where you are.';
+
+  @override
+  String get qiblaNeedsPlace => 'Set your location first to find the Qibla.';
+
+  @override
+  String get compassN => 'North';
+
+  @override
+  String get compassNE => 'North-east';
+
+  @override
+  String get compassE => 'East';
+
+  @override
+  String get compassSE => 'South-east';
+
+  @override
+  String get compassS => 'South';
+
+  @override
+  String get compassSW => 'South-west';
+
+  @override
+  String get compassW => 'West';
+
+  @override
+  String get compassNW => 'North-west';
 }
