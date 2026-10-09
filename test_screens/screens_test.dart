@@ -230,6 +230,8 @@ void main() {
       await tap(find.byType(SearchEntry));
       await tester.enterText(find.byType(TextField).first, 'صلاة');
       await tester.testTextInput.receiveAction(TextInputAction.search);
+      // Let the search's typing pause pass so the results show.
+      await tester.pump(const Duration(seconds: 1));
       await shot('search');
       await back();
 

@@ -35,8 +35,8 @@ class LoadingView extends StatelessWidget {
   );
 }
 
-/// Grey placeholder rows shown while a list loads. Static (no animation), announced once
-/// as "Loading".
+/// Placeholder cards shown while a list loads: the card shape with two faint text bars, so the
+/// screen keeps its layout. Static (no animation), announced once as "Loading".
 class SkeletonList extends StatelessWidget {
   const SkeletonList({
     super.key,
@@ -50,6 +50,17 @@ class SkeletonList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    Widget bar(double widthFactor) => FractionallySizedBox(
+      alignment: AlignmentDirectional.centerStart,
+      widthFactor: widthFactor,
+      child: Container(
+        height: AppSpacing.md,
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
+      ),
+    );
     return Semantics(
       label: context.l10n.loading,
       liveRegion: true,
@@ -62,10 +73,26 @@ class SkeletonList extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
         itemBuilder: (context, index) => DecoratedBox(
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerHigh,
+            color: scheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: scheme.outlineVariant),
           ),
-          child: SizedBox(height: rowHeight, width: double.infinity),
+          child: SizedBox(
+            height: rowHeight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  bar(0.7),
+                  if (rowHeight >= 72) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    bar(0.45),
+                  ],
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );

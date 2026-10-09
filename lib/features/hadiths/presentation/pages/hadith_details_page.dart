@@ -160,9 +160,13 @@ class HadithDetailsBody extends StatelessWidget {
                 Semantics(
                   header: true,
                   child: SelectionArea(
+                    // Titles can be a whole sentence, so the editorial face in its regular weight:
+                    // elegant at any length, never a heavy block.
                     child: Text(
                       d.title,
-                      style: AppTypography.of(context).editorial,
+                      style: AppTypography.of(
+                        context,
+                      ).editorial.copyWith(fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
