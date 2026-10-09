@@ -1391,7 +1391,7 @@ abstract class AppLocalizations {
   /// No description provided for @remindersExactHint.
   ///
   /// In ar, this message translates to:
-  /// **'يوصل كل تذكير في دقيقته. سيطلب منك أندرويد السماح بـ«المنبهات والتذكيرات» لهذا التطبيق.'**
+  /// **'يطلب من أندرويد إيصال كل تذكير في وقته. يحتاج هذا إلى إذن «المنبهات والتذكيرات» لهذا التطبيق، ومن دونه قد تتأخر التذكيرات.'**
   String get remindersExactHint;
 
   /// No description provided for @remindersExactExplainTitle.
@@ -1403,7 +1403,7 @@ abstract class AppLocalizations {
   /// No description provided for @remindersExactExplainBody.
   ///
   /// In ar, this message translates to:
-  /// **'من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه تصل التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن.'**
+  /// **'من دونه قد يتأخر أندرويد في إيصال التذكير، وأحيانًا حتى ساعة، عندما يوفّر الهاتف الطاقة. معه يستطيع أندرويد إيصال التذكيرات في وقتها. الشاشة التالية هي صفحة إعدادات أندرويد الخاصة بهذا الإذن. إن لم تسمح به تبقى التذكيرات تعمل لكنها قد تتأخر.'**
   String get remindersExactExplainBody;
 
   /// No description provided for @remindersExactMissing.

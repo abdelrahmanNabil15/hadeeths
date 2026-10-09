@@ -163,8 +163,7 @@ source you trust; none was invented).
 | Reboot reschedule, timezone change on the device | NOT RUN |
 | iOS notifications | NOT RUN (CI compiles only; no Mac) |
 
-Decisions for the owner: Adhan audio (none bundled; a licensed recording is needed first), whether to ship `SCHEDULE_EXACT_ALARM`
-(Google Play may require a declaration for it), and approval of the reminder wording.
+Owner decisions (2026-10-09): (1) keep `SCHEDULE_EXACT_ALARM` only for user-enabled precise reminders, check access before scheduling, explain before asking, fall back to inexact if denied, never use `USE_EXACT_ALARM`, and never promise exact delivery without access; the Play Console declaration must still be checked against the current policy before release (not verified here). (2) System notification sound or silence only; no bundled or streamed adhan until licence and usage rights are verified. (3) Wording approved: "حان وقت صلاة {name}" and "صلاة {name} بعد {n} دقيقة", with names and digits following the language and digit preference. The sunrise variants ("الشروق الآن", "الشروق بعد n دقيقة") and the test reminder text are outside the approved templates and are awaiting confirmation.
 
 ## Owner decisions (2026-10-09) and where they stand
 

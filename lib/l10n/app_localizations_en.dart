@@ -752,14 +752,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get remindersExactHint =>
-      'Delivers each reminder on the minute. Android asks you to allow “Alarms & reminders” for this app.';
+      'Asks Android to deliver each reminder at its time. This needs “Alarms & reminders” access for this app; without it, reminders may arrive late.';
 
   @override
   String get remindersExactExplainTitle => 'Allow exact timing?';
 
   @override
   String get remindersExactExplainBody =>
-      'Without it, Android may deliver a reminder late, sometimes by up to an hour, when the phone is saving power. With it, reminders arrive on time. The next screen is Android\'s own settings page for this permission.';
+      'Without it, Android may deliver a reminder late, sometimes by up to an hour, when the phone is saving power. With it, Android can deliver reminders at their time. The next screen is Android\'s own settings page for this permission. If you do not allow it, reminders still work but may be late.';
 
   @override
   String get remindersExactMissing =>
