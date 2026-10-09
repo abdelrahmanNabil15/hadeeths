@@ -133,6 +133,23 @@ cubits are created per screen with `BlocProvider`.
 - Motion: sections animate for 250 ms; with the system's "remove animations" setting nothing animates (and no
   `AnimatedSize` is built, which would assert with a zero duration).
 
+### Design foundations (UI Phase A, additive)
+
+- `AppMotion` (tokens): `instant` 100, `short` 150, `medium` 250, `page` 280 (`pageReverse` 220), `emphasis` 400 ms, and the curves
+  `standard`, `enter`, `exit`. Read them as `context.motion(AppMotion.medium)` (`design_system/motion.dart`), which returns zero when the
+  system removes animations. `test/core/motion_test.dart` fails if a screen, shell file or shared widget contains a `Duration(...)` literal.
+- `AppColors` (theme extension): success, warning and the reading surface, with contrast-checked pairs; `AppColors.of(context)`.
+- `AppTypography.of(context)`: named styles (display, title, heading, body, meta, label, number). Hadith text keeps `ReadingText`.
+- `appRoute()` (`core/navigation`): opt-in page route per call site. iOS keeps the platform slide; elsewhere a short fade with a 2%
+  vertical move; nothing moves with animations removed. No existing route uses it yet. When a flow adopts it, adopt it for the whole
+  flow including its first route: the page underneath is moved by its own route's transition, so a mixed stack would fade one page
+  while the default transition still slides the other.
+- `Haptics` (`core/haptics`): `selection()` and `alignment()` through the system; no in-app setting. Not yet used (the Qibla cue still
+  calls `HapticFeedback` directly until UI Phase D).
+- Shared widgets added: `StatusBanner`, `AnimatedStateSwitcher`, `PressableScale`. No existing widget changed.
+- Finding: `MaterialApp` is given a new `AppTheme.light()` on every settings rebuild, and the theme contains closures that never compare equal,
+  so the theme animates (about 200 ms) on each settings change. Left as is; to be looked at in UI Phase B.
+
 ## Decisions kept
 
 - State management: `flutter_bloc` (ADR-1). DI: no second container (ADR-2). Routing: `Navigator` (ADR-3).

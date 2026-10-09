@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 
 abstract final class AppTheme {
@@ -14,6 +15,7 @@ abstract final class AppTheme {
       colorScheme: scheme,
       fontFamily: AppFonts.ui,
       scaffoldBackgroundColor: scheme.surface,
+      extensions: [isLight ? AppColors.light : AppColors.dark],
     );
     final textTheme = base.textTheme.apply(
       fontFamily: AppFonts.ui,

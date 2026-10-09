@@ -127,7 +127,7 @@ needs a device test away from magnets. The compass package question from the pla
    └─> 3E Quran (needs DB; blocked on licences, can run in parallel with 3B–3D)
 3H hardening last.  Social v2 backend: design document only.
 ```
-Critical path: 3A → 3B → 3C → 3D. Parallel: Quran (once licences settle), hadith improvements, share cards, Liquid Glass spike.
+Critical path: 3A → 3B → 3C → 3D. **Order change (owner, 2026-10-09): the UI modernization phases A–F (`docs/UI_MODERNIZATION_PLAN.md`) run before 3D; 3D starts on the approved UI foundation and does not run alongside UI work that touches shared widgets or the theme.** Parallel: Quran (once licences settle), hadith improvements, share cards, Liquid Glass spike.
 
 ## 7. Offline matrix (summary)
 
