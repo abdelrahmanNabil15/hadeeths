@@ -2,4 +2,6 @@
 <resources>
     <!-- Default language of the app is Arabic. -->
     <string name="app_name">الأحاديث النبوية</string>
+    <string name="widget_description">الصلاة التالية ووقتها</string>
+    <string name="widget_open_app">افتح التطبيق لعرض مواقيت الصلاة</string>
 </resources>

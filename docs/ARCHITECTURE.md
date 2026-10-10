@@ -273,3 +273,17 @@ translation parity, and the architecture rules. Nothing touches the live API.
   day. Shown hadiths are avoided for 60 days. `UserDataEraser` clears the store.
 - Stored in shared preferences rather than the user database, to avoid a schema clash with the Quran migration (PR #8). It can move
   to a migration after both are merged, if wanted.
+
+## Android home-screen widget (Phase 3 step 4)
+
+- Dart writes, Kotlin shows: `buildWidgetSnapshot` (lib/app) produces plain lines (header, heading, "then" label, then
+  `millis\tname\ttime` for seven days). `WidgetUpdatingReminderService` wraps the reminder service, so every reconcile refreshes it
+  and `cancelAll` (Delete-all) clears it. `HomeWidgetBridge` (core/platform) is the `hadeeths/home_widget` channel; it exists only on
+  Android with the prayer section on.
+- `NextPrayerWidget` (android/.../widget) parses with pure Kotlin (`WidgetSnapshot.kt`, unit-tested on the JVM), shows the next time
+  and the one after it, and schedules its own redraw at the next prayer time: exact when the user allowed exact alarms, otherwise
+  inexact. It also redraws after boot, time and time-zone changes, and app updates. The receiver is disabled in the manifest and
+  switched on by `MainActivity.setWidgetEnabled` when the prayer section is on.
+- No live countdown on the widget (see `docs/PHASE3_CHECKLIST.md`, step 4). No location data reaches the widget.
+- A tap opens `MainActivity` with `hadeeths.route=prayer`; Flutter reads it with `takeLaunchRoute` (cold start) or receives `openRoute`
+  (running), and `AppShell.tabRequests` shows the Prayer section.

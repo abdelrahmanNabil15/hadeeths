@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/shell/coming_soon_page.dart';
@@ -32,6 +34,7 @@ class AppShell extends StatefulWidget {
     this.tasbeeh,
     this.favorites,
     this.onDeleteAll,
+    this.tabRequests,
   });
 
   final FeatureFlags features;
@@ -51,6 +54,9 @@ class AppShell extends StatefulWidget {
 
   /// Deletes everything the app keeps about the user.
   final Future<bool> Function()? onDeleteAll;
+
+  /// Sections to switch to from outside the app (a tap on the home-screen widget).
+  final Stream<ShellTab>? tabRequests;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -73,6 +79,29 @@ class _AppShellState extends State<AppShell> {
   int _index = 0;
 
   NavigatorState? get _currentNavigator => _navigators[_index].currentState;
+
+  StreamSubscription<ShellTab>? _requests;
+
+  @override
+  void initState() {
+    super.initState();
+    _requests = widget.tabRequests?.listen((tab) {
+      final index = _tabs.indexOf(tab);
+      if (index < 0 || !mounted) return;
+      // Show the section's first page, as a tap on its button would.
+      if (index == _index) {
+        _currentNavigator?.popUntil((route) => route.isFirst);
+      } else {
+        _select(index);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _requests?.cancel();
+    super.dispose();
+  }
 
   void _stackChanged() {
     // Navigator callbacks can arrive while the tree is building; update afterwards.

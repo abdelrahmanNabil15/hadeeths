@@ -83,7 +83,7 @@ class ReminderCoordinator implements ReminderService {
       final prefs = await _preferences.load();
       final app = await _loadAppSettings();
       final env = _environment();
-      final language = _language(app, env);
+      final language = languageFor(app, env);
       final l10n = lookupAppLocalizations(Locale(language));
       await _gateway.prepare(channelLabels(l10n));
 
@@ -248,7 +248,9 @@ class ReminderCoordinator implements ReminderService {
   Future<void> sendTest() async {
     final prefs = await _preferences.load();
     final app = await _loadAppSettings();
-    final l10n = lookupAppLocalizations(Locale(_language(app, _environment())));
+    final l10n = lookupAppLocalizations(
+      Locale(languageFor(app, _environment())),
+    );
     await _gateway.prepare(channelLabels(l10n));
     await _gateway.showNow(
       id: _testId,
@@ -267,6 +269,15 @@ class ReminderCoordinator implements ReminderService {
   }
 
   /// The app's language: the user's choice, else the device's if Arabic or English, else Arabic.
-  static String _language(AppSettings app, ReminderEnvironment env) =>
+  static String languageFor(AppSettings app, ReminderEnvironment env) =>
       app.language.code ?? (env.deviceLanguageCode == 'en' ? 'en' : 'ar');
+
+  /// The numerals the user sees: their choice, else Arabic-Indic for Arabic.
+  static Digits digitsFor(AppSettings app, String language) => Digits(
+    arabicIndic: switch (app.digits) {
+      DigitStyle.automatic => language == 'ar',
+      DigitStyle.arabicIndic => true,
+      DigitStyle.western => false,
+    },
+  );
 }

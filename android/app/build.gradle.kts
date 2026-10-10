@@ -74,6 +74,8 @@ kotlin {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // Unit tests of the home-screen widget's pure Kotlin (android/app/src/test).
+    testImplementation("junit:junit:4.13.2")
 }
 
 flutter {

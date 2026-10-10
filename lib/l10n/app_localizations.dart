@@ -1879,6 +1879,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.'**
   String get dailyHadithRememberHint;
+
+  /// Home-screen widget: before the prayer after the next one. Phase 3 step 4; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثم'**
+  String get widgetThen;
 }
 
 class _AppLocalizationsDelegate

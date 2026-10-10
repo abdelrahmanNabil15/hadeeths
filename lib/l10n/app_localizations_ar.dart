@@ -1082,4 +1082,7 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get dailyHadithRememberHint =>
       'وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.';
+
+  @override
+  String get widgetThen => 'ثم';
 }

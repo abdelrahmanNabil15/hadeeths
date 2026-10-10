@@ -1,11 +1,16 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:mynewapp/app/composite_permission_gateway.dart';
 import 'package:mynewapp/app/reminder_coordinator.dart';
+import 'package:mynewapp/app/widget_snapshot.dart';
+import 'package:mynewapp/app/widget_updating_reminders.dart';
 import 'package:mynewapp/core/notifications/local_notifications_gateway.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
+import 'package:mynewapp/core/time/clock.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/geolocator_location_service.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
@@ -16,6 +21,7 @@ import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
+import 'package:mynewapp/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Builds the real prayer services. The city list and the country borders are read from the
@@ -23,6 +29,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 PrayerServices buildPrayerServices({
   required SharedPreferences preferences,
   required Future<AppSettings> Function() loadAppSettings,
+  HomeWidgetBridge? homeWidget,
 }) {
   Future<Map<String, dynamic>> asset(String path) async =>
       jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
@@ -32,15 +39,34 @@ PrayerServices buildPrayerServices({
   final notifications = LocalNotificationsGateway();
   final prayerPreferences = PrayerPreferencesRepositoryImpl(preferences);
   const calculator = AdhanPrayerTimesCalculator();
+  final coordinator = ReminderCoordinator(
+    preferences: prayerPreferences,
+    calculator: calculator,
+    gateway: notifications,
+    loadAppSettings: loadAppSettings,
+  );
   return PrayerServices(
     preferences: prayerPreferences,
     calculator: calculator,
-    reminders: ReminderCoordinator(
-      preferences: prayerPreferences,
-      calculator: calculator,
-      gateway: notifications,
-      loadAppSettings: loadAppSettings,
-    ),
+    reminders: homeWidget == null
+        ? coordinator
+        : WidgetUpdatingReminderService(
+            inner: coordinator,
+            bridge: homeWidget,
+            snapshot: () async {
+              final app = await loadAppSettings();
+              final env = ReminderEnvironment.current();
+              final language = ReminderCoordinator.languageFor(app, env);
+              return buildWidgetSnapshot(
+                preferences: await prayerPreferences.load(),
+                calculator: calculator,
+                l10n: lookupAppLocalizations(Locale(language)),
+                digits: ReminderCoordinator.digitsFor(app, language),
+                use24Hour: env.use24Hour,
+                now: const SystemClock().now(),
+              );
+            },
+          ),
     hijri: const HijriCoreConverter(),
     permissions: PermissionFlow(
       buildPermissionGateway(notifications: notifications),

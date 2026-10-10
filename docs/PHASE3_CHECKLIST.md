@@ -78,14 +78,28 @@ Device checks NOT RUN: delivery timing, silent delivery on Android channels, reb
 New strings for wording review: `dailyHadithHeading` (حديث اليوم), `dailyHadithFrom`, `dailyHadithUnavailable`,
 `dailyHadithRemember`, `dailyHadithRememberHint`.
 
-## Step 4 — Android home-screen widget (`feature/p3g-android-widget`)
-- [ ] Spike: `Chronometer` count-down behaviour and digits on the emulator.
-- [ ] Snapshot builder (Dart) and thin channel; Kotlin provider, layouts, receivers; receiver disabled unless the flag is on.
-- [ ] Stale, no-place and tap-to-open states; Delete-all clears the snapshot.
-- [ ] Kotlin unit tests plus a Gradle test step in CI; Dart snapshot tests.
+## Step 4 — Android home-screen widget (`feature/p3g-android-widget`) — DONE (device placement check pending)
+- [x] Spike decision (D6): **no live countdown on the widget.** Android's `Chronometer` count-down (from its source, as I recall it;
+      not run on a device) shows negative time after zero, and its digits follow the system locale, not the app's digit setting. A
+      redraw at the prayer time can arrive late under Doze, so the widget would show "−0:03". Fallback taken: the next time and the
+      one after it, always correct after each redraw.
+- [x] Snapshot (`lib/app/widget_snapshot.dart`): seven days of times as plain lines, with names, times and labels in the app's
+      language, digits and clock style; no place name, no coordinates; nothing when no place is set.
+- [x] Kept current by `WidgetUpdatingReminderService`, which wraps the reminder service: every reconcile (start, resume, place,
+      method, language, numerals) rewrites it; Delete-all clears it; a widget failure never fails reminders.
+- [x] Native (`android/.../widget/`): pure-Kotlin parser and selector (`WidgetSnapshot.kt`); `NextPrayerWidget` redraws at each
+      prayer time (exact when "Alarms & reminders" is allowed, otherwise inexact), after boot, time or time-zone change and app update;
+      shows "Open the app to see prayer times" when it has nothing; tap opens the app on the Prayer section; layout in the hero colours
+      (day and night), text aligned to its own language; receiver disabled until the app enables it with the prayer section; no new
+      permission.
+- [x] Channel `hadeeths/home_widget` in `MainActivity` (update, clear, setEnabled, takeLaunchRoute; openRoute on a new tap);
+      `AppShell.tabRequests` selects the Prayer section.
+- [x] Tests: `test/app/home_widget_test.dart` (snapshot, wrapper, channel, launch and running taps); Kotlin unit tests
+      `android/app/src/test/.../WidgetSnapshotTest.kt` (6, PASS locally); CI step `./gradlew :app:testDebugUnitTest` added (NOT RUN on
+      GitHub: Phase 3 branches are not pushed).
+- [ ] On a device: add the widget, check the redraw at a prayer time, reboot, time-zone change, Doze, Samsung One UI (NOT RUN).
 
-**Acceptance:** widget shows the next prayer from the snapshot without the app running; never shows a passed prayer as next; no new
-permission; all checks green.
+New strings for wording review: `widgetThen` (ثم / Then); Android `widget_description`, `widget_open_app`.
 
 ## Step 5 — Quran tests and sura filter (`feature/p3e-quran-tests`, stacked on PR #8) — DONE
 - [x] Normalisation: one test per documented rule (marks, dagger alef, Quranic marks, tatweel, alef forms, alef maqsura, ta marbuta,

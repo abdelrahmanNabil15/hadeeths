@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Prophetic Hadiths</string>
+    <string name="widget_description">The next prayer and its time</string>
+    <string name="widget_open_app">Open the app to see prayer times</string>
 </resources>
