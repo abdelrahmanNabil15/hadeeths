@@ -8,16 +8,15 @@ dependency or font file; no change to religious text, business logic, APIs, pers
 
 # Track A — Luxury UI revamp
 
-- Branch `ui/g-luxury-revamp` pushed; PR https://github.com/abdelrahmanNabil15/hadeeths/pull/10 (base `master`).
-- CI on PR #10: PASS on both runs (branch push and pull request). Android: format, analyze, test, build. iOS: compile without code
-  signing.
-- Auto-fix is on for PR #10, so the app wakes this session on CI failures, conflicts or review comments.
-- PR #8 (Quran) retargeted from `feature/p3h-hardening` to `master`. It conflicted with master after #9 (share cards). I merged master
-  into `feature/p3e-quran-core` (f6ac83e) by keeping both sides and regenerating the localizations. Locally: analyze PASS, 1,060 tests
-  PASS. Pushed; GitHub reports it mergeable. CI on it: iOS PASS, Android running at the last check.
-- UI skill extended: `.claude/skills/hadeeths-ui-modernization/SKILL.md` section 17 (luxury design system). `.claude/` is untracked,
-  so the skill file is not in any commit (owner decision D10).
-- Merge order note: #8 and #10 both touch shared widgets; whichever merges second may need a small conflict fix.
+| Item | Status |
+|---|---|
+| Branch | `ui/g-luxury-revamp`, pushed |
+| Pull request | https://github.com/abdelrahmanNabil15/hadeeths/pull/10 (base `master`), MERGEABLE, CLEAN |
+| CI | PASS on every run (Android: format, analyze, test, APK builds; iOS: compile without code signing) |
+| Auto-fix | on for PR #10 (the app wakes this session on CI failures, conflicts or review comments) |
+| PR #8 (Quran) | retargeted to `master`; master merged into it (f6ac83e, both sides kept, localizations regenerated); CI PASS; MERGEABLE, CLEAN |
+| UI skill | `.claude/skills/hadeeths-ui-modernization/SKILL.md` section 17 added; `.claude/` is untracked, so not in any commit (D10) |
+| Merge | not done (needs the owner). #8 and #10 both touch shared widgets: whichever merges second may need a small conflict fix |
 
 ## Objective
 A "quiet luxury" revamp of the single Flutter app: midnight emerald, warm ivory, charcoal, muted gold (sparingly) and soft sage;
@@ -91,23 +90,34 @@ shot shows the loading state because the old harness did not wait; fixed since).
 
 # Track B — Phase 3 (approved 2026-10-10)
 
-Checklist with acceptance criteria: `docs/PHASE3_CHECKLIST.md` (on the Phase 3 branches). Plan: `docs/PHASE3_NEXT_PLAN.md`.
-Decisions D1–D10 use the plan's defaults (approval without answers).
+Checklist with acceptance criteria and per-step results: `docs/PHASE3_CHECKLIST.md` (on the Phase 3 branches). Plan:
+`docs/PHASE3_NEXT_PLAN.md`. Decisions D1–D10 use the plan's defaults.
 
-Worktree: `D:\StudioProjects\hadeeths-p3`. Branches are local only (pushing Phase 3 was not part of the approval) and stacked in a line
-on `ui/g-luxury-revamp` so they get the new design system: `feature/p3b-countdown` → `feature/p3d-salawat-quiet-hours` → (next)
-`feature/p3f-daily-hadith` → `feature/p3g-android-widget`. Quran tests will stack on `feature/p3e-quran-core` (PR #8).
+Branches are **local only** (pushing Phase 3 was not part of the approval). Worktrees: `D:\StudioProjects\hadeeths-p3` (steps 1–4,
+stacked in a line on `ui/g-luxury-revamp`) and `D:\StudioProjects\hadeeths-quran` (step 5, on `feature/p3e-quran-core`).
 
-| Step | Branch | Status | Commit |
+| Step | Branch | Status | Commits |
 |---|---|---|---|
-| 1 Live countdown | `feature/p3b-countdown` | DONE, tests pass | 9d5f931 |
-| 2 Salawat and quiet hours | `feature/p3d-salawat-quiet-hours` | DONE, tests pass | f9ad176 |
-| 3 Daily hadith | `feature/p3f-daily-hadith` | NEXT | |
-| 4 Android widget | `feature/p3g-android-widget` | PENDING (needs a spike on the emulator first) | |
-| 5 Quran tests and sura filter | `feature/p3e-quran-tests` | PENDING (on PR #8) | |
+| 1 Live countdown | `feature/p3b-countdown` | DONE | 80a27cd (plan), 9d5f931 |
+| 2 Salawat and quiet hours | `feature/p3d-salawat-quiet-hours` | DONE | f9ad176 |
+| 3 Daily hadith | `feature/p3f-daily-hadith` | DONE (stored in shared preferences, not migration 6; see checklist) | 008ff96, 1022065 |
+| 4 Android widget | `feature/p3g-android-widget` | DONE; emulator-checked; some device checks NOT RUN | b4ec52d, a26878b |
+| 5 Quran tests and sura filter | `feature/p3e-quran-tests` | DONE; on-device flow PASS on the emulator | 716c03d |
 
-Verification on `feature/p3d-salawat-quiet-hours`: format PASS, analyze PASS, `flutter test` 1,093 PASS. Device checks for reminders
-(timing, silent delivery, reboot, Doze) NOT RUN.
+Verification (2026-10-10):
+- `feature/p3g-android-widget` (top of steps 1–4): format PASS, analyze PASS, 1,133 tests PASS, logic coverage 91.4%, release config
+  OK, debug and release APK builds PASS (59.4 MB), Kotlin unit tests 6/6 PASS.
+- `feature/p3e-quran-tests`: format PASS, analyze PASS, 1,090 tests PASS, coverage 91.4%, release config OK; `integration_test`
+  flow PASS on emulator-5554.
+- Emulator: widget listed, added, tapped (opens Prayer), updated after choosing Cairo, redraw alarm at the next prayer time.
+- NOT RUN: CI for Phase 3 (not pushed, including the new Gradle test step), Samsung phone, iPhone, reminder delivery timing,
+  widget redraw at a prayer time, reboot, time-zone change, Doze, TalkBack.
 
-Next step: Step 3 daily hadith. Create `feature/p3f-daily-hadith` from `feature/p3d-salawat-quiet-hours` in the worktree: migration 6,
-opened-categories record, deterministic selector with fallback, home card behind a `dailyHadith` flag, tests.
+Bugs found and fixed along the way: go-to-verse rejected Arabic-Indic digits; the reminders screen state ignored some status
+fields when comparing (an exact-alarm change alone did not redraw); the widget's inexact redraw could be up to an hour late.
+
+Emulator state changed by testing: the debug app now has Cairo as its prayer place and its widget is on the home screen.
+
+Next steps (need the owner): review the new wording (listed per step in the checklist); approve pushing the Phase 3 branches and
+opening their pull requests (they stack: countdown → salawat → daily hadith → widget, after #10; Quran tests after #8); device checks
+on a phone.
