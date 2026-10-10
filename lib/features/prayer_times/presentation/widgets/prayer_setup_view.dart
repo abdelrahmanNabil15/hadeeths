@@ -5,6 +5,7 @@ import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/location_setup.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
@@ -54,42 +55,22 @@ class PrayerSetupView extends StatelessWidget {
               ),
               if (problem != null) ...[
                 const SizedBox(height: AppSpacing.lg),
-                Semantics(
-                  liveRegion: true,
-                  container: true,
-                  child: Container(
-                    padding: const EdgeInsets.all(AppSpacing.md),
-                    decoration: BoxDecoration(
-                      color: scheme.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(AppRadius.card),
-                      border: Border.all(color: scheme.outline),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          problem,
-                          style: TextStyle(
-                            fontSize: AppTextSize.body,
-                            height: AppLineHeight.body,
-                            color: scheme.onSurface,
-                          ),
-                        ),
-                        if (state.setupProblem ==
-                            LocationSetupStatus.needsSettings)
-                          TextButton(
-                            onPressed: cubit.openAppSettings,
-                            child: Text(l10n.openSettings),
-                          ),
-                        if (state.setupProblem ==
-                            LocationSetupStatus.serviceDisabled)
-                          TextButton(
-                            onPressed: cubit.openLocationSettings,
-                            child: Text(l10n.openSettings),
-                          ),
-                      ],
-                    ),
-                  ),
+                // The app's status message: warning icon and words (never colour alone), announced
+                // when it appears, with the way out when there is one.
+                StatusBanner(
+                  message: problem,
+                  kind: StatusKind.warning,
+                  actionLabel: switch (state.setupProblem) {
+                    LocationSetupStatus.needsSettings ||
+                    LocationSetupStatus.serviceDisabled => l10n.openSettings,
+                    _ => null,
+                  },
+                  onAction: switch (state.setupProblem) {
+                    LocationSetupStatus.needsSettings => cubit.openAppSettings,
+                    LocationSetupStatus.serviceDisabled =>
+                      cubit.openLocationSettings,
+                    _ => null,
+                  },
                 ),
               ],
               const SizedBox(height: AppSpacing.xl),

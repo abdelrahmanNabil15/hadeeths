@@ -465,6 +465,11 @@ void main() {
       await shot('tasbeeh_reset_dialog');
       await cancel();
       await back();
+      await tap(find.text(l10n.trackerTitle));
+      await tap(find.text(l10n.trackerDelete));
+      await shot('tracker_delete_dialog');
+      await cancel();
+      await back();
 
       // Hadith: share as image.
       await tab(l10n.navHadiths);

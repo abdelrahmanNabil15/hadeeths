@@ -21,10 +21,10 @@ parts still old; **Not revamped** = old design; **Needs verification** = built o
 
 | Status | Count |
 |---|---|
-| Revamped | 31 |
-| Partially revamped | 8 |
-| Not revamped | 2 |
-| Needs verification | 9 |
+| Revamped | 39 |
+| Partially revamped | 1 |
+| Not revamped | 0 |
+| Needs verification | 10 |
 | **Total** | **50** |
 
 ## 1. Full screens
@@ -129,4 +129,14 @@ parts still old; **Not revamped** = old design; **Needs verification** = built o
 
 ## Progress log
 
-- 2026-10-10: audit written (this file). Migration starts with step 1.
+- 2026-10-10: audit written (this file).
+- 2026-10-10, same day, on `ui/h-revamp-coverage` (local, not pushed):
+  - **Now Revamped:** S10 Sura reader (gold star verse markers, editorial sura header with ornament; fixed: header kept the app's
+    text direction); D4 verse sheet (shared options sheet, titled); S11 and S12 (`VerseResultTile` on `AppCard`, field on the theme,
+    prompt before typing); S19 Qibla dial; S14 and S15 (`StatusBanner`); S5 footer (`StatusBanner`); S28 Android launch (ivory, or
+    charcoal in dark mode, including the Android 12+ splash; seen on the emulator).
+  - **S29 iOS launch:** storyboard and a light/dark named colour done; it moves to *Needs verification* (needs a Mac).
+  - **Still open:** S7 share-card image (needs owner approval); D7 and D11 (the harness can open the screens but not yet tap these
+    two buttons); D12; P1–P6 on their PRs. The Android app icon is not adaptive (the system draws it on a white disc on the
+    splash): owner artwork needed.
+  - Checks: format, analyze PASS; `flutter test` 1,095 PASS; Qibla tests 35 PASS; harness captures in `build/screens/final/`.
