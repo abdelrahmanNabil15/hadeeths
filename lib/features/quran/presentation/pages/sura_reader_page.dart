@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/widgets/app_sheet.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/ornament_divider.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/quran_labels.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_cubit.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/verse_marker.dart';
 import 'package:mynewapp/features/settings/presentation/state/settings_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
@@ -81,21 +86,21 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     final cubit = context.read<QuranCubit>();
     final place = VerseRef(verse.sura, verse.number);
     final marked = cubit.isBookmarked(place);
-    await showModalBottomSheet<void>(
-      context: context,
-      builder: (sheetContext) => SafeArea(
-        child: ListTile(
-          leading: Icon(marked ? Icons.bookmark_remove : Icons.bookmark_add),
-          title: Text(
-            marked ? l10n.quranBookmarkRemove : l10n.quranBookmarkAdd,
-          ),
-          onTap: () {
-            Navigator.of(sheetContext).pop();
-            cubit.toggleBookmark(place);
-          },
+    // The same options sheet as the rest of the app, titled with the verse it acts on.
+    final toggle = await showOptionsSheet<bool>(
+      context,
+      title:
+          '${suraName(context, verse.sura)} · '
+          '${l10n.quranVerseLabel(context.digits.format(verse.number))}',
+      options: [
+        SheetOption(
+          value: true,
+          label: marked ? l10n.quranBookmarkRemove : l10n.quranBookmarkAdd,
+          icon: marked ? Icons.bookmark_remove : Icons.bookmark_add,
         ),
-      ),
+      ],
     );
+    if (toggle ?? false) await cubit.toggleBookmark(place);
   }
 
   @override
@@ -105,6 +110,7 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     final scale = context.select((SettingsCubit c) => c.state.readingScale);
     final style = quranTextStyle(context, scale: scale);
     final bookmarks = context.select((QuranCubit c) => c.state.bookmarks);
+    final appDirection = Directionality.of(context);
     return Scaffold(
       appBar: AppBar(title: Text(suraName(context, widget.sura))),
       body: NotificationListener<ScrollEndNotification>(
@@ -119,6 +125,15 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // The header is interface text: it keeps the app's direction, not the verses'.
+                  Directionality(
+                    textDirection: appDirection,
+                    child: _SuraHeader(
+                      sura: widget.sura,
+                      verses: _verses.length,
+                    ),
+                  ),
+                  const SizedBox(height: AppSpacing.lg),
                   for (final verse in _verses)
                     _VerseBlock(
                       key: _keys[verse.number - 1],
@@ -163,7 +178,6 @@ class _VerseBlock extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final digits = context.digits;
     return Semantics(
       container: true,
       label: label,
@@ -182,29 +196,12 @@ class _VerseBlock extends StatelessWidget {
               const SizedBox(width: AppSpacing.sm),
               Column(
                 children: [
-                  ExcludeSemantics(
-                    child: Container(
-                      constraints: const BoxConstraints(minWidth: 32),
-                      padding: const EdgeInsets.all(AppSpacing.xs),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: scheme.outline),
-                      ),
-                      child: Text(
-                        digits.format(verse.number),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: AppTextSize.meta,
-                          color: scheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ),
-                  ),
+                  VerseMarker(number: verse.number, bookmarked: bookmarked),
                   if (bookmarked)
                     Icon(
                       Icons.bookmark,
                       size: AppSizes.iconSmall,
-                      color: scheme.primary,
+                      color: AppColors.of(context).gold,
                       semanticLabel: context.l10n.quranBookmarkRemove,
                     ),
                 ],
@@ -213,6 +210,41 @@ class _VerseBlock extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The head of a sura: its name in the editorial face, its number of verses, and a fine ornament
+/// before the text. Nothing here is Quran text.
+class _SuraHeader extends StatelessWidget {
+  const _SuraHeader({required this.sura, required this.verses});
+
+  final int sura;
+  final int verses;
+
+  @override
+  Widget build(BuildContext context) {
+    final type = AppTypography.of(context);
+    final count = context.l10n
+        .quranVerses(verses)
+        .replaceAllMapped(
+          RegExp(r'\d+'),
+          (m) => context.digits.format(int.parse(m[0]!)),
+        );
+    return Column(
+      children: [
+        Semantics(
+          header: true,
+          child: Text(
+            suraName(context, sura),
+            textAlign: TextAlign.center,
+            style: type.editorialTitle,
+          ),
+        ),
+        Text(count, textAlign: TextAlign.center, style: type.meta),
+        const SizedBox(height: AppSpacing.md),
+        const OrnamentDivider(width: 160),
+      ],
     );
   }
 }
