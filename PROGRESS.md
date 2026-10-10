@@ -1,16 +1,30 @@
-# PROGRESS — Luxury UI/UX revamp
+# PROGRESS — Track A (luxury UI revamp) and Track B (Phase 3)
 
-Branch: `ui/g-luxury-revamp` (local only, from `origin/master` 0decdf7). **Not pushed.** No merge, no release.
+Track A branch: `ui/g-luxury-revamp` (from `origin/master` 0decdf7), pushed with the owner's approval on 2026-10-10. No merge, no release.
 Approved plan: owner version of 2026-10-10 (copy in `C:\Users\EXPRESS\.claude\plans\proud-mixing-sedgewick.md`).
 Owner rules: no co-author trailer; no push or merge without approval; never push `master` or `feature/p3c-reminders`; no new
 dependency or font file; no change to religious text, business logic, APIs, persistence, flags or navigation behaviour.
+
+
+# Track A — Luxury UI revamp
+
+- Branch `ui/g-luxury-revamp` pushed; PR https://github.com/abdelrahmanNabil15/hadeeths/pull/10 (base `master`).
+- CI on PR #10: PASS on both runs (branch push and pull request). Android: format, analyze, test, build. iOS: compile without code
+  signing.
+- Auto-fix is on for PR #10, so the app wakes this session on CI failures, conflicts or review comments.
+- PR #8 (Quran) retargeted from `feature/p3h-hardening` to `master`. It conflicted with master after #9 (share cards). I merged master
+  into `feature/p3e-quran-core` (f6ac83e) by keeping both sides and regenerating the localizations. Locally: analyze PASS, 1,060 tests
+  PASS. Pushed; GitHub reports it mergeable. CI on it: iOS PASS, Android running at the last check.
+- UI skill extended: `.claude/skills/hadeeths-ui-modernization/SKILL.md` section 17 (luxury design system). `.claude/` is untracked,
+  so the skill file is not in any commit (owner decision D10).
+- Merge order note: #8 and #10 both touch shared widgets; whichever merges second may need a small conflict fix.
 
 ## Objective
 A "quiet luxury" revamp of the single Flutter app: midnight emerald, warm ivory, charcoal, muted gold (sparingly) and soft sage;
 editorial Arabic and Latin type (Amiri display, Cairo UI); subtle eight-fold star geometry; one cohesive design system; light and
 dark both designed; accessibility, RTL and 200% text preserved.
 
-## Status: all planned stages done; waiting for owner review
+## Status: all planned stages done; owner approved the result on 2026-10-10
 | Stage | Status | Main commits |
 |---|---|---|
 | 0 Baseline | DONE: format, analyze PASS; 1,011 tests PASS; coverage 90.8%; release config OK; before screenshots | 0ee4bed, 5bdc4b4 |
@@ -58,11 +72,9 @@ shot shows the loading state because the old harness did not wait; fixed since).
 
 ## Remaining / next steps (need the owner)
 1. Review the look (`build/revamp_review.html`, or run the app with `--dart-define=HADEETHS_PREVIEW_SECTIONS=true`).
-2. Approve a push of `ui/g-luxury-revamp` so CI runs (including the macOS iOS compile) and a pull request can be opened.
-3. After approval, extend `.claude/skills/hadeeths-ui-modernization/SKILL.md` with the new tokens and components (not done:
-   it needs approval).
-4. Quran screens (PR #8) inherit the shared components; review them once PR #8 is merged. PR #8's base branch also needs to be
-   changed to `master` (PR #7 was merged).
+2. DONE: pushed, PR #10 open, CI green.
+3. DONE: skill file section 17.
+4. Quran screens (PR #8) inherit the shared components; review them once PR #8 is merged. PR #8 now targets `master`.
 5. Device checks: Samsung phone (TalkBack, frame timing), iPhone (VoiceOver, platform transitions).
 6. Separate, still waiting for approval: `docs/PHASE3_NEXT_PLAN.md` on the local branch `docs/phase3-next-plan` (countdown, salawat
    and quiet hours, daily hadith, Android widget, Quran tests).
@@ -74,3 +86,28 @@ shot shows the loading state because the old harness did not wait; fixed since).
   database is at schema 5 from an earlier Quran-branch build, and this branch supports schema 4, so it refuses the database
   (`DatabaseTooNewException`) and the tracker, counter and favourites stay hidden. This is the designed safe behaviour and an emulator
   state, not a revamp issue. To see those pages here, clear the app's data on the emulator (that deletes its local data).
+
+---
+
+# Track B — Phase 3 (approved 2026-10-10)
+
+Checklist with acceptance criteria: `docs/PHASE3_CHECKLIST.md` (on the Phase 3 branches). Plan: `docs/PHASE3_NEXT_PLAN.md`.
+Decisions D1–D10 use the plan's defaults (approval without answers).
+
+Worktree: `D:\StudioProjects\hadeeths-p3`. Branches are local only (pushing Phase 3 was not part of the approval) and stacked in a line
+on `ui/g-luxury-revamp` so they get the new design system: `feature/p3b-countdown` → `feature/p3d-salawat-quiet-hours` → (next)
+`feature/p3f-daily-hadith` → `feature/p3g-android-widget`. Quran tests will stack on `feature/p3e-quran-core` (PR #8).
+
+| Step | Branch | Status | Commit |
+|---|---|---|---|
+| 1 Live countdown | `feature/p3b-countdown` | DONE, tests pass | 9d5f931 |
+| 2 Salawat and quiet hours | `feature/p3d-salawat-quiet-hours` | DONE, tests pass | f9ad176 |
+| 3 Daily hadith | `feature/p3f-daily-hadith` | NEXT | |
+| 4 Android widget | `feature/p3g-android-widget` | PENDING (needs a spike on the emulator first) | |
+| 5 Quran tests and sura filter | `feature/p3e-quran-tests` | PENDING (on PR #8) | |
+
+Verification on `feature/p3d-salawat-quiet-hours`: format PASS, analyze PASS, `flutter test` 1,093 PASS. Device checks for reminders
+(timing, silent delivery, reboot, Doze) NOT RUN.
+
+Next step: Step 3 daily hadith. Create `feature/p3f-daily-hadith` from `feature/p3d-salawat-quiet-hours` in the worktree: migration 6,
+opened-categories record, deterministic selector with fallback, home card behind a `dailyHadith` flag, tests.
