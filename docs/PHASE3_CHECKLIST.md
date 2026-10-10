@@ -97,7 +97,12 @@ New strings for wording review: `dailyHadithHeading` (حديث اليوم), `dai
 - [x] Tests: `test/app/home_widget_test.dart` (snapshot, wrapper, channel, launch and running taps); Kotlin unit tests
       `android/app/src/test/.../WidgetSnapshotTest.kt` (6, PASS locally); CI step `./gradlew :app:testDebugUnitTest` added (NOT RUN on
       GitHub: Phase 3 branches are not pushed).
-- [ ] On a device: add the widget, check the redraw at a prayer time, reboot, time-zone change, Doze, Samsung One UI (NOT RUN).
+- [x] Emulator (Android, emulator-5554): the widget is listed only after the app enabled it; added to the home screen it shows
+      "Open the app to see prayer times"; a tap opens the app on the Prayer section; after choosing Cairo it shows "Next prayer ·
+      Dhuhr 12:43 PM · Then Asr 4:00 PM" at 11:27; its redraw alarm is set for 12:43:01. Without exact alarms that alarm first had a
+      57-minute window; **fixed** to a 10-minute window (`setWindow`), checked again on the emulator. A manual refresh broadcast is
+      handled without errors.
+- [ ] Still NOT RUN: watching the redraw at a prayer time, reboot, time-zone change, Doze, Arabic and dark widget, Samsung One UI.
 
 New strings for wording review: `widgetThen` (ثم / Then); Android `widget_description`, `widget_open_app`.
 

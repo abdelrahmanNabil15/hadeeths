@@ -134,11 +134,22 @@ class NextPrayerWidget : AppWidgetProvider() {
                 if (exact) {
                     alarms.setExactAndAllowWhileIdle(AlarmManager.RTC, at, refresh)
                 } else {
-                    alarms.setAndAllowWhileIdle(AlarmManager.RTC, at, refresh)
+                    window(alarms, at, refresh)
                 }
             } catch (_: SecurityException) {
-                alarms.setAndAllowWhileIdle(AlarmManager.RTC, at, refresh)
+                window(alarms, at, refresh)
             }
         }
+
+        /**
+         * Without exact alarms: within ten minutes of the time (the shortest window the system grants)
+         * rather than "some time in the next hour". Not an allow-while-idle alarm: the widget is only seen
+         * with the screen on, which ends idle, and due alarms are then delivered.
+         */
+        private fun window(alarms: AlarmManager, at: Long, refresh: PendingIntent) {
+            alarms.setWindow(AlarmManager.RTC, at, WINDOW_MILLIS, refresh)
+        }
+
+        private const val WINDOW_MILLIS = 10 * 60 * 1_000L
     }
 }
