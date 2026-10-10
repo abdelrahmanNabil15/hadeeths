@@ -232,11 +232,12 @@ void main() {
         'gold on canvas': (s.secondary, s.surface),
         'error text on canvas': (s.error, s.surface),
         'snackbar text': (s.onInverseSurface, s.inverseSurface),
+        // The bar sits on the card colour; the selected label is in the brand colour.
         'navigation bar: unselected label': (
           s.onSurfaceVariant,
-          s.surfaceContainer,
+          s.surfaceContainerLowest,
         ),
-        'navigation bar: selected label': (s.onSurface, s.surfaceContainer),
+        'navigation bar: selected label': (s.primary, s.surfaceContainerLowest),
         'navigation bar: selected icon': (
           s.onPrimaryContainer,
           s.primaryContainer,

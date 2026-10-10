@@ -155,6 +155,38 @@ cubits are created per screen with `BlocProvider`.
   once in `_MyAppState`. Home and the hadith list fade between loading, error, empty and loaded (`AnimatedStateSwitcher`, one key per state, so
   loading more pages never fades); the hadith details page fades only between loading and error, never the hadith itself.
 
+### Luxury revamp (branch `ui/g-luxury-revamp`)
+
+The same design system, refined; no competing system and no new dependency or font file.
+
+- **Palette** (`tokens.dart`): light is warm ivory canvas, midnight-emerald primary (`0B4A3B`), charcoal text, sage containers,
+  muted gold secondary. Dark is a charcoal canvas whose container steps add emerald, not an inverted light theme.
+- **`AppColors` roles added**: `gold`, `goldSoft` (ornaments and thin rules only, never text or large areas), `sage`/`onSage` (count
+  pills, secondary surfaces), `hero`/`onHero`/`onHeroMuted`/`heroAccent` (the midnight-emerald panels). Text pairs are tested at 4.5:1,
+  marks at 3:1 (`test/core/app_colors_test.dart`).
+- **Shape and depth**: `AppRadius` control 12, card 16, sheet and dialog 24, pill; `AppBorders.hairline`/`emphasis`;
+  `AppShadows.soft` is the only shadow, used for raised cards (reading surface, home search). Surfaces are flat by default.
+- **Type**: `AppFonts.editorial` is Amiri (Naskh Arabic plus serif Latin, already bundled); `AppTypography.editorialTitle`,
+  `editorial` and `sectionLabel` (no letter spacing, which would break Arabic joining). Cairo stays the UI face; reading text keeps
+  `ReadingText`. Hadith titles use the editorial face at regular weight, because titles can be a whole sentence.
+- **Theme** (`app_theme.dart`): component themes for inputs (rounded, 3:1 edge, brand focus), dialogs, sheets (drag handle, 24 corners),
+  switches, sliders, chips, progress, segmented buttons, tooltips, popup menus, cards, icon and outlined buttons, the navigation bar
+  (card colour, sage pill, brand label) and a calm `InkRipple`.
+- **Shared components** (`core/widgets`): `AppCard` is the one card (tiles, option groups, search entry, reading surface, expandable
+  sections, result cards and settings groups all use it). `GeometricPattern` is an eight-fold star lattice drawn in code at 4 to 8%
+  opacity: no semantics, its own layer, no animation, never behind reading text. `OrnamentDivider` is a fine rule with a small gold
+  star. `showOptionsSheet` and `SheetOption` give every options sheet the same look. `AppIcons` holds shared glyphs; the chevron is
+  `chevron_right_rounded`, which mirrors in RTL. `StateMedallion` is the empty and error emblem.
+- **Screens**: home has a `HomeHero` (emerald panel, date from an injected `Clock`, gold ornament, editorial title, raised search).
+  Loading, error and empty states use a compact header so the message stays visible at 200% text. The prayer page's next prayer uses
+  the same emerald panel. The hadith page has an editorial title, ornament, raised reading surface and a quiet credit footer. Search has
+  a rounded field with the search icon in the brand colour. More has leading icons, with the personal pages grouped apart from Settings
+  and About. Location setup uses the medallion. Skeletons are hairline cards with faint text bars, and stay static.
+- **Screenshots**: `flutter test test_screens/screens_test.dart --dart-define=SHOTS=<name>` renders the main screens with fake data
+  and the real fonts into `build/screens/<name>/`. It covers Arabic and English, light and dark, 200% text and a tablet width. It is
+  not part of `flutter test` (only `test/` runs there). The test renderer draws `BoxShadow` blur as a hard band; on a device the
+  shadow is soft (checked on the emulator).
+
 
 ## Decisions kept
 

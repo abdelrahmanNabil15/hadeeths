@@ -112,7 +112,7 @@ class _Counter extends StatelessWidget {
                           child: Text(
                             count,
                             style: type.number.copyWith(
-                              fontSize: 64,
+                              fontSize: AppTextSize.counter,
                               fontWeight: FontWeight.w700,
                               color: scheme.onPrimaryContainer,
                             ),

@@ -175,8 +175,8 @@ void main() {
     useSmallPhone(tester, textScale: 2);
     await _openQuran(tester, tall: false);
     expect(tester.takeException(), isNull);
-    await tester.tap(find.text('١. الفاتحة'));
-    await tester.pumpAndSettle();
+    // At this size the row is below the fold: scroll to it first.
+    await scrollAndTap(tester, find.text('١. الفاتحة'));
     expect(tester.takeException(), isNull);
   });
 

@@ -65,6 +65,34 @@ class AppTypography {
     color: _color,
   );
 
+  /// Editorial display: the home header and other large titles. Amiri carries both a Naskh Arabic
+  /// and a serif Latin, so one role works in both languages.
+  TextStyle get editorialTitle => TextStyle(
+    fontFamily: AppFonts.editorial,
+    fontSize: AppTextSize.display + 2,
+    fontWeight: FontWeight.w700,
+    height: 1.45,
+    color: _color,
+  );
+
+  /// A smaller editorial title: a hadith's title, the title of an empty or error state.
+  TextStyle get editorial => TextStyle(
+    fontFamily: AppFonts.editorial,
+    fontSize: AppTextSize.title,
+    fontWeight: FontWeight.w700,
+    height: 1.6,
+    color: _color,
+  );
+
+  /// The label above a group of rows. No letter spacing: it would break Arabic joining.
+  TextStyle get sectionLabel => TextStyle(
+    fontFamily: AppFonts.ui,
+    fontSize: AppTextSize.meta + 1,
+    fontWeight: FontWeight.w700,
+    height: 1.4,
+    color: _muted,
+  );
+
   /// Times, counts and countdowns: equal-width digits where the font has them, so a changing
   /// number does not jiggle. (Cairo's support for this has not been checked.)
   TextStyle get number => TextStyle(
