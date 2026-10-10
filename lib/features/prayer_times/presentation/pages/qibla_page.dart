@@ -2,11 +2,13 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/haptics/haptics.dart';
 import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/geometric_pattern.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
@@ -183,6 +185,9 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
                                       ? scheme.secondary
                                       : scheme.primary,
                                   tick: scheme.onSurfaceVariant,
+                                  face: scheme.surfaceContainerLowest,
+                                  hairline: scheme.outlineVariant,
+                                  gold: AppColors.of(context).gold,
                                 ),
                               ),
                             ),
@@ -423,6 +428,9 @@ class _DialPainter extends CustomPainter {
     required this.ring,
     required this.accent,
     required this.tick,
+    required this.face,
+    required this.hairline,
+    required this.gold,
   });
 
   final double? markerAngle;
@@ -431,6 +439,11 @@ class _DialPainter extends CustomPainter {
   final Color ring;
   final Color accent;
   final Color tick;
+
+  /// The dial's face (the card colour), its fine rules, and the gold of the ornaments.
+  final Color face;
+  final Color hairline;
+  final Color gold;
 
   Offset _at(Offset center, double radius, double degrees) {
     final a = degrees * math.pi / 180;
@@ -441,6 +454,22 @@ class _DialPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2 - 8;
+    // A calm face with a fine inner rule and a tick every 30 degrees, like the rest of the app's
+    // hairlines; the outer ring keeps its weight and turns gold when the phone faces the Qibla.
+    canvas.drawCircle(center, radius, Paint()..color = face);
+    final fine = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1
+      ..color = hairline;
+    canvas.drawCircle(center, radius - 18, fine);
+    for (var i = 0; i < 12; i++) {
+      if (i % 3 == 0) continue;
+      canvas.drawLine(
+        _at(center, radius - 7, i * 30.0),
+        _at(center, radius, i * 30.0),
+        fine,
+      );
+    }
     canvas.drawCircle(
       center,
       radius,
@@ -489,12 +518,12 @@ class _DialPainter extends CustomPainter {
           ..strokeCap = StrokeCap.round
           ..color = accent,
       );
-      canvas.drawCircle(tip, 11, Paint()..color = accent);
+      // An eight-pointed star marks the Qibla at the end of the needle.
+      canvas.drawPath(eightPointStar(tip, 13), Paint()..color = accent);
     }
-    canvas.drawCircle(
-      center,
-      6,
-      Paint()..color = angle == null ? ring : accent,
+    canvas.drawPath(
+      eightPointStar(center, 9),
+      Paint()..color = angle == null ? ring : gold,
     );
   }
 
@@ -505,5 +534,8 @@ class _DialPainter extends CustomPainter {
       old.aligned != aligned ||
       old.ring != ring ||
       old.accent != accent ||
-      old.tick != tick;
+      old.tick != tick ||
+      old.face != face ||
+      old.hairline != hairline ||
+      old.gold != gold;
 }
