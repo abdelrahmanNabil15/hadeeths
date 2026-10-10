@@ -319,5 +319,6 @@
   "dailyHadithFrom": "From: {category}",
   "dailyHadithUnavailable": "Today's hadith cannot be shown right now.",
   "dailyHadithRemember": "Choose from the categories I open",
-  "dailyHadithRememberHint": "Otherwise it is chosen from all the main categories. This list stays on your phone."
+  "dailyHadithRememberHint": "Otherwise it is chosen from all the main categories. This list stays on your phone.",
+  "widgetThen": "Then"
 }

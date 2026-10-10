@@ -1075,4 +1075,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dailyHadithRememberHint =>
       'Otherwise it is chosen from all the main categories. This list stays on your phone.';
+
+  @override
+  String get widgetThen => 'Then';
 }

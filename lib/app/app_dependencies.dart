@@ -4,6 +4,7 @@ import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
@@ -45,6 +46,7 @@ class AppDependencies {
     this.favorites,
     this.imageSharer = const SystemImageSharer(),
     this.dailyHadith,
+    this.homeWidget,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -56,6 +58,7 @@ class AppDependencies {
     UserDatabase? userData,
     FeatureFlags features = const FeatureFlags(),
     PrayerServices? prayer,
+    HomeWidgetBridge? homeWidget,
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -80,6 +83,7 @@ class AppDependencies {
           ? null
           : SqliteFavoritesRepository(userData.db),
       dailyHadith: PrefsDailyHadithStore(preferences),
+      homeWidget: homeWidget,
     );
   }
 
@@ -117,6 +121,9 @@ class AppDependencies {
   /// What the hadith of the day remembers (opened categories, picks, history); `null` in tests that do
   /// not use it.
   final DailyHadithStore? dailyHadith;
+
+  /// The Android home-screen widget; `null` elsewhere and while the prayer section is off.
+  final HomeWidgetBridge? homeWidget;
 
   /// The store as the screens should see it: only when its section is on.
   DailyHadithStore? get dailyHadithIfEnabled =>

@@ -595,5 +595,9 @@
   "dailyHadithRememberHint": "وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.",
   "@dailyHadithRememberHint": {
     "description": "Phase 3 step 3; wording for owner review."
+  },
+  "widgetThen": "ثم",
+  "@widgetThen": {
+    "description": "Home-screen widget: before the prayer after the next one. Phase 3 step 4; wording for owner review."
   }
 }

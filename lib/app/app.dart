@@ -9,6 +9,7 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
@@ -77,6 +78,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final prayer = widget.dependencies.prayer;
     if (prayer != null && widget.dependencies.features.prayer) {
       unawaited(prayer.reminders.reconcile());
+    }
+  }
+
+  /// Sections asked for by the home-screen widget: the one it launched the app for, then any later
+  /// taps. Created once, so a rebuild does not ask again.
+  late final Stream<ShellTab>? _widgetTabs =
+      switch (widget.dependencies.homeWidget) {
+        final bridge? => _tabsFrom(bridge),
+        null => null,
+      };
+
+  static Stream<ShellTab> _tabsFrom(HomeWidgetBridge bridge) async* {
+    ShellTab? tab(String? route) => route == 'prayer' ? ShellTab.prayer : null;
+    final first = tab(
+      await bridge.takeLaunchRoute().catchError((Object _) => null),
+    );
+    if (first != null) yield first;
+    await for (final route in bridge.routes) {
+      final next = tab(route);
+      if (next != null) yield next;
     }
   }
 
@@ -202,6 +223,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             tasbeeh: deps.tasbeeh,
                             favorites: deps.favoritesIfEnabled,
                             onDeleteAll: _eraseAll,
+                            tabRequests: _widgetTabs,
                           )
                         : const HomePage(),
                   ),

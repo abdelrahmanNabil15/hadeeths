@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -12,6 +13,7 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/licences.dart';
 import 'package:mynewapp/core/logging/app_bloc_observer.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -49,6 +51,14 @@ Future<void> main() async {
   }
 
   final preferences = await SharedPreferences.getInstance();
+  final features = FeatureFlags.fromEnvironment();
+  // The Android home-screen widget shows the next prayer; it is offered only with the prayer section.
+  final homeWidget = Platform.isAndroid
+      ? MethodChannelHomeWidgetBridge()
+      : null;
+  if (homeWidget != null) {
+    unawaited(homeWidget.setEnabled(features.prayer).catchError((Object _) {}));
+  }
   // The reminders read the saved language and numerals through the app's own settings
   // repository, which exists once the dependencies are built; they only look when asked, later.
   late final AppDependencies dependencies;
@@ -57,10 +67,12 @@ Future<void> main() async {
     prayer: buildPrayerServices(
       preferences: preferences,
       loadAppSettings: () => dependencies.settings.load(),
+      homeWidget: features.prayer ? homeWidget : null,
     ),
+    homeWidget: features.prayer ? homeWidget : null,
     cache: cache,
     userData: userData,
-    features: FeatureFlags.fromEnvironment(),
+    features: features,
   );
   // Saved language, theme and the offline setting are known before the first frame.
   final settings = await dependencies.settings.load();
