@@ -570,5 +570,30 @@
         "type": "int"
       }
     }
+  },
+  "dailyHadithHeading": "حديث اليوم",
+  "@dailyHadithHeading": {
+    "description": "Phase 3 step 3; wording for owner review."
+  },
+  "dailyHadithFrom": "من تصنيف: {category}",
+  "@dailyHadithFrom": {
+    "description": "Phase 3 step 3; wording for owner review.",
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+  "dailyHadithUnavailable": "تعذّر عرض حديث اليوم الآن.",
+  "@dailyHadithUnavailable": {
+    "description": "Phase 3 step 3; wording for owner review."
+  },
+  "dailyHadithRemember": "الاختيار من التصنيفات التي أفتحها",
+  "@dailyHadithRemember": {
+    "description": "Phase 3 step 3; wording for owner review."
+  },
+  "dailyHadithRememberHint": "وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.",
+  "@dailyHadithRememberHint": {
+    "description": "Phase 3 step 3; wording for owner review."
   }
 }

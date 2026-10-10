@@ -6,6 +6,7 @@ import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -43,6 +44,7 @@ AppDependencies testDependencies(
   FavoritesRepository? favorites,
   UserDatabase? userData,
   ImageSharer? imageSharer,
+  DailyHadithStore? dailyHadith,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -56,6 +58,7 @@ AppDependencies testDependencies(
   favorites: favorites,
   userData: userData,
   imageSharer: imageSharer ?? const SystemImageSharer(),
+  dailyHadith: dailyHadith,
 );
 
 /// Starts the app against [api].
@@ -77,6 +80,7 @@ Future<void> pumpApp(
   FavoritesRepository? favorites,
   UserDatabase? userData,
   ImageSharer? imageSharer,
+  DailyHadithStore? dailyHadith,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -93,6 +97,7 @@ Future<void> pumpApp(
         favorites: favorites,
         userData: userData,
         imageSharer: imageSharer,
+        dailyHadith: dailyHadith,
       ),
       initialSettings: settings,
     ),

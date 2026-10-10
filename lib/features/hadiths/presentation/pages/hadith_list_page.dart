@@ -8,6 +8,7 @@ import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
 import 'package:mynewapp/features/hadiths/presentation/state/hadith_list_cubit.dart';
@@ -28,11 +29,16 @@ class HadithListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final language = context.apiLanguage;
     return BlocProvider(
-      create: (context) => HadithListCubit(
-        context.read<HadithsRepository>(),
-        categoryId,
-        language: language,
-      )..load(),
+      create: (context) {
+        // Remembered for the hadith of the day (only when that section is on and the user has not
+        // switched remembering off). Nothing waits for it.
+        context.read<DailyHadithStore?>()?.recordOpened(categoryId);
+        return HadithListCubit(
+          context.read<HadithsRepository>(),
+          categoryId,
+          language: language,
+        )..load();
+      },
       child: Scaffold(
         appBar: AppBar(title: Text(title)),
         body: const _HadithListBody(),

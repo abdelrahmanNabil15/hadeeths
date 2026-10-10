@@ -1056,4 +1056,23 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dailyHadithHeading => 'Hadith of the day';
+
+  @override
+  String dailyHadithFrom(String category) {
+    return 'From: $category';
+  }
+
+  @override
+  String get dailyHadithUnavailable =>
+      'Today\'s hadith cannot be shown right now.';
+
+  @override
+  String get dailyHadithRemember => 'Choose from the categories I open';
+
+  @override
+  String get dailyHadithRememberHint =>
+      'Otherwise it is chosen from all the main categories. This list stays on your phone.';
 }

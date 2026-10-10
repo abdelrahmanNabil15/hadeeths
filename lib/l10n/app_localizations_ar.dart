@@ -1064,4 +1064,22 @@ class AppLocalizationsAr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get dailyHadithHeading => 'حديث اليوم';
+
+  @override
+  String dailyHadithFrom(String category) {
+    return 'من تصنيف: $category';
+  }
+
+  @override
+  String get dailyHadithUnavailable => 'تعذّر عرض حديث اليوم الآن.';
+
+  @override
+  String get dailyHadithRemember => 'الاختيار من التصنيفات التي أفتحها';
+
+  @override
+  String get dailyHadithRememberHint =>
+      'وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.';
 }

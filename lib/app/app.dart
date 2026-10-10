@@ -13,6 +13,8 @@ import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_service.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
@@ -115,6 +117,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         // Nullable on purpose: without it a hadith is shared as text only, as in the released app.
         RepositoryProvider<ImageSharer?>.value(
           value: deps.imageSharerIfEnabled,
+        ),
+        // Nullable on purpose: the hadith of the day and its memory exist only with their section on.
+        RepositoryProvider<DailyHadithStore?>.value(
+          value: deps.dailyHadithIfEnabled,
+        ),
+        RepositoryProvider<DailyHadithService?>.value(
+          value: deps.dailyHadithServiceIfEnabled,
         ),
       ],
       child: BlocProvider.value(
