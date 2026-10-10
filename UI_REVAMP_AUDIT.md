@@ -140,3 +140,9 @@ parts still old; **Not revamped** = old design; **Needs verification** = built o
     two buttons); D12; P1–P6 on their PRs. The Android app icon is not adaptive (the system draws it on a white disc on the
     splash): owner artwork needed.
   - Checks: format, analyze PASS; `flutter test` 1,095 PASS; Qibla tests 35 PASS; harness captures in `build/screens/final/`.
+- 2026-10-10, on `ui/i-mushaf-reader` (local, not pushed): the sura reader now looks like a mushaf page. The verses flow as one
+  justified paragraph (not one block per verse), each ending with its number in a gold rosette; the page has a broad pale-gold
+  frame with corner stars; a framed banner ("Surah ..." / "سورة ...") and the opening line sit at the top. The verse text is
+  unchanged: the opening line is split off only when the file's own first verse (1:1) is its exact prefix. New string:
+  `quranSuraTitle` (needs the owner's wording review). Not done (needs data the app does not have): mushaf page numbers and
+  juz/hizb header strips.

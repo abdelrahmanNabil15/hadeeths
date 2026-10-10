@@ -302,6 +302,7 @@
   "quranGo": "Go",
   "quranVerses": "{count, plural, =1{1 verse} other{{count} verses}}",
   "quranVerseLabel": "Verse {number}",
+  "quranSuraTitle": "Surah {name}",
   "quranBookmarkAdd": "Bookmark this verse",
   "quranBookmarkRemove": "Remove the bookmark",
   "quranSurasHeading": "Suras",

@@ -993,6 +993,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String quranSuraTitle(Object name) {
+    return 'Surah $name';
+  }
+
+  @override
   String get quranBookmarkAdd => 'Bookmark this verse';
 
   @override
