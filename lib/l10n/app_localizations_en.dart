@@ -1034,4 +1034,39 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shareCardFailed =>
       'The image could not be made or shared. Try again.';
+
+  @override
+  String countdownIn(String time) {
+    return 'in $time';
+  }
+
+  @override
+  String durationHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours',
+      one: '1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationJoin(String hours, String minutes) {
+    return '$hours and $minutes';
+  }
+
+  @override
+  String get durationUnderAMinute => 'less than a minute';
 }
