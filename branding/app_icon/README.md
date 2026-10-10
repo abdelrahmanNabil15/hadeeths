@@ -1,15 +1,19 @@
 # Sakina app icon
 
-Flat vector icon: a muted-gold eight-pointed star (rub el hizb) around an ivory open book, on solid midnight emerald.
-Colours: emerald `#0B3F33`, gold `#D6B568`, ivory `#FAF6EC`, near-black `#0D1311` (themed layer).
+Flat vector icon: an open Quran on a crossed stand (a rehal). Emerald cover and stand, ivory pages with soft lines of
+text and a small gold eight-pointed star at the head of each page, on a warm gold background. No lettering: the lines are
+strokes, not words or verses.
+
+Colours: gold `#D6B568` (background and stars), midnight emerald `#0B3F33` (cover, stand, text strokes),
+warm ivory `#FAF6EC` (pages), near-black `#0D1311` (the themed layer).
 
 ## Sources (edit these)
 | File | What it is |
 |---|---|
 | `app_icon_master.svg` | Full icon with `background` and `foreground` groups (full-bleed composition, as used on iOS and Play). |
-| `app_icon_foreground.svg` | Star and book only, transparent. The Android adaptive foreground: the whole symbol sits inside the central 61% of the canvas. |
-| `app_icon_monochrome.svg` | The same shapes in one colour, for Android 13 themed icons. |
-| `notification_icon.svg` | Solid star with the book cut out, for the notification bar. |
+| `app_icon_foreground.svg` | The art only, transparent, scaled so the whole of it sits inside the central 61% circle: the Android adaptive foreground. |
+| `app_icon_monochrome.svg` | One flat colour, simplified (cover with the pages cut out, and the stand), for Android 13 themed icons. |
+| `notification_icon.svg` | The same simplified silhouette, white, for the notification bar. |
 
 The geometry lives in `tools/geometry.py`; every SVG is plain `<path>` elements (no embedded bitmaps).
 

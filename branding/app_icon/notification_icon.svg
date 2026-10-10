@@ -1,6 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
 <title>Sakina notification icon</title>
-<g id="foreground" transform="translate(512 512) scale(1.5) translate(-512 -512)">
-<path id="star-with-book-cutout" d="M512.0 222.0 L596.9 306.9 L717.1 306.9 L717.1 427.1 L802.0 512.0 L717.1 596.9 L717.1 717.1 L596.9 717.1 L512.0 802.0 L427.1 717.1 L306.9 717.1 L306.9 596.9 L222.0 512.0 L306.9 427.1 L306.9 306.9 L427.1 306.9 Z M501.9 453.8 Q429.1 415.7 356.3 435.8 L356.3 579.2 Q429.1 559.0 501.9 597.1 Z M522.1 453.8 Q594.9 415.7 667.7 435.8 L667.7 579.2 Q594.9 559.0 522.1 597.1 Z" fill="#FFFFFF" fill-rule="evenodd"/>
+<g id="foreground" transform="translate(512 512) scale(1.4) translate(-512 -620)">
+<path id="stand" d="M350 640 L674 900 M674 640 L350 900" fill="none" stroke="#FFFFFF" stroke-width="34" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="cover-with-pages-cut-out" d="M512 358 Q360 312 186 334 L186 662 Q360 640 512 692 Q664 640 838 662 L838 334 Q664 312 512 358 Z M500 376 Q356 332 208 352 L208 636 Q356 616 500 660 Z M524 376 Q668 332 816 352 L816 636 Q668 616 524 660 Z" fill="#FFFFFF" fill-rule="evenodd"/>
 </g>
 </svg>

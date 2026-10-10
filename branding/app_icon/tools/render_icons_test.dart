@@ -41,10 +41,8 @@ Path _parse(String d, {required bool evenOdd}) {
 }
 
 void _drawLayer(Canvas canvas, Map<String, dynamic> layer) {
-  final path = _parse(
-    layer['d'] as String,
-    evenOdd: layer['evenodd'] == true,
-  );
+  final path = _parse(layer['d'] as String, evenOdd: layer['evenodd'] == true);
+  final opacity = (layer['opacity'] as num?)?.toDouble() ?? 1.0;
   final fill = layer['fill'] as String?;
   final stroke = layer['stroke'] as String?;
   if (fill != null) {
@@ -53,7 +51,7 @@ void _drawLayer(Canvas canvas, Map<String, dynamic> layer) {
       Paint()
         ..style = PaintingStyle.fill
         ..isAntiAlias = true
-        ..color = _color(fill),
+        ..color = _color(fill).withValues(alpha: opacity),
     );
   }
   if (stroke != null) {
@@ -64,8 +62,9 @@ void _drawLayer(Canvas canvas, Map<String, dynamic> layer) {
         ..isAntiAlias = true
         ..strokeJoin = StrokeJoin.miter
         ..strokeMiterLimit = 10
+        ..strokeCap = layer['cap'] == 'round' ? StrokeCap.round : StrokeCap.butt
         ..strokeWidth = (layer['sw'] as num).toDouble()
-        ..color = _color(stroke),
+        ..color = _color(stroke).withValues(alpha: opacity),
     );
   }
 }
@@ -87,7 +86,10 @@ Future<List<int>> _render(Map<String, dynamic> job) async {
   for (final raw in job['items'] as List) {
     final item = raw as Map<String, dynamic>;
     canvas.save();
-    canvas.translate((item['x'] as num).toDouble(), (item['y'] as num).toDouble());
+    canvas.translate(
+      (item['x'] as num).toDouble(),
+      (item['y'] as num).toDouble(),
+    );
     canvas.scale((item['size'] as num).toDouble() / 1024);
     final clip = item['clip'] as String?;
     if (clip == 'rrect') {
@@ -98,9 +100,7 @@ Future<List<int>> _render(Map<String, dynamic> job) async {
         ),
       );
     } else if (clip == 'circle') {
-      canvas.clipPath(
-        Path()..addOval(const Rect.fromLTWH(0, 0, 1024, 1024)),
-      );
+      canvas.clipPath(Path()..addOval(const Rect.fromLTWH(0, 0, 1024, 1024)));
     }
     final itemBg = item['bg'] as String?;
     if (itemBg != null) {
@@ -112,14 +112,16 @@ Future<List<int>> _render(Map<String, dynamic> job) async {
     final scale = (item['scale'] as num).toDouble();
     canvas.translate(512, 512);
     canvas.scale(scale);
-    canvas.translate(-512, -512);
+    canvas.translate(-512, -((item['cy'] as num?)?.toDouble() ?? 512));
     for (final layer in item['layers'] as List) {
       _drawLayer(canvas, layer as Map<String, dynamic>);
     }
     canvas.restore();
   }
   final image = await recorder.endRecording().toImage(w, h);
-  final data = await image.toByteData(format: ui.ImageByteFormat.rawStraightRgba);
+  final data = await image.toByteData(
+    format: ui.ImageByteFormat.rawStraightRgba,
+  );
   return data!.buffer.asUint8List();
 }
 
