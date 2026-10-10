@@ -93,7 +93,7 @@ shot shows the loading state because the old harness did not wait; fixed since).
 Checklist with acceptance criteria and per-step results: `docs/PHASE3_CHECKLIST.md` (on the Phase 3 branches). Plan:
 `docs/PHASE3_NEXT_PLAN.md`. Decisions D1–D10 use the plan's defaults.
 
-Branches are **local only** (pushing Phase 3 was not part of the approval). Worktrees: `D:\StudioProjects\hadeeths-p3` (steps 1–4,
+Branches pushed and pull requests opened on 2026-10-10 with the owner's approval: #11 countdown (base `ui/g-luxury-revamp`), #12 salawat and quiet hours (base #11's branch), #13 daily hadith (base #12's), #14 Android widget (base #13's), #15 Quran tests (base `feature/p3e-quran-core`, #8). Merge order: #10, then #11, #12, #13, #14; #8, then #15. Worktrees: `D:\StudioProjects\hadeeths-p3` (steps 1–4,
 stacked in a line on `ui/g-luxury-revamp`) and `D:\StudioProjects\hadeeths-quran` (step 5, on `feature/p3e-quran-core`).
 
 | Step | Branch | Status | Commits |
@@ -110,7 +110,7 @@ Verification (2026-10-10):
 - `feature/p3e-quran-tests`: format PASS, analyze PASS, 1,090 tests PASS, coverage 91.4%, release config OK; `integration_test`
   flow PASS on emulator-5554.
 - Emulator: widget listed, added, tapped (opens Prayer), updated after choosing Cairo, redraw alarm at the next prayer time.
-- NOT RUN: CI for Phase 3 (not pushed, including the new Gradle test step), Samsung phone, iPhone, reminder delivery timing,
+- CI for Phase 3: started by the push (results to be checked on each PR). NOT RUN: Samsung phone, iPhone, reminder delivery timing,
   widget redraw at a prayer time, reboot, time-zone change, Doze, TalkBack.
 
 Bugs found and fixed along the way: go-to-verse rejected Arabic-Indic digits; the reminders screen state ignored some status
@@ -118,6 +118,5 @@ fields when comparing (an exact-alarm change alone did not redraw); the widget's
 
 Emulator state changed by testing: the debug app now has Cairo as its prayer place and its widget is on the home screen.
 
-Next steps (need the owner): review the new wording (listed per step in the checklist); approve pushing the Phase 3 branches and
-opening their pull requests (they stack: countdown → salawat → daily hadith → widget, after #10; Quran tests after #8); device checks
-on a phone.
+Next steps (need the owner): review the new wording (listed per step in the checklist and in each PR); merge in the order above;
+device checks on a phone.
