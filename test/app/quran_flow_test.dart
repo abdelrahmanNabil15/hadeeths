@@ -69,11 +69,16 @@ void main() {
       await tester.tap(find.text('٢. البقرة'));
       await tester.pumpAndSettle();
       // Nothing is added above the first verse: the file itself carries any opening line.
-      // The verses flow as one paragraph, each exactly as in the file, in order.
+      // The verses flow as paragraphs, one per mushaf page, each verse exactly as in the file and in
+      // order. The made-up sura has 12 lines: the mushaf puts five on page 2 and the rest on page 3.
       expect(verseTexts(tester), [
-        for (var v = 1; v <= 12; v++) placeholderVerse(2, v),
+        for (var v = 1; v <= 5; v++) placeholderVerse(2, v),
       ]);
       expect(find.textContaining(placeholderVerse(1, 1)), findsNothing);
+      await turnPage(tester);
+      expect(verseTexts(tester), [
+        for (var v = 6; v <= 12; v++) placeholderVerse(2, v),
+      ]);
       // Each verse ends with its number, drawn beside the text.
       expect(find.text('١٢'), findsOneWidget);
     },
@@ -95,7 +100,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       Directionality.of(
-        tester.element(find.textContaining(placeholderVerse(2, 1))),
+        tester.element(find.textContaining(placeholderVerse(2, 1)).first),
       ),
       TextDirection.rtl,
     );
