@@ -7,6 +7,7 @@ import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/prayer_wiring.dart';
+import 'package:mynewapp/app/quran_wiring.dart';
 import 'package:mynewapp/core/cache/file_response_cache.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
@@ -61,6 +62,7 @@ Future<void> main() async {
     cache: cache,
     userData: userData,
     features: FeatureFlags.fromEnvironment(),
+    quran: buildQuranSource(),
   );
   // Saved language, theme and the offline setting are known before the first frame.
   final settings = await dependencies.settings.load();

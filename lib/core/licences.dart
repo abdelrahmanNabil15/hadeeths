@@ -6,7 +6,13 @@ void registerFontLicences() {
   LicenseRegistry.addLicense(() async* {
     for (final font in const ['Cairo', 'Amiri']) {
       final text = await rootBundle.loadString('assets/licenses/OFL-$font.txt');
-      yield LicenseEntryWithLineBreaks(['$font font'], text);
+      yield LicenseEntryWithLineBreaks([
+        if (font == 'Amiri') ...[
+          'Amiri font',
+          'Amiri Quran font',
+        ] else
+          '$font font',
+      ], text);
     }
   });
 }

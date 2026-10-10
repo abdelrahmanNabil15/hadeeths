@@ -8,6 +8,8 @@ import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/quran/domain/quran_source.dart';
+import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
@@ -42,6 +44,8 @@ AppDependencies testDependencies(
   TasbeehRepository? tasbeeh,
   FavoritesRepository? favorites,
   UserDatabase? userData,
+  QuranSource? quran,
+  QuranUserData? quranUserData,
   ImageSharer? imageSharer,
 }) => AppDependencies(
   categories: api,
@@ -55,6 +59,8 @@ AppDependencies testDependencies(
   tasbeeh: tasbeeh,
   favorites: favorites,
   userData: userData,
+  quran: quran,
+  quranUserData: quranUserData,
   imageSharer: imageSharer ?? const SystemImageSharer(),
 );
 
@@ -76,6 +82,8 @@ Future<void> pumpApp(
   TasbeehRepository? tasbeeh,
   FavoritesRepository? favorites,
   UserDatabase? userData,
+  QuranSource? quran,
+  QuranUserData? quranUserData,
   ImageSharer? imageSharer,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
@@ -92,6 +100,8 @@ Future<void> pumpApp(
         tasbeeh: tasbeeh,
         favorites: favorites,
         userData: userData,
+        quran: quran,
+        quranUserData: quranUserData,
         imageSharer: imageSharer,
       ),
       initialSettings: settings,

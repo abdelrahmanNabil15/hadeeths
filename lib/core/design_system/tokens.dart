@@ -216,4 +216,7 @@ abstract final class AppFonts {
   /// Editorial display face for large titles: Amiri's Naskh for Arabic and its serif Latin for
   /// English. Same bundled file, no new font.
   static const editorial = 'Amiri';
+
+  /// Quran text: Amiri Quran 1.003, bundled, SIL OFL 1.1 (the Amiri licence file covers it).
+  static const quran = 'AmiriQuran';
 }

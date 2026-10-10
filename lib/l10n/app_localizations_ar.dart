@@ -921,6 +921,102 @@ class AppLocalizationsAr extends AppLocalizations {
       'يستخدم التصحيح من الشمال المغناطيسي إلى الشمال الحقيقي النموذج المغناطيسي العالمي 2025 (الإدارة الوطنية للمحيطات والغلاف الجوي الأمريكية والمسح الجيولوجي البريطاني)، ويُحسب على جهازك.';
 
   @override
+  String get quranUnavailable =>
+      'نص القرآن الكريم غير مضمَّن في هذا الإصدار بعد.';
+
+  @override
+  String get quranContinue => 'متابعة القراءة';
+
+  @override
+  String quranContinueAt(Object sura, Object verse) {
+    return '$sura، الآية $verse';
+  }
+
+  @override
+  String get quranBookmarks => 'العلامات';
+
+  @override
+  String get quranNoBookmarks =>
+      'لا توجد علامات بعد. في السورة، اضغط مطولًا على آية لوضع علامة عليها.';
+
+  @override
+  String get quranSearchHint => 'البحث في القرآن';
+
+  @override
+  String get quranSearchTooShort => 'اكتب حرفين على الأقل.';
+
+  @override
+  String quranSearchCount(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'وُجدت $count آية',
+      few: 'وُجدت $count آيات',
+      two: 'وُجدت آيتان',
+      one: 'وُجدت آية واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get quranNoResults => 'لا توجد آية مطابقة.';
+
+  @override
+  String get quranJump => 'الانتقال إلى آية';
+
+  @override
+  String get quranJumpSura => 'رقم السورة (١ إلى ١١٤)';
+
+  @override
+  String get quranJumpVerseLabel => 'رقم الآية';
+
+  @override
+  String quranJumpVerse(Object max) {
+    return 'رقم الآية (١ إلى $max)';
+  }
+
+  @override
+  String get quranGo => 'انتقال';
+
+  @override
+  String quranVerses(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count آية',
+      few: '$count آيات',
+      two: 'آيتان',
+      one: 'آية واحدة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String quranVerseLabel(Object number) {
+    return 'الآية $number';
+  }
+
+  @override
+  String get quranBookmarkAdd => 'وضع علامة على هذه الآية';
+
+  @override
+  String get quranBookmarkRemove => 'إزالة العلامة';
+
+  @override
+  String get quranSurasHeading => 'السور';
+
+  @override
+  String get quranCredit =>
+      'نص القرآن: مشروع تنزيل (tanzil.net)، مستخدَم دون أي تغيير وفق ترخيصه.';
+
+  @override
+  String get aboutQuranHeading => 'نص القرآن الكريم';
+
+  @override
+  String get aboutQuranBody =>
+      'نص القرآن من مشروع تنزيل: Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير، مع إشعار حقوقه. التحديثات: tanzil.net.';
+
+  @override
   String get shareAsText => 'مشاركة كنص';
 
   @override
