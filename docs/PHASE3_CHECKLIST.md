@@ -87,12 +87,19 @@ New strings for wording review: `dailyHadithHeading` (حديث اليوم), `dai
 **Acceptance:** widget shows the next prayer from the snapshot without the app running; never shows a passed prayer as next; no new
 permission; all checks green.
 
-## Step 5 — Quran tests and sura filter (`feature/p3e-quran-tests`, on PR #8)
-- [ ] Normalisation rule tests, search behaviour tests, go-to-verse matrix over all 114 suras.
-- [ ] Sura-name filter on the list (Arabic, English, number in either digit style) with tests.
-- [ ] `integration_test` flows for local runs.
+## Step 5 — Quran tests and sura filter (`feature/p3e-quran-tests`, stacked on PR #8) — DONE
+- [x] Normalisation: one test per documented rule (marks, dagger alef, Quranic marks, tatweel, alef forms, alef maqsura, ta marbuta,
+      hamza kept, Latin case and spaces, marks-only query).
+- [x] Search over the real file: first and last verse found by their own text, plain and marked forms agree, Mushaf order and limit,
+      verses returned unchanged, short queries refused, a time bound for regressions.
+- [x] Go to a verse: `checkGoTo` checked over all 114 suras with the real data (first, last, last + 1, zero, empty verse), suras
+      outside 1–114 refused. **Bug fixed:** digits typed on an Arabic or Persian keyboard were rejected; they are accepted now.
+- [x] Sura filter on the list (`filterSuras`): number in either digit style, Arabic name without marks or the article, English name
+      ignoring case, article, apostrophes and hyphens; every sura is found by its own names; "No sura matches."; clear button.
+- [x] Widget tests (`test/app/quran_lookup_flow_test.dart`) and an on-device flow (`integration_test/quran_test.dart`, dev
+      dependency `integration_test` from the SDK): PASS on the Android emulator (emulator-5554). Not in CI (D7).
 
-**Acceptance:** every documented rule has a test; filter works in both languages; all checks green.
+New strings for wording review: `quranFilterHint`, `quranFilterNone`.
 
 ## Research items (no code)
 - Play exact alarm: findings in `docs/PHASE3_NEXT_PLAN.md` section 9; the owner checks Play Console.
