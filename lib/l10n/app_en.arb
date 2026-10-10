@@ -312,5 +312,7 @@
   "shareAsImage": "Share as image",
   "shareCardShareOne": "Share the image",
   "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
-  "shareCardFailed": "The image could not be made or shared. Try again."
+  "shareCardFailed": "The image could not be made or shared. Try again.",
+  "quranFilterHint": "Find a sura by name or number",
+  "quranFilterNone": "No sura matches."
 }

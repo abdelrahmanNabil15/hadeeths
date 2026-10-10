@@ -138,7 +138,12 @@ Future<void> goBack(WidgetTester tester) async {
 
 /// Scrolls the first list until [finder] has been built, then taps it.
 Future<void> scrollAndTap(WidgetTester tester, Finder finder) async {
-  await tester.scrollUntilVisible(finder, 300);
+  // The first scrollable is the page's own; a text field on the page brings a second one.
+  await tester.scrollUntilVisible(
+    finder,
+    300,
+    scrollable: find.byType(Scrollable).first,
+  );
   await tester.pumpAndSettle();
   await tester.tap(finder);
   await tester.pumpAndSettle();

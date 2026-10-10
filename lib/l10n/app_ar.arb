@@ -467,5 +467,13 @@
   "shareAsImage": "مشاركة كصورة",
   "shareCardShareOne": "مشاركة الصورة",
   "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
-  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى."
+  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.",
+  "quranFilterHint": "ابحث عن سورة بالاسم أو الرقم",
+  "@quranFilterHint": {
+    "description": "Phase 3 step 5; wording for owner review."
+  },
+  "quranFilterNone": "لا توجد سورة مطابقة.",
+  "@quranFilterNone": {
+    "description": "Phase 3 step 5; wording for owner review."
+  }
 }
