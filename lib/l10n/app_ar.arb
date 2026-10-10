@@ -445,5 +445,44 @@
   "shareAsImage": "مشاركة كصورة",
   "shareCardShareOne": "مشاركة الصورة",
   "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
-  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى."
+  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.",
+  "countdownIn": "بعد {time}",
+  "@countdownIn": {
+    "description": "Time left until the next prayer. [time] is a clock face (1:05:09) or words (ساعة و5 دقائق). Wording for owner review.",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "durationHours": "{count, plural, =1{ساعة} =2{ساعتين} few{{count} ساعات} other{{count} ساعة}}",
+  "@durationHours": {
+    "description": "Hours after بعد (genitive).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "durationMinutes": "{count, plural, =1{دقيقة} =2{دقيقتين} few{{count} دقائق} other{{count} دقيقة}}",
+  "@durationMinutes": {
+    "description": "Minutes after بعد (genitive).",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "durationJoin": "{hours} و{minutes}",
+  "@durationJoin": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "durationUnderAMinute": "أقل من دقيقة"
 }

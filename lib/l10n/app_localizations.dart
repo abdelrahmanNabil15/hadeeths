@@ -1705,6 +1705,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
   String get shareCardFailed;
+
+  /// Time left until the next prayer. [time] is a clock face (1:05:09) or words (ساعة و5 دقائق). Wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {time}'**
+  String countdownIn(String time);
+
+  /// Hours after بعد (genitive).
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{ساعة} =2{ساعتين} few{{count} ساعات} other{{count} ساعة}}'**
+  String durationHours(int count);
+
+  /// Minutes after بعد (genitive).
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{دقيقة} =2{دقيقتين} few{{count} دقائق} other{{count} دقيقة}}'**
+  String durationMinutes(int count);
+
+  /// No description provided for @durationJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'{hours} و{minutes}'**
+  String durationJoin(String hours, String minutes);
+
+  /// No description provided for @durationUnderAMinute.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل من دقيقة'**
+  String get durationUnderAMinute;
 }
 
 class _AppLocalizationsDelegate

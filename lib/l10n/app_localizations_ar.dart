@@ -944,4 +944,43 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get shareCardFailed =>
       'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
+
+  @override
+  String countdownIn(String time) {
+    return 'بعد $time';
+  }
+
+  @override
+  String durationHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ساعة',
+      few: '$count ساعات',
+      two: 'ساعتين',
+      one: 'ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count دقيقة',
+      few: '$count دقائق',
+      two: 'دقيقتين',
+      one: 'دقيقة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationJoin(String hours, String minutes) {
+    return '$hours و$minutes';
+  }
+
+  @override
+  String get durationUnderAMinute => 'أقل من دقيقة';
 }

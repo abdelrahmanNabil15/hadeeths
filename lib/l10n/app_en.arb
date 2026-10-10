@@ -290,5 +290,10 @@
   "shareAsImage": "Share as image",
   "shareCardShareOne": "Share the image",
   "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
-  "shareCardFailed": "The image could not be made or shared. Try again."
+  "shareCardFailed": "The image could not be made or shared. Try again.",
+  "countdownIn": "in {time}",
+  "durationHours": "{count, plural, =1{1 hour} other{{count} hours}}",
+  "durationMinutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
+  "durationJoin": "{hours} and {minutes}",
+  "durationUnderAMinute": "less than a minute"
 }

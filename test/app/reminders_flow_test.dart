@@ -53,8 +53,8 @@ Future<void> _openReminders(
   await tester.pumpAndSettle();
   final tile = find.text(locale == 'ar' ? 'التذكيرات' : 'Reminders');
   if (!tall) await tester.scrollUntilVisible(tile, 300);
-  await tester.tap(tile);
-  await tester.pumpAndSettle();
+  // Bring the whole row into view: a row half under the edge would not take the tap.
+  await tapVisible(tester, tile);
 }
 
 Finder _switchFor(String label) => find.widgetWithText(SwitchListTile, label);
