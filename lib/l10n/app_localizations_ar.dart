@@ -1040,4 +1040,10 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get shareCardFailed =>
       'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
+
+  @override
+  String get quranFilterHint => 'ابحث عن سورة بالاسم أو الرقم';
+
+  @override
+  String get quranFilterNone => 'لا توجد سورة مطابقة.';
 }

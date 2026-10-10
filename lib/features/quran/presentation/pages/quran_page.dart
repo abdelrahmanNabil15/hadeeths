@@ -11,6 +11,7 @@ import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
+import 'package:mynewapp/features/quran/domain/sura_lookup.dart';
 import 'package:mynewapp/features/quran/presentation/pages/quran_bookmarks_page.dart';
 import 'package:mynewapp/features/quran/presentation/pages/quran_search_page.dart';
 import 'package:mynewapp/features/quran/presentation/pages/sura_reader_page.dart';
@@ -55,10 +56,25 @@ class QuranPage extends StatelessWidget {
   }
 }
 
-class _Index extends StatelessWidget {
+class _Index extends StatefulWidget {
   const _Index({super.key, required this.state});
 
   final QuranState state;
+
+  @override
+  State<_Index> createState() => _IndexState();
+}
+
+class _IndexState extends State<_Index> {
+  final _filter = TextEditingController();
+
+  @override
+  void dispose() {
+    _filter.dispose();
+    super.dispose();
+  }
+
+  QuranState get state => widget.state;
 
   void _push(BuildContext context, Widget page) {
     final cubit = context.read<QuranCubit>();
@@ -75,6 +91,7 @@ class _Index extends StatelessWidget {
     final digits = context.digits;
     final text = state.text!;
     final last = state.lastRead;
+    final suras = filterSuras(_filter.text, suraTotal: text.suraTotal);
     return ContentWidth(
       child: ListView(
         padding: const EdgeInsets.all(AppSpacing.lg),
@@ -113,7 +130,36 @@ class _Index extends StatelessWidget {
           const SizedBox(height: AppSpacing.xl),
           SectionHeading(l10n.quranSurasHeading),
           const SizedBox(height: AppSpacing.sm),
-          for (var s = 1; s <= text.suraTotal; s++) ...[
+          TextField(
+            controller: _filter,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
+              hintText: l10n.quranFilterHint,
+              prefixIcon: const Icon(Icons.search),
+              suffixIcon: _filter.text.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: l10n.searchClear,
+                      icon: const Icon(Icons.close),
+                      onPressed: () => setState(_filter.clear),
+                    ),
+            ),
+            onChanged: (_) => setState(() {}),
+          ),
+          const SizedBox(height: AppSpacing.md),
+          if (suras.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
+              child: Semantics(
+                liveRegion: true,
+                child: Text(
+                  l10n.quranFilterNone,
+                  textAlign: TextAlign.center,
+                  style: AppTypography.of(context).meta,
+                ),
+              ),
+            ),
+          for (final s in suras) ...[
             AppTile(
               title: '${digits.format(s)}. ${suraName(context, s)}',
               trailingText: l10n
@@ -173,14 +219,17 @@ class _GoToVerseDialogState extends State<_GoToVerseDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final sura = int.tryParse(_suraField.text);
-    final validSura = sura != null && sura >= 1 && sura <= widget.suraTotal;
-    final max = validSura ? widget.versesIn(sura) : null;
-    final verse = int.tryParse(_verseField.text);
-    final validVerse =
-        _verseField.text.isEmpty ||
-        (verse != null && verse >= 1 && verse <= max!);
-    final valid = validSura && validVerse;
+    // Accepts digits typed on an Arabic or Persian keyboard as well as Western ones.
+    final check = checkGoTo(
+      suraText: _suraField.text,
+      verseText: _verseField.text,
+      suraTotal: widget.suraTotal,
+      versesIn: widget.versesIn,
+    );
+    final sura = check.sura;
+    final validSura = sura != null;
+    final max = check.verseCount;
+    final valid = check.valid;
     return AlertDialog(
       title: Text(l10n.quranJump),
       content: Column(
@@ -192,7 +241,7 @@ class _GoToVerseDialogState extends State<_GoToVerseDialog> {
             autofocus: true,
             decoration: InputDecoration(
               labelText: l10n.quranJumpSura,
-              helperText: validSura ? suraName(context, sura) : null,
+              helperText: sura == null ? null : suraName(context, sura),
             ),
             onChanged: (_) => setState(() {}),
           ),
@@ -217,7 +266,7 @@ class _GoToVerseDialogState extends State<_GoToVerseDialog> {
         ),
         FilledButton(
           onPressed: valid
-              ? () => Navigator.of(context).pop(VerseRef(sura, verse ?? 1))
+              ? () => Navigator.of(context).pop(VerseRef(sura!, check.verse))
               : null,
           child: Text(l10n.quranGo),
         ),

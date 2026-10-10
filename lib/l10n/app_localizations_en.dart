@@ -1034,4 +1034,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shareCardFailed =>
       'The image could not be made or shared. Try again.';
+
+  @override
+  String get quranFilterHint => 'Find a sura by name or number';
+
+  @override
+  String get quranFilterNone => 'No sura matches.';
 }
