@@ -17,8 +17,10 @@ void main(List<String> args) {
     );
     exit(64);
   }
-  final export = jsonDecode(File(args.single).readAsStringSync()) as Map;
-  final suras = ((export['data'] as Map)['surahs'] as List).cast<Map>();
+  final export =
+      jsonDecode(File(args.single).readAsStringSync()) as Map<String, dynamic>;
+  final suras = ((export['data'] as Map<String, dynamic>)['surahs'] as List)
+      .cast<Map<String, dynamic>>();
 
   final tanzilCounts = <int, int>{};
   for (final line in File('assets/quran/quran-uthmani.txt').readAsLinesSync()) {
@@ -32,7 +34,7 @@ void main(List<String> args) {
   var page = 0, part = 0, quarter = 0;
   for (final sura in suras) {
     final number = sura['number'] as int;
-    final ayahs = (sura['ayahs'] as List).cast<Map>();
+    final ayahs = (sura['ayahs'] as List).cast<Map<String, dynamic>>();
     if (ayahs.length != tanzilCounts[number]) {
       _fail(
         'sura $number: ${ayahs.length} verses, Tanzil has ${tanzilCounts[number]}',

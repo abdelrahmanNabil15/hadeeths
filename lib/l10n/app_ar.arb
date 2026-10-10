@@ -458,6 +458,8 @@
   "quranVerses": "{count, plural, =1{آية واحدة} =2{آيتان} few{{count} آيات} other{{count} آية}}",
   "quranVerseLabel": "الآية {number}",
   "quranSuraTitle": "سورة {name}",
+  "quranJuz": "الجزء {number}",
+  "quranPage": "صفحة {number}",
   "quranBookmarkAdd": "وضع علامة على هذه الآية",
   "quranBookmarkRemove": "إزالة العلامة",
   "quranSurasHeading": "السور",

@@ -998,6 +998,16 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String quranJuz(Object number) {
+    return 'Juz $number';
+  }
+
+  @override
+  String quranPage(Object number) {
+    return 'Page $number';
+  }
+
+  @override
   String get quranBookmarkAdd => 'Bookmark this verse';
 
   @override

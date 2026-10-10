@@ -95,7 +95,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       Directionality.of(
-        tester.element(find.textContaining(placeholderVerse(2, 1))),
+        tester.element(find.textContaining(placeholderVerse(2, 1)).first),
       ),
       TextDirection.rtl,
     );

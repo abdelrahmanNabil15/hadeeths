@@ -8,6 +8,7 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_sheet.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/geometric_pattern.dart';
+import 'package:mynewapp/features/quran/domain/quran_structure.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/quran_labels.dart';
@@ -48,6 +49,25 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
   late final List<Verse> _verses = _text.sura(widget.sura);
   late final List<GlobalKey> _keys = [for (final _ in _verses) GlobalKey()];
   late final String? _basmala = leadingBasmala(_text, widget.sura);
+  static final _structure = QuranStructure.madinah;
+
+  /// The verses on each mushaf page, as ranges of [_verses]: a page of the sura is one paragraph.
+  late final List<({int first, int last, int page})> _pages = () {
+    final pages = <({int first, int last, int page})>[];
+    for (var i = 0; i < _verses.length; i++) {
+      final page = _structure.pageOf(VerseRef(widget.sura, _verses[i].number));
+      if (pages.isNotEmpty && pages.last.page == page) {
+        pages[pages.length - 1] = (
+          first: pages.last.first,
+          last: i,
+          page: page,
+        );
+      } else {
+        pages.add((first: i, last: i, page: page));
+      }
+    }
+    return pages;
+  }();
   final _viewport = GlobalKey();
 
   @override
@@ -134,6 +154,9 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
                         child: _SuraBanner(
                           sura: widget.sura,
                           verses: _verses.length,
+                          juz: _structure.juzOf(
+                            VerseRef(widget.sura, _verses.first.number),
+                          ),
                         ),
                       ),
                       const SizedBox(height: AppSpacing.md),
@@ -151,14 +174,25 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
                               ),
                               const SizedBox(height: AppSpacing.sm),
                             ],
-                            VerseFlow(
-                              verses: _verses,
-                              style: style,
-                              bookmarks: bookmarks,
-                              markerKeys: _keys,
-                              onVerseActions: _verseActions,
-                              skipFromFirst: _basmala ?? '',
-                            ),
+                            for (final page in _pages) ...[
+                              VerseFlow(
+                                verses: _verses.sublist(
+                                  page.first,
+                                  page.last + 1,
+                                ),
+                                style: style,
+                                bookmarks: bookmarks,
+                                markerKeys: _keys.sublist(
+                                  page.first,
+                                  page.last + 1,
+                                ),
+                                onVerseActions: _verseActions,
+                                skipFromFirst: page.first == 0
+                                    ? (_basmala ?? '')
+                                    : '',
+                              ),
+                              _PageBreak(page: page.page),
+                            ],
                           ],
                         ),
                       ),
@@ -260,10 +294,17 @@ class _CornerStarPainter extends CustomPainter {
 /// framed band with the sura's title between two stars, and its number of verses. Nothing here is
 /// Quran text.
 class _SuraBanner extends StatelessWidget {
-  const _SuraBanner({required this.sura, required this.verses});
+  const _SuraBanner({
+    required this.sura,
+    required this.verses,
+    required this.juz,
+  });
 
   final int sura;
   final int verses;
+
+  /// The juz the sura begins in.
+  final int juz;
 
   @override
   Widget build(BuildContext context) {
@@ -275,6 +316,7 @@ class _SuraBanner extends StatelessWidget {
           RegExp(r'\d+'),
           (m) => context.digits.format(int.parse(m[0]!)),
         );
+    final part = context.l10n.quranJuz(context.digits.format(juz));
     Widget star() => ExcludeSemantics(
       child: CustomPaint(
         size: const Size.square(AppSpacing.lg),
@@ -306,11 +348,53 @@ class _SuraBanner extends StatelessWidget {
                       style: type.editorialTitle,
                     ),
                   ),
-                  Text(count, textAlign: TextAlign.center, style: type.meta),
+                  Text(
+                    '$count · $part',
+                    textAlign: TextAlign.center,
+                    style: type.meta,
+                  ),
                 ],
               ),
             ),
             star(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The foot of a mushaf page: its number between two fine rules. The number is read as "Page n".
+class _PageBreak extends StatelessWidget {
+  const _PageBreak({required this.page});
+
+  final int page;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    Widget rule() => Expanded(
+      child: Container(height: AppBorders.hairline, color: colors.goldSoft),
+    );
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+      child: Semantics(
+        label: context.l10n.quranPage(context.digits.format(page)),
+        excludeSemantics: true,
+        child: Row(
+          children: [
+            rule(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              child: Text(
+                context.digits.format(page),
+                style: AppTypography.of(
+                  context,
+                ).meta.copyWith(color: scheme.onSurfaceVariant),
+              ),
+            ),
+            rule(),
           ],
         ),
       ),

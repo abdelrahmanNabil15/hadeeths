@@ -1778,6 +1778,18 @@ abstract class AppLocalizations {
   /// **'سورة {name}'**
   String quranSuraTitle(Object name);
 
+  /// No description provided for @quranJuz.
+  ///
+  /// In ar, this message translates to:
+  /// **'الجزء {number}'**
+  String quranJuz(Object number);
+
+  /// No description provided for @quranPage.
+  ///
+  /// In ar, this message translates to:
+  /// **'صفحة {number}'**
+  String quranPage(Object number);
+
   /// No description provided for @quranBookmarkAdd.
   ///
   /// In ar, this message translates to:

@@ -4,22 +4,19 @@ import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 /// Where each verse sits in the Madinah mushaf: its page (1 to 604), juz (1 to 30) and hizb
 /// quarter (1 to 240), and which verses carry a prostration. Only numbers; no Quran text.
 class QuranStructure {
-  const QuranStructure._({
-    required List<int> pageStarts,
-    required List<int> juzStarts,
-    required List<int> hizbQuarterStarts,
-    required Set<int> sajdahVerses,
-  }) : _pageStarts = pageStarts,
-       _juzStarts = juzStarts,
-       _hizbQuarterStarts = hizbQuarterStarts,
-       _sajdahVerses = sajdahVerses;
+  const QuranStructure._(
+    this._pageStarts,
+    this._juzStarts,
+    this._hizbQuarterStarts,
+    this._sajdahVerses,
+  );
 
   /// The mushaf layout shipped with the app (see `tool/export_quran_structure.dart`).
   static final madinah = QuranStructure._(
-    pageStarts: pageStarts,
-    juzStarts: juzStarts,
-    hizbQuarterStarts: hizbQuarterStarts,
-    sajdahVerses: sajdahVerses.toSet(),
+    pageStarts,
+    juzStarts,
+    hizbQuarterStarts,
+    sajdahVerses.toSet(),
   );
 
   static const pageCount = 604;

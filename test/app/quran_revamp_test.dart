@@ -52,14 +52,14 @@ void main() {
         tester.getSemantics(find.text(title)),
         isSemantics(label: title, isHeader: true),
       );
-      expect(find.text('7 verses'), findsOneWidget);
+      expect(find.textContaining('7 verses'), findsOneWidget);
       // Interface text keeps the app's direction inside the right-to-left reader.
       expect(
         tester
             .widget<Directionality>(
               find
                   .ancestor(
-                    of: find.text('7 verses'),
+                    of: find.textContaining('7 verses'),
                     matching: find.byType(Directionality),
                   )
                   .first,
@@ -97,6 +97,24 @@ void main() {
       handle.dispose();
     },
   );
+
+  testWidgets('a sura is set page by page, each page ending with its number', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    final l10n = await _open(tester);
+    await tester.tap(find.text('2. ${SuraNames.latin(2)}'));
+    await tester.pumpAndSettle();
+    // The made-up sura has 12 lines: the mushaf puts the first five on page 2 and the rest on page 3.
+    expect(find.bySemanticsLabel(l10n.quranPage('2')), findsOneWidget);
+    expect(find.bySemanticsLabel(l10n.quranPage('3')), findsOneWidget);
+    expect(find.textContaining(l10n.quranJuz('1')), findsOneWidget);
+    // Every line is still there, in order, whatever the page it falls on.
+    expect(verseTexts(tester), [
+      for (var v = 1; v <= 12; v++) placeholderVerse(2, v),
+    ]);
+    handle.dispose();
+  });
 
   testWidgets('search prompts before typing and shows results on cards', (
     tester,

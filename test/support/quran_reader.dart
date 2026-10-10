@@ -3,23 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// The reader sets all the verses of a sura as one paragraph. This is the text of each verse in it, in
-/// order, taken from the spans that react to a long press (the numbers and spaces are not verses).
+/// The reader sets the verses of each mushaf page of a sura as one paragraph. This is the text of each
+/// verse in them, in order, taken from the spans that react to a long press (the numbers and spaces are not verses).
 List<String> verseTexts(WidgetTester tester) {
-  final paragraph = tester.widget<Text>(
-    find.byWidgetPredicate(
-      (w) =>
-          w is Text &&
-          w.textSpan is TextSpan &&
-          ((w.textSpan! as TextSpan).children ?? const []).any(
-            (s) => s is TextSpan && s.recognizer is LongPressGestureRecognizer,
-          ),
-    ),
-  );
+  bool isPage(Widget w) =>
+      w is Text &&
+      w.textSpan is TextSpan &&
+      ((w.textSpan! as TextSpan).children ?? const []).any(
+        (s) => s is TextSpan && s.recognizer is LongPressGestureRecognizer,
+      );
   return [
-    for (final span in (paragraph.textSpan! as TextSpan).children!)
-      if (span is TextSpan && span.recognizer is LongPressGestureRecognizer)
-        span.text!,
+    for (final paragraph in tester.widgetList<Text>(
+      find.byWidgetPredicate(isPage),
+    ))
+      for (final span in (paragraph.textSpan! as TextSpan).children!)
+        if (span is TextSpan && span.recognizer is LongPressGestureRecognizer)
+          span.text!,
   ];
 }
 
