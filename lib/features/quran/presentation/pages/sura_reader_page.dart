@@ -7,12 +7,12 @@ import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_sheet.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
-import 'package:mynewapp/core/widgets/ornament_divider.dart';
+import 'package:mynewapp/core/widgets/geometric_pattern.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/quran_labels.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_cubit.dart';
-import 'package:mynewapp/features/quran/presentation/widgets/verse_marker.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/verse_flow.dart';
 import 'package:mynewapp/features/settings/presentation/state/settings_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
@@ -47,6 +47,7 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
   late final QuranText _text = context.read<QuranCubit>().state.text!;
   late final List<Verse> _verses = _text.sura(widget.sura);
   late final List<GlobalKey> _keys = [for (final _ in _verses) GlobalKey()];
+  late final String? _basmala = leadingBasmala(_text, widget.sura);
   final _viewport = GlobalKey();
 
   @override
@@ -56,7 +57,8 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     context.read<QuranCubit>().setLastRead(VerseRef(widget.sura, start));
     if (start > 1) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final target = _keys[start - 1].currentContext;
+        // The verse starts where the one before it ends.
+        final target = _keys[start - 2].currentContext;
         if (target != null) Scrollable.ensureVisible(target);
       });
     }
@@ -71,9 +73,9 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
       final verseBox =
           _keys[i].currentContext?.findRenderObject() as RenderBox?;
       if (verseBox == null) continue;
-      final verseBottom =
+      final markBottom =
           verseBox.localToGlobal(Offset.zero).dy + verseBox.size.height;
-      if (verseBottom > top + 1) {
+      if (markBottom > top + 1) {
         context.read<QuranCubit>().setLastRead(VerseRef(widget.sura, i + 1));
         break;
       }
@@ -105,10 +107,10 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
-    final scale = context.select((SettingsCubit c) => c.state.readingScale);
-    final style = quranTextStyle(context, scale: scale);
+    final style = quranTextStyle(
+      context,
+      scale: context.select((SettingsCubit c) => c.state.readingScale),
+    );
     final bookmarks = context.select((QuranCubit c) => c.state.bookmarks);
     final appDirection = Directionality.of(context);
     return Scaffold(
@@ -119,37 +121,51 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
           key: _viewport,
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(AppSpacing.lg),
-            child: Directionality(
-              // Quran text is right to left whatever the interface language.
-              textDirection: TextDirection.rtl,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // The header is interface text: it keeps the app's direction, not the verses'.
-                  Directionality(
-                    textDirection: appDirection,
-                    child: _SuraHeader(
-                      sura: widget.sura,
-                      verses: _verses.length,
-                    ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _MushafPage(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // The banner is interface text: it keeps the app's direction.
+                      Directionality(
+                        textDirection: appDirection,
+                        child: _SuraBanner(
+                          sura: widget.sura,
+                          verses: _verses.length,
+                        ),
+                      ),
+                      const SizedBox(height: AppSpacing.md),
+                      // Quran text is right to left whatever the interface language.
+                      Directionality(
+                        textDirection: TextDirection.rtl,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            if (_basmala != null) ...[
+                              Text(
+                                _basmala,
+                                textAlign: TextAlign.center,
+                                style: style,
+                              ),
+                              const SizedBox(height: AppSpacing.sm),
+                            ],
+                            VerseFlow(
+                              verses: _verses,
+                              style: style,
+                              bookmarks: bookmarks,
+                              markerKeys: _keys,
+                              onVerseActions: _verseActions,
+                              skipFromFirst: _basmala ?? '',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: AppSpacing.lg),
-                  for (final verse in _verses)
-                    _VerseBlock(
-                      key: _keys[verse.number - 1],
-                      verse: verse,
-                      style: style,
-                      bookmarked: bookmarks.contains(
-                        VerseRef(verse.sura, verse.number),
-                      ),
-                      label: l10n.quranVerseLabel(
-                        context.digits.format(verse.number),
-                      ),
-                      onLongPress: () => _verseActions(verse),
-                      scheme: scheme,
-                    ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
@@ -158,72 +174,100 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
   }
 }
 
-class _VerseBlock extends StatelessWidget {
-  const _VerseBlock({
-    super.key,
-    required this.verse,
-    required this.style,
-    required this.bookmarked,
-    required this.label,
-    required this.onLongPress,
-    required this.scheme,
-  });
+/// The page the verses are set on, framed as a mushaf page is: a broad band in pale gold between two
+/// gold rules, with a small star in each corner. Decoration only; the text sits on the plain reading
+/// surface inside it.
+class _MushafPage extends StatelessWidget {
+  const _MushafPage({required this.child});
 
-  final Verse verse;
-  final TextStyle style;
-  final bool bookmarked;
-  final String label;
-  final VoidCallback onLongPress;
-  final ColorScheme scheme;
+  final Widget child;
+
+  static const _band = AppSpacing.md;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      container: true,
-      label: label,
-      onLongPressHint: bookmarked
-          ? context.l10n.quranBookmarkRemove
-          : context.l10n.quranBookmarkAdd,
-      child: InkWell(
-        onLongPress: onLongPress,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: Text(verse.text, style: style)),
-              const SizedBox(width: AppSpacing.sm),
-              Column(
-                children: [
-                  VerseMarker(number: verse.number, bookmarked: bookmarked),
-                  if (bookmarked)
-                    Icon(
-                      Icons.bookmark,
-                      size: AppSizes.iconSmall,
-                      color: AppColors.of(context).gold,
-                      semanticLabel: context.l10n.quranBookmarkRemove,
-                    ),
-                ],
-              ),
-            ],
-          ),
+    final colors = AppColors.of(context);
+    Widget corner(Alignment at) => Align(
+      alignment: at,
+      child: ExcludeSemantics(
+        child: CustomPaint(
+          size: const Size.square(_band + AppSpacing.xs),
+          painter: _CornerStarPainter(colors.gold),
         ),
+      ),
+    );
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.goldSoft.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        border: Border.all(color: colors.gold, width: AppBorders.emphasis),
+      ),
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(_band),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: colors.readingSurface,
+                border: Border.all(
+                  color: colors.gold,
+                  width: AppBorders.hairline,
+                ),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.sm,
+                  vertical: AppSpacing.lg,
+                ),
+                child: child,
+              ),
+            ),
+          ),
+          Positioned.fill(
+            child: Stack(
+              children: [
+                corner(Alignment.topLeft),
+                corner(Alignment.topRight),
+                corner(Alignment.bottomLeft),
+                corner(Alignment.bottomRight),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// The head of a sura: its name in the editorial face, its number of verses, and a fine ornament
-/// before the text. Nothing here is Quran text.
-class _SuraHeader extends StatelessWidget {
-  const _SuraHeader({required this.sura, required this.verses});
+class _CornerStarPainter extends CustomPainter {
+  const _CornerStarPainter(this.color);
+
+  final Color color;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawPath(
+      eightPointStar(size.center(Offset.zero), size.shortestSide / 2),
+      Paint()..color = color,
+    );
+  }
+
+  @override
+  bool shouldRepaint(_CornerStarPainter old) => old.color != color;
+}
+
+/// The banner at the head of a sura, like the cartouche above the first verses of a mushaf page: a
+/// framed band with the sura's title between two stars, and its number of verses. Nothing here is
+/// Quran text.
+class _SuraBanner extends StatelessWidget {
+  const _SuraBanner({required this.sura, required this.verses});
 
   final int sura;
   final int verses;
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
     final type = AppTypography.of(context);
     final count = context.l10n
         .quranVerses(verses)
@@ -231,20 +275,45 @@ class _SuraHeader extends StatelessWidget {
           RegExp(r'\d+'),
           (m) => context.digits.format(int.parse(m[0]!)),
         );
-    return Column(
-      children: [
-        Semantics(
-          header: true,
-          child: Text(
-            suraName(context, sura),
-            textAlign: TextAlign.center,
-            style: type.editorialTitle,
-          ),
+    Widget star() => ExcludeSemantics(
+      child: CustomPaint(
+        size: const Size.square(AppSpacing.lg),
+        painter: _CornerStarPainter(colors.gold),
+      ),
+    );
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: colors.goldSoft.withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(AppRadius.control),
+        border: Border.all(color: colors.gold, width: AppBorders.hairline),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.lg,
+          vertical: AppSpacing.md,
         ),
-        Text(count, textAlign: TextAlign.center, style: type.meta),
-        const SizedBox(height: AppSpacing.md),
-        const OrnamentDivider(width: 160),
-      ],
+        child: Row(
+          children: [
+            star(),
+            Expanded(
+              child: Column(
+                children: [
+                  Semantics(
+                    header: true,
+                    child: Text(
+                      context.l10n.quranSuraTitle(suraName(context, sura)),
+                      textAlign: TextAlign.center,
+                      style: type.editorialTitle,
+                    ),
+                  ),
+                  Text(count, textAlign: TextAlign.center, style: type.meta),
+                ],
+              ),
+            ),
+            star(),
+          ],
+        ),
+      ),
     );
   }
 }
