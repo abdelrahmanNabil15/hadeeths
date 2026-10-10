@@ -4,6 +4,7 @@ import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
@@ -44,6 +45,7 @@ class AppDependencies {
     this.favorites,
     this.quran,
     this.quranUserData,
+    this.imageSharer = const SystemImageSharer(),
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -117,6 +119,13 @@ class AppDependencies {
 
   /// Last-read place and bookmarks; `null` when the user database could not be opened.
   final QuranUserData? quranUserData;
+
+  /// Opens the system share sheet with images.
+  final ImageSharer imageSharer;
+
+  /// Image sharing as the screens should see it: only when its section is on.
+  ImageSharer? get imageSharerIfEnabled =>
+      features.shareCards && features.usesShell ? imageSharer : null;
 
   /// Favourites as the screens should see them: only when their section is on and the bottom
   /// navigation exists.

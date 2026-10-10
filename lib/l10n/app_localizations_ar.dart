@@ -1015,4 +1015,29 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get aboutQuranBody =>
       'نص القرآن من مشروع تنزيل: Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير، مع إشعار حقوقه. التحديثات: tanzil.net.';
+
+  @override
+  String get shareAsText => 'مشاركة كنص';
+
+  @override
+  String get shareAsImage => 'مشاركة كصورة';
+
+  @override
+  String get shareCardShareOne => 'مشاركة الصورة';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'مشاركة الصور الـ$count',
+      few: 'مشاركة الصور الـ$count',
+      two: 'مشاركة الصورتين',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
 }

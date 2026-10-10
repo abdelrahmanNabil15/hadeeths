@@ -222,3 +222,15 @@ translation parity, and the architecture rules. Nothing touches the live API.
 - **Screens:** list of suras (names written for owner review), reader (each verse unchanged, right to left in both interface languages, number drawn
   beside it), go to a verse, bookmarks (long press), continue reading, search (marks ignored for matching only). Positions only are stored
   (migration 5). Credit in the section and in About.
+
+## Share as image (Phase 3G-1)
+
+- With the `shareCards` flag on (preview sections), a hadith's share button asks "Share as text" or "Share as image"; the released app still shares
+  text straight away (a test checks it).
+- `ShareCardPage` lays the hadith out on 360 x 450 cards (saved as 1080 x 1350 PNGs), always in the light palette and without the phone's text
+  scaling. Each card has the app's name, a piece of the hadith, and the HadeethEnc credit; the grade and narrator are on the last card; cards are
+  numbered when there is more than one.
+- `splitIntoPages` breaks the text only at spaces and never changes it: the pieces joined with single spaces equal the original with its spaces
+  collapsed (tested); a word longer than a card gets a card of its own, uncut.
+- `ImageSharer` (core) writes the PNGs to the app's temporary folder and opens the system share sheet; nothing is uploaded by the app. Every card is
+  built (not only those on screen) so each one can be captured; the share button stays at the bottom of the screen.

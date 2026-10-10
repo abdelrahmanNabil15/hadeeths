@@ -5,6 +5,7 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
@@ -45,6 +46,7 @@ AppDependencies testDependencies(
   UserDatabase? userData,
   QuranSource? quran,
   QuranUserData? quranUserData,
+  ImageSharer? imageSharer,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -59,6 +61,7 @@ AppDependencies testDependencies(
   userData: userData,
   quran: quran,
   quranUserData: quranUserData,
+  imageSharer: imageSharer ?? const SystemImageSharer(),
 );
 
 /// Starts the app against [api].
@@ -81,6 +84,7 @@ Future<void> pumpApp(
   UserDatabase? userData,
   QuranSource? quran,
   QuranUserData? quranUserData,
+  ImageSharer? imageSharer,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -98,6 +102,7 @@ Future<void> pumpApp(
         userData: userData,
         quran: quran,
         quranUserData: quranUserData,
+        imageSharer: imageSharer,
       ),
       initialSettings: settings,
     ),

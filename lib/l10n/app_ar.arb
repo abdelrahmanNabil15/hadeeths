@@ -462,5 +462,10 @@
   "quranSurasHeading": "السور",
   "quranCredit": "نص القرآن: مشروع تنزيل (tanzil.net)، مستخدَم دون أي تغيير وفق ترخيصه.",
   "aboutQuranHeading": "نص القرآن الكريم",
-  "aboutQuranBody": "نص القرآن من مشروع تنزيل: Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير، مع إشعار حقوقه. التحديثات: tanzil.net."
+  "aboutQuranBody": "نص القرآن من مشروع تنزيل: Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. الترخيص: المشاع الإبداعي، نَسب المُصنَّف 3.0. يُستخدم النص كما نُشر تمامًا دون أي تغيير، مع إشعار حقوقه. التحديثات: tanzil.net.",
+  "shareAsText": "مشاركة كنص",
+  "shareAsImage": "مشاركة كصورة",
+  "shareCardShareOne": "مشاركة الصورة",
+  "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
+  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى."
 }

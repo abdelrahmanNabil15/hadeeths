@@ -1011,4 +1011,27 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get aboutQuranBody =>
       'Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change, with its copyright notice. Updates: tanzil.net.';
+
+  @override
+  String get shareAsText => 'Share as text';
+
+  @override
+  String get shareAsImage => 'Share as image';
+
+  @override
+  String get shareCardShareOne => 'Share the image';
+
+  @override
+  String shareCardShareMany(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Share the $count images',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get shareCardFailed =>
+      'The image could not be made or shared. Try again.';
 }

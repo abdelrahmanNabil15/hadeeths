@@ -11,10 +11,15 @@ class FeatureFlags {
     this.quran = false,
     this.prayer = false,
     this.favorites = false,
+    this.shareCards = false,
   });
 
   /// Everything on (previews and tests).
-  const FeatureFlags.all() : quran = true, prayer = true, favorites = true;
+  const FeatureFlags.all()
+    : quran = true,
+      prayer = true,
+      favorites = true,
+      shareCards = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -28,6 +33,9 @@ class FeatureFlags {
   /// Favourite hadiths: the bookmark on a hadith and the list under More. The list lives under
   /// More, so favourites are only offered together with the bottom navigation.
   final bool favorites;
+
+  /// Sharing a hadith as an image. Off in the released app, where sharing stays text only.
+  final bool shareCards;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

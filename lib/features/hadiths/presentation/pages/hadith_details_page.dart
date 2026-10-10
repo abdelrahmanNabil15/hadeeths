@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
@@ -10,6 +12,7 @@ import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/favorites/presentation/favorite_button.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
+import 'package:mynewapp/features/hadiths/presentation/share_card/share_card_page.dart';
 import 'package:mynewapp/features/hadiths/presentation/share_text.dart';
 import 'package:mynewapp/features/hadiths/presentation/state/hadith_detail_cubit.dart';
 import 'package:mynewapp/features/hadiths/presentation/widgets/reading_surface.dart';
@@ -44,14 +47,25 @@ class HadithDetailsPage extends StatelessWidget {
               builder: (context, state) {
                 final details = state.details;
                 if (details == null) return const SizedBox.shrink();
+                void shareText() => SharePlus.instance.share(
+                  ShareParams(
+                    text: hadithShareText(details, credit: l10n.sourceCredit),
+                  ),
+                );
+                final sharer = context.read<ImageSharer?>();
                 return IconButton(
                   tooltip: l10n.shareHadith,
                   icon: const Icon(Icons.share),
-                  onPressed: () => SharePlus.instance.share(
-                    ShareParams(
-                      text: hadithShareText(details, credit: l10n.sourceCredit),
-                    ),
-                  ),
+                  // The released app shares text straight away; with image sharing on, the user
+                  // chooses text or image first.
+                  onPressed: sharer == null
+                      ? shareText
+                      : () => _chooseShare(
+                          context,
+                          details: details,
+                          sharer: sharer,
+                          shareText: shareText,
+                        ),
                 );
               },
             ),
@@ -78,6 +92,48 @@ class HadithDetailsPage extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _chooseShare(
+  BuildContext context, {
+  required HadithDetails details,
+  required ImageSharer sharer,
+  required VoidCallback shareText,
+}) async {
+  final l10n = context.l10n;
+  final arabic = context.apiLanguage == 'ar';
+  final navigator = Navigator.of(context);
+  final choice = await showModalBottomSheet<bool>(
+    context: context,
+    builder: (sheetContext) => SafeArea(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(
+            leading: const Icon(Icons.notes),
+            title: Text(l10n.shareAsText),
+            onTap: () => Navigator.of(sheetContext).pop(false),
+          ),
+          ListTile(
+            leading: const Icon(Icons.image_outlined),
+            title: Text(l10n.shareAsImage),
+            onTap: () => Navigator.of(sheetContext).pop(true),
+          ),
+        ],
+      ),
+    ),
+  );
+  if (choice == null) return;
+  if (!choice) {
+    shareText();
+    return;
+  }
+  await navigator.push(
+    appRoute<void>(
+      builder: (_) =>
+          ShareCardPage(details: details, arabic: arabic, sharer: sharer),
+    ),
+  );
 }
 
 class HadithDetailsBody extends StatelessWidget {

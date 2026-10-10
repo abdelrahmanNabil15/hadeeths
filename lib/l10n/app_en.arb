@@ -307,5 +307,10 @@
   "quranSurasHeading": "Suras",
   "quranCredit": "Quran text: Tanzil Project (tanzil.net), used unchanged under its licence.",
   "aboutQuranHeading": "Quran text",
-  "aboutQuranBody": "Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change, with its copyright notice. Updates: tanzil.net."
+  "aboutQuranBody": "Tanzil Quran Text (Uthmani, Version 1.1), Copyright (C) 2007-2026 Tanzil Project. Licence: Creative Commons Attribution 3.0. The text is used exactly as published, without any change, with its copyright notice. Updates: tanzil.net.",
+  "shareAsText": "Share as text",
+  "shareAsImage": "Share as image",
+  "shareCardShareOne": "Share the image",
+  "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
+  "shareCardFailed": "The image could not be made or shared. Try again."
 }
