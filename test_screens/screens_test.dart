@@ -26,6 +26,7 @@ import 'package:mynewapp/l10n/app_localizations.dart';
 import '../test/support/fake_backend.dart';
 import '../test/support/fixtures.dart';
 import '../test/support/prayer_fakes.dart';
+import '../test/support/quran_fakes.dart';
 import '../test/support/test_app.dart';
 import '../test/support/tracker_fakes.dart';
 
@@ -111,6 +112,7 @@ Future<void> _loadFonts() async {
     'assets/fonts/Amiri-Regular.ttf',
     'assets/fonts/Amiri-Bold.ttf',
   ]);
+  await load('AmiriQuran', ['assets/fonts/AmiriQuran.ttf']);
   final flutterRoot =
       Platform.environment['FLUTTER_ROOT'] ??
       'D:/StudioProjects/Flutter/flutter';
@@ -313,6 +315,164 @@ void main() {
       await back();
       await tap(find.text(l10n.aboutTitle));
       await shot('about');
+    });
+  }
+
+  // Secondary screens, dialogs and sheets (the audit's evidence set).
+  for (final config in _configs.where(
+    (c) => c.textScale == 1.0 && c.label.isEmpty,
+  )) {
+    testWidgets('secondary ${config.name}', (tester) async {
+      tester.view.physicalSize = config.size * 2;
+      tester.view.devicePixelRatio = 2.0;
+      addTearDown(tester.view.reset);
+      final l10n = lookupAppLocalizations(Locale(config.locale));
+      final dir = 'build/screens/$_set/${config.name}';
+      var index = 20;
+
+      Future<void> shot(String name) async {
+        await tester.pumpAndSettle();
+        final view = tester.binding.renderViews.first;
+        final layer = view.debugLayer! as OffsetLayer;
+        await tester.runAsync(() async {
+          final image = await layer.toImage(
+            Offset.zero & tester.view.physicalSize,
+          );
+          final png = await image.toByteData(format: ui.ImageByteFormat.png);
+          final number = (++index).toString().padLeft(2, '0');
+          File('$dir/${number}_$name.png')
+            ..createSync(recursive: true)
+            ..writeAsBytesSync(png!.buffer.asUint8List());
+        });
+      }
+
+      Future<void> tap(Finder finder) async {
+        if (finder.evaluate().isEmpty) {
+          await tester.scrollUntilVisible(
+            finder,
+            200,
+            scrollable: find.byType(Scrollable).hitTestable().first,
+          );
+        }
+        await tester.ensureVisible(finder);
+        await tester.pumpAndSettle();
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> tab(String label) => tap(
+        find.descendant(
+          of: find.byType(NavigationBar),
+          matching: find.text(label),
+        ),
+      );
+
+      Future<void> back() async {
+        await tester.tap(find.byType(BackButton).last);
+        await tester.pumpAndSettle();
+      }
+
+      Future<void> cancel() async {
+        await tester.tap(find.text(l10n.notNow).last);
+        await tester.pumpAndSettle();
+      }
+
+      final fixture = PrayerFixture(
+        now: DateTime.utc(2026, 10, 9, 10),
+        saved: _cairo(),
+      );
+      final log = InMemoryPrayerLog();
+      final quranData = InMemoryQuranUserData();
+      await pumpApp(
+        tester,
+        FakeBackend(
+          pages: {
+            '2:1': samplePage(
+              ids: List.generate(8, (i) => '${100 + i}'),
+              totalItems: 8,
+            ),
+          },
+        ),
+        locale: config.locale,
+        settings: AppSettings(theme: config.theme),
+        features: const FeatureFlags(
+          prayer: true,
+          favorites: true,
+          shareCards: true,
+          quran: true,
+        ),
+        prayer: fixture.services,
+        prayerLog: log,
+        tasbeeh: _Tasbeeh(),
+        favorites: _Favorites(),
+        imageSharer: _NoSharer(),
+        quran: FakeQuranSource(),
+        quranUserData: quranData,
+      );
+
+      // Quran.
+      await tab(l10n.navQuran);
+      await shot('quran');
+      await tap(find.text(l10n.quranJump));
+      await shot('quran_go_to_dialog');
+      await cancel();
+      await tap(find.textContaining(RegExp(r'^[١1]\. ')).first);
+      await shot('sura_reader');
+      await tester.longPress(find.text(placeholderVerse(1, 1)));
+      await shot('verse_actions_sheet');
+      await tester.tapAt(const Offset(20, 20));
+      await tester.pumpAndSettle();
+      await back();
+      await tap(find.text(l10n.quranSearchHint));
+      await tester.enterText(find.byType(TextField).first, 'كلمة');
+      await shot('quran_search');
+      await back();
+      await tap(find.text(l10n.quranBookmarks));
+      await shot('quran_bookmarks_empty');
+      await back();
+
+      // Prayer secondary screens and dialogs.
+      await tab(l10n.navPrayer);
+      await tap(find.text(l10n.changeLocation));
+      await tap(find.text(l10n.chooseCity));
+      await shot('city_picker');
+      await back();
+      await tap(find.text(l10n.useMyLocation));
+      await shot('location_explain_dialog');
+      await cancel();
+      await back();
+      await tap(find.textContaining(RegExp('Egyptian|المصرية')).first);
+      await shot('method');
+      await back();
+      await tap(find.text(l10n.hijriHeading));
+      await shot('hijri');
+      await back();
+      await tap(find.text(l10n.remindersHeading));
+      await tap(find.text(l10n.remindersSwitch));
+      await shot('reminders_explain_dialog');
+      await cancel();
+      await back();
+
+      // More: dialogs.
+      await tab(l10n.navMore);
+      await tap(find.text(l10n.favoritesTitle));
+      await tap(find.text(l10n.favoritesClear));
+      await shot('favorites_clear_dialog');
+      await cancel();
+      await back();
+      await tap(find.text(l10n.tasbeehTitle));
+      await tap(find.text(l10n.tasbeehReset));
+      await shot('tasbeeh_reset_dialog');
+      await cancel();
+      await back();
+
+      // Hadith: share as image.
+      await tab(l10n.navHadiths);
+      await tap(find.text(categoriesJson[1]['title']!));
+      await tap(find.text('حديث 100').first);
+      await tap(find.byTooltip(l10n.shareHadith));
+      await tap(find.text(l10n.shareAsImage));
+      await shot('share_card_page');
     });
   }
 }
