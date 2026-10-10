@@ -50,6 +50,7 @@ class ReminderCoordinator implements ReminderService {
     required this._loadAppSettings,
     ReminderEnvironment Function()? environment,
     this._clock = const SystemClock(),
+    this._deviceZone = const DeviceTimeZone(),
   }) : _sync = NotificationSync(_gateway),
        _environment = environment ?? ReminderEnvironment.current;
 
@@ -60,6 +61,9 @@ class ReminderCoordinator implements ReminderService {
   final Future<AppSettings> Function() _loadAppSettings;
   final ReminderEnvironment Function() _environment;
   final Clock _clock;
+
+  /// The phone's own zone: salawat times and quiet hours follow it.
+  final TimeZoneRules _deviceZone;
 
   /// Two runs at once would race on the platform's list; the second waits for the first.
   Future<ReminderStatus>? _running;
@@ -85,11 +89,15 @@ class ReminderCoordinator implements ReminderService {
 
       final settings = prefs.reminders;
       final place = prefs.location;
-      if (!settings.enabled || settings.active.isEmpty) {
+      final prayersOn = settings.enabled && settings.active.isNotEmpty;
+      final salawatOn = settings.salawat.enabled;
+      if (!prayersOn && !salawatOn) {
         await _sync.cancelAll();
         return status();
       }
-      if (place == null) {
+      // Salawat needs no place (it follows the phone's clock), so a missing place only stops prayer
+      // reminders.
+      if (prayersOn && place == null && !salawatOn) {
         await _sync.cancelAll();
         return const ReminderStatus(needsPlace: true);
       }
@@ -98,18 +106,7 @@ class ReminderCoordinator implements ReminderService {
         return const ReminderStatus(notificationsAllowed: false);
       }
 
-      final zone = zoneForPlace(place);
       final now = _clock.now();
-      final today = zone.localDateAt(now);
-      final days = <PrayerDay>[];
-      for (var i = 0; i <= ReminderPlanBuilder.horizon.inDays; i++) {
-        final result = _calculator.calculate(
-          location: place.point,
-          date: today.add(Duration(days: i)),
-          settings: prefs.settings,
-        );
-        if (result is Success<PrayerDay>) days.add(result.value);
-      }
       final digits = Digits(
         arabicIndic: switch (app.digits) {
           DigitStyle.automatic => language == 'ar',
@@ -117,31 +114,73 @@ class ReminderCoordinator implements ReminderService {
           DigitStyle.western => false,
         },
       );
-      final signature = [
-        language,
-        settings.leadMinutes,
-        settings.sound.name,
-        settings.vibrate,
-        digits.arabicIndic,
-        env.use24Hour,
-        settings.exactTiming,
-        // Not the zone name itself: this text is stored with the notification, and the name hints at
-        // the country.
-        fnv1a31(zone.id).toRadixString(16),
-      ].join('|');
-      final plan =
-          NotificationPlanner(
-            zone: zone,
-            maxPending: 60,
-            horizon: ReminderPlanBuilder.horizon,
-          ).plan(
-            ReminderPlanBuilder.candidates(
-              days: days,
-              settings: settings,
-              contentSignature: signature,
-            ),
-            now: now,
+      final quiet = settings.quietHours;
+      final candidates = <NotificationCandidate>[];
+      TimeZoneRules? placeZone;
+      if (prayersOn && place != null) {
+        final zone = zoneForPlace(place);
+        placeZone = zone;
+        final today = zone.localDateAt(now);
+        final days = <PrayerDay>[];
+        for (var i = 0; i <= ReminderPlanBuilder.horizon.inDays; i++) {
+          final result = _calculator.calculate(
+            location: place.point,
+            date: today.add(Duration(days: i)),
+            settings: prefs.settings,
           );
+          if (result is Success<PrayerDay>) days.add(result.value);
+        }
+        final signature = [
+          language,
+          settings.leadMinutes,
+          settings.sound.name,
+          settings.vibrate,
+          digits.arabicIndic,
+          env.use24Hour,
+          settings.exactTiming,
+          // Whether a reminder is delivered silently depends on these.
+          settings.quietForPrayers && quiet != null
+              ? '${quiet.startMinute}-${quiet.endMinute}'
+              : '-',
+          // Not the zone name itself: this text is stored with the notification, and the name hints
+          // at the country.
+          fnv1a31(zone.id).toRadixString(16),
+        ].join('|');
+        candidates.addAll(
+          ReminderPlanBuilder.candidates(
+            days: days,
+            settings: settings,
+            contentSignature: signature,
+          ),
+        );
+      }
+      if (salawatOn) {
+        candidates.addAll(
+          ReminderPlanBuilder.salawatCandidates(
+            settings: settings.salawat,
+            zone: _deviceZone,
+            now: now,
+            signature: [
+              settings.salawat.leadMinutes,
+              settings.sound.name,
+              settings.vibrate,
+              digits.arabicIndic,
+              settings.exactTiming,
+            ].join('|'),
+          ),
+        );
+      }
+      final contentZone = placeZone ?? _deviceZone;
+      final plan = NotificationPlanner(
+        zone: contentZone,
+        quietHours: quiet,
+        // Quiet hours follow the phone's own clock, wherever the prayer place is (decision D2).
+        quietZone: _deviceZone,
+        maxPending: 60,
+        horizon: ReminderPlanBuilder.horizon,
+      ).plan(candidates, now: now);
+      bool inQuietHours(DateTime at) =>
+          quiet?.contains(_deviceZone.minuteOfDayAt(at)) ?? false;
       final report = await _sync.apply(
         plan,
         contentFor: (n) => reminderContent(
@@ -150,7 +189,11 @@ class ReminderCoordinator implements ReminderService {
           settings: settings,
           digits: digits,
           use24Hour: env.use24Hour,
-          zone: zone,
+          zone: contentZone,
+          silent:
+              n.kind == NotificationKind.prayer &&
+              settings.quietForPrayers &&
+              inQuietHours(n.fireAt),
         ),
         exact: settings.exactTiming,
       );
@@ -158,9 +201,15 @@ class ReminderCoordinator implements ReminderService {
       return ReminderStatus(
         scheduled: current.scheduled,
         next: current.next,
+        scheduledPrayers: current.scheduledPrayers,
+        nextPrayer: current.nextPrayer,
         notificationsAllowed: true,
         failed: report.failed,
         exactDenied: current.exactDenied,
+        needsPlace: prayersOn && place == null,
+        heldBackByQuietHours: plan.dropped
+            .where((d) => d.reason == DropReason.quietHours)
+            .length,
       );
     } on Object {
       return const ReminderStatus(failed: 1);
@@ -175,9 +224,15 @@ class ReminderCoordinator implements ReminderService {
           ?NotificationPayload.decode(entry),
       ]..sort((a, b) => a.fireAt.compareTo(b.fireAt));
       final settings = (await _preferences.load()).reminders;
+      final prayers = [
+        for (final n in ours)
+          if (n.kind == NotificationKind.prayer) n,
+      ];
       return ReminderStatus(
         scheduled: ours.length,
         next: ours.isEmpty ? null : ours.first,
+        scheduledPrayers: prayers.length,
+        nextPrayer: prayers.isEmpty ? null : prayers.first,
         notificationsAllowed: await _gateway.notificationsAllowed(),
         exactDenied:
             settings.enabled &&

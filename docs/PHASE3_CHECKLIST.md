@@ -33,15 +33,30 @@ Status key: `[ ]` pending, `[~]` in progress, `[x]` done and verified.
 New strings for wording review: `countdownIn` ("in {time}" / "بعد {time}"), `durationHours`, `durationMinutes`, `durationJoin`,
 `durationUnderAMinute` (Arabic uses the genitive after بعد: ساعة، ساعتين، ٣ ساعات، ١١ ساعة).
 
-## Step 2 — Salawat reminders and quiet hours (`feature/p3d-salawat-quiet-hours`)
-- [ ] Settings model for quiet hours (start, end, "apply to prayer reminders") and salawat (enabled, interval, window, lead).
-- [ ] Planner: salawat candidates (priority below prayers, own horizon); quiet hours on device time; prayer reminders inside quiet
-      hours delivered silently when the switch is on.
-- [ ] Approved wording exactly; ICU plural for minutes; a test pins the approved strings.
-- [ ] Reminders page: quiet-hours and salawat sections; "held back by quiet hours" summary.
-- [ ] Tests: quiet-hours matrix (midnight, boundaries, empty window, DST), priorities, iOS cap, wording.
+## Step 2 — Salawat reminders and quiet hours (`feature/p3d-salawat-quiet-hours`) — DONE
+- [x] Settings: `SalawatSettings` (interval 1/2/3/4/6 h, window, optional earlier reminder 5/10/15 min, off by default) and quiet
+      hours (on/off, start, end, "prayer reminders arrive silently") inside `ReminderSettings`; saved with the reminders; older saved
+      data and damaged entries load as off.
+- [x] Planner: salawat candidates for today and tomorrow on the phone's clock (priority 5, below prayers at 10; DST-safe);
+      quiet hours judged on the phone's clock (`quietZone`); prayer reminders never dropped or moved; with the switch on, a prayer
+      reminder in quiet hours is delivered without sound or vibration.
+- [x] Wording: the approved Arabic exactly (`presentation/salawat_wording.dart`, pinned by a test), in both interface languages;
+      دقائق after 3 to 10 (D3).
+- [x] Coordinator: salawat needs no place; everything off cancels everything; the status counts reminders held back by quiet
+      hours, and the prayer summary counts prayer reminders only.
+- [x] Screens: "More reminders" on the Reminders page with Salawat and Quiet hours rows (on/off shown); Salawat page (switch with the
+      notification-permission flow, approved-text preview, interval, window with a start-before-end check, earlier reminder);
+      Quiet hours page (switch, window, held-back count, silent-prayers switch).
+- [x] Tests: `test/features/prayer_times/salawat_quiet_hours_test.dart` (wording, settings, saving, planning, DST, quiet hours on the
+      phone clock, coordinator) and `test/app/salawat_quiet_flow_test.dart` (pages, scheduling, time picker, held-back count,
+      200% text and tap-target/label guidelines in both languages).
+- [x] Fix found on the way: the reminders screen state ignored some status fields when comparing, so a change in exact-alarm
+      permission alone did not redraw the warning; those fields are now compared.
 
-**Acceptance:** nothing deleted or moved silently; prayers never displaced by salawat; all checks green.
+New strings for wording review: `remindersMore`, `statusOn`, `statusOff`, `salawatTitle` (تذكيرات الصلاة على النبي ﷺ), `salawatSwitch`,
+`salawatIntro`, `salawatPreview`, `salawatInterval`, `salawatEveryHours`, `salawatWindow`, `timeFrom`, `timeTo`, `salawatLeadNone`,
+`windowInvalid`, `quietTitle`, `quietSwitch`, `quietIntro`, `quietPrayersSilent`, `quietHeldBack`.
+Device checks NOT RUN: delivery timing, silent delivery on Android channels, reboot, Doze, time-zone change.
 
 ## Step 3 — Daily hadith (`feature/p3f-daily-hadith`)
 - [ ] Migration 6: `opened_categories`, `daily_hadith`, `daily_hadith_history` (ids and dates only); upgrade test; Delete-all.
