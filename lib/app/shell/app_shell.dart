@@ -9,6 +9,9 @@ import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
+import 'package:mynewapp/features/quran/domain/quran_source.dart';
+import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
+import 'package:mynewapp/features/quran/presentation/pages/quran_page.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
 import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:mynewapp/l10n/l10n.dart';
@@ -32,6 +35,8 @@ class AppShell extends StatefulWidget {
     this.tasbeeh,
     this.favorites,
     this.onDeleteAll,
+    this.quran,
+    this.quranUserData,
   });
 
   final FeatureFlags features;
@@ -51,6 +56,10 @@ class AppShell extends StatefulWidget {
 
   /// Deletes everything the app keeps about the user.
   final Future<bool> Function()? onDeleteAll;
+
+  /// The Quran text; without it the Quran section shows its placeholder.
+  final QuranSource? quran;
+  final QuranUserData? quranUserData;
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -159,10 +168,13 @@ class _AppShellState extends State<AppShell> {
 
   Widget _root(ShellTab tab) => switch (tab) {
     ShellTab.hadiths => const HomePage(inShell: true),
-    ShellTab.quran => ComingSoonPage(
-      title: context.l10n.navQuran,
-      icon: Icons.auto_stories_outlined,
-    ),
+    ShellTab.quran =>
+      widget.quran == null
+          ? ComingSoonPage(
+              title: context.l10n.navQuran,
+              icon: Icons.auto_stories_outlined,
+            )
+          : QuranPage(source: widget.quran!, userData: widget.quranUserData),
     ShellTab.prayer =>
       widget.prayer == null
           ? ComingSoonPage(

@@ -39,4 +39,21 @@ CREATE TABLE favorites (
   added_at INTEGER NOT NULL
 ) WITHOUT ROWID''');
   }),
+  Migration(5, 'quran reading places', (db) {
+    // Positions only (sura and verse), never Quran text.
+    db.execute('''
+CREATE TABLE quran_last_read (
+  id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1),
+  sura INTEGER NOT NULL CHECK (sura BETWEEN 1 AND 114),
+  verse INTEGER NOT NULL CHECK (verse BETWEEN 1 AND 286),
+  updated_at INTEGER NOT NULL
+) WITHOUT ROWID''');
+    db.execute('''
+CREATE TABLE quran_bookmarks (
+  sura INTEGER NOT NULL CHECK (sura BETWEEN 1 AND 114),
+  verse INTEGER NOT NULL CHECK (verse BETWEEN 1 AND 286),
+  added_at INTEGER NOT NULL,
+  PRIMARY KEY (sura, verse)
+) WITHOUT ROWID''');
+  }),
 ];

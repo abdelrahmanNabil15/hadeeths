@@ -14,6 +14,9 @@ import 'package:mynewapp/features/hadiths/data/hadiths_remote_data_source.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_repository_impl.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/quran/data/quran_user_data_impl.dart';
+import 'package:mynewapp/features/quran/domain/quran_source.dart';
+import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/search/data/search_remote_data_source.dart';
 import 'package:mynewapp/features/search/data/search_repository_impl.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
@@ -40,6 +43,8 @@ class AppDependencies {
     this.prayerLog,
     this.tasbeeh,
     this.favorites,
+    this.quran,
+    this.quranUserData,
     this.imageSharer = const SystemImageSharer(),
   });
 
@@ -52,6 +57,7 @@ class AppDependencies {
     UserDatabase? userData,
     FeatureFlags features = const FeatureFlags(),
     PrayerServices? prayer,
+    QuranSource? quran,
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -75,6 +81,8 @@ class AppDependencies {
       favorites: userData == null
           ? null
           : SqliteFavoritesRepository(userData.db),
+      quran: quran,
+      quranUserData: userData == null ? null : SqliteQuranUserData(userData.db),
     );
   }
 
@@ -105,6 +113,12 @@ class AppDependencies {
 
   /// Favourite hadith ids; `null` when the user database could not be opened.
   final FavoritesRepository? favorites;
+
+  /// The verified Quran text (Phase 3E); `null` in tests that do not use it.
+  final QuranSource? quran;
+
+  /// Last-read place and bookmarks; `null` when the user database could not be opened.
+  final QuranUserData? quranUserData;
 
   /// Opens the system share sheet with images.
   final ImageSharer imageSharer;

@@ -83,6 +83,8 @@ void main() {
         'prayer_log',
         'tasbeeh_counter',
         'favorites',
+        'quran_last_read',
+        'quran_bookmarks',
       });
       database.close();
     });
