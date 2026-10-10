@@ -143,7 +143,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 return MaterialApp(
                   key: ValueKey(_generation),
                   scaffoldMessengerKey: _messenger,
-                  onGenerateTitle: (context) => context.l10n.appTitle,
+                  onGenerateTitle: (context) => context.l10n.appName,
                   theme: _lightTheme,
                   darkTheme: _darkTheme,
                   themeMode: switch (settings.theme) {

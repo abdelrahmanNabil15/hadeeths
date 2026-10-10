@@ -4,6 +4,10 @@
   "@appTitle": {
     "description": "App name shown in the home app bar and the task switcher."
   },
+  "appName": "سكينة",
+  "@appName": {
+    "description": "The name of the app: the task switcher title and the About page."
+  },
   "homeIntro": "تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.",
   "mainCategories": "التصنيفات الرئيسية",
   "noCategories": "لا توجد تصنيفات",

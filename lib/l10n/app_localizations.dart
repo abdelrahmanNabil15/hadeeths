@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'الأحاديث النبوية'**
   String get appTitle;
 
+  /// The name of the app: the task switcher title and the About page.
+  ///
+  /// In ar, this message translates to:
+  /// **'سكينة'**
+  String get appName;
+
   /// No description provided for @homeIntro.
   ///
   /// In ar, this message translates to:
