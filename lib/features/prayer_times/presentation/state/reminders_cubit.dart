@@ -8,6 +8,7 @@ import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_service.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
+import 'package:mynewapp/features/prayer_times/domain/salawat_settings.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 
 /// Why reminders could not be switched on, for the screen to explain.
@@ -80,6 +81,10 @@ class RemindersState extends Equatable {
     status.failed,
     status.notificationsAllowed,
     status.needsPlace,
+    status.exactDenied,
+    status.heldBackByQuietHours,
+    status.scheduledPrayers,
+    status.nextPrayer?.id,
     permission,
     problem,
     busy,
@@ -192,6 +197,70 @@ class RemindersCubit extends Cubit<RemindersState> {
 
   Future<void> setVibrate({required bool on}) =>
       _apply(_settings.copyWith(vibrate: on));
+
+  /// Switches salawat reminders on or off. Switching on asks for the notification permission the
+  /// same way as prayer reminders; no place is needed, they follow the phone's clock.
+  Future<void> setSalawatEnabled(
+    bool on, {
+    required Future<bool> Function() explain,
+  }) async {
+    if (on && !await _notificationsAllowed(explain)) return;
+    await _apply(
+      _settings.copyWith(salawat: _settings.salawat.copyWith(enabled: on)),
+    );
+  }
+
+  /// Saves a change to the salawat times (interval, window or earlier reminder).
+  Future<void> setSalawat(SalawatSettings next) =>
+      _apply(_settings.copyWith(salawat: next));
+
+  /// Saves a change to quiet hours.
+  Future<void> setQuiet({
+    bool? enabled,
+    int? startMinute,
+    int? endMinute,
+    bool? forPrayers,
+  }) => _apply(
+    _settings.copyWith(
+      quietEnabled: enabled,
+      quietStartMinute: startMinute,
+      quietEndMinute: endMinute,
+      quietForPrayers: forPrayers,
+    ),
+  );
+
+  /// Plans again (changes nothing when nothing changed) so the screen can say what quiet hours hold
+  /// back.
+  Future<void> refreshPlan() async {
+    final status = await services.reminders.reconcile();
+    if (!isClosed) emit(state.copyWith(status: status));
+  }
+
+  /// Asks for the notification permission when needed; on refusal shows the reason and returns
+  /// false.
+  Future<bool> _notificationsAllowed(Future<bool> Function() explain) async {
+    emit(state.copyWith(busy: true, clearProblem: true));
+    final outcome = await services.permissions.ensure(
+      AppPermission.notifications,
+      explain: explain,
+    );
+    if (outcome == PermissionOutcome.granted) return true;
+    emit(
+      state.copyWith(
+        busy: false,
+        permission: await services.permissions.current(
+          AppPermission.notifications,
+        ),
+        problem: switch (outcome) {
+          PermissionOutcome.declinedExplanation => ReminderProblem.declined,
+          PermissionOutcome.denied => ReminderProblem.denied,
+          PermissionOutcome.needsSettings => ReminderProblem.needsSettings,
+          _ => ReminderProblem.unavailable,
+        },
+      ),
+    );
+    return false;
+  }
 
   /// Shows a test notification now (asking for permission first if needed).
   Future<void> sendTest({required Future<bool> Function() explain}) async {

@@ -26,6 +26,7 @@ class NotificationPlanner {
   const NotificationPlanner({
     required this.zone,
     this.quietHours,
+    this.quietZone,
     this.maxPending = 60,
     this.horizon = const Duration(days: 7),
     this.hash = fnv1a31,
@@ -33,6 +34,9 @@ class NotificationPlanner {
 
   final TimeZoneRules zone;
   final QuietHours? quietHours;
+
+  /// The zone quiet hours are read in (the phone's own clock); [zone] when not given.
+  final TimeZoneRules? quietZone;
   final int maxPending;
   final Duration horizon;
 
@@ -56,7 +60,8 @@ class NotificationPlanner {
       } else if (c.fireAt.isAfter(limit)) {
         dropped.add(DroppedCandidate(c, DropReason.beyondHorizon));
       } else if (c.respectsQuietHours &&
-          (quietHours?.contains(zone.minuteOfDayAt(c.fireAt)) ?? false)) {
+          (quietHours?.contains((quietZone ?? zone).minuteOfDayAt(c.fireAt)) ??
+              false)) {
         dropped.add(DroppedCandidate(c, DropReason.quietHours));
       } else if (!seen.add(c.identity)) {
         dropped.add(DroppedCandidate(c, DropReason.duplicate));

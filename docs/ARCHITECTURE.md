@@ -250,3 +250,14 @@ translation parity, and the architecture rules. Nothing touches the live API.
   collapsed (tested); a word longer than a card gets a card of its own, uncut.
 - `ImageSharer` (core) writes the PNGs to the app's temporary folder and opens the system share sheet; nothing is uploaded by the app. Every card is
   built (not only those on screen) so each one can be captured; the share button stays at the bottom of the screen.
+
+## Salawat reminders and quiet hours (Phase 3 step 2)
+
+- Settings live in `ReminderSettings` (saved under `reminders` with the prayer preferences, so Delete-all already clears them):
+  `salawat` (`SalawatSettings`) and `quietEnabled`, `quietStartMinute`, `quietEndMinute`, `quietForPrayers`.
+- One scheduling path: `ReminderCoordinator` plans prayer reminders (place zone) and salawat reminders (`DeviceTimeZone`) together.
+  Salawat has a lower priority than prayers, so the 60-item cap can never push a prayer reminder out. It is planned two days ahead.
+- Quiet hours are read on the phone's clock (`NotificationPlanner.quietZone`). They drop salawat reminders and never prayer
+  reminders. With `quietForPrayers` on, a prayer reminder in quiet hours is delivered with `NotificationSound.silent` and no
+  vibration. `ReminderStatus.heldBackByQuietHours` is shown on the Quiet hours page.
+- The salawat text is the owner-approved Arabic, in `presentation/salawat_wording.dart`, and a test pins it.

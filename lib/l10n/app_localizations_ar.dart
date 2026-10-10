@@ -983,4 +983,85 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get durationUnderAMinute => 'أقل من دقيقة';
+
+  @override
+  String get remindersMore => 'تذكيرات أخرى';
+
+  @override
+  String get statusOn => 'مفعّل';
+
+  @override
+  String get statusOff => 'متوقف';
+
+  @override
+  String get salawatTitle => 'تذكيرات الصلاة على النبي ﷺ';
+
+  @override
+  String get salawatSwitch => 'تشغيل التذكيرات';
+
+  @override
+  String get salawatIntro => 'تذكيرات منتظمة خلال اليوم بحسب ساعة هاتفك.';
+
+  @override
+  String get salawatPreview => 'نص التذكير';
+
+  @override
+  String get salawatInterval => 'كم مرة';
+
+  @override
+  String salawatEveryHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'كل $count ساعة',
+      few: 'كل $count ساعات',
+      two: 'كل ساعتين',
+      one: 'كل ساعة',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get salawatWindow => 'خلال الفترة';
+
+  @override
+  String get timeFrom => 'من';
+
+  @override
+  String get timeTo => 'إلى';
+
+  @override
+  String get salawatLeadNone => 'بدون تذكير مسبق';
+
+  @override
+  String get windowInvalid => 'يجب أن تكون النهاية بعد البداية.';
+
+  @override
+  String get quietTitle => 'أوقات الهدوء';
+
+  @override
+  String get quietSwitch => 'تفعيل أوقات الهدوء';
+
+  @override
+  String get quietIntro =>
+      'لا تُرسَل تذكيرات الصلاة على النبي ﷺ في أوقات الهدوء. أما تذكيرات مواقيت الصلاة فتصل دائمًا.';
+
+  @override
+  String get quietPrayersSilent =>
+      'تصل تذكيرات مواقيت الصلاة بلا صوت في أوقات الهدوء';
+
+  @override
+  String quietHeldBack(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count تذكيرًا في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.',
+      few: '$count تذكيرات في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.',
+      two: 'تذكيران في اليومين القادمين يقعان في أوقات الهدوء ولن يُرسَلا.',
+      one: 'تذكير واحد في اليومين القادمين يقع في أوقات الهدوء ولن يُرسَل.',
+      zero: 'لا يوجد تذكير محجوب في اليومين القادمين.',
+    );
+    return '$_temp0';
+  }
 }

@@ -9,6 +9,7 @@ import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
+import 'package:mynewapp/features/prayer_times/domain/salawat_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Keeps the preferences as one small JSON text in `shared_preferences`.
@@ -67,6 +68,19 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
         'sound': p.reminders.sound.name,
         'vibrate': p.reminders.vibrate,
         'exactTiming': p.reminders.exactTiming,
+        'quiet': {
+          'enabled': p.reminders.quietEnabled,
+          'start': p.reminders.quietStartMinute,
+          'end': p.reminders.quietEndMinute,
+          'prayersSilent': p.reminders.quietForPrayers,
+        },
+        'salawat': {
+          'enabled': p.reminders.salawat.enabled,
+          'interval': p.reminders.salawat.intervalMinutes,
+          'start': p.reminders.salawat.windowStartMinute,
+          'end': p.reminders.salawat.windowEndMinute,
+          'lead': p.reminders.salawat.leadMinutes,
+        },
       },
       'location': place == null
           ? null
@@ -135,6 +149,10 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
     if (json is! Map<String, dynamic>) return ReminderSettings();
     final prayers = json['prayers'];
     final lead = json['leadMinutes'];
+    final quietJson = json['quiet'];
+    final quiet = quietJson is Map<String, dynamic>
+        ? quietJson
+        : const <String, dynamic>{};
     return ReminderSettings(
       enabled: json['enabled'] == true,
       prayers: prayers is List
@@ -148,7 +166,42 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
           NotificationSound.system,
       vibrate: json['vibrate'] != false,
       exactTiming: json['exactTiming'] == true,
+      quietEnabled: quiet['enabled'] == true,
+      quietStartMinute: _minute(quiet['start']) ?? 22 * 60,
+      quietEndMinute: _minute(quiet['end']) ?? 6 * 60,
+      quietForPrayers: quiet['prayersSilent'] == true,
+      salawat: _decodeSalawat(json['salawat']),
     );
+  }
+
+  /// A minute of the day (0 to 1439), or null for anything else.
+  static int? _minute(Object? value) =>
+      value is int && value >= 0 && value < 1440 ? value : null;
+
+  /// Salawat settings; anything missing or out of range falls back to the defaults, and a saved
+  /// combination that is no longer valid as a whole falls back to the defaults switched off.
+  static SalawatSettings _decodeSalawat(Object? json) {
+    if (json is! Map<String, dynamic>) return SalawatSettings();
+    final defaults = SalawatSettings();
+    final interval = json['interval'];
+    final lead = json['lead'];
+    try {
+      return SalawatSettings(
+        enabled: json['enabled'] == true,
+        intervalMinutes:
+            interval is int &&
+                SalawatSettings.intervalOptions.contains(interval)
+            ? interval
+            : defaults.intervalMinutes,
+        windowStartMinute: _minute(json['start']) ?? defaults.windowStartMinute,
+        windowEndMinute: _minute(json['end']) ?? defaults.windowEndMinute,
+        leadMinutes: lead is int && SalawatSettings.leadOptions.contains(lead)
+            ? lead
+            : defaults.leadMinutes,
+      );
+    } on ArgumentError {
+      return SalawatSettings();
+    }
   }
 
   static PrayerLocation? _decodeLocation(Object? json) {
