@@ -1,4 +1,5 @@
 import 'package:mynewapp/features/quran/domain/quran_structure_data.dart';
+import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 
 /// Where each verse sits in the Madinah mushaf: its page (1 to 604), juz (1 to 30) and hizb
@@ -70,4 +71,22 @@ class QuranStructure {
   /// Whether [place] is the first verse of its page.
   bool startsPage(VerseRef place) =>
       _pageStarts[pageOf(place) - 1] == _key(place);
+
+  /// The verses that begin on [page], in order, taken from [text]. A shorter text (in tests) simply
+  /// has fewer; a page none of whose verses exist in it is empty.
+  List<Verse> versesOnPage(QuranText text, int page) {
+    final first = pageStart(page);
+    final end = page == pageCount ? 115001 : _pageStarts[page];
+    final verses = <Verse>[];
+    var sura = first.sura, number = first.verse;
+    while (sura <= text.suraTotal && sura * 1000 + number < end) {
+      if (number > text.versesIn(sura)) {
+        sura++;
+        number = 1;
+      } else {
+        verses.add(text.verse(sura, number++));
+      }
+    }
+    return verses;
+  }
 }

@@ -38,3 +38,10 @@ Future<void> longPressVerse(WidgetTester tester, String verse) async {
   await tester.longPressAt(render.localToGlobal(boxes.first.toRect().center));
   await tester.pumpAndSettle();
 }
+
+/// Turns to the next page of the mushaf: pages are right to left, so the next one is dragged in from
+/// the left.
+Future<void> turnPage(WidgetTester tester) async {
+  await tester.fling(find.byType(PageView), const Offset(500, 0), 2000);
+  await tester.pumpAndSettle();
+}

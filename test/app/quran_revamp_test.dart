@@ -40,7 +40,7 @@ Future<AppLocalizations> _open(
 
 void main() {
   testWidgets(
-    'the reader opens with the sura banner, its count and the verse numbers',
+    'the reader opens on the page with the sura banner, the juz and the verse numbers',
     (tester) async {
       final handle = tester.ensureSemantics();
       final l10n = await _open(tester);
@@ -52,14 +52,14 @@ void main() {
         tester.getSemantics(find.text(title)),
         isSemantics(label: title, isHeader: true),
       );
-      expect(find.textContaining('7 verses'), findsOneWidget);
+      expect(find.text(l10n.quranJuz('1')), findsOneWidget);
       // Interface text keeps the app's direction inside the right-to-left reader.
       expect(
         tester
             .widget<Directionality>(
               find
                   .ancestor(
-                    of: find.textContaining('7 verses'),
+                    of: find.text(title),
                     matching: find.byType(Directionality),
                   )
                   .first,
@@ -107,11 +107,11 @@ void main() {
     await tester.pumpAndSettle();
     // The made-up sura has 12 lines: the mushaf puts the first five on page 2 and the rest on page 3.
     expect(find.bySemanticsLabel(l10n.quranPage('2')), findsOneWidget);
+    expect(find.text(l10n.quranJuz('1')), findsOneWidget);
+    await turnPage(tester);
     expect(find.bySemanticsLabel(l10n.quranPage('3')), findsOneWidget);
-    expect(find.textContaining(l10n.quranJuz('1')), findsOneWidget);
-    // Every line is still there, in order, whatever the page it falls on.
     expect(verseTexts(tester), [
-      for (var v = 1; v <= 12; v++) placeholderVerse(2, v),
+      for (var v = 6; v <= 12; v++) placeholderVerse(2, v),
     ]);
     handle.dispose();
   });

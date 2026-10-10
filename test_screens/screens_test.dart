@@ -441,6 +441,9 @@ void main() {
       if (_realQuran) {
         await tap(find.textContaining(RegExp(r'^[٢2]\. ')).first);
         await shot('sura_reader_baqarah');
+        await tester.fling(find.byType(PageView), const Offset(500, 0), 2000);
+        await tester.pumpAndSettle();
+        await shot('sura_reader_baqarah_next_page');
         await back();
       } else {
         await tap(find.text(l10n.quranSearchHint));
