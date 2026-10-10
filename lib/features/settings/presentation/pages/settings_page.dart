@@ -8,6 +8,8 @@ import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
+import 'package:mynewapp/core/widgets/switch_row.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
 import 'package:mynewapp/features/settings/presentation/state/settings_cubit.dart';
@@ -79,6 +81,12 @@ class SettingsPage extends StatelessWidget {
                 enabled: settings.offlineCopies,
                 onChanged: (v) => cubit.setOfflineCopies(enabled: v),
               ),
+              if (context.read<DailyHadithStore?>() case final daily?) ...[
+                const SizedBox(height: AppSpacing.xl),
+                SectionHeading(l10n.dailyHadithHeading),
+                const SizedBox(height: AppSpacing.sm),
+                _RememberOpened(store: daily),
+              ],
               const SizedBox(height: AppSpacing.xl),
               AppTile(
                 title: l10n.aboutTitle,
@@ -163,6 +171,46 @@ class _DeleteAllButton extends StatelessWidget {
       onPressed: () => _confirm(context),
       icon: const Icon(Icons.delete_forever_outlined),
       label: Text(context.l10n.deleteAllButton),
+    );
+  }
+}
+
+/// Whether the hadith of the day is chosen from the categories the user opens. Switching it off also
+/// forgets the ones already remembered.
+class _RememberOpened extends StatefulWidget {
+  const _RememberOpened({required this.store});
+
+  final DailyHadithStore store;
+
+  @override
+  State<_RememberOpened> createState() => _RememberOpenedState();
+}
+
+class _RememberOpenedState extends State<_RememberOpened> {
+  bool? _on;
+
+  @override
+  void initState() {
+    super.initState();
+    widget.store.remembersOpened().then((on) {
+      if (mounted) setState(() => _on = on);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final on = _on;
+    return SwitchRow(
+      title: l10n.dailyHadithRemember,
+      subtitle: l10n.dailyHadithRememberHint,
+      value: on ?? true,
+      onChanged: on == null
+          ? null
+          : (value) async {
+              setState(() => _on = value);
+              await widget.store.setRemembersOpened(value);
+            },
     );
   }
 }

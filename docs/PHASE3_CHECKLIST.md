@@ -58,14 +58,25 @@ New strings for wording review: `remindersMore`, `statusOn`, `statusOff`, `salaw
 `windowInvalid`, `quietTitle`, `quietSwitch`, `quietIntro`, `quietPrayersSilent`, `quietHeldBack`.
 Device checks NOT RUN: delivery timing, silent delivery on Android channels, reboot, Doze, time-zone change.
 
-## Step 3 — Daily hadith (`feature/p3f-daily-hadith`)
-- [ ] Migration 6: `opened_categories`, `daily_hadith`, `daily_hadith_history` (ids and dates only); upgrade test; Delete-all.
-- [ ] Record opened categories (with a switch to stop remembering).
-- [ ] Deterministic selector (day, opened set, history) with fallback to top-level categories.
-- [ ] Home card behind the `dailyHadith` flag: category, reference when given, HadeethEnc credit; offline and empty states.
-- [ ] Tests: determinism, stability within a day, no repeat in 60 days, fallback, offline, request count.
+## Step 3 — Daily hadith (`feature/p3f-daily-hadith`) — DONE
+- [x] Storage: **deviation from the plan.** Shared preferences (`PrefsDailyHadithStore`, one JSON entry) instead of migration 6.
+      The data is tiny (50 category ids, two days of picks, 60 days of ids), and a migration here would collide with the Quran
+      section's migration 5 on the unmerged PR #8. Ids, page numbers and dates only, no source text. Delete-all clears it.
+- [x] Opened categories recorded when a category's hadith list opens (only with the section on and remembering on); Settings switch
+      "Choose from the categories I open" (off also forgets).
+- [x] Deterministic selection (`domain/daily_selection.dart`, `DailyHadithService`): phone's local date; categories rotate by day,
+      yesterday's not repeated; position by a stable hash; last 60 days skipped (neighbours on the same page first); the day's pick
+      saved, so it does not change during the day; fallback to the top-level categories; empty categories skipped; at most two list
+      requests, both through the existing cache.
+- [x] Home section behind the new `dailyHadith` flag: title as given, "From: category", HadeethEnc credit; tap opens the hadith
+      page with its text and reference; loading placeholder; "cannot be shown right now" with Retry; hidden when there is nothing to
+      choose from.
+- [x] Tests: `test/features/daily_hadith/daily_hadith_test.dart` (rules, store, service) and `test/app/daily_hadith_flow_test.dart`
+      (home, open, remember, flag off, failure and retry, empty, settings switch, Delete-all, 200% text and guidelines in both
+      languages).
 
-**Acceptance:** same hadith all day; no invented content; at most two requests a day; all checks green.
+New strings for wording review: `dailyHadithHeading` (حديث اليوم), `dailyHadithFrom`, `dailyHadithUnavailable`,
+`dailyHadithRemember`, `dailyHadithRememberHint`.
 
 ## Step 4 — Android home-screen widget (`feature/p3g-android-widget`)
 - [ ] Spike: `Chronometer` count-down behaviour and digits on the emulator.
@@ -76,12 +87,19 @@ Device checks NOT RUN: delivery timing, silent delivery on Android channels, reb
 **Acceptance:** widget shows the next prayer from the snapshot without the app running; never shows a passed prayer as next; no new
 permission; all checks green.
 
-## Step 5 — Quran tests and sura filter (`feature/p3e-quran-tests`, on PR #8)
-- [ ] Normalisation rule tests, search behaviour tests, go-to-verse matrix over all 114 suras.
-- [ ] Sura-name filter on the list (Arabic, English, number in either digit style) with tests.
-- [ ] `integration_test` flows for local runs.
+## Step 5 — Quran tests and sura filter (`feature/p3e-quran-tests`, stacked on PR #8) — DONE
+- [x] Normalisation: one test per documented rule (marks, dagger alef, Quranic marks, tatweel, alef forms, alef maqsura, ta marbuta,
+      hamza kept, Latin case and spaces, marks-only query).
+- [x] Search over the real file: first and last verse found by their own text, plain and marked forms agree, Mushaf order and limit,
+      verses returned unchanged, short queries refused, a time bound for regressions.
+- [x] Go to a verse: `checkGoTo` checked over all 114 suras with the real data (first, last, last + 1, zero, empty verse), suras
+      outside 1–114 refused. **Bug fixed:** digits typed on an Arabic or Persian keyboard were rejected; they are accepted now.
+- [x] Sura filter on the list (`filterSuras`): number in either digit style, Arabic name without marks or the article, English name
+      ignoring case, article, apostrophes and hyphens; every sura is found by its own names; "No sura matches."; clear button.
+- [x] Widget tests (`test/app/quran_lookup_flow_test.dart`) and an on-device flow (`integration_test/quran_test.dart`, dev
+      dependency `integration_test` from the SDK): PASS on the Android emulator (emulator-5554). Not in CI (D7).
 
-**Acceptance:** every documented rule has a test; filter works in both languages; all checks green.
+New strings for wording review: `quranFilterHint`, `quranFilterNone`.
 
 ## Research items (no code)
 - Play exact alarm: findings in `docs/PHASE3_NEXT_PLAN.md` section 9; the owner checks Play Console.

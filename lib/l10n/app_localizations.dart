@@ -1849,6 +1849,36 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'{count, plural, =0{لا يوجد تذكير محجوب في اليومين القادمين.} =1{تذكير واحد في اليومين القادمين يقع في أوقات الهدوء ولن يُرسَل.} =2{تذكيران في اليومين القادمين يقعان في أوقات الهدوء ولن يُرسَلا.} few{{count} تذكيرات في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.} other{{count} تذكيرًا في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.}}'**
   String quietHeldBack(int count);
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'حديث اليوم'**
+  String get dailyHadithHeading;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'من تصنيف: {category}'**
+  String dailyHadithFrom(String category);
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر عرض حديث اليوم الآن.'**
+  String get dailyHadithUnavailable;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختيار من التصنيفات التي أفتحها'**
+  String get dailyHadithRemember;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.'**
+  String get dailyHadithRememberHint;
 }
 
 class _AppLocalizationsDelegate

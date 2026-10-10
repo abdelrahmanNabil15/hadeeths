@@ -261,3 +261,15 @@ translation parity, and the architecture rules. Nothing touches the live API.
   reminders. With `quietForPrayers` on, a prayer reminder in quiet hours is delivered with `NotificationSound.silent` and no
   vibration. `ReminderStatus.heldBackByQuietHours` is shown on the Quiet hours page.
 - The salawat text is the owner-approved Arabic, in `presentation/salawat_wording.dart`, and a test pins it.
+
+## Daily hadith (Phase 3 step 3)
+
+- Feature `lib/features/daily_hadith/`: `DailyHadithStore` (interface) with `PrefsDailyHadithStore` (shared preferences, key
+  `daily_hadith_v1`), pure rules in `daily_selection.dart`, `DailyHadithService` (uses the categories and hadiths repositories, so
+  the saved-copy cache applies), `DailyHadithCubit` and `DailyHadithSection` on the home screen.
+- Behind `FeatureFlags.dailyHadith`. `AppDependencies.dailyHadithIfEnabled` and `dailyHadithServiceIfEnabled` are provided as
+  nullable repositories; screens do nothing when they are null.
+- `HadithListPage` records the category it opens. The pick is saved per day and language, so the hadith does not change during the
+  day. Shown hadiths are avoided for 60 days. `UserDataEraser` clears the store.
+- Stored in shared preferences rather than the user database, to avoid a schema clash with the Quran migration (PR #8). It can move
+  to a migration after both are merged, if wanted.

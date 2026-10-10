@@ -314,5 +314,10 @@
   "quietSwitch": "Use quiet hours",
   "quietIntro": "Salawat reminders are not sent in quiet hours. Prayer reminders always arrive.",
   "quietPrayersSilent": "Prayer reminders arrive silently in quiet hours",
-  "quietHeldBack": "{count, plural, =0{Nothing is held back in the next 2 days.} =1{1 salawat reminder in the next 2 days falls in quiet hours and will not be sent.} other{{count} salawat reminders in the next 2 days fall in quiet hours and will not be sent.}}"
+  "quietHeldBack": "{count, plural, =0{Nothing is held back in the next 2 days.} =1{1 salawat reminder in the next 2 days falls in quiet hours and will not be sent.} other{{count} salawat reminders in the next 2 days fall in quiet hours and will not be sent.}}",
+  "dailyHadithHeading": "Hadith of the day",
+  "dailyHadithFrom": "From: {category}",
+  "dailyHadithUnavailable": "Today's hadith cannot be shown right now.",
+  "dailyHadithRemember": "Choose from the categories I open",
+  "dailyHadithRememberHint": "Otherwise it is chosen from all the main categories. This list stays on your phone."
 }
