@@ -230,14 +230,5 @@ void main() {
         );
       },
     );
-
-    testWidgets('opens the licence page with the bundled fonts', (
-      tester,
-    ) async {
-      await pumpApp(tester, _backend(), locale: 'en');
-      await scrollAndTap(tester, find.text('Sources and rights'));
-      await scrollAndTap(tester, find.text('Open-source licences'));
-      expect(find.byType(LicensePage), findsOneWidget);
-    });
   });
 }

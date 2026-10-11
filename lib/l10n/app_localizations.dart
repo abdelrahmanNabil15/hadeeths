@@ -398,12 +398,6 @@ abstract class AppLocalizations {
   /// **'لا يجمع التطبيق أي بيانات شخصية. يحتاج إلى الإنترنت لتحميل المحتوى، ويحفظ على جهازك نسخًا مما فتحته لتقرأه دون اتصال، ويمكنك إيقاف ذلك أو مسحه من الإعدادات.'**
   String get aboutPrivacyBody;
 
-  /// No description provided for @openSourceLicences.
-  ///
-  /// In ar, this message translates to:
-  /// **'تراخيص البرمجيات مفتوحة المصدر'**
-  String get openSourceLicences;
-
   /// No description provided for @offlineCopies.
   ///
   /// In ar, this message translates to:
