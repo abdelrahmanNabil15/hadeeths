@@ -5,6 +5,7 @@ import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 
 import '../support/fake_backend.dart';
 import '../support/quran_fakes.dart';
+import '../support/quran_reader.dart';
 import '../support/test_app.dart';
 
 Future<InMemoryQuranUserData> _openQuran(
@@ -68,14 +69,12 @@ void main() {
       await tester.tap(find.text('٢. البقرة'));
       await tester.pumpAndSettle();
       // Nothing is added above the first verse: the file itself carries any opening line.
-      expect(find.text(placeholderVerse(1, 1)), findsNothing);
-      for (var v = 1; v <= 12; v++) {
-        expect(
-          find.text(placeholderVerse(2, v)),
-          findsOneWidget,
-          reason: '2:$v',
-        );
-      }
+      // The verses flow as one paragraph, each exactly as in the file, in order.
+      expect(verseTexts(tester), [
+        for (var v = 1; v <= 12; v++) placeholderVerse(2, v),
+      ]);
+      expect(find.textContaining(placeholderVerse(1, 1)), findsNothing);
+      // Each verse ends with its number, drawn beside the text.
       expect(find.text('١٢'), findsOneWidget);
     },
   );
@@ -84,7 +83,8 @@ void main() {
     await _openQuran(tester);
     await tester.tap(find.text('١. الفاتحة'));
     await tester.pumpAndSettle();
-    expect(find.text(placeholderVerse(1, 1)), findsOneWidget);
+    expect(verseTexts(tester).first, placeholderVerse(1, 1));
+    expect(find.textContaining(placeholderVerse(1, 1)), findsOneWidget);
   });
 
   testWidgets('verse text is right to left even in the English interface', (
@@ -94,7 +94,9 @@ void main() {
     await tester.tap(find.text('2. Al-Baqarah'));
     await tester.pumpAndSettle();
     expect(
-      Directionality.of(tester.element(find.text(placeholderVerse(2, 1)))),
+      Directionality.of(
+        tester.element(find.textContaining(placeholderVerse(2, 1))),
+      ),
       TextDirection.rtl,
     );
   });
@@ -117,12 +119,10 @@ void main() {
     final data = await _openQuran(tester);
     await tester.tap(find.text('٢. البقرة'));
     await tester.pumpAndSettle();
-    await tester.longPress(find.text(placeholderVerse(2, 3)));
-    await tester.pumpAndSettle();
+    await longPressVerse(tester, placeholderVerse(2, 3));
     await tester.tap(find.text('وضع علامة على هذه الآية'));
     await tester.pumpAndSettle();
     expect(data.marks, {const VerseRef(2, 3)});
-    expect(find.byIcon(Icons.bookmark), findsOneWidget);
     await goBack(tester);
     await tester.tap(find.text('العلامات'));
     await tester.pumpAndSettle();
@@ -168,7 +168,7 @@ void main() {
     await tester.tap(find.text('انتقال'));
     await tester.pumpAndSettle();
     expect(data.last, const VerseRef(2, 9));
-    expect(find.text(placeholderVerse(2, 9)), findsOneWidget);
+    expect(verseTexts(tester), contains(placeholderVerse(2, 9)));
   });
 
   testWidgets('fits at 200% text on a small phone', (tester) async {

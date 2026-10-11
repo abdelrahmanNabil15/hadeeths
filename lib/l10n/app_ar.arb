@@ -457,6 +457,7 @@
   "quranGo": "انتقال",
   "quranVerses": "{count, plural, =1{آية واحدة} =2{آيتان} few{{count} آيات} other{{count} آية}}",
   "quranVerseLabel": "الآية {number}",
+  "quranSuraTitle": "سورة {name}",
   "quranBookmarkAdd": "وضع علامة على هذه الآية",
   "quranBookmarkRemove": "إزالة العلامة",
   "quranSurasHeading": "السور",

@@ -1772,6 +1772,12 @@ abstract class AppLocalizations {
   /// **'الآية {number}'**
   String quranVerseLabel(Object number);
 
+  /// No description provided for @quranSuraTitle.
+  ///
+  /// In ar, this message translates to:
+  /// **'سورة {name}'**
+  String quranSuraTitle(Object name);
+
   /// No description provided for @quranBookmarkAdd.
   ///
   /// In ar, this message translates to:

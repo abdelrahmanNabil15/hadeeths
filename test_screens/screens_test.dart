@@ -17,6 +17,8 @@ import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
+import 'package:mynewapp/features/quran/domain/quran_source.dart';
+import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/search/presentation/widgets/search_entry.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_counter.dart';
@@ -31,6 +33,17 @@ import '../test/support/test_app.dart';
 import '../test/support/tracker_fakes.dart';
 
 const _set = String.fromEnvironment('SHOTS', defaultValue: 'latest');
+
+/// `--dart-define=REAL_QURAN=true` draws the Quran screens from the app's own bundled file (read
+/// from disk, never copied into a test) to judge the page's look; the default is the placeholder text.
+const _realQuran = bool.fromEnvironment('REAL_QURAN');
+
+class _FileQuranSource implements QuranSource {
+  @override
+  Future<QuranText> load() async => QuranText.parseTanzil(
+    File('assets/quran/quran-uthmani.txt').readAsStringSync(),
+  );
+}
 
 class _Config {
   const _Config(
@@ -406,7 +419,7 @@ void main() {
         tasbeeh: _Tasbeeh(),
         favorites: _Favorites(),
         imageSharer: _NoSharer(),
-        quran: FakeQuranSource(),
+        quran: _realQuran ? _FileQuranSource() : FakeQuranSource(),
         quranUserData: quranData,
       );
 
@@ -418,18 +431,26 @@ void main() {
       await cancel();
       await tap(find.textContaining(RegExp(r'^[١1]\. ')).first);
       await shot('sura_reader');
-      await tester.longPress(find.text(placeholderVerse(1, 1)));
-      await shot('verse_actions_sheet');
-      await tester.tapAt(const Offset(20, 20));
-      await tester.pumpAndSettle();
+      if (!_realQuran) {
+        await tester.longPress(find.textContaining(placeholderVerse(1, 1)));
+        await shot('verse_actions_sheet');
+        await tester.tapAt(const Offset(20, 20));
+        await tester.pumpAndSettle();
+      }
       await back();
-      await tap(find.text(l10n.quranSearchHint));
-      await tester.enterText(find.byType(TextField).first, 'كلمة');
-      await shot('quran_search');
-      await back();
-      await tap(find.text(l10n.quranBookmarks));
-      await shot('quran_bookmarks_empty');
-      await back();
+      if (_realQuran) {
+        await tap(find.textContaining(RegExp(r'^[٢2]\. ')).first);
+        await shot('sura_reader_baqarah');
+        await back();
+      } else {
+        await tap(find.text(l10n.quranSearchHint));
+        await tester.enterText(find.byType(TextField).first, 'كلمة');
+        await shot('quran_search');
+        await back();
+        await tap(find.text(l10n.quranBookmarks));
+        await shot('quran_bookmarks_empty');
+        await back();
+      }
 
       // Prayer secondary screens and dialogs.
       await tab(l10n.navPrayer);
