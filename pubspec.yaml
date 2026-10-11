@@ -66,6 +66,8 @@ flutter:
     - assets/licenses/
     # City list (GeoNames, CC BY 4.0) and country borders (Natural Earth, public domain) for prayer times.
     - assets/data/
+    # Tanzil Quran text, verbatim (CC BY 3.0, changing it is not allowed).
+    - assets/quran/
 
   fonts:
     # UI font (Arabic and Latin). SIL OFL 1.1.
@@ -78,3 +80,7 @@ flutter:
         - asset: assets/fonts/Amiri-Regular.ttf
         - asset: assets/fonts/Amiri-Bold.ttf
           weight: 700
+    # Amiri Quran 1.003 (github.com/aliftype/amiri), SIL OFL 1.1, same licence file as Amiri.
+    - family: AmiriQuran
+      fonts:
+        - asset: assets/fonts/AmiriQuran.ttf

@@ -53,8 +53,10 @@ class AboutPage extends StatelessWidget {
               const SizedBox(height: AppSpacing.xl),
             ],
             section(l10n.aboutPlacesHeading, l10n.aboutPlacesBody),
-            if (extended)
+            if (extended) ...[
               section(l10n.aboutCompassHeading, l10n.aboutCompassBody),
+              section(l10n.aboutQuranHeading, l10n.aboutQuranBody),
+            ],
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: OutlinedButton.icon(

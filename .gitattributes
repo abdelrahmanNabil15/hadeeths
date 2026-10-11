@@ -1,0 +1,3 @@
+# The bundled Quran text must stay byte for byte as published (the app checks its fingerprint),
+# so Git must never change its line endings on any machine.
+assets/quran/*.txt -text

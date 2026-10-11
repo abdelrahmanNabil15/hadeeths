@@ -11,6 +11,10 @@ const _samples = {
   'tasbeeh_counter':
       'INSERT INTO tasbeeh_counter (id, count, target) VALUES (1, 12, 33)',
   'favorites': "INSERT INTO favorites (hadith_id, added_at) VALUES ('100', 1)",
+  'quran_last_read':
+      'INSERT INTO quran_last_read (id, sura, verse, updated_at) VALUES (1, 2, 255, 1)',
+  'quran_bookmarks':
+      'INSERT INTO quran_bookmarks (sura, verse, added_at) VALUES (36, 1, 1)',
 };
 
 Set<String> _tables(Database db) => db

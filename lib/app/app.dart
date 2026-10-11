@@ -224,6 +224,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             favorites: deps.favoritesIfEnabled,
                             onDeleteAll: _eraseAll,
                             tabRequests: _widgetTabs,
+                            quran: deps.quran,
+                            quranUserData: deps.quranUserData,
                           )
                         : const HomePage(),
                   ),

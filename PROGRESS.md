@@ -1,16 +1,29 @@
-# PROGRESS — Luxury UI/UX revamp
+# PROGRESS — Track A (luxury UI revamp) and Track B (Phase 3)
 
-Branch: `ui/g-luxury-revamp` (local only, from `origin/master` 0decdf7). **Not pushed.** No merge, no release.
+Track A branch: `ui/g-luxury-revamp` (from `origin/master` 0decdf7), pushed with the owner's approval on 2026-10-10. No merge, no release.
 Approved plan: owner version of 2026-10-10 (copy in `C:\Users\EXPRESS\.claude\plans\proud-mixing-sedgewick.md`).
 Owner rules: no co-author trailer; no push or merge without approval; never push `master` or `feature/p3c-reminders`; no new
 dependency or font file; no change to religious text, business logic, APIs, persistence, flags or navigation behaviour.
+
+
+# Track A — Luxury UI revamp
+
+| Item | Status |
+|---|---|
+| Branch | `ui/g-luxury-revamp`, pushed |
+| Pull request | https://github.com/abdelrahmanNabil15/hadeeths/pull/10 (base `master`), MERGEABLE, CLEAN |
+| CI | PASS on every run (Android: format, analyze, test, APK builds; iOS: compile without code signing) |
+| Auto-fix | on for PR #10 (the app wakes this session on CI failures, conflicts or review comments) |
+| PR #8 (Quran) | retargeted to `master`; master merged into it (f6ac83e, both sides kept, localizations regenerated); CI PASS; MERGEABLE, CLEAN |
+| UI skill | `.claude/skills/hadeeths-ui-modernization/SKILL.md` section 17 added; `.claude/` is untracked, so not in any commit (D10) |
+| Merge | not done (needs the owner). #8 and #10 both touch shared widgets: whichever merges second may need a small conflict fix |
 
 ## Objective
 A "quiet luxury" revamp of the single Flutter app: midnight emerald, warm ivory, charcoal, muted gold (sparingly) and soft sage;
 editorial Arabic and Latin type (Amiri display, Cairo UI); subtle eight-fold star geometry; one cohesive design system; light and
 dark both designed; accessibility, RTL and 200% text preserved.
 
-## Status: all planned stages done; waiting for owner review
+## Status: all planned stages done; owner approved the result on 2026-10-10
 | Stage | Status | Main commits |
 |---|---|---|
 | 0 Baseline | DONE: format, analyze PASS; 1,011 tests PASS; coverage 90.8%; release config OK; before screenshots | 0ee4bed, 5bdc4b4 |
@@ -58,11 +71,9 @@ shot shows the loading state because the old harness did not wait; fixed since).
 
 ## Remaining / next steps (need the owner)
 1. Review the look (`build/revamp_review.html`, or run the app with `--dart-define=HADEETHS_PREVIEW_SECTIONS=true`).
-2. Approve a push of `ui/g-luxury-revamp` so CI runs (including the macOS iOS compile) and a pull request can be opened.
-3. After approval, extend `.claude/skills/hadeeths-ui-modernization/SKILL.md` with the new tokens and components (not done:
-   it needs approval).
-4. Quran screens (PR #8) inherit the shared components; review them once PR #8 is merged. PR #8's base branch also needs to be
-   changed to `master` (PR #7 was merged).
+2. DONE: pushed, PR #10 open, CI green.
+3. DONE: skill file section 17.
+4. Quran screens (PR #8) inherit the shared components; review them once PR #8 is merged. PR #8 now targets `master`.
 5. Device checks: Samsung phone (TalkBack, frame timing), iPhone (VoiceOver, platform transitions).
 6. Separate, still waiting for approval: `docs/PHASE3_NEXT_PLAN.md` on the local branch `docs/phase3-next-plan` (countdown, salawat
    and quiet hours, daily hadith, Android widget, Quran tests).
@@ -74,3 +85,38 @@ shot shows the loading state because the old harness did not wait; fixed since).
   database is at schema 5 from an earlier Quran-branch build, and this branch supports schema 4, so it refuses the database
   (`DatabaseTooNewException`) and the tracker, counter and favourites stay hidden. This is the designed safe behaviour and an emulator
   state, not a revamp issue. To see those pages here, clear the app's data on the emulator (that deletes its local data).
+
+---
+
+# Track B — Phase 3 (approved 2026-10-10)
+
+Checklist with acceptance criteria and per-step results: `docs/PHASE3_CHECKLIST.md` (on the Phase 3 branches). Plan:
+`docs/PHASE3_NEXT_PLAN.md`. Decisions D1–D10 use the plan's defaults.
+
+Branches pushed and pull requests opened on 2026-10-10 with the owner's approval: #11 countdown (base `ui/g-luxury-revamp`), #12 salawat and quiet hours (base #11's branch), #13 daily hadith (base #12's), #14 Android widget (base #13's), #15 Quran tests (base `feature/p3e-quran-core`, #8). Merge order: #10, then #11, #12, #13, #14; #8, then #15. Worktrees: `D:\StudioProjects\hadeeths-p3` (steps 1–4,
+stacked in a line on `ui/g-luxury-revamp`) and `D:\StudioProjects\hadeeths-quran` (step 5, on `feature/p3e-quran-core`).
+
+| Step | Branch | Status | Commits |
+|---|---|---|---|
+| 1 Live countdown | `feature/p3b-countdown` | DONE | 80a27cd (plan), 9d5f931 |
+| 2 Salawat and quiet hours | `feature/p3d-salawat-quiet-hours` | DONE | f9ad176 |
+| 3 Daily hadith | `feature/p3f-daily-hadith` | DONE (stored in shared preferences, not migration 6; see checklist) | 008ff96, 1022065 |
+| 4 Android widget | `feature/p3g-android-widget` | DONE; emulator-checked; some device checks NOT RUN | b4ec52d, a26878b |
+| 5 Quran tests and sura filter | `feature/p3e-quran-tests` | DONE; on-device flow PASS on the emulator | 716c03d |
+
+Verification (2026-10-10):
+- `feature/p3g-android-widget` (top of steps 1–4): format PASS, analyze PASS, 1,133 tests PASS, logic coverage 91.4%, release config
+  OK, debug and release APK builds PASS (59.4 MB), Kotlin unit tests 6/6 PASS.
+- `feature/p3e-quran-tests`: format PASS, analyze PASS, 1,090 tests PASS, coverage 91.4%, release config OK; `integration_test`
+  flow PASS on emulator-5554.
+- Emulator: widget listed, added, tapped (opens Prayer), updated after choosing Cairo, redraw alarm at the next prayer time.
+- CI for Phase 3: started by the push (results to be checked on each PR). NOT RUN: Samsung phone, iPhone, reminder delivery timing,
+  widget redraw at a prayer time, reboot, time-zone change, Doze, TalkBack.
+
+Bugs found and fixed along the way: go-to-verse rejected Arabic-Indic digits; the reminders screen state ignored some status
+fields when comparing (an exact-alarm change alone did not redraw); the widget's inexact redraw could be up to an hour late.
+
+Emulator state changed by testing: the debug app now has Cairo as its prayer place and its widget is on the home screen.
+
+Next steps (need the owner): review the new wording (listed per step in the checklist and in each PR); merge in the order above;
+device checks on a phone.
