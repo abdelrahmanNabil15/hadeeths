@@ -183,7 +183,9 @@ class ReminderCoordinator implements ReminderService {
             zone: _deviceZone,
             now: now,
             signature: [
+              'v2',
               settings.salawat.leadMinutes,
+              settings.salawat.tone ?? '-',
               settings.sound.name,
               settings.vibrate,
               digits.arabicIndic,

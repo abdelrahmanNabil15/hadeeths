@@ -340,6 +340,7 @@
   "salawatWindow": "Between",
   "timeFrom": "From",
   "timeTo": "To",
+  "salawatSound": "Sound",
   "salawatLeadNone": "No earlier reminder",
   "windowInvalid": "The end must be after the start.",
   "quietTitle": "Quiet hours",

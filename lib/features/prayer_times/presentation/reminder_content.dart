@@ -30,6 +30,7 @@ NotificationContent reminderContent({
       notification: notification,
       settings: settings,
       digits: digits,
+      silent: silent,
     );
   }
   if (notification.kind == NotificationKind.wakeUp) {
@@ -127,18 +128,28 @@ CustomSound? adhanSoundFor(ReminderSettings settings, {required bool arabic}) {
   return CustomSound(id: chosen.id, label: chosen.name(arabic));
 }
 
-/// The words of a salawat reminder: the owner-approved Arabic, in both interface languages.
+/// The words of a salawat reminder: the owner-approved Arabic, in both interface languages. It plays
+/// the recording chosen for salawat (one of two that ship with the app) unless the reminders are
+/// silent or the phone's own sound is chosen.
 NotificationContent salawatContent({
   required PlannedNotification notification,
   required ReminderSettings settings,
   required Digits digits,
-}) => NotificationContent(
-  title: notification.key == ReminderPlanBuilder.salawatSoonKey
-      ? salawatSoonText(settings.salawat.leadMinutes, digits)
-      : salawatNowText,
-  sound: settings.sound,
-  vibrate: settings.vibrate,
-);
+  bool silent = false,
+}) {
+  final tone = settings.salawat.tone;
+  return NotificationContent(
+    title: notification.key == ReminderPlanBuilder.salawatSoonKey
+        ? salawatSoonText(settings.salawat.leadMinutes, digits)
+        : salawatNowText,
+    sound: silent ? NotificationSound.silent : settings.sound,
+    vibrate: !silent && settings.vibrate,
+    bundledSound:
+        !silent && tone != null && settings.sound == NotificationSound.system
+        ? BundledSound(resource: tone, label: salawatToneLabel(tone))
+        : null,
+  );
+}
 
 /// The words for the platform's own notification settings.
 ChannelLabels channelLabels(AppLocalizations l10n) => ChannelLabels(

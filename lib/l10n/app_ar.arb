@@ -579,6 +579,7 @@
   "@timeTo": {
     "description": "Phase 3 step 2; wording for owner review."
   },
+  "salawatSound": "الصوت",
   "salawatLeadNone": "بدون تذكير مسبق",
   "@salawatLeadNone": {
     "description": "Phase 3 step 2; wording for owner review."

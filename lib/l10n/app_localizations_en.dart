@@ -1143,6 +1143,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get timeTo => 'To';
 
   @override
+  String get salawatSound => 'Sound';
+
+  @override
   String get salawatLeadNone => 'No earlier reminder';
 
   @override

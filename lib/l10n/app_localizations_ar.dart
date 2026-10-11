@@ -1154,6 +1154,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get timeTo => 'إلى';
 
   @override
+  String get salawatSound => 'الصوت';
+
+  @override
   String get salawatLeadNone => 'بدون تذكير مسبق';
 
   @override

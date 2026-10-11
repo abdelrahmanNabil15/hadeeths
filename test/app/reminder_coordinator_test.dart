@@ -828,6 +828,115 @@ void main() {
     });
   });
 
+  group('the salawat recordings', () {
+    List<FakeScheduled> held(PrayerFixture f) => [
+      for (final h in f.notifications.sorted)
+        if (NotificationPayload.decode(
+              PendingEntry(id: h.id, payload: h.payload),
+            )!.kind ==
+            NotificationKind.salawat)
+          h,
+    ];
+
+    Future<PrayerFixture> planned(
+      SalawatSettings salawat, {
+      NotificationSound sound = NotificationSound.system,
+    }) async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          prayers: const {},
+          sound: sound,
+          salawat: salawat,
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(held(f), isNotEmpty);
+      return f;
+    }
+
+    test(
+      'the first recording is the default, played as a notification',
+      () async {
+        final f = await planned(SalawatSettings(enabled: true));
+        for (final h in held(f)) {
+          expect(h.content.bundledSound?.resource, 'salawat_1');
+          expect(h.content.bundledSound?.alarm, isFalse);
+        }
+      },
+    );
+
+    test(
+      'the second recording can be chosen, for the earlier reminder too',
+      () async {
+        final f = await planned(
+          SalawatSettings(enabled: true, leadMinutes: 10, tone: 'salawat_2'),
+        );
+        expect(
+          held(f).every((h) => h.content.bundledSound?.resource == 'salawat_2'),
+          isTrue,
+        );
+      },
+    );
+
+    test('the phone sound can be chosen instead', () async {
+      final f = await planned(
+        SalawatSettings(enabled: true).copyWith(clearTone: true),
+      );
+      expect(held(f).every((h) => h.content.bundledSound == null), isTrue);
+    });
+
+    test('silent reminders stay silent', () async {
+      final f = await planned(
+        SalawatSettings(enabled: true),
+        sound: NotificationSound.silent,
+      );
+      expect(held(f).every((h) => h.content.bundledSound == null), isTrue);
+    });
+
+    test(
+      'they have a file in the app, and no prayer reminder uses them',
+      () async {
+        for (final tone in SalawatSettings.toneOptions) {
+          expect(
+            File('android/app/src/main/res/raw/$tone.mp3').existsSync(),
+            isTrue,
+            reason: tone,
+          );
+        }
+        final f = _fixture(reminders: ReminderSettings(enabled: true));
+        await f.services.reminders.reconcile();
+        expect(
+          f.notifications.held.values.every(
+            (h) =>
+                h.content.bundledSound?.resource.startsWith('salawat') != true,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('changing the recording re-schedules the reminders', () async {
+      final f = await planned(SalawatSettings(enabled: true));
+      final before = f.notifications.schedules;
+      await f.services.preferences.save(
+        _prefs(
+          reminders: ReminderSettings(
+            enabled: true,
+            prayers: const {},
+            salawat: SalawatSettings(enabled: true, tone: 'salawat_2'),
+          ),
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.schedules, greaterThan(before));
+      expect(
+        held(f).every((h) => h.content.bundledSound?.resource == 'salawat_2'),
+        isTrue,
+      );
+    });
+  });
+
   group('the test reminder', () {
     test('shows now, with the chosen sound', () async {
       final f = _fixture(

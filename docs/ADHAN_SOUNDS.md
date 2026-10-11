@@ -52,6 +52,23 @@ name the owner gave it, and the owner should check that every file says what its
 - On an Android 16 emulator the channels were created with the expected sounds (`android.resource://…/raw/near_*`,
   `raw/wake_fajr`), the wake-up channel as `USAGE_ALARM`; actually hearing them on a phone is NOT RUN.
 
+## The salawat recordings (supplied by the owner)
+
+Two more recordings ship in `android/app/src/main/res/raw/`: `salawat_1.mp3` (the owner's "نغمة صلي على محمد ﷺ", about 13 seconds)
+and `salawat_2.mp3` ("اللهم صل على محمد وعلى آل محمد", about 7 seconds; lengths estimated from the MP3 headers). As with the other
+recordings, **I have not listened to them**.
+
+- **Salawat reminders → Sound** offers the two recordings and "The phone's notification sound". The first is the default, so a
+  user who switches salawat reminders on hears it without choosing; the choice is saved (`tone` in the saved salawat
+  settings; older saved data gets the default).
+- It plays for the salawat reminder at its time and for the optional earlier one. It does not play when the reminders' sound
+  is Silent, and the prayer reminders never use it.
+- The option names are the owner's file names, in Arabic in both interface languages, like the salawat reminder text. They are
+  marked for the owner's review.
+- Android only, like the other recordings. On an Android 16 emulator the channel `prayer_raw_salawat_1_vibrate` was created with
+  sound `android.resource://com.hadeeths.eg/raw/salawat_1`; hearing it is NOT RUN. The channel's name in the phone's
+  settings starts with "Prayer reminders", which is not quite right for salawat; not changed.
+
 ## Not available, and why
 
 - **iOS:** a notification sound there must be bundled with the app or placed in the app's Library/Sounds folder, and is

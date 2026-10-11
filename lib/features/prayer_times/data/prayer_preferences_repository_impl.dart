@@ -85,6 +85,7 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
           'start': p.reminders.salawat.windowStartMinute,
           'end': p.reminders.salawat.windowEndMinute,
           'lead': p.reminders.salawat.leadMinutes,
+          'tone': p.reminders.salawat.tone,
         },
       },
       'location': place == null
@@ -203,6 +204,8 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
     final defaults = SalawatSettings();
     final interval = json['interval'];
     final lead = json['lead'];
+    // Saved before the recordings existed: the default one. Saved as null: the phone's sound.
+    final tone = json.containsKey('tone') ? json['tone'] : defaults.tone;
     try {
       return SalawatSettings(
         enabled: json['enabled'] == true,
@@ -216,6 +219,11 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
         leadMinutes: lead is int && SalawatSettings.leadOptions.contains(lead)
             ? lead
             : defaults.leadMinutes,
+        tone: tone is String && SalawatSettings.toneOptions.contains(tone)
+            ? tone
+            : tone == null
+            ? null
+            : defaults.tone,
       );
     } on ArgumentError {
       return SalawatSettings();

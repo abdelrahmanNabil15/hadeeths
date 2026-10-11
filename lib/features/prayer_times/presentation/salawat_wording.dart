@@ -15,3 +15,11 @@ String salawatSoonText(int minutes, Digits digits) {
   final noun = lastTwo >= 3 && lastTwo <= 10 ? 'دقائق' : 'دقيقة';
   return 'الصلاة على النبي ﷺ بعد ${digits.format(minutes)} $noun';
 }
+
+/// The names of the two recordings, as the owner named the files. Arabic in both interface languages.
+const salawatToneNames = {
+  'salawat_1': 'صلي على محمد ﷺ',
+  'salawat_2': 'اللهم صل على محمد وعلى آل محمد',
+};
+
+String salawatToneLabel(String tone) => salawatToneNames[tone] ?? tone;

@@ -17,6 +17,8 @@ import 'package:mynewapp/features/prayer_times/presentation/state/reminders_cubi
 import 'package:mynewapp/features/prayer_times/presentation/widgets/time_of_day_tile.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
+const _phoneSound = 'system';
+
 /// Salawat reminders: on or off, how often, between which times, and an optional earlier reminder.
 /// The reminder text is the owner-approved Arabic, shown here as it will appear.
 class SalawatPage extends StatelessWidget {
@@ -121,6 +123,22 @@ class SalawatPage extends StatelessWidget {
                       label: l10n.timeTo,
                       minute: s.windowEndMinute,
                       onChanged: (m) => setWindow(end: m),
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeading(l10n.salawatSound),
+                    const SizedBox(height: AppSpacing.sm),
+                    OptionGroup<String>(
+                      selected: s.tone ?? _phoneSound,
+                      onSelected: (v) => cubit.setSalawat(
+                        v == _phoneSound
+                            ? s.copyWith(clearTone: true)
+                            : s.copyWith(tone: v),
+                      ),
+                      options: [
+                        for (final tone in SalawatSettings.toneOptions)
+                          (tone, salawatToneLabel(tone)),
+                        (_phoneSound, l10n.remindersSoundSystem),
+                      ],
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     SectionHeading(l10n.remindersLead),

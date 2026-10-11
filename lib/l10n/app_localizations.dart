@@ -1982,6 +1982,12 @@ abstract class AppLocalizations {
   /// **'إلى'**
   String get timeTo;
 
+  /// No description provided for @salawatSound.
+  ///
+  /// In ar, this message translates to:
+  /// **'الصوت'**
+  String get salawatSound;
+
   /// Phase 3 step 2; wording for owner review.
   ///
   /// In ar, this message translates to:

@@ -11,6 +11,7 @@ import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_plan_builder.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
+import 'package:mynewapp/features/prayer_times/domain/salawat_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../support/result_helpers.dart';
@@ -78,6 +79,20 @@ void main() {
           );
         }
         expect(s.copyWith(wakeUp: true, wakeUpMinutes: 15).wakeUp, isTrue);
+      },
+    );
+
+    test(
+      'the salawat recording defaults to the first and accepts only the two',
+      () {
+        expect(SalawatSettings().tone, 'salawat_1');
+        for (final ok in SalawatSettings.toneOptions) {
+          expect(SalawatSettings(tone: ok).tone, ok);
+        }
+        expect(() => SalawatSettings(tone: 'other'), throwsArgumentError);
+        expect(SalawatSettings(tone: null).tone, isNull);
+        expect(SalawatSettings().copyWith(clearTone: true).tone, isNull);
+        expect(SalawatSettings().copyWith(tone: 'salawat_2').tone, 'salawat_2');
       },
     );
 
@@ -206,6 +221,36 @@ void main() {
             bad is Map && bad['enabled'] == true,
             reason: '$bad',
           );
+        }
+      },
+    );
+
+    test(
+      'the salawat recording round-trips; old or bad data means the default',
+      () async {
+        final r = await repo();
+        for (final tone in <String?>['salawat_2', null]) {
+          await r.save(
+            PrayerPreferences().withReminders(
+              ReminderSettings(
+                enabled: true,
+                salawat: SalawatSettings(enabled: true, tone: tone),
+              ),
+            ),
+          );
+          expect((await r.load()).reminders.salawat.tone, tone);
+        }
+        for (final saved in <Map<String, Object?>>[
+          {'enabled': true},
+          {'enabled': true, 'tone': 'salawat_9'},
+          {'enabled': true, 'tone': 3},
+        ]) {
+          final p = await (await repo({
+            PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+              'reminders': {'salawat': saved},
+            }),
+          })).load();
+          expect(p.reminders.salawat.tone, 'salawat_1', reason: '$saved');
         }
       },
     );
