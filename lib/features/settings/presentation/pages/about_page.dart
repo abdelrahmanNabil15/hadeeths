@@ -57,17 +57,6 @@ class AboutPage extends StatelessWidget {
               section(l10n.aboutCompassHeading, l10n.aboutCompassBody),
               section(l10n.aboutQuranHeading, l10n.aboutQuranBody),
             ],
-            Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: OutlinedButton.icon(
-                onPressed: () => showLicensePage(
-                  context: context,
-                  applicationName: l10n.appName,
-                ),
-                icon: const Icon(Icons.description_outlined),
-                label: Text(l10n.openSourceLicences),
-              ),
-            ),
           ],
         ),
       ),
