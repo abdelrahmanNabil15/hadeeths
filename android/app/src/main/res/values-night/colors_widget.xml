@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark theme hero roles (AppColors.dark). -->
+<resources>
+    <color name="widget_background">#FF0F2E26</color>
+    <color name="widget_text">#FFEDE8DA</color>
+    <color name="widget_muted">#FFA8C3B6</color>
+    <color name="widget_accent">#FFCFAE62</color>
+</resources>

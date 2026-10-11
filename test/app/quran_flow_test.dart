@@ -156,7 +156,10 @@ void main() {
     final data = await _openQuran(tester);
     await tester.tap(find.text('الانتقال إلى آية'));
     await tester.pumpAndSettle();
-    final fields = find.byType(TextField);
+    final fields = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byType(TextField),
+    );
     await tester.enterText(fields.at(0), '2');
     await tester.pump();
     expect(find.text('البقرة'), findsOneWidget); // the sura's name as a hint
@@ -180,7 +183,7 @@ void main() {
     useSmallPhone(tester, textScale: 2);
     await _openQuran(tester, tall: false);
     expect(tester.takeException(), isNull);
-    // At this size the row is below the fold: scroll to it first.
+    // Below the sura filter at this size: scroll to it first.
     await scrollAndTap(tester, find.text('١. الفاتحة'));
     expect(tester.takeException(), isNull);
   });

@@ -9,10 +9,13 @@ import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_service.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/search/domain/search_repository.dart';
@@ -78,6 +81,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
+  /// Sections asked for by the home-screen widget: the one it launched the app for, then any later
+  /// taps. Created once, so a rebuild does not ask again.
+  late final Stream<ShellTab>? _widgetTabs =
+      switch (widget.dependencies.homeWidget) {
+        final bridge? => _tabsFrom(bridge),
+        null => null,
+      };
+
+  static Stream<ShellTab> _tabsFrom(HomeWidgetBridge bridge) async* {
+    ShellTab? tab(String? route) => route == 'prayer' ? ShellTab.prayer : null;
+    final first = tab(
+      await bridge.takeLaunchRoute().catchError((Object _) => null),
+    );
+    if (first != null) yield first;
+    await for (final route in bridge.routes) {
+      final next = tab(route);
+      if (next != null) yield next;
+    }
+  }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) _reconcileReminders();
@@ -116,6 +139,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         RepositoryProvider<ImageSharer?>.value(
           value: deps.imageSharerIfEnabled,
         ),
+        // Nullable on purpose: the hadith of the day and its memory exist only with their section on.
+        RepositoryProvider<DailyHadithStore?>.value(
+          value: deps.dailyHadithIfEnabled,
+        ),
+        RepositoryProvider<DailyHadithService?>.value(
+          value: deps.dailyHadithServiceIfEnabled,
+        ),
       ],
       child: BlocProvider.value(
         value: _settings,
@@ -143,7 +173,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 return MaterialApp(
                   key: ValueKey(_generation),
                   scaffoldMessengerKey: _messenger,
-                  onGenerateTitle: (context) => context.l10n.appTitle,
+                  onGenerateTitle: (context) => context.l10n.appName,
                   theme: _lightTheme,
                   darkTheme: _darkTheme,
                   themeMode: switch (settings.theme) {
@@ -193,6 +223,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             tasbeeh: deps.tasbeeh,
                             favorites: deps.favoritesIfEnabled,
                             onDeleteAll: _eraseAll,
+                            tabRequests: _widgetTabs,
                             quran: deps.quran,
                             quranUserData: deps.quranUserData,
                           )

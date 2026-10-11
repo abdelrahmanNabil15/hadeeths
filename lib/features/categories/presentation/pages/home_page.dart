@@ -16,6 +16,8 @@ import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/categories/presentation/category_navigation.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
 import 'package:mynewapp/features/categories/presentation/widgets/home_hero.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_service.dart';
+import 'package:mynewapp/features/daily_hadith/presentation/widgets/daily_hadith_card.dart';
 import 'package:mynewapp/features/search/presentation/pages/search_page.dart';
 import 'package:mynewapp/features/search/presentation/widgets/search_entry.dart';
 import 'package:mynewapp/features/settings/presentation/pages/about_page.dart';
@@ -146,6 +148,8 @@ class HomePage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
+                      if (context.read<DailyHadithService?>() case final daily?)
+                        DailyHadithSection(service: daily),
                       SectionHeading(l10n.mainCategories),
                       const SizedBox(height: AppSpacing.md),
                       for (final root in roots) ...[

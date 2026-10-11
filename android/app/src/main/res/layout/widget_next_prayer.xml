@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Next-prayer widget. Texts align to their own language (textStart), so Arabic reads right to left
+     even on a phone set to English. Hero colours from the app: midnight emerald, ivory text, gold label. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/widget_background"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/widget_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:textAlignment="textStart"
+        android:textColor="@color/widget_accent"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/widget_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="textStart"
+        android:textColor="@color/widget_text"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/widget_then"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAlignment="textStart"
+        android:textColor="@color/widget_muted"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/widget_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/widget_open_app"
+        android:textAlignment="textStart"
+        android:textColor="@color/widget_text"
+        android:textSize="14sp"
+        android:visibility="gone" />
+</LinearLayout>

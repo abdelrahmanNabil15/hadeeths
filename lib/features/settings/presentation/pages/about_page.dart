@@ -62,7 +62,7 @@ class AboutPage extends StatelessWidget {
               child: OutlinedButton.icon(
                 onPressed: () => showLicensePage(
                   context: context,
-                  applicationName: l10n.appTitle,
+                  applicationName: l10n.appName,
                 ),
                 icon: const Icon(Icons.description_outlined),
                 label: Text(l10n.openSourceLicences),
