@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/app.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/app/review_coordinator.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
@@ -51,6 +52,7 @@ AppDependencies testDependencies(
   ImageSharer? imageSharer,
   DailyHadithStore? dailyHadith,
   HomeWidgetBridge? homeWidget,
+  ReviewCoordinator? review,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -68,6 +70,7 @@ AppDependencies testDependencies(
   imageSharer: imageSharer ?? const SystemImageSharer(),
   dailyHadith: dailyHadith,
   homeWidget: homeWidget,
+  review: review,
 );
 
 /// Starts the app against [api].
@@ -93,6 +96,7 @@ Future<void> pumpApp(
   ImageSharer? imageSharer,
   DailyHadithStore? dailyHadith,
   HomeWidgetBridge? homeWidget,
+  ReviewCoordinator? review,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -113,6 +117,7 @@ Future<void> pumpApp(
         imageSharer: imageSharer,
         dailyHadith: dailyHadith,
         homeWidget: homeWidget,
+        review: review,
       ),
       initialSettings: settings,
     ),

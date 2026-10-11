@@ -1,4 +1,5 @@
 import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/app/review_coordinator.dart';
 import 'package:mynewapp/app/user_data_eraser.dart';
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
@@ -52,6 +53,7 @@ class AppDependencies {
     this.imageSharer = const SystemImageSharer(),
     this.dailyHadith,
     this.homeWidget,
+    this.review,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -65,6 +67,7 @@ class AppDependencies {
     PrayerServices? prayer,
     HomeWidgetBridge? homeWidget,
     QuranSource? quran,
+    ReviewCoordinator? review,
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
@@ -92,6 +95,7 @@ class AppDependencies {
       homeWidget: homeWidget,
       quran: quran,
       quranUserData: userData == null ? null : SqliteQuranUserData(userData.db),
+      review: review,
     );
   }
 
@@ -139,6 +143,13 @@ class AppDependencies {
   /// The Android home-screen widget; `null` elsewhere and while the prayer section is off.
   final HomeWidgetBridge? homeWidget;
 
+  /// Rating: the rules and memory behind the system's rating sheet; `null` in tests that do not use it.
+  final ReviewCoordinator? review;
+
+  /// Rating as the screens should see it: only when its feature is on.
+  ReviewCoordinator? get reviewIfEnabled =>
+      features.inAppReview ? review : null;
+
   /// The store as the screens should see it: only when its section is on.
   DailyHadithStore? get dailyHadithIfEnabled =>
       features.dailyHadith ? dailyHadith : null;
@@ -168,6 +179,7 @@ class AppDependencies {
     userData: userData,
     prayer: prayer,
     dailyHadith: dailyHadith,
+    review: review,
   );
 
   FavoritesRepository? get favoritesIfEnabled =>

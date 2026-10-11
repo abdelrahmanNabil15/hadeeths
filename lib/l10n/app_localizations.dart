@@ -380,6 +380,12 @@ abstract class AppLocalizations {
   /// **'الخطوط'**
   String get aboutFontsHeading;
 
+  /// No description provided for @rateApp.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيّم سكينة'**
+  String get rateApp;
+
   /// No description provided for @aboutFontsBody.
   ///
   /// In ar, this message translates to:

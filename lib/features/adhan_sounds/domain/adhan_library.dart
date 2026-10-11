@@ -29,6 +29,9 @@ abstract interface class AdhanLibrary implements NotificationSoundResolver {
   /// later). When false the adhan choice is not offered.
   Future<bool> isSupported();
 
+  /// Whether a download is under way (the rating prompt never interrupts one).
+  bool get downloading;
+
   /// The ids of the recordings that are on the phone.
   Future<Set<String>> downloaded();
 

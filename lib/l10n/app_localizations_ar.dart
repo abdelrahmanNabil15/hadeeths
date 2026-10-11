@@ -161,6 +161,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get aboutFontsHeading => 'الخطوط';
 
   @override
+  String get rateApp => 'قيّم سكينة';
+
+  @override
   String get aboutFontsBody =>
       'خط Cairo وخط Amiri، برخصة SIL Open Font License 1.1.';
 

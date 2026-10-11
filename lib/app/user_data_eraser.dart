@@ -1,3 +1,4 @@
+import 'package:mynewapp/app/review_coordinator.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
@@ -18,6 +19,7 @@ class UserDataEraser {
     this.userData,
     this.prayer,
     this.dailyHadith,
+    this.review,
   });
 
   final SettingsRepository settings;
@@ -27,6 +29,9 @@ class UserDataEraser {
 
   /// The hadith of the day's memory (opened categories, picks, history).
   final DailyHadithStore? dailyHadith;
+
+  /// The rating prompt's memory (days of use, counts, requests made).
+  final ReviewCoordinator? review;
 
   /// True when every step succeeded.
   Future<bool> eraseAll() async {
@@ -48,6 +53,8 @@ class UserDataEraser {
     if (userData != null) await step(() async => userData.clearUserTables());
     final dailyHadith = this.dailyHadith;
     if (dailyHadith != null) await step(dailyHadith.clear);
+    final review = this.review;
+    if (review != null) await step(review.forget);
     await step(cache.clear);
     await step(() => settings.save(const AppSettings()));
     return ok;

@@ -47,6 +47,8 @@
   "aboutContentHeading": "Content",
   "aboutContentBody": "Hadiths, explanations and translations come from HadeethEnc.com and are shown exactly as published.",
   "aboutFontsHeading": "Fonts",
+  "rateApp": "Rate Sakina",
+  "@rateApp": {"description": "Opens the app page in the store, where the user can rate it. Wording approved by the owner."},
   "aboutFontsBody": "Cairo and Amiri, under the SIL Open Font License 1.1.",
   "aboutPrivacyHeading": "Privacy",
   "aboutPrivacyBody": "The app collects no personal data. It needs the internet to load content, keeps copies of what you open on your device for offline reading, and you can turn that off or clear it in Settings.",

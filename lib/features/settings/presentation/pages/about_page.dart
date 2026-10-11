@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
+import 'package:mynewapp/features/app_review/presentation/rate_app_tile.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// Credits and licences: who the content comes from, which fonts are bundled, and privacy.
@@ -57,6 +58,7 @@ class AboutPage extends StatelessWidget {
               section(l10n.aboutCompassHeading, l10n.aboutCompassBody),
               section(l10n.aboutQuranHeading, l10n.aboutQuranBody),
             ],
+            const RateAppTile(),
           ],
         ),
       ),

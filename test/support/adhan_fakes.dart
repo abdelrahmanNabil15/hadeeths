@@ -12,6 +12,10 @@ class FakeAdhanLibrary implements AdhanLibrary {
   final deleted = <String>[];
   final downloads = <String>[];
 
+  /// Set by a test to say a download is under way.
+  @override
+  bool downloading = false;
+
   @override
   Future<bool> isSupported() async => supported;
 
