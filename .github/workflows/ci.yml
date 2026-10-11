@@ -51,6 +51,9 @@ jobs:
         run: flutter build apk --debug
       - name: Build release APK (unsigned; no secrets needed)
         run: flutter build apk --release
+      - name: Kotlin unit tests (home-screen widget)
+        working-directory: android
+        run: ./gradlew :app:testDebugUnitTest
 
   ios:
     name: Build (iOS, no code signing)

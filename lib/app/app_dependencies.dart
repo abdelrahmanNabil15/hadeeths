@@ -4,10 +4,14 @@ import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
 import 'package:mynewapp/features/categories/data/categories_repository_impl.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
+import 'package:mynewapp/features/daily_hadith/data/prefs_daily_hadith_store.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_service.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/data/favorites_repository_impl.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_remote_data_source.dart';
@@ -46,6 +50,8 @@ class AppDependencies {
     this.quran,
     this.quranUserData,
     this.imageSharer = const SystemImageSharer(),
+    this.dailyHadith,
+    this.homeWidget,
   });
 
   /// Production wiring: the content repositories share one HTTP client and one saved-copy
@@ -57,6 +63,7 @@ class AppDependencies {
     UserDatabase? userData,
     FeatureFlags features = const FeatureFlags(),
     PrayerServices? prayer,
+    HomeWidgetBridge? homeWidget,
     QuranSource? quran,
   }) {
     final http = client ?? HadeethClient();
@@ -81,6 +88,8 @@ class AppDependencies {
       favorites: userData == null
           ? null
           : SqliteFavoritesRepository(userData.db),
+      dailyHadith: PrefsDailyHadithStore(preferences),
+      homeWidget: homeWidget,
       quran: quran,
       quranUserData: userData == null ? null : SqliteQuranUserData(userData.db),
     );
@@ -123,6 +132,29 @@ class AppDependencies {
   /// Opens the system share sheet with images.
   final ImageSharer imageSharer;
 
+  /// What the hadith of the day remembers (opened categories, picks, history); `null` in tests that do
+  /// not use it.
+  final DailyHadithStore? dailyHadith;
+
+  /// The Android home-screen widget; `null` elsewhere and while the prayer section is off.
+  final HomeWidgetBridge? homeWidget;
+
+  /// The store as the screens should see it: only when its section is on.
+  DailyHadithStore? get dailyHadithIfEnabled =>
+      features.dailyHadith ? dailyHadith : null;
+
+  /// Chooses the hadith of the day; only when its section is on.
+  DailyHadithService? get dailyHadithServiceIfEnabled {
+    final store = dailyHadithIfEnabled;
+    return store == null
+        ? null
+        : DailyHadithService(
+            categories: categories,
+            hadiths: hadiths,
+            store: store,
+          );
+  }
+
   /// Image sharing as the screens should see it: only when its section is on.
   ImageSharer? get imageSharerIfEnabled =>
       features.shareCards && features.usesShell ? imageSharer : null;
@@ -135,6 +167,7 @@ class AppDependencies {
     cache: cache,
     userData: userData,
     prayer: prayer,
+    dailyHadith: dailyHadith,
   );
 
   FavoritesRepository? get favoritesIfEnabled =>

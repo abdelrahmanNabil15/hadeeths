@@ -1844,6 +1844,186 @@ abstract class AppLocalizations {
   /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
   String get shareCardFailed;
 
+  /// Time left until the next prayer. [time] is a clock face (1:05:09) or words (ساعة و5 دقائق). Wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'بعد {time}'**
+  String countdownIn(String time);
+
+  /// Hours after بعد (genitive).
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{ساعة} =2{ساعتين} few{{count} ساعات} other{{count} ساعة}}'**
+  String durationHours(int count);
+
+  /// Minutes after بعد (genitive).
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{دقيقة} =2{دقيقتين} few{{count} دقائق} other{{count} دقيقة}}'**
+  String durationMinutes(int count);
+
+  /// No description provided for @durationJoin.
+  ///
+  /// In ar, this message translates to:
+  /// **'{hours} و{minutes}'**
+  String durationJoin(String hours, String minutes);
+
+  /// No description provided for @durationUnderAMinute.
+  ///
+  /// In ar, this message translates to:
+  /// **'أقل من دقيقة'**
+  String get durationUnderAMinute;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات أخرى'**
+  String get remindersMore;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'مفعّل'**
+  String get statusOn;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'متوقف'**
+  String get statusOff;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات الصلاة على النبي ﷺ'**
+  String get salawatTitle;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل التذكيرات'**
+  String get salawatSwitch;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تذكيرات منتظمة خلال اليوم بحسب ساعة هاتفك.'**
+  String get salawatIntro;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص التذكير'**
+  String get salawatPreview;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'كم مرة'**
+  String get salawatInterval;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =1{كل ساعة} =2{كل ساعتين} few{كل {count} ساعات} other{كل {count} ساعة}}'**
+  String salawatEveryHours(int count);
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'خلال الفترة'**
+  String get salawatWindow;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'من'**
+  String get timeFrom;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'إلى'**
+  String get timeTo;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون تذكير مسبق'**
+  String get salawatLeadNone;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'يجب أن تكون النهاية بعد البداية.'**
+  String get windowInvalid;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'أوقات الهدوء'**
+  String get quietTitle;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تفعيل أوقات الهدوء'**
+  String get quietSwitch;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا تُرسَل تذكيرات الصلاة على النبي ﷺ في أوقات الهدوء. أما تذكيرات مواقيت الصلاة فتصل دائمًا.'**
+  String get quietIntro;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تصل تذكيرات مواقيت الصلاة بلا صوت في أوقات الهدوء'**
+  String get quietPrayersSilent;
+
+  /// Phase 3 step 2; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'{count, plural, =0{لا يوجد تذكير محجوب في اليومين القادمين.} =1{تذكير واحد في اليومين القادمين يقع في أوقات الهدوء ولن يُرسَل.} =2{تذكيران في اليومين القادمين يقعان في أوقات الهدوء ولن يُرسَلا.} few{{count} تذكيرات في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.} other{{count} تذكيرًا في اليومين القادمين تقع في أوقات الهدوء ولن تُرسَل.}}'**
+  String quietHeldBack(int count);
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'حديث اليوم'**
+  String get dailyHadithHeading;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'من تصنيف: {category}'**
+  String dailyHadithFrom(String category);
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر عرض حديث اليوم الآن.'**
+  String get dailyHadithUnavailable;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'الاختيار من التصنيفات التي أفتحها'**
+  String get dailyHadithRemember;
+
+  /// Phase 3 step 3; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'وإلا فيُختار من التصنيفات الرئيسية كلها. تبقى هذه القائمة على هاتفك فقط.'**
+  String get dailyHadithRememberHint;
+
+  /// Home-screen widget: before the prayer after the next one. Phase 3 step 4; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'ثم'**
+  String get widgetThen;
+
   /// UI revamp; wording for owner review.
   ///
   /// In ar, this message translates to:

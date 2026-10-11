@@ -5,7 +5,9 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
+import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
@@ -47,6 +49,8 @@ AppDependencies testDependencies(
   QuranSource? quran,
   QuranUserData? quranUserData,
   ImageSharer? imageSharer,
+  DailyHadithStore? dailyHadith,
+  HomeWidgetBridge? homeWidget,
 }) => AppDependencies(
   categories: api,
   hadiths: api,
@@ -62,6 +66,8 @@ AppDependencies testDependencies(
   quran: quran,
   quranUserData: quranUserData,
   imageSharer: imageSharer ?? const SystemImageSharer(),
+  dailyHadith: dailyHadith,
+  homeWidget: homeWidget,
 );
 
 /// Starts the app against [api].
@@ -85,6 +91,8 @@ Future<void> pumpApp(
   QuranSource? quran,
   QuranUserData? quranUserData,
   ImageSharer? imageSharer,
+  DailyHadithStore? dailyHadith,
+  HomeWidgetBridge? homeWidget,
 }) async {
   tester.platformDispatcher.localesTestValue = [Locale(locale)];
   addTearDown(tester.platformDispatcher.clearLocalesTestValue);
@@ -103,6 +111,8 @@ Future<void> pumpApp(
         quran: quran,
         quranUserData: quranUserData,
         imageSharer: imageSharer,
+        dailyHadith: dailyHadith,
+        homeWidget: homeWidget,
       ),
       initialSettings: settings,
     ),

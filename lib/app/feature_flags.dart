@@ -12,6 +12,7 @@ class FeatureFlags {
     this.prayer = false,
     this.favorites = false,
     this.shareCards = false,
+    this.dailyHadith = false,
   });
 
   /// Everything on (previews and tests).
@@ -19,7 +20,8 @@ class FeatureFlags {
     : quran = true,
       prayer = true,
       favorites = true,
-      shareCards = true;
+      shareCards = true,
+      dailyHadith = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -36,6 +38,9 @@ class FeatureFlags {
 
   /// Sharing a hadith as an image. Off in the released app, where sharing stays text only.
   final bool shareCards;
+
+  /// The hadith of the day on the home screen, with its setting.
+  final bool dailyHadith;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;
