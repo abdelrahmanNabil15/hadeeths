@@ -1197,4 +1197,101 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get widgetThen => 'Then';
+
+  @override
+  String get remindersSoundAdhan => 'Adhan';
+
+  @override
+  String get adhanTitle => 'Adhan sound';
+
+  @override
+  String get adhanIntro =>
+      'Choose a recording of the adhan for the reminder at each prayer time. It is downloaded only when you ask, and it stays on your phone.';
+
+  @override
+  String get adhanPrayerOnly =>
+      'It plays only for the reminder at the prayer time: not for early reminders, sunrise or salawat.';
+
+  @override
+  String adhanSize(String mb) {
+    return '$mb MB';
+  }
+
+  @override
+  String adhanDownload(String size) {
+    return 'Download ($size)';
+  }
+
+  @override
+  String get adhanDownloading => 'Downloading…';
+
+  @override
+  String get adhanUse => 'Use this adhan';
+
+  @override
+  String get adhanInUse => 'In use';
+
+  @override
+  String get adhanDelete => 'Delete the file';
+
+  @override
+  String get adhanFailedNetwork =>
+      'Could not download. Check your connection and try again.';
+
+  @override
+  String get adhanFailedFile =>
+      'The file was not a valid recording, so it was not kept.';
+
+  @override
+  String get adhanUnsupported =>
+      'Downloaded adhan recordings need Android 10 or later.';
+
+  @override
+  String adhanSourceLine(String source) {
+    return 'Recordings: $source. Their rights belong to their publishers.';
+  }
+
+  @override
+  String adhanTestHint(String test) {
+    return 'To hear it, go back and tap “$test”.';
+  }
+
+  @override
+  String get adhanChooseTile => 'Choose an adhan';
+
+  @override
+  String get adhanNoneChosen => 'None chosen';
+
+  @override
+  String get wakeUpHeading => 'Wake-up before Fajr';
+
+  @override
+  String get wakeUpSwitch => 'Wake me before Fajr';
+
+  @override
+  String get wakeUpHint =>
+      'Plays a recording at the time you choose, so that you can be awake before the adhan. It plays even when reminders are silent.';
+
+  @override
+  String wakeUpBefore(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes minutes before Fajr',
+      one: '1 minute before Fajr',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wakeUpExactHint(String setting) {
+    return 'For an alarm on the minute, switch on “$setting” above.';
+  }
+
+  @override
+  String get wakeUpChannel => 'Wake-up before Fajr';
+
+  @override
+  String get remindersNearHint =>
+      'An early reminder says that the prayer is near, in a short recording.';
 }

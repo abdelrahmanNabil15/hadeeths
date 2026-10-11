@@ -12,7 +12,8 @@ import io.flutter.plugin.common.MethodChannel
 /**
  * The Flutter host. It also carries the `hadeeths/home_widget` channel: the app sends the widget's
  * snapshot, switches the widget on or off with the prayer section, and learns which page a tap on the
- * widget asked for.
+ * widget asked for. A second channel, `hadeeths/adhan_sound`, lists a downloaded adhan recording in
+ * the shared notification sounds so a notification channel can play it (see [AdhanSounds]).
  */
 class MainActivity : FlutterActivity() {
     private var channel: MethodChannel? = null
@@ -25,6 +26,26 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        val adhan = AdhanSounds(this)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, ADHAN_CHANNEL).setMethodCallHandler { call, result ->
+            when (call.method) {
+                "isSupported" -> result.success(adhan.supported)
+                "register" -> {
+                    val path = call.argument<String>("path")
+                    val name = call.argument<String>("name")
+                    if (path == null || name == null) {
+                        result.error("bad_arguments", "path and name are required", null)
+                    } else {
+                        result.success(adhan.register(path, name))
+                    }
+                }
+                "unregister" -> {
+                    call.argument<String>("name")?.let { adhan.unregister(it) }
+                    result.success(null)
+                }
+                else -> result.notImplemented()
+            }
+        }
         channel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).apply {
             setMethodCallHandler { call, result ->
                 when (call.method) {
@@ -70,6 +91,7 @@ class MainActivity : FlutterActivity() {
 
     companion object {
         const val CHANNEL = "hadeeths/home_widget"
+        const val ADHAN_CHANNEL = "hadeeths/adhan_sound"
         const val EXTRA_ROUTE = "hadeeths.route"
         const val ROUTE_PRAYER = "prayer"
     }

@@ -69,6 +69,7 @@ Future<void> main() async {
       preferences: preferences,
       loadAppSettings: () => dependencies.settings.load(),
       homeWidget: features.prayer ? homeWidget : null,
+      adhanSounds: features.adhanSounds && Platform.isAndroid,
     ),
     homeWidget: features.prayer ? homeWidget : null,
     cache: cache,

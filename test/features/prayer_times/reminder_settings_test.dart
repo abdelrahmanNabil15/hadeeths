@@ -54,6 +54,33 @@ void main() {
       }
     });
 
+    test('copyWith keeps the adhan, sets it, and can clear it', () {
+      final s = ReminderSettings(adhanId: 'rifaat');
+      expect(s.copyWith(vibrate: false).adhanId, 'rifaat');
+      expect(s.copyWith(adhanId: 'mulla').adhanId, 'mulla');
+      expect(s.copyWith(clearAdhan: true).adhanId, isNull);
+      expect(ReminderSettings().adhanId, isNull);
+    });
+
+    test(
+      'the wake-up alarm starts off, 30 minutes before, and accepts only the offered times',
+      () {
+        final s = ReminderSettings();
+        expect(s.wakeUp, isFalse);
+        expect(s.wakeUpMinutes, 30);
+        for (final ok in ReminderSettings.wakeUpOptions) {
+          expect(ReminderSettings(wakeUpMinutes: ok).wakeUpMinutes, ok);
+        }
+        for (final bad in [0, 10, 20, 90]) {
+          expect(
+            () => ReminderSettings(wakeUpMinutes: bad),
+            throwsArgumentError,
+          );
+        }
+        expect(s.copyWith(wakeUp: true, wakeUpMinutes: 15).wakeUp, isTrue);
+      },
+    );
+
     test('the chosen prayers cannot be changed from outside', () {
       final s = ReminderSettings();
       expect(() => s.prayers.add(Prayer.sunrise), throwsUnsupportedError);
@@ -123,6 +150,65 @@ void main() {
       await r.save(saved);
       expect((await r.load()).reminders, saved.reminders);
     });
+
+    test('the chosen adhan round-trips, and bad values mean none', () async {
+      final r = await repo();
+      final saved = PrayerPreferences().withReminders(
+        ReminderSettings(enabled: true, adhanId: 'rifaat'),
+      );
+      await r.save(saved);
+      expect((await r.load()).reminders.adhanId, 'rifaat');
+      for (final bad in [5, '', null, true]) {
+        final p = await (await repo({
+          PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+            'reminders': {'adhan': bad},
+          }),
+        })).load();
+        expect(p.reminders.adhanId, isNull, reason: '$bad');
+      }
+    });
+
+    test('older data has no adhan', () async {
+      final p = await (await repo({
+        PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+          'reminders': {'enabled': true},
+        }),
+      })).load();
+      expect(p.reminders.adhanId, isNull);
+    });
+
+    test(
+      'the wake-up alarm round-trips, and bad values mean the default',
+      () async {
+        final r = await repo();
+        await r.save(
+          PrayerPreferences().withReminders(
+            ReminderSettings(enabled: true, wakeUp: true, wakeUpMinutes: 45),
+          ),
+        );
+        final back = (await r.load()).reminders;
+        expect(back.wakeUp, isTrue);
+        expect(back.wakeUpMinutes, 45);
+        for (final bad in <Object?>[
+          {'enabled': 'yes', 'minutes': 7},
+          {'enabled': true, 'minutes': 'soon'},
+          'text',
+          null,
+        ]) {
+          final p = await (await repo({
+            PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+              'reminders': {'wakeUp': bad},
+            }),
+          })).load();
+          expect(p.reminders.wakeUpMinutes, 30, reason: '$bad');
+          expect(
+            p.reminders.wakeUp,
+            bad is Map && bad['enabled'] == true,
+            reason: '$bad',
+          );
+        }
+      },
+    );
 
     test('older data without reminders means reminders off', () async {
       final json = jsonEncode({'method': 'egyptian'});

@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
+
+import 'package:dio/dio.dart';
 
 import 'package:flutter/services.dart';
 import 'package:mynewapp/app/composite_permission_gateway.dart';
@@ -9,8 +12,10 @@ import 'package:mynewapp/app/widget_updating_reminders.dart';
 import 'package:mynewapp/core/notifications/local_notifications_gateway.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
+import 'package:mynewapp/core/platform/adhan_sound_bridge.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/time/clock.dart';
+import 'package:mynewapp/features/adhan_sounds/data/file_adhan_library.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/geolocator_location_service.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
@@ -22,6 +27,7 @@ import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/world_magnetic_model.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/l10n/app_localizations.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Builds the real prayer services. The city list and the country borders are read from the
@@ -30,13 +36,25 @@ PrayerServices buildPrayerServices({
   required SharedPreferences preferences,
   required Future<AppSettings> Function() loadAppSettings,
   HomeWidgetBridge? homeWidget,
+  bool adhanSounds = false,
 }) {
   Future<Map<String, dynamic>> asset(String path) async =>
       jsonDecode(await rootBundle.loadString(path)) as Map<String, dynamic>;
   Future<CityCatalog>? cities;
   Future<CountryLookup>? countries;
   Future<WorldMagneticModel>? magnetic;
-  final notifications = LocalNotificationsGateway();
+  // Downloadable adhan recordings (Android 10 and later), only when the feature is on.
+  final adhan = adhanSounds
+      ? FileAdhanLibrary(
+          directory: () async {
+            final base = await getApplicationSupportDirectory();
+            return Directory('${base.path}${Platform.pathSeparator}adhan');
+          },
+          dio: Dio(),
+          bridge: MethodChannelAdhanSoundBridge(),
+        )
+      : null;
+  final notifications = LocalNotificationsGateway(soundResolver: adhan);
   final prayerPreferences = PrayerPreferencesRepositoryImpl(preferences);
   const calculator = AdhanPrayerTimesCalculator();
   final coordinator = ReminderCoordinator(
@@ -67,6 +85,7 @@ PrayerServices buildPrayerServices({
               );
             },
           ),
+    adhan: adhan,
     hijri: const HijriCoreConverter(),
     permissions: PermissionFlow(
       buildPermissionGateway(notifications: notifications),

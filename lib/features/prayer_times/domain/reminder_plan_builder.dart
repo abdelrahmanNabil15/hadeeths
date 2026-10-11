@@ -1,5 +1,6 @@
 import 'package:mynewapp/core/notifications/planned_notification.dart';
 import 'package:mynewapp/core/time/zone.dart';
+import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_day.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/salawat_settings.dart';
@@ -47,6 +48,28 @@ abstract final class ReminderPlanBuilder {
             respectsQuietHours: false,
             signature: contentSignature,
           ),
+    ];
+  }
+
+  /// The wake-up alarm: one candidate per day, [ReminderSettings.wakeUpMinutes] before Fajr. Like a
+  /// prayer reminder it is never dropped or moved by quiet hours. Nothing while it is off.
+  static List<NotificationCandidate> wakeUpCandidates({
+    required Iterable<PrayerDay> days,
+    required ReminderSettings settings,
+    required String contentSignature,
+  }) {
+    if (!settings.enabled || !settings.wakeUp) return const [];
+    final lead = Duration(minutes: settings.wakeUpMinutes);
+    return [
+      for (final day in days)
+        NotificationCandidate(
+          kind: NotificationKind.wakeUp,
+          key: Prayer.fajr.name,
+          fireAt: day[Prayer.fajr].subtract(lead),
+          priority: prayerPriority,
+          respectsQuietHours: false,
+          signature: contentSignature,
+        ),
     ];
   }
 

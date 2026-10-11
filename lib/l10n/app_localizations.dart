@@ -2059,6 +2059,150 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ثم'**
   String get widgetThen;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'الأذان'**
+  String get remindersSoundAdhan;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوت الأذان'**
+  String get adhanTitle;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تسجيلًا للأذان لتذكير وقت كل صلاة. لا يُنزَّل إلا حين تطلب ذلك، ويبقى على هاتفك.'**
+  String get adhanIntro;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُسمَع في تذكير وقت الصلاة فقط، لا في التذكير المبكر ولا الشروق ولا تذكير الصلاة على النبي.'**
+  String get adhanPrayerOnly;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'{mb} ميغابايت'**
+  String adhanSize(String mb);
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تنزيل ({size})'**
+  String adhanDownload(String size);
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'جارٍ التنزيل…'**
+  String get adhanDownloading;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'استخدم هذا الأذان'**
+  String get adhanUse;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'قيد الاستخدام'**
+  String get adhanInUse;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'حذف الملف'**
+  String get adhanDelete;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر التنزيل. تحقّق من اتصالك وحاول مرة أخرى.'**
+  String get adhanFailedNetwork;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يكن الملف تسجيلًا صالحًا فلم يُحفَظ.'**
+  String get adhanFailedFile;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.'**
+  String get adhanUnsupported;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'التسجيلات من {source}. وحقوقها لأصحابها.'**
+  String adhanSourceLine(String source);
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لتسمعه، ارجع واضغط «{test}».'**
+  String adhanTestHint(String test);
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر أذانًا'**
+  String get adhanChooseTile;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لم يُختر'**
+  String get adhanNoneChosen;
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنبّه قبل الفجر'**
+  String get wakeUpHeading;
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'أيقظني قبل الفجر'**
+  String get wakeUpSwitch;
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'يُسمَع تسجيلٌ في الوقت الذي تختاره لتكون مستيقظًا قبل الأذان. ويعمل حتى لو كانت التذكيرات صامتة.'**
+  String get wakeUpHint;
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'{minutes, plural, few{قبل الفجر بـ {minutes} دقائق} many{قبل الفجر بـ {minutes} دقيقة} other{قبل الفجر بـ {minutes} دقيقة}}'**
+  String wakeUpBefore(int minutes);
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لمنبّه في وقته بالضبط، فعّل «{setting}» أعلاه.'**
+  String wakeUpExactHint(String setting);
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'المنبّه قبل الفجر'**
+  String get wakeUpChannel;
+
+  /// Wake-up before Fajr and the spoken early reminders; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'يقول التذكير المبكر إن الصلاة اقتربت، بتسجيل قصير.'**
+  String get remindersNearHint;
 }
 
 class _AppLocalizationsDelegate

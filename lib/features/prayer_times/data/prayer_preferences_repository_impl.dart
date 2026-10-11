@@ -66,8 +66,13 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
         ],
         'leadMinutes': p.reminders.leadMinutes,
         'sound': p.reminders.sound.name,
+        'adhan': p.reminders.adhanId,
         'vibrate': p.reminders.vibrate,
         'exactTiming': p.reminders.exactTiming,
+        'wakeUp': {
+          'enabled': p.reminders.wakeUp,
+          'minutes': p.reminders.wakeUpMinutes,
+        },
         'quiet': {
           'enabled': p.reminders.quietEnabled,
           'start': p.reminders.quietStartMinute,
@@ -153,6 +158,10 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
     final quiet = quietJson is Map<String, dynamic>
         ? quietJson
         : const <String, dynamic>{};
+    final wakeJson = json['wakeUp'];
+    final wake = wakeJson is Map<String, dynamic>
+        ? wakeJson
+        : const <String, dynamic>{};
     return ReminderSettings(
       enabled: json['enabled'] == true,
       prayers: prayers is List
@@ -164,8 +173,17 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
       sound:
           _byName(NotificationSound.values, json['sound']) ??
           NotificationSound.system,
+      adhanId: json['adhan'] is String && (json['adhan'] as String).isNotEmpty
+          ? json['adhan'] as String
+          : null,
       vibrate: json['vibrate'] != false,
       exactTiming: json['exactTiming'] == true,
+      wakeUp: wake['enabled'] == true,
+      wakeUpMinutes:
+          wake['minutes'] is int &&
+              ReminderSettings.wakeUpOptions.contains(wake['minutes'])
+          ? wake['minutes'] as int
+          : 30,
       quietEnabled: quiet['enabled'] == true,
       quietStartMinute: _minute(quiet['start']) ?? 22 * 60,
       quietEndMinute: _minute(quiet['end']) ?? 6 * 60,
