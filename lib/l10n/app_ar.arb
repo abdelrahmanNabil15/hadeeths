@@ -467,5 +467,9 @@
   "shareAsImage": "مشاركة كصورة",
   "shareCardShareOne": "مشاركة الصورة",
   "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
-  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى."
+  "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.",
+  "quranSearchPrompt": "اكتب كلمة للبحث في الآيات.",
+  "@quranSearchPrompt": {
+    "description": "UI revamp; wording for owner review."
+  }
 }

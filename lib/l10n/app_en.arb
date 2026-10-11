@@ -312,5 +312,6 @@
   "shareAsImage": "Share as image",
   "shareCardShareOne": "Share the image",
   "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
-  "shareCardFailed": "The image could not be made or shared. Try again."
+  "shareCardFailed": "The image could not be made or shared. Try again.",
+  "quranSearchPrompt": "Type a word to search the verses."
 }

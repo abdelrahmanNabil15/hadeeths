@@ -8,6 +8,7 @@ import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
 import 'package:mynewapp/features/hadiths/presentation/state/hadith_list_cubit.dart';
@@ -161,22 +162,12 @@ class _FooterState extends State<_Footer> {
   Widget build(BuildContext context) {
     final failure = widget.failure;
     if (failure != null) {
-      return Semantics(
-        liveRegion: true,
-        container: true,
-        child: Column(
-          children: [
-            Text(
-              failureMessage(context.l10n, failure),
-              textAlign: TextAlign.center,
-            ),
-            TextButton.icon(
-              onPressed: widget.onLoadMore,
-              icon: const Icon(Icons.refresh),
-              label: Text(context.l10n.retry),
-            ),
-          ],
-        ),
+      // The app's status message (announced when it appears), with Retry.
+      return StatusBanner(
+        message: failureMessage(context.l10n, failure),
+        kind: StatusKind.warning,
+        actionLabel: context.l10n.retry,
+        onAction: widget.onLoadMore,
       );
     }
     return Center(

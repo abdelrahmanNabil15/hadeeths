@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The app's canvas (AppPalette.light.surface), shown before Flutter draws: no white flash. -->
+<resources>
+    <color name="launch_background">#FFFAF6EC</color>
+</resources>

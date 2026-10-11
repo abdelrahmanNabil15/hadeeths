@@ -1837,6 +1837,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
   String get shareCardFailed;
+
+  /// UI revamp; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة للبحث في الآيات.'**
+  String get quranSearchPrompt;
 }
 
 class _AppLocalizationsDelegate

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/widgets/app_card.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/quran/domain/quran_search.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/presentation/pages/sura_reader_page.dart';
@@ -51,15 +53,27 @@ class _QuranSearchPageState extends State<QuranSearchPage> {
               controller: _field,
               autofocus: true,
               textInputAction: TextInputAction.search,
+              // The rounded field, its edge and its focus colour come from the input theme.
               decoration: InputDecoration(
                 hintText: l10n.quranSearchHint,
-                prefixIcon: const Icon(Icons.search),
-                border: const OutlineInputBorder(),
+                prefixIcon: Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
               onChanged: _run,
             ),
             const SizedBox(height: AppSpacing.md),
-            if (tooShort)
+            if (query.isEmpty) ...[
+              const SizedBox(height: AppSpacing.xxl),
+              const Center(child: StateMedallion(icon: Icons.search)),
+              const SizedBox(height: AppSpacing.lg),
+              Text(
+                l10n.quranSearchPrompt,
+                textAlign: TextAlign.center,
+                style: AppTypography.of(context).body,
+              ),
+            ] else if (tooShort)
               Text(
                 l10n.quranSearchTooShort,
                 style: AppTypography.of(context).meta,
@@ -100,32 +114,27 @@ class VerseResultTile extends StatelessWidget {
     final where =
         '${suraName(context, verse.sura)} ${digits.format(verse.sura)}:'
         '${digits.format(verse.number)}';
-    return Material(
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => openSura(context, verse.sura, verse: verse.number),
-        child: Padding(
-          padding: const EdgeInsets.all(AppSpacing.lg),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(where, style: AppTypography.of(context).label),
-              const SizedBox(height: AppSpacing.sm),
-              Directionality(
-                textDirection: TextDirection.rtl,
-                child: Text(
-                  verse.text,
-                  style: quranTextStyle(context, scale: scale * 0.85),
-                ),
-              ),
-            ],
+    return AppCard(
+      onTap: () => openSura(context, verse.sura, verse: verse.number),
+      padding: const EdgeInsets.all(AppSpacing.lg),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            where,
+            style: AppTypography.of(
+              context,
+            ).label.copyWith(color: scheme.primary),
           ),
-        ),
+          const SizedBox(height: AppSpacing.sm),
+          Directionality(
+            textDirection: TextDirection.rtl,
+            child: Text(
+              verse.text,
+              style: quranTextStyle(context, scale: scale * 0.85),
+            ),
+          ),
+        ],
       ),
     );
   }

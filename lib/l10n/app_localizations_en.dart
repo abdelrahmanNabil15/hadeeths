@@ -1034,4 +1034,7 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get shareCardFailed =>
       'The image could not be made or shared. Try again.';
+
+  @override
+  String get quranSearchPrompt => 'Type a word to search the verses.';
 }
