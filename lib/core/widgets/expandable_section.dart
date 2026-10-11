@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/widgets/app_card.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
 
 /// A titled block that expands and collapses in place. Announces its expanded state to
 /// screen readers; the animation is skipped when the user asked for reduced motion.
@@ -46,13 +48,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
             child: widget.child,
           )
         : const SizedBox(width: double.infinity);
-    return Material(
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -99,7 +95,7 @@ class _ExpandableSectionState extends State<ExpandableSection> {
               if (_expanded && widget.onShare != null)
                 IconButton(
                   tooltip: widget.shareTooltip,
-                  icon: const Icon(Icons.share),
+                  icon: const Icon(AppIcons.share),
                   onPressed: widget.onShare,
                 ),
             ],
@@ -135,7 +131,7 @@ class _Chevron extends StatelessWidget {
     // The arrow already mirrors with the text direction, so it must turn the other way
     // in right-to-left to end up pointing down.
     final turns = expanded ? (rtl ? -0.25 : 0.25) : 0.0;
-    final icon = Icon(Icons.arrow_forward_ios, size: 16, color: color);
+    final icon = Icon(AppIcons.chevron, size: AppSizes.iconSmall, color: color);
     if (duration == Duration.zero) {
       return RotationTransition(
         turns: AlwaysStoppedAnimation(turns),

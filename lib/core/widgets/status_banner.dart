@@ -55,7 +55,7 @@ class StatusBanner extends StatelessWidget {
       liveRegion: true,
       container: true,
       child: Container(
-        padding: const EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         decoration: BoxDecoration(
           color: background,
           borderRadius: BorderRadius.circular(AppRadius.card),

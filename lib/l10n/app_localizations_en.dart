@@ -1040,4 +1040,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quranFilterNone => 'No sura matches.';
+
+  @override
+  String get quranSearchPrompt => 'Type a word to search the verses.';
 }

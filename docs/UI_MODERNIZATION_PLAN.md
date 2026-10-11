@@ -587,3 +587,48 @@ shows each page after two frames with nothing left running; going back is immedi
   Jerusalem and Gaza handling, FCNA Hijri calendar validation, magnetic-model licence confirmation, the Egyptian authority's official timetable, compass accuracy away from magnets.
 - Branches are stacked: `feature/p3c-reminders` then `ui/a-foundations`, `ui/b-navigation-home`, `ui/c-reading`, `ui/d-worship`, `ui/e-secondary`, `ui/f-review`. Merge them in that order. Local `master`
   is 7 commits ahead of `origin/master`, unpushed.
+
+## 30. Luxury revamp report (branch `ui/g-luxury-revamp`, from `origin/master` 0decdf7)
+
+Owner brief: "quiet luxury" across every screen; plan approved 2026-10-10 (owner version). Flutter only: the brief's SwiftUI,
+Compose and Kotlin Multiplatform parts do not apply, because none of them exist in this project. The existing design system was
+evolved, not replaced. Details of the tokens and components are in `docs/ARCHITECTURE.md`, "Luxury revamp".
+
+**What changed**
+- Foundation: refined light and dark palettes (midnight emerald, warm ivory, charcoal, sage, muted gold); new colour roles for gold,
+  sage and the emerald hero; radius, border and shadow tokens; editorial type in Amiri; complete component themes.
+- Components: `AppCard` (one card everywhere), `GeometricPattern`, `OrnamentDivider`, `showOptionsSheet`, `AppIcons`,
+  `StateMedallion`. Tiles, option groups, search entry, reading surface, section labels, expandable sections, status banners,
+  empty, error and skeleton states were moved onto them, with their APIs kept.
+- Screens: home header; navigation bar; hadith page; search; prayer next-prayer panel; More; location setup. All other screens
+  (settings, about, favourites, tracker, tasbeeh, reminders, method, Hijri, Qibla, city picker, dialogs and sheets) take the new look
+  through the shared components and themes, with no screen-specific styling.
+- Not changed: business logic, cubits, repositories, APIs, persistence, offline cache, feature flags, navigation behaviour, religious
+  text, the generated share-card image, the Quran screens (PR #8 is not merged).
+- Your earlier decision kept: no press feedback on released tiles (home). More already had it, behind the flag.
+
+**Verification**
+| Check | Result |
+|---|---|
+| `dart format --set-exit-if-changed .` | PASS |
+| `flutter analyze` | PASS, no issues |
+| `flutter test` | PASS, 1,042 tests (1,011 before; new: colour roles, component tests, home header) |
+| Logic coverage (gate 80%) | PASS, 90.8% |
+| Release config check | PASS |
+| `flutter build apk --debug` (all sections on) and `flutter build apk --release` | PASS (release 62.1 MB, unsigned) |
+| Screen sweeps already in the suite (tap targets, labels, contrast, 200% text on 360x640, reduced motion, RTL) | PASS |
+| Screenshot harness: 18 to 20 screens each in Arabic and English, light and dark, Arabic 200% text, tablet width | PASS (rendered, reviewed) |
+| Emulator, live API: home, category, hadith page (shadow blur checked), English light; Arabic dark home and More | PASS (looked at screenshots) |
+| iOS build and run, VoiceOver, TalkBack, profile frame timing, Samsung phone | NOT RUN (no Mac, no phone; CI not triggered because nothing is pushed) |
+
+**Test changes and why**
+- `test/app/localization_test.dart`: looks for `AppIcons.chevron` instead of `Icons.arrow_forward_ios` (the chevron glyph changed on
+  purpose; the RTL position checks are the same).
+- `test/app/accessibility_test.dart`: the navigation-bar pairs now use the bar's new background (card colour) and selected label
+  colour (brand). Both still require 4.5:1.
+
+**For your review**
+- No new user-facing strings were added.
+- Look and feel: the hero header, the editorial Amiri titles in English, the hairline navigation bar, and the faintness of the
+  star lattice (8% on the header).
+- Merge order: this branch is independent of PR #8 (Quran). Whichever merges second may need a small conflict fix in shared widgets.

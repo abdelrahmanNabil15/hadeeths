@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/hadiths/presentation/pages/hadith_details_page.dart';
@@ -57,31 +58,40 @@ class _SearchViewState extends State<_SearchView> {
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
-        title: ListenableBuilder(
-          listenable: _controller,
-          builder: (context, _) => TextField(
-            controller: _controller,
-            autofocus: true,
-            textInputAction: TextInputAction.search,
-            onChanged: cubit.onQueryChanged,
-            style: TextStyle(
-              fontSize: AppTextSize.body + 2,
-              color: scheme.onSurface,
-            ),
-            decoration: InputDecoration(
-              hintText: l10n.searchHint,
-              hintStyle: TextStyle(color: scheme.onSurfaceVariant),
-              border: InputBorder.none,
-              suffixIcon: _controller.text.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: l10n.searchClear,
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        _controller.clear();
-                        cubit.onQueryChanged('');
-                      },
-                    ),
+        title: Padding(
+          padding: const EdgeInsetsDirectional.only(end: AppSpacing.lg),
+          child: ListenableBuilder(
+            listenable: _controller,
+            // The rounded field comes from the input theme: card colour, 3:1 edge, brand colour on
+            // focus.
+            builder: (context, _) => TextField(
+              controller: _controller,
+              autofocus: true,
+              textInputAction: TextInputAction.search,
+              onChanged: cubit.onQueryChanged,
+              style: TextStyle(
+                fontSize: AppTextSize.body + 1,
+                color: scheme.onSurface,
+              ),
+              decoration: InputDecoration(
+                hintText: l10n.searchHint,
+                isDense: true,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.md,
+                ),
+                prefixIcon: Icon(AppIcons.search, color: scheme.primary),
+                suffixIcon: _controller.text.isEmpty
+                    ? null
+                    : IconButton(
+                        tooltip: l10n.searchClear,
+                        icon: const Icon(Icons.close),
+                        onPressed: () {
+                          _controller.clear();
+                          cubit.onQueryChanged('');
+                        },
+                      ),
+              ),
             ),
           ),
         ),
@@ -129,6 +139,7 @@ class _SearchViewState extends State<_SearchView> {
                           ),
                           style: TextStyle(
                             fontSize: AppTextSize.meta,
+                            fontWeight: FontWeight.w600,
                             color: scheme.onSurfaceVariant,
                           ),
                         ),

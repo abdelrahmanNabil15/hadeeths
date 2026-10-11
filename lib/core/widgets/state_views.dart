@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/errors/failure.dart';
+import 'package:mynewapp/core/widgets/geometric_pattern.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// User-facing text for a failure. Never shows raw exception text.
@@ -32,8 +35,8 @@ class LoadingView extends StatelessWidget {
   );
 }
 
-/// Grey placeholder rows shown while a list loads. Static (no animation), announced once
-/// as "Loading".
+/// Placeholder cards shown while a list loads: the card shape with two faint text bars, so the
+/// screen keeps its layout. Static (no animation), announced once as "Loading".
 class SkeletonList extends StatelessWidget {
   const SkeletonList({
     super.key,
@@ -47,6 +50,17 @@ class SkeletonList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    Widget bar(double widthFactor) => FractionallySizedBox(
+      alignment: AlignmentDirectional.centerStart,
+      widthFactor: widthFactor,
+      child: Container(
+        height: AppSpacing.md,
+        decoration: BoxDecoration(
+          color: scheme.surfaceContainerHigh,
+          borderRadius: BorderRadius.circular(AppRadius.pill),
+        ),
+      ),
+    );
     return Semantics(
       label: context.l10n.loading,
       liveRegion: true,
@@ -59,10 +73,26 @@ class SkeletonList extends StatelessWidget {
             const SizedBox(height: AppSpacing.md),
         itemBuilder: (context, index) => DecoratedBox(
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerHigh,
+            color: scheme.surfaceContainerLowest,
             borderRadius: BorderRadius.circular(AppRadius.card),
+            border: Border.all(color: scheme.outlineVariant),
           ),
-          child: SizedBox(height: rowHeight, width: double.infinity),
+          child: SizedBox(
+            height: rowHeight,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  bar(0.7),
+                  if (rowHeight >= 72) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    bar(0.45),
+                  ],
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -90,16 +120,15 @@ class ErrorView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                offline ? Icons.wifi_off : Icons.error_outline,
-                size: 48,
-                color: scheme.onSurfaceVariant,
+              StateMedallion(
+                icon: offline ? Icons.wifi_off : Icons.error_outline,
+                color: offline ? scheme.primary : scheme.error,
               ),
-              const SizedBox(height: AppSpacing.lg),
+              const SizedBox(height: AppSpacing.xl),
               Text(
                 failureMessage(l10n, failure),
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: AppTextSize.heading),
+                style: AppTypography.of(context).editorial,
               ),
               if (onRetry != null && failure.isRetryable) ...[
                 const SizedBox(height: AppSpacing.lg),
@@ -125,9 +154,9 @@ class EmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    // Scrolls when the space is short (a small box, very large text) instead of overflowing.
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.xl),
         child: Semantics(
           liveRegion: true,
@@ -136,15 +165,59 @@ class EmptyView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (icon != null) ...[
-                Icon(icon, size: 48, color: scheme.onSurfaceVariant),
-                const SizedBox(height: AppSpacing.lg),
+                StateMedallion(icon: icon!),
+                const SizedBox(height: AppSpacing.xl),
               ],
               Text(
                 message,
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: AppTextSize.heading),
+                style: AppTypography.of(context).editorial,
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The round emblem of an empty or error state: a sage disc with a faint star lattice and the
+/// state's icon. Decoration only; the words carry the meaning.
+class StateMedallion extends StatelessWidget {
+  const StateMedallion({super.key, required this.icon, this.color});
+
+  final IconData icon;
+
+  /// The icon colour; the brand colour by default.
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    return ExcludeSemantics(
+      child: SizedBox.square(
+        dimension: AppSizes.stateMedallion,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: colors.sage,
+            shape: BoxShape.circle,
+            border: Border.all(color: colors.goldSoft),
+          ),
+          child: ClipOval(
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                GeometricPattern(
+                  color: colors.gold.withValues(alpha: 0.16),
+                  tileSize: AppSizes.stateMedallion / 3,
+                ),
+                Icon(
+                  icon,
+                  size: AppSizes.stateMedallion * 0.4,
+                  color: color ?? Theme.of(context).colorScheme.primary,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1849,6 +1849,12 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'لا توجد سورة مطابقة.'**
   String get quranFilterNone;
+
+  /// UI revamp; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة للبحث في الآيات.'**
+  String get quranSearchPrompt;
 }
 
 class _AppLocalizationsDelegate

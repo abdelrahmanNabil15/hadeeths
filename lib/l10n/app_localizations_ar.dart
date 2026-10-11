@@ -1046,4 +1046,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get quranFilterNone => 'لا توجد سورة مطابقة.';
+
+  @override
+  String get quranSearchPrompt => 'اكتب كلمة للبحث في الآيات.';
 }

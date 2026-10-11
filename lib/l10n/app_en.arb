@@ -314,5 +314,6 @@
   "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
   "shareCardFailed": "The image could not be made or shared. Try again.",
   "quranFilterHint": "Find a sura by name or number",
-  "quranFilterNone": "No sura matches."
+  "quranFilterNone": "No sura matches.",
+  "quranSearchPrompt": "Type a word to search the verses."
 }

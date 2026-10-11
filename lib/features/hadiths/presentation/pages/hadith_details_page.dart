@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/core/state/load_status.dart';
 import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
+import 'package:mynewapp/core/widgets/app_sheet.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/expandable_section.dart';
+import 'package:mynewapp/core/widgets/ornament_divider.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/favorites/presentation/favorite_button.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
@@ -103,25 +107,21 @@ Future<void> _chooseShare(
   final l10n = context.l10n;
   final arabic = context.apiLanguage == 'ar';
   final navigator = Navigator.of(context);
-  final choice = await showModalBottomSheet<bool>(
-    context: context,
-    builder: (sheetContext) => SafeArea(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.notes),
-            title: Text(l10n.shareAsText),
-            onTap: () => Navigator.of(sheetContext).pop(false),
-          ),
-          ListTile(
-            leading: const Icon(Icons.image_outlined),
-            title: Text(l10n.shareAsImage),
-            onTap: () => Navigator.of(sheetContext).pop(true),
-          ),
-        ],
+  final choice = await showOptionsSheet<bool>(
+    context,
+    title: l10n.shareHadith,
+    options: [
+      SheetOption(
+        value: false,
+        label: l10n.shareAsText,
+        icon: AppIcons.shareText,
       ),
-    ),
+      SheetOption(
+        value: true,
+        label: l10n.shareAsImage,
+        icon: AppIcons.shareImage,
+      ),
+    ],
   );
   if (choice == null) return;
   if (!choice) {
@@ -160,17 +160,18 @@ class HadithDetailsBody extends StatelessWidget {
                 Semantics(
                   header: true,
                   child: SelectionArea(
+                    // Titles can be a whole sentence, so the editorial face in its regular weight:
+                    // elegant at any length, never a heavy block.
                     child: Text(
                       d.title,
-                      style: TextStyle(
-                        fontSize: AppTextSize.title - 2,
-                        fontWeight: FontWeight.w700,
-                        height: AppLineHeight.body,
-                        color: scheme.onSurface,
-                      ),
+                      style: AppTypography.of(
+                        context,
+                      ).editorial.copyWith(fontWeight: FontWeight.w400),
                     ),
                   ),
                 ),
+                const SizedBox(height: AppSpacing.md),
+                const OrnamentDivider(),
                 const SizedBox(height: AppSpacing.lg),
               ],
               ReadingSurface(text: d.hadeeth, scale: scale),
@@ -273,6 +274,8 @@ class HadithDetailsBody extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
               ],
               const SizedBox(height: AppSpacing.lg),
+              const OrnamentDivider(width: 96),
+              const SizedBox(height: AppSpacing.sm),
               SelectionArea(
                 child: Text(
                   credit,

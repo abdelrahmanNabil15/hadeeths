@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/widgets/app_card.dart';
 import 'package:mynewapp/features/settings/presentation/widgets/reading_text.dart';
 
-/// The hadith text on a calm, bordered surface, in the reading font at the user's reading
-/// size. The text is shown exactly as received and can be selected.
+/// The hadith text on a calm, raised reading surface with generous margins, in the reading font at
+/// the user's reading size. The text is shown exactly as received and can be selected. No pattern
+/// or ornament is ever drawn behind it.
 class ReadingSurface extends StatelessWidget {
   const ReadingSurface({super.key, required this.text, required this.scale});
 
@@ -12,18 +15,15 @@ class ReadingSurface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: scheme.surfaceContainerLowest,
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        border: Border.all(color: scheme.outlineVariant),
+    return AppCard(
+      raised: true,
+      color: AppColors.of(context).readingSurface,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.xl,
+        vertical: AppSpacing.xl + AppSpacing.xs,
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl - AppSpacing.xs),
-        child: SelectionArea(
-          child: Text(text, style: readingTextStyle(context, scale: scale)),
-        ),
+      child: SelectionArea(
+        child: Text(text, style: readingTextStyle(context, scale: scale)),
       ),
     );
   }
@@ -53,7 +53,7 @@ class SourceBlock extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: scheme.secondaryContainer,
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(

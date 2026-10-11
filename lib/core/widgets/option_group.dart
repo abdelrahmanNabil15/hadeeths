@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:mynewapp/core/design_system/motion.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/widgets/app_card.dart';
+import 'package:mynewapp/core/widgets/app_icons.dart';
 
-/// A mutually exclusive list of choices; the chosen one shows a check mark (not colour alone).
+/// A mutually exclusive list of choices on one [AppCard]; the chosen one shows a check mark and a
+/// sage tint (never colour alone).
 /// Each choice may carry a smaller line of explanation under its label.
 class OptionGroup<T> extends StatelessWidget {
   const OptionGroup({
@@ -22,13 +26,7 @@ class OptionGroup<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Material(
-      color: scheme.surfaceContainerLowest,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppRadius.card),
-        side: BorderSide(color: scheme.outlineVariant),
-      ),
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
       child: Column(
         children: [
           for (var i = 0; i < options.length; i++) ...[
@@ -52,48 +50,58 @@ class OptionGroup<T> extends StatelessWidget {
       label: subtitle == null ? label : '$label. $subtitle',
       excludeSemantics: true,
       onTap: () => onSelected(value),
-      child: InkWell(
-        onTap: () => onSelected(value),
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: AppSizes.minTileHeight),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-              vertical: AppSpacing.md,
+      child: AnimatedContainer(
+        duration: context.motion(AppMotion.short),
+        curve: AppMotion.standard,
+        color: isSelected
+            ? scheme.primaryContainer.withValues(alpha: 0.55)
+            : Colors.transparent,
+        child: InkWell(
+          onTap: () => onSelected(value),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minHeight: AppSizes.minTileHeight,
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: TextStyle(
-                          fontSize: AppTextSize.body + 1,
-                          fontWeight: isSelected
-                              ? FontWeight.w700
-                              : FontWeight.w500,
-                          color: scheme.onSurface,
-                        ),
-                      ),
-                      if (subtitle != null)
-                        Padding(
-                          padding: const EdgeInsets.only(top: AppSpacing.xs),
-                          child: Text(
-                            subtitle,
-                            style: TextStyle(
-                              fontSize: AppTextSize.meta,
-                              height: AppLineHeight.body,
-                              color: scheme.onSurfaceVariant,
-                            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.md,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          label,
+                          style: TextStyle(
+                            fontSize: AppTextSize.body + 1,
+                            fontWeight: isSelected
+                                ? FontWeight.w700
+                                : FontWeight.w500,
+                            color: scheme.onSurface,
                           ),
                         ),
-                    ],
+                        if (subtitle != null)
+                          Padding(
+                            padding: const EdgeInsets.only(top: AppSpacing.xs),
+                            child: Text(
+                              subtitle,
+                              style: TextStyle(
+                                fontSize: AppTextSize.meta,
+                                height: AppLineHeight.body,
+                                color: scheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-                if (isSelected) Icon(Icons.check_circle, color: scheme.primary),
-              ],
+                  if (isSelected)
+                    Icon(AppIcons.selected, color: scheme.primary),
+                ],
+              ),
             ),
           ),
         ),

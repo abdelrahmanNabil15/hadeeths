@@ -39,11 +39,27 @@ void main() {
         colors.onWarningContainer,
         colors.warningContainer,
       ),
+      'text on sage': (colors.onSage, colors.sage),
+      'title on the hero': (colors.onHero, colors.hero),
+      'muted text on the hero': (colors.onHeroMuted, colors.hero),
     };
     for (final pair in pairs.entries) {
       test('${entry.key}: ${pair.key} is at least 4.5:1', () {
         final (fg, bg) = pair.value;
         expect(_contrast(fg, bg), greaterThanOrEqualTo(4.5));
+      });
+    }
+
+    // Ornaments and selected marks are not text: WCAG asks 3:1 for graphics.
+    final marks = <String, (Color, Color)>{
+      'gold mark on the canvas': (colors.gold, scheme.surface),
+      'gold mark on cards': (colors.gold, scheme.surfaceContainerLowest),
+      'gold ornament on the hero': (colors.heroAccent, colors.hero),
+    };
+    for (final mark in marks.entries) {
+      test('${entry.key}: ${mark.key} is at least 3:1', () {
+        final (fg, bg) = mark.value;
+        expect(_contrast(fg, bg), greaterThanOrEqualTo(3.0));
       });
     }
   }
@@ -88,5 +104,20 @@ void main() {
       Color.lerp(AppColors.light.success, AppColors.dark.success, 0.5),
     );
     expect(AppColors.light.lerp(null, 0.5), AppColors.light);
+    expect(
+      mid.hero,
+      Color.lerp(AppColors.light.hero, AppColors.dark.hero, 0.5),
+    );
+    expect(
+      mid.gold,
+      Color.lerp(AppColors.light.gold, AppColors.dark.gold, 0.5),
+    );
+  });
+
+  test('copyWith replaces only what is given', () {
+    final changed = AppColors.light.copyWith(gold: const Color(0xFF000000));
+    expect(changed.gold, const Color(0xFF000000));
+    expect(changed.sage, AppColors.light.sage);
+    expect(changed.hero, AppColors.light.hero);
   });
 }

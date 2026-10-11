@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/motion.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/design_system/typography.dart';
@@ -10,6 +11,7 @@ import 'package:mynewapp/core/time/zone.dart';
 import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/core/widgets/geometric_pattern.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/prayer_times/domain/method_suggestion.dart';
@@ -264,54 +266,69 @@ class _NextBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
+    final type = AppTypography.of(context);
+    // The same midnight-emerald panel and faint lattice as the home header, so the most important
+    // fact on the page reads as its headline.
     return Semantics(
       container: true,
       label: '$label: $name, $time',
       excludeSemantics: true,
-      child: Container(
-        padding: const EdgeInsets.all(AppSpacing.lg),
-        decoration: BoxDecoration(
-          color: scheme.primaryContainer,
-          borderRadius: BorderRadius.circular(AppRadius.card),
-        ),
-        // A Wrap, not a Row: with very large text the time moves under the name instead of
-        // running out of the box.
-        child: SizedBox(
-          width: double.infinity,
-          child: Wrap(
-            alignment: WrapAlignment.spaceBetween,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: AppSpacing.md,
-            runSpacing: AppSpacing.xs,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppRadius.card),
+        child: ColoredBox(
+          color: colors.hero,
+          child: Stack(
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: AppTextSize.meta,
-                      color: scheme.onPrimaryContainer,
-                    ),
-                  ),
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: AppTextSize.title,
-                      fontWeight: FontWeight.w700,
-                      color: scheme.onPrimaryContainer,
-                    ),
-                  ),
-                ],
+              Positioned.fill(
+                child: GeometricPattern(
+                  color: colors.heroAccent.withValues(alpha: 0.08),
+                  tileSize: 44,
+                ),
               ),
-              Text(
-                time,
-                style: TextStyle(
-                  fontSize: AppTextSize.title,
-                  fontWeight: FontWeight.w700,
-                  color: scheme.onPrimaryContainer,
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.lg + AppSpacing.xs,
+                  vertical: AppSpacing.lg,
+                ),
+                // A Wrap, not a Row: with very large text the time moves under the name instead of
+                // running out of the box.
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceBetween,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: AppSpacing.md,
+                    runSpacing: AppSpacing.xs,
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            label,
+                            style: type.label.copyWith(
+                              color: colors.heroAccent,
+                            ),
+                          ),
+                          Text(
+                            name,
+                            style: type.editorial.copyWith(
+                              color: colors.onHero,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        time,
+                        style: type.number.copyWith(
+                          fontSize: AppTextSize.title,
+                          fontWeight: FontWeight.w700,
+                          color: colors.onHero,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
