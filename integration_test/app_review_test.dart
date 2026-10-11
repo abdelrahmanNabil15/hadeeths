@@ -29,7 +29,9 @@ void main() {
   testWidgets('More offers the Rate entry', (tester) async {
     await app.main();
     await tester.pumpAndSettle(const Duration(seconds: 3));
-    final l10n = AppLocalizations.of(tester.element(find.byType(NavigationBar)));
+    final l10n = AppLocalizations.of(
+      tester.element(find.byType(NavigationBar)),
+    );
     await tester.tap(
       find.descendant(
         of: find.byType(NavigationBar),
