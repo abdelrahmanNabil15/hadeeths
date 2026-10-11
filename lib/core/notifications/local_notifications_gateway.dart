@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:mynewapp/core/notifications/notification_gateway.dart';
+import 'package:mynewapp/core/notifications/notification_planner.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:timezone/timezone.dart' as tz;
 
@@ -13,12 +14,20 @@ import 'package:timezone/timezone.dart' as tz;
 ///   they are scheduled exactly (`exactAllowWhileIdle`) and arrive on the minute.
 /// - Nothing here reads, stores or logs where the user is.
 class LocalNotificationsGateway implements NotificationGateway {
-  LocalNotificationsGateway({FlutterLocalNotificationsPlugin? plugin})
-    : _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+  LocalNotificationsGateway({
+    FlutterLocalNotificationsPlugin? plugin,
+    NotificationSoundResolver? soundResolver,
+  }) : _plugin = plugin ?? FlutterLocalNotificationsPlugin(),
+       // ignore: prefer_initializing_formals
+       _soundResolver = soundResolver;
 
   final FlutterLocalNotificationsPlugin _plugin;
+  final NotificationSoundResolver? _soundResolver;
   Future<bool?>? _initialised;
   ChannelLabels? _labels;
+
+  /// The channels made for a downloaded recording during this run.
+  final _recordingChannels = <String>{};
 
   /// Starts the plugin once. It never asks for a permission by itself.
   Future<bool?> _ensureInitialised() => _initialised ??= _plugin.initialize(
@@ -80,6 +89,136 @@ class LocalNotificationsGateway implements NotificationGateway {
     (NotificationSound.silent, false) => labels.silent,
   };
 
+  /// A downloaded recording is a channel of its own: Android fixes a channel's sound when it is made,
+  /// and the recording's location is part of the channel's name, so a recording downloaded again
+  /// (which gets a new location) gets a new channel. Returns null when the recording cannot be used
+  /// (not Android, not found, no resolver): the caller then uses the system sound.
+  Future<NotificationDetails?> _recordingDetails(
+    NotificationContent content,
+  ) async {
+    final custom = content.customSound;
+    final resolver = _soundResolver;
+    final android = _android;
+    if (custom == null ||
+        resolver == null ||
+        android == null ||
+        content.sound != NotificationSound.system) {
+      return null;
+    }
+    final uri = await resolver.uriFor(custom.id);
+    if (uri == null) return null;
+    final id =
+        'prayer_adhan_${custom.id}_${fnv1a31(uri).toRadixString(16)}_'
+        '${content.vibrate ? 'vibrate' : 'still'}';
+    final labels = _labels;
+    final name = labels == null
+        ? custom.label
+        : '${content.vibrate ? labels.soundAndVibration : labels.soundOnly}'
+              ' - ${custom.label}';
+    final sound = UriAndroidNotificationSound(uri);
+    if (_recordingChannels.add(id)) {
+      // Older channels of the same recording point at a location that no longer exists.
+      final stale = [
+        for (final c
+            in await android.getNotificationChannels() ??
+                const <AndroidNotificationChannel>[])
+          if (c.id.startsWith('prayer_adhan_${custom.id}_') && c.id != id) c.id,
+      ];
+      for (final old in stale) {
+        await android.deleteNotificationChannel(channelId: old);
+      }
+      await android.createNotificationChannel(
+        AndroidNotificationChannel(
+          id,
+          name,
+          description: labels?.description,
+          importance: Importance.high,
+          playSound: true,
+          sound: sound,
+          enableVibration: content.vibrate,
+        ),
+      );
+    }
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        id,
+        name,
+        channelDescription: labels?.description,
+        importance: Importance.high,
+        priority: Priority.high,
+        playSound: true,
+        sound: sound,
+        enableVibration: content.vibrate,
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentSound: true,
+      ),
+    );
+  }
+
+  /// A sound that ships with the app plays through a channel of its own, for the same reason. Null
+  /// when there is none or this is not Android.
+  Future<NotificationDetails?> _bundledDetails(
+    NotificationContent content,
+  ) async {
+    final bundled = content.bundledSound;
+    final android = _android;
+    if (bundled == null ||
+        android == null ||
+        content.sound != NotificationSound.system) {
+      return null;
+    }
+    final id =
+        'prayer_raw_${bundled.resource}_${content.vibrate ? 'vibrate' : 'still'}';
+    final labels = _labels;
+    final name = labels == null
+        ? bundled.label
+        : '${content.vibrate ? labels.soundAndVibration : labels.soundOnly}'
+              ' - ${bundled.label}';
+    final sound = RawResourceAndroidNotificationSound(bundled.resource);
+    final importance = bundled.alarm ? Importance.max : Importance.high;
+    final usage = bundled.alarm
+        ? AudioAttributesUsage.alarm
+        : AudioAttributesUsage.notification;
+    if (_recordingChannels.add(id)) {
+      await android.createNotificationChannel(
+        AndroidNotificationChannel(
+          id,
+          name,
+          description: labels?.description,
+          importance: importance,
+          playSound: true,
+          sound: sound,
+          enableVibration: content.vibrate,
+          audioAttributesUsage: usage,
+        ),
+      );
+    }
+    return NotificationDetails(
+      android: AndroidNotificationDetails(
+        id,
+        name,
+        channelDescription: labels?.description,
+        importance: importance,
+        priority: Priority.high,
+        playSound: true,
+        sound: sound,
+        enableVibration: content.vibrate,
+        audioAttributesUsage: usage,
+      ),
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentSound: true,
+      ),
+    );
+  }
+
+  Future<NotificationDetails> _detailsFor(NotificationContent content) async =>
+      await _recordingDetails(content) ??
+      await _bundledDetails(content) ??
+      _details(content);
+
   NotificationDetails _details(NotificationContent content) {
     final labels = _labels;
     final id = _channelId(content.sound, content.vibrate);
@@ -130,7 +269,7 @@ class LocalNotificationsGateway implements NotificationGateway {
         tz.UTC,
         fireAt.millisecondsSinceEpoch,
       ),
-      notificationDetails: _details(content),
+      notificationDetails: await _detailsFor(content),
       androidScheduleMode: useExact
           ? AndroidScheduleMode.exactAllowWhileIdle
           : AndroidScheduleMode.inexactAllowWhileIdle,
@@ -154,7 +293,7 @@ class LocalNotificationsGateway implements NotificationGateway {
       id: id,
       title: content.title,
       body: content.body,
-      notificationDetails: _details(content),
+      notificationDetails: await _detailsFor(content),
     );
   }
 

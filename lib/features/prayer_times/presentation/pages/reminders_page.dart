@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/clock_format.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
@@ -13,6 +14,8 @@ import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/core/widgets/switch_row.dart';
+import 'package:mynewapp/features/adhan_sounds/domain/adhan_sound.dart';
+import 'package:mynewapp/features/adhan_sounds/presentation/pages/adhan_sounds_page.dart';
 import 'package:mynewapp/features/prayer_times/domain/place_zone.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
@@ -48,8 +51,18 @@ class _RemindersScaffold extends StatefulWidget {
   State<_RemindersScaffold> createState() => _RemindersScaffoldState();
 }
 
+/// How the reminders sound in the choice shown on the page. The adhan is one of the system-sound
+/// settings (a downloaded recording in place of the system sound).
+enum _SoundChoice { system, adhan, silent }
+
 class _RemindersScaffoldState extends State<_RemindersScaffold>
     with WidgetsBindingObserver {
+  /// Whether downloaded adhan recordings can be used on this phone (Android 10 and later, with the
+  /// feature on). Asked once.
+  late final Future<bool> _adhanSupported =
+      context.read<PrayerServices>().adhan?.isSupported() ??
+      Future<bool>.value(false);
+
   @override
   void initState() {
     super.initState();
@@ -93,6 +106,11 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
   }
 
   Future<bool> _explain() => explainNotifications(context);
+
+  void _openAdhan() {
+    final library = context.read<PrayerServices>().adhan;
+    if (library != null) _openSub(AdhanSoundsPage(library: library));
+  }
 
   /// Opens a reminders sub-page that shares this page's state.
   void _openSub(Widget page) {
@@ -175,6 +193,42 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
                           ),
                       ],
                     ),
+                    if (settings.leadMinutes > 0) ...[
+                      const SizedBox(height: AppSpacing.sm),
+                      Text(
+                        l10n.remindersNearHint,
+                        style: AppTypography.of(context).meta,
+                      ),
+                    ],
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeading(l10n.wakeUpHeading),
+                    const SizedBox(height: AppSpacing.sm),
+                    SwitchRow(
+                      title: l10n.wakeUpSwitch,
+                      subtitle: l10n.wakeUpHint,
+                      value: settings.wakeUp,
+                      onChanged: state.busy
+                          ? null
+                          : (on) => cubit.setWakeUp(on: on),
+                    ),
+                    if (settings.wakeUp) ...[
+                      const SizedBox(height: AppSpacing.md),
+                      OptionGroup<int>(
+                        selected: settings.wakeUpMinutes,
+                        onSelected: cubit.setWakeUpMinutes,
+                        options: [
+                          for (final m in ReminderSettings.wakeUpOptions)
+                            (m, digits.localize(l10n.wakeUpBefore(m))),
+                        ],
+                      ),
+                      if (isAndroid && !settings.exactTiming) ...[
+                        const SizedBox(height: AppSpacing.sm),
+                        Text(
+                          l10n.wakeUpExactHint(l10n.remindersExact),
+                          style: AppTypography.of(context).meta,
+                        ),
+                      ],
+                    ],
                     const SizedBox(height: AppSpacing.xl),
                     SectionHeading(l10n.remindersMore),
                     const SizedBox(height: AppSpacing.sm),
@@ -212,13 +266,64 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
                     ],
                     SectionHeading(l10n.remindersSound),
                     const SizedBox(height: AppSpacing.sm),
-                    OptionGroup<NotificationSound>(
-                      selected: settings.sound,
-                      onSelected: cubit.setSound,
-                      options: [
-                        (NotificationSound.system, l10n.remindersSoundSystem),
-                        (NotificationSound.silent, l10n.remindersSoundSilent),
-                      ],
+                    FutureBuilder<bool>(
+                      future: _adhanSupported,
+                      builder: (context, adhan) {
+                        final withAdhan = adhan.data ?? false;
+                        final choice =
+                            settings.sound == NotificationSound.silent
+                            ? _SoundChoice.silent
+                            : settings.adhanId != null
+                            ? _SoundChoice.adhan
+                            : _SoundChoice.system;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            OptionGroup<_SoundChoice>(
+                              selected: choice,
+                              onSelected: (picked) {
+                                switch (picked) {
+                                  case _SoundChoice.system:
+                                    cubit.setSound(NotificationSound.system);
+                                  case _SoundChoice.silent:
+                                    cubit.setSound(NotificationSound.silent);
+                                  case _SoundChoice.adhan:
+                                    // Nothing chosen yet: go and choose one.
+                                    _openAdhan();
+                                }
+                              },
+                              options: [
+                                (
+                                  _SoundChoice.system,
+                                  l10n.remindersSoundSystem,
+                                ),
+                                if (withAdhan)
+                                  (
+                                    _SoundChoice.adhan,
+                                    l10n.remindersSoundAdhan,
+                                  ),
+                                (
+                                  _SoundChoice.silent,
+                                  l10n.remindersSoundSilent,
+                                ),
+                              ],
+                            ),
+                            if (withAdhan && choice == _SoundChoice.adhan) ...[
+                              const SizedBox(height: AppSpacing.sm),
+                              AppTile(
+                                title: l10n.adhanChooseTile,
+                                leadingIcon: Icons.graphic_eq,
+                                trailingText:
+                                    adhanById(
+                                      settings.adhanId,
+                                    )?.name(l10n.localeName.startsWith('ar')) ??
+                                    l10n.adhanNoneChosen,
+                                onTap: _openAdhan,
+                              ),
+                            ],
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: AppSpacing.sm),
                     SwitchRow(

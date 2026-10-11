@@ -1154,6 +1154,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get timeTo => 'إلى';
 
   @override
+  String get salawatSound => 'الصوت';
+
+  @override
   String get salawatLeadNone => 'بدون تذكير مسبق';
 
   @override
@@ -1208,4 +1211,101 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get widgetThen => 'ثم';
+
+  @override
+  String get remindersSoundAdhan => 'الأذان';
+
+  @override
+  String get adhanTitle => 'صوت الأذان';
+
+  @override
+  String get adhanIntro =>
+      'اختر تسجيلًا للأذان لتذكير وقت كل صلاة. لا يُنزَّل إلا حين تطلب ذلك، ويبقى على هاتفك.';
+
+  @override
+  String get adhanPrayerOnly =>
+      'يُسمَع في تذكير وقت الصلاة فقط، لا في التذكير المبكر ولا الشروق ولا تذكير الصلاة على النبي.';
+
+  @override
+  String adhanSize(String mb) {
+    return '$mb ميغابايت';
+  }
+
+  @override
+  String adhanDownload(String size) {
+    return 'تنزيل ($size)';
+  }
+
+  @override
+  String get adhanDownloading => 'جارٍ التنزيل…';
+
+  @override
+  String get adhanUse => 'استخدم هذا الأذان';
+
+  @override
+  String get adhanInUse => 'قيد الاستخدام';
+
+  @override
+  String get adhanDelete => 'حذف الملف';
+
+  @override
+  String get adhanFailedNetwork =>
+      'تعذّر التنزيل. تحقّق من اتصالك وحاول مرة أخرى.';
+
+  @override
+  String get adhanFailedFile => 'لم يكن الملف تسجيلًا صالحًا فلم يُحفَظ.';
+
+  @override
+  String get adhanUnsupported =>
+      'تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.';
+
+  @override
+  String adhanSourceLine(String source) {
+    return 'التسجيلات من $source. وحقوقها لأصحابها.';
+  }
+
+  @override
+  String adhanTestHint(String test) {
+    return 'لتسمعه، ارجع واضغط «$test».';
+  }
+
+  @override
+  String get adhanChooseTile => 'اختر أذانًا';
+
+  @override
+  String get adhanNoneChosen => 'لم يُختر';
+
+  @override
+  String get wakeUpHeading => 'المنبّه قبل الفجر';
+
+  @override
+  String get wakeUpSwitch => 'أيقظني قبل الفجر';
+
+  @override
+  String get wakeUpHint =>
+      'يُسمَع تسجيلٌ في الوقت الذي تختاره لتكون مستيقظًا قبل الأذان. ويعمل حتى لو كانت التذكيرات صامتة.';
+
+  @override
+  String wakeUpBefore(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: 'قبل الفجر بـ $minutes دقيقة',
+      many: 'قبل الفجر بـ $minutes دقيقة',
+      few: 'قبل الفجر بـ $minutes دقائق',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wakeUpExactHint(String setting) {
+    return 'لمنبّه في وقته بالضبط، فعّل «$setting» أعلاه.';
+  }
+
+  @override
+  String get wakeUpChannel => 'المنبّه قبل الفجر';
+
+  @override
+  String get remindersNearHint =>
+      'يقول التذكير المبكر إن الصلاة اقتربت، بتسجيل قصير.';
 }

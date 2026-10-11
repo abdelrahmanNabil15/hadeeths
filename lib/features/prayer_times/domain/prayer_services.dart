@@ -1,5 +1,6 @@
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/time/clock.dart';
+import 'package:mynewapp/features/adhan_sounds/domain/adhan_library.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
 import 'package:mynewapp/features/prayer_times/domain/compass_source.dart';
 import 'package:mynewapp/features/prayer_times/domain/country_lookup.dart';
@@ -25,6 +26,7 @@ class PrayerServices {
     required this.compass,
     required this.loadMagneticModel,
     required this.reminders,
+    this.adhan,
     this.clock = const SystemClock(),
   }) : locationSetup = LocationSetup(permissions, location);
 
@@ -47,4 +49,7 @@ class PrayerServices {
 
   /// Keeps the system's prayer reminders in line with everything saved.
   final ReminderService reminders;
+
+  /// Downloadable adhan recordings for the reminders' sound; null when that is not offered.
+  final AdhanLibrary? adhan;
 }

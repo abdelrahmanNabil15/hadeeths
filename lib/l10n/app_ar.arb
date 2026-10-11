@@ -579,6 +579,7 @@
   "@timeTo": {
     "description": "Phase 3 step 2; wording for owner review."
   },
+  "salawatSound": "الصوت",
   "salawatLeadNone": "بدون تذكير مسبق",
   "@salawatLeadNone": {
     "description": "Phase 3 step 2; wording for owner review."
@@ -640,5 +641,131 @@
   "widgetThen": "ثم",
   "@widgetThen": {
     "description": "Home-screen widget: before the prayer after the next one. Phase 3 step 4; wording for owner review."
+  },
+  "remindersSoundAdhan": "الأذان",
+  "@remindersSoundAdhan": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanTitle": "صوت الأذان",
+  "@adhanTitle": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanIntro": "اختر تسجيلًا للأذان لتذكير وقت كل صلاة. لا يُنزَّل إلا حين تطلب ذلك، ويبقى على هاتفك.",
+  "@adhanIntro": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanPrayerOnly": "يُسمَع في تذكير وقت الصلاة فقط، لا في التذكير المبكر ولا الشروق ولا تذكير الصلاة على النبي.",
+  "@adhanPrayerOnly": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanSize": "{mb} ميغابايت",
+  "@adhanSize": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanDownload": "تنزيل ({size})",
+  "@adhanDownload": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanDownloading": "جارٍ التنزيل…",
+  "@adhanDownloading": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanUse": "استخدم هذا الأذان",
+  "@adhanUse": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanInUse": "قيد الاستخدام",
+  "@adhanInUse": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanDelete": "حذف الملف",
+  "@adhanDelete": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanFailedNetwork": "تعذّر التنزيل. تحقّق من اتصالك وحاول مرة أخرى.",
+  "@adhanFailedNetwork": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanFailedFile": "لم يكن الملف تسجيلًا صالحًا فلم يُحفَظ.",
+  "@adhanFailedFile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanUnsupported": "تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.",
+  "@adhanUnsupported": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanSourceLine": "التسجيلات من {source}. وحقوقها لأصحابها.",
+  "@adhanSourceLine": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanTestHint": "لتسمعه، ارجع واضغط «{test}».",
+  "@adhanTestHint": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "test": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanChooseTile": "اختر أذانًا",
+  "@adhanChooseTile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanNoneChosen": "لم يُختر",
+  "@adhanNoneChosen": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "wakeUpHeading": "المنبّه قبل الفجر",
+  "@wakeUpHeading": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpSwitch": "أيقظني قبل الفجر",
+  "@wakeUpSwitch": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpHint": "يُسمَع تسجيلٌ في الوقت الذي تختاره لتكون مستيقظًا قبل الأذان. ويعمل حتى لو كانت التذكيرات صامتة.",
+  "@wakeUpHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpBefore": "{minutes, plural, few{قبل الفجر بـ {minutes} دقائق} many{قبل الفجر بـ {minutes} دقيقة} other{قبل الفجر بـ {minutes} دقيقة}}",
+  "@wakeUpBefore": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "wakeUpExactHint": "لمنبّه في وقته بالضبط، فعّل «{setting}» أعلاه.",
+  "@wakeUpExactHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review.",
+    "placeholders": {
+      "setting": {
+        "type": "String"
+      }
+    }
+  },
+  "wakeUpChannel": "المنبّه قبل الفجر",
+  "@wakeUpChannel": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "remindersNearHint": "يقول التذكير المبكر إن الصلاة اقتربت، بتسجيل قصير.",
+  "@remindersNearHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
   }
 }

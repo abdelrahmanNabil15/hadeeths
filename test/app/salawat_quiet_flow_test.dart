@@ -99,6 +99,30 @@ void main() {
       );
     });
 
+    testWidgets('the recording is chosen on the page and saved', (
+      tester,
+    ) async {
+      final f = _fixture(
+        reminders: ReminderSettings(salawat: SalawatSettings(enabled: true)),
+      );
+      final l10n = await _open(tester, f, row: (l) => l.salawatTitle);
+      expect(find.text(l10n.salawatSound), findsOneWidget);
+      expect(f.preferences.stored.reminders.salawat.tone, 'salawat_1');
+
+      await scrollAndTap(tester, find.text(salawatToneLabel('salawat_2')));
+      expect(f.preferences.stored.reminders.salawat.tone, 'salawat_2');
+      expect(
+        _salawat(f).isNotEmpty &&
+            f.notifications.sorted.every(
+              (s) => s.content.bundledSound?.resource == 'salawat_2',
+            ),
+        isTrue,
+      );
+
+      await scrollAndTap(tester, find.text(l10n.remindersSoundSystem));
+      expect(f.preferences.stored.reminders.salawat.tone, isNull);
+    });
+
     testWidgets('changing the interval is saved', (tester) async {
       final f = _fixture(
         reminders: ReminderSettings(salawat: SalawatSettings(enabled: true)),

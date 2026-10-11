@@ -89,7 +89,9 @@ class ReminderCoordinator implements ReminderService {
 
       final settings = prefs.reminders;
       final place = prefs.location;
-      final prayersOn = settings.enabled && settings.active.isNotEmpty;
+      // The wake-up alarm is a prayer-time reminder too: it needs a place and the master switch.
+      final prayersOn =
+          settings.enabled && (settings.active.isNotEmpty || settings.wakeUp);
       final salawatOn = settings.salawat.enabled;
       if (!prayersOn && !salawatOn) {
         await _sync.cancelAll();
@@ -131,9 +133,13 @@ class ReminderCoordinator implements ReminderService {
           if (result is Success<PrayerDay>) days.add(result.value);
         }
         final signature = [
+          // 2: early reminders carry a recording that says the prayer is near.
+          'v2',
           language,
           settings.leadMinutes,
           settings.sound.name,
+          // Which downloaded adhan plays at prayer times (none: the system sound).
+          settings.adhanId ?? '-',
           settings.vibrate,
           digits.arabicIndic,
           env.use24Hour,
@@ -153,6 +159,22 @@ class ReminderCoordinator implements ReminderService {
             contentSignature: signature,
           ),
         );
+        candidates.addAll(
+          ReminderPlanBuilder.wakeUpCandidates(
+            days: days,
+            settings: settings,
+            contentSignature: [
+              'v2',
+              language,
+              settings.wakeUpMinutes,
+              settings.vibrate,
+              digits.arabicIndic,
+              env.use24Hour,
+              settings.exactTiming,
+              fnv1a31(zone.id).toRadixString(16),
+            ].join('|'),
+          ),
+        );
       }
       if (salawatOn) {
         candidates.addAll(
@@ -161,7 +183,9 @@ class ReminderCoordinator implements ReminderService {
             zone: _deviceZone,
             now: now,
             signature: [
+              'v2',
               settings.salawat.leadMinutes,
+              settings.salawat.tone ?? '-',
               settings.sound.name,
               settings.vibrate,
               digits.arabicIndic,
@@ -259,6 +283,11 @@ class ReminderCoordinator implements ReminderService {
         body: l10n.reminderTestBody,
         sound: prefs.reminders.sound,
         vibrate: prefs.reminders.vibrate,
+        // The test plays the chosen adhan, so the user can hear it.
+        customSound: adhanSoundFor(
+          prefs.reminders,
+          arabic: l10n.localeName.startsWith('ar'),
+        ),
       ),
     );
   }

@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Which feature asked for a notification. Part of its identity, so two features can
 /// never collide on the same slot.
-enum NotificationKind { prayer, salawat, tracker }
+enum NotificationKind { prayer, salawat, tracker, wakeUp }
 
 /// A notification a feature would like to show, before the planner applies the
 /// operating-system limits and the user's quiet hours.

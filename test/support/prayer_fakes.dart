@@ -6,6 +6,7 @@ import 'package:mynewapp/app/reminder_coordinator.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/core/time/zone.dart';
+import 'package:mynewapp/features/adhan_sounds/domain/adhan_library.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
 import 'package:mynewapp/features/prayer_times/domain/city.dart';
@@ -130,6 +131,7 @@ class PrayerFixture {
     LocationResult? position,
     Map<AppPermission, PermissionState>? permissions,
     this.appSettings = const AppSettings(),
+    AdhanLibrary? adhan,
     bool use24Hour = false,
     TimeZoneRules deviceZone = const FixedOffsetZone(Duration(hours: 3)),
   }) : clock = FakeClock(now ?? DateTime.utc(2026, 4, 1, 10)),
@@ -158,6 +160,7 @@ class PrayerFixture {
         clock: clock,
         deviceZone: deviceZone,
       ),
+      adhan: adhan,
       clock: clock,
     );
   }

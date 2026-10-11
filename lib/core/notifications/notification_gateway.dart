@@ -1,6 +1,37 @@
-/// How a notification sounds. Only the system's own notification sound or silence: the app ships
-/// no audio of its own.
+/// How a notification sounds: the system's own notification sound, or silence. The app ships no
+/// audio of its own; a [CustomSound] is a recording the user chose to download.
 enum NotificationSound { system, silent }
+
+/// A recording the user downloaded, to play instead of the system's notification sound (Android
+/// 10 and later). [id] names it in the app's library; [label] is its name in the user's language,
+/// shown in the phone's own notification settings.
+class CustomSound {
+  const CustomSound({required this.id, required this.label});
+
+  final String id;
+  final String label;
+}
+
+/// A short recording that ships with the app (an Android raw resource called [resource], without
+/// its extension). [label] names it in the phone's own notification settings. With [alarm] it
+/// plays as an alarm does, not as a notification: it is not muted with the notification volume.
+class BundledSound {
+  const BundledSound({
+    required this.resource,
+    required this.label,
+    this.alarm = false,
+  });
+
+  final String resource;
+  final String label;
+  final bool alarm;
+}
+
+/// Finds where the platform can read a downloaded recording from. Null when it is gone or not
+/// supported, in which case the notification uses the system sound.
+abstract interface class NotificationSoundResolver {
+  Future<String?> uriFor(String id);
+}
 
 /// What the user reads. Built by the feature when a notification is scheduled; never contains a
 /// place name or any private data, because it can be read on a locked screen.
@@ -10,12 +41,21 @@ class NotificationContent {
     this.body,
     this.sound = NotificationSound.system,
     this.vibrate = true,
+    this.customSound,
+    this.bundledSound,
   });
 
   final String title;
   final String? body;
   final NotificationSound sound;
   final bool vibrate;
+
+  /// Used only with [NotificationSound.system]: a downloaded recording in place of the system sound.
+  final CustomSound? customSound;
+
+  /// A sound that ships with the app, in place of the system sound (Android; elsewhere the system
+  /// sound is used). Ignored when [customSound] is set or the sound is silent.
+  final BundledSound? bundledSound;
 }
 
 /// A notification the platform is holding for later, with the text the app attached to it

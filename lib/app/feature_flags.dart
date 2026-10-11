@@ -13,6 +13,7 @@ class FeatureFlags {
     this.favorites = false,
     this.shareCards = false,
     this.dailyHadith = false,
+    this.adhanSounds = false,
   });
 
   /// Everything on (previews and tests).
@@ -21,7 +22,8 @@ class FeatureFlags {
       prayer = true,
       favorites = true,
       shareCards = true,
-      dailyHadith = true;
+      dailyHadith = true,
+      adhanSounds = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -41,6 +43,10 @@ class FeatureFlags {
 
   /// The hadith of the day on the home screen, with its setting.
   final bool dailyHadith;
+
+  /// Downloadable adhan recordings as the sound of the prayer reminders (Android 10 and later).
+  /// Off until the owner has confirmed the right to offer the recordings (`docs/ADHAN_SOUNDS.md`).
+  final bool adhanSounds;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

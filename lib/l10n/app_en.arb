@@ -340,6 +340,7 @@
   "salawatWindow": "Between",
   "timeFrom": "From",
   "timeTo": "To",
+  "salawatSound": "Sound",
   "salawatLeadNone": "No earlier reminder",
   "windowInvalid": "The end must be after the start.",
   "quietTitle": "Quiet hours",
@@ -352,5 +353,131 @@
   "dailyHadithUnavailable": "Today's hadith cannot be shown right now.",
   "dailyHadithRemember": "Choose from the categories I open",
   "dailyHadithRememberHint": "Otherwise it is chosen from all the main categories. This list stays on your phone.",
-  "widgetThen": "Then"
+  "widgetThen": "Then",
+  "remindersSoundAdhan": "Adhan",
+  "@remindersSoundAdhan": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanTitle": "Adhan sound",
+  "@adhanTitle": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanIntro": "Choose a recording of the adhan for the reminder at each prayer time. It is downloaded only when you ask, and it stays on your phone.",
+  "@adhanIntro": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanPrayerOnly": "It plays only for the reminder at the prayer time: not for early reminders, sunrise or salawat.",
+  "@adhanPrayerOnly": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanSize": "{mb} MB",
+  "@adhanSize": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "mb": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanDownload": "Download ({size})",
+  "@adhanDownload": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanDownloading": "Downloading…",
+  "@adhanDownloading": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanUse": "Use this adhan",
+  "@adhanUse": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanInUse": "In use",
+  "@adhanInUse": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanDelete": "Delete the file",
+  "@adhanDelete": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanFailedNetwork": "Could not download. Check your connection and try again.",
+  "@adhanFailedNetwork": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanFailedFile": "The file was not a valid recording, so it was not kept.",
+  "@adhanFailedFile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanUnsupported": "Downloaded adhan recordings need Android 10 or later.",
+  "@adhanUnsupported": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanSourceLine": "Recordings: {source}. Their rights belong to their publishers.",
+  "@adhanSourceLine": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanTestHint": "To hear it, go back and tap “{test}”.",
+  "@adhanTestHint": {
+    "description": "Adhan sounds; wording for owner review.",
+    "placeholders": {
+      "test": {
+        "type": "String"
+      }
+    }
+  },
+  "adhanChooseTile": "Choose an adhan",
+  "@adhanChooseTile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanNoneChosen": "None chosen",
+  "@adhanNoneChosen": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "wakeUpHeading": "Wake-up before Fajr",
+  "@wakeUpHeading": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpSwitch": "Wake me before Fajr",
+  "@wakeUpSwitch": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpHint": "Plays a recording at the time you choose, so that you can be awake before the adhan. It plays even when reminders are silent.",
+  "@wakeUpHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "wakeUpBefore": "{minutes, plural, =1{1 minute before Fajr} other{{minutes} minutes before Fajr}}",
+  "@wakeUpBefore": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review.",
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "wakeUpExactHint": "For an alarm on the minute, switch on “{setting}” above.",
+  "@wakeUpExactHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review.",
+    "placeholders": {
+      "setting": {
+        "type": "String"
+      }
+    }
+  },
+  "wakeUpChannel": "Wake-up before Fajr",
+  "@wakeUpChannel": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  },
+  "remindersNearHint": "An early reminder says that the prayer is near, in a short recording.",
+  "@remindersNearHint": {
+    "description": "Wake-up before Fajr and the spoken early reminders; wording for owner review."
+  }
 }

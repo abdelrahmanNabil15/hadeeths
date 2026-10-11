@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/app/reminder_coordinator.dart';
 import 'package:mynewapp/core/notifications/notification_gateway.dart';
 import 'package:mynewapp/core/notifications/notification_sync.dart';
+import 'package:mynewapp/core/notifications/planned_notification.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/domain/calculation_settings.dart';
 import 'package:mynewapp/features/prayer_times/domain/geo_point.dart';
@@ -9,8 +12,10 @@ import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_location.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
+import 'package:mynewapp/features/prayer_times/domain/salawat_settings.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 
+import '../support/notification_fakes.dart';
 import '../support/prayer_fakes.dart';
 import '../support/result_helpers.dart';
 
@@ -512,6 +517,424 @@ void main() {
         expect(status.failed, 0);
       },
     );
+  });
+
+  group('a downloaded adhan', () {
+    test(
+      'plays for the reminders at the prayer time, in the user language',
+      () async {
+        final f = _fixture(
+          reminders: ReminderSettings(enabled: true, adhanId: 'rifaat'),
+        );
+        await f.services.reminders.reconcile();
+        expect(f.notifications.held, isNotEmpty);
+        for (final h in f.notifications.held.values) {
+          expect(h.content.customSound?.id, 'rifaat');
+          expect(h.content.customSound?.label, 'محمد رفعت');
+          expect(h.content.sound, NotificationSound.system);
+        }
+      },
+    );
+
+    test(
+      'is not used for an early reminder, for sunrise, or when silent',
+      () async {
+        final early = _fixture(
+          reminders: ReminderSettings(
+            enabled: true,
+            leadMinutes: 10,
+            adhanId: 'rifaat',
+          ),
+        );
+        await early.services.reminders.reconcile();
+        expect(early.notifications.held, isNotEmpty);
+        expect(
+          early.notifications.held.values.every(
+            (h) => h.content.customSound == null,
+          ),
+          isTrue,
+        );
+
+        final sunrise = _fixture(
+          reminders: ReminderSettings(
+            enabled: true,
+            prayers: {Prayer.sunrise},
+            adhanId: 'rifaat',
+          ),
+        );
+        await sunrise.services.reminders.reconcile();
+        expect(sunrise.notifications.held, isNotEmpty);
+        expect(
+          sunrise.notifications.held.values.every(
+            (h) => h.content.customSound == null,
+          ),
+          isTrue,
+        );
+
+        final silent = _fixture(
+          reminders: ReminderSettings(
+            enabled: true,
+            sound: NotificationSound.silent,
+            adhanId: 'rifaat',
+          ),
+        );
+        await silent.services.reminders.reconcile();
+        expect(
+          silent.notifications.held.values.every(
+            (h) => h.content.customSound == null,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('is not used for salawat reminders', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          prayers: const {},
+          adhanId: 'rifaat',
+          salawat: SalawatSettings(enabled: true),
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.held, isNotEmpty);
+      expect(
+        f.notifications.held.values.every((h) => h.content.customSound == null),
+        isTrue,
+      );
+    });
+
+    test('an unknown recording falls back to the system sound', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(enabled: true, adhanId: 'gone'),
+      );
+      await f.services.reminders.reconcile();
+      expect(
+        f.notifications.held.values.every((h) => h.content.customSound == null),
+        isTrue,
+      );
+    });
+
+    test('changing the adhan re-schedules the reminders', () async {
+      final f = _fixture(reminders: ReminderSettings(enabled: true));
+      await f.services.reminders.reconcile();
+      final before = f.notifications.schedules;
+      await f.services.preferences.save(
+        _prefs(reminders: ReminderSettings(enabled: true, adhanId: 'rifaat')),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.schedules, greaterThan(before));
+    });
+
+    test('the test reminder plays it too', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(enabled: true, adhanId: 'mulla'),
+      );
+      await f.services.reminders.sendTest();
+      expect(f.notifications.shown.single.customSound?.id, 'mulla');
+    });
+  });
+
+  group('the spoken early reminders', () {
+    String keyOf(FakeScheduled h) => NotificationPayload.decode(
+      PendingEntry(id: h.id, payload: h.payload),
+    )!.key;
+
+    test('an early reminder plays the recording for its own prayer', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(enabled: true, leadMinutes: 10),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.held, isNotEmpty);
+      for (final h in f.notifications.held.values) {
+        final sound = h.content.bundledSound;
+        expect(sound?.resource, 'near_${keyOf(h)}');
+        expect(sound?.alarm, isFalse);
+        expect(h.content.sound, NotificationSound.system);
+      }
+    });
+
+    test('a reminder at the prayer time plays none', () async {
+      final f = _fixture(reminders: ReminderSettings(enabled: true));
+      await f.services.reminders.reconcile();
+      expect(
+        f.notifications.held.values.every(
+          (h) => h.content.bundledSound == null,
+        ),
+        isTrue,
+      );
+    });
+
+    test('sunrise has none, and silent reminders stay silent', () async {
+      final sunrise = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          leadMinutes: 10,
+          prayers: {Prayer.sunrise},
+        ),
+      );
+      await sunrise.services.reminders.reconcile();
+      expect(sunrise.notifications.held, isNotEmpty);
+      expect(
+        sunrise.notifications.held.values.every(
+          (h) => h.content.bundledSound == null,
+        ),
+        isTrue,
+      );
+      final silent = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          leadMinutes: 10,
+          sound: NotificationSound.silent,
+        ),
+      );
+      await silent.services.reminders.reconcile();
+      expect(
+        silent.notifications.held.values.every(
+          (h) => h.content.bundledSound == null,
+        ),
+        isTrue,
+      );
+    });
+
+    test('every prayer has a recording in the app', () {
+      final raw = Directory('android/app/src/main/res/raw');
+      for (final p in Prayer.values.where((p) => p != Prayer.sunrise)) {
+        expect(
+          File('${raw.path}/near_${p.name}.mp3').existsSync(),
+          isTrue,
+          reason: p.name,
+        );
+      }
+      expect(File('${raw.path}/wake_fajr.mp3').existsSync(), isTrue);
+    });
+  });
+
+  group('the wake-up alarm before Fajr', () {
+    List<FakeScheduled> wakeUps(PrayerFixture f) => [
+      for (final h in f.notifications.sorted)
+        if (NotificationPayload.decode(
+              PendingEntry(id: h.id, payload: h.payload),
+            )!.kind ==
+            NotificationKind.wakeUp)
+          h,
+    ];
+
+    test('is off by default and nothing is planned for it', () async {
+      final f = _fixture();
+      await f.services.reminders.reconcile();
+      expect(wakeUps(f), isEmpty);
+    });
+
+    test('plans one a day, at the chosen minutes before Fajr', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          wakeUp: true,
+          wakeUpMinutes: 45,
+        ),
+      );
+      await f.services.reminders.reconcile();
+      final alarms = wakeUps(f);
+      expect(alarms.length, inInclusiveRange(6, 8));
+      const calculator = AdhanPrayerTimesCalculator();
+      for (final h in alarms) {
+        final day = calculator
+            .calculate(
+              location: _cairo.point.rounded(),
+              date: DateTime.utc(h.fireAt.year, h.fireAt.month, h.fireAt.day),
+              settings: CalculationSettings(),
+            )
+            .value;
+        final fajr = day[Prayer.fajr];
+        // Fajr falls a few hours after midnight UTC: the alarm is on the same or the next UTC day.
+        final expected = [
+          fajr,
+          fajr.add(const Duration(days: 1)),
+        ].map((t) => t.subtract(const Duration(minutes: 45)));
+        expect(expected, contains(h.fireAt));
+      }
+    });
+
+    test('plays its own recording as an alarm', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(enabled: true, wakeUp: true),
+      );
+      await f.services.reminders.reconcile();
+      final content = wakeUps(f).first.content;
+      expect(content.bundledSound?.resource, 'wake_fajr');
+      expect(content.bundledSound?.alarm, isTrue);
+      expect(content.title, contains('الفجر'));
+    });
+
+    test('plays even when reminders are silent, and in quiet hours', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          wakeUp: true,
+          sound: NotificationSound.silent,
+          quietEnabled: true,
+          quietStartMinute: 0,
+          quietEndMinute: 8 * 60,
+          quietForPrayers: true,
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(wakeUps(f), isNotEmpty);
+      for (final h in wakeUps(f)) {
+        expect(h.content.sound, NotificationSound.system);
+        expect(h.content.bundledSound?.resource, 'wake_fajr');
+      }
+    });
+
+    test('needs the master switch', () async {
+      final f = _fixture(reminders: ReminderSettings(wakeUp: true));
+      await f.services.reminders.reconcile();
+      expect(f.notifications.held, isEmpty);
+    });
+
+    test('works with every prayer reminder turned off', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          wakeUp: true,
+          prayers: const {},
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.held, isNotEmpty);
+      expect(wakeUps(f).length, f.notifications.held.length);
+    });
+
+    test('changing the minutes re-schedules it', () async {
+      final f = _fixture(
+        reminders: ReminderSettings(enabled: true, wakeUp: true),
+      );
+      await f.services.reminders.reconcile();
+      final before = wakeUps(f).map((h) => h.fireAt).toList();
+      await f.services.preferences.save(
+        _prefs(
+          reminders: ReminderSettings(
+            enabled: true,
+            wakeUp: true,
+            wakeUpMinutes: 60,
+          ),
+        ),
+      );
+      await f.services.reminders.reconcile();
+      final after = wakeUps(f).map((h) => h.fireAt).toList();
+      expect(after, isNot(before));
+    });
+  });
+
+  group('the salawat recordings', () {
+    List<FakeScheduled> held(PrayerFixture f) => [
+      for (final h in f.notifications.sorted)
+        if (NotificationPayload.decode(
+              PendingEntry(id: h.id, payload: h.payload),
+            )!.kind ==
+            NotificationKind.salawat)
+          h,
+    ];
+
+    Future<PrayerFixture> planned(
+      SalawatSettings salawat, {
+      NotificationSound sound = NotificationSound.system,
+    }) async {
+      final f = _fixture(
+        reminders: ReminderSettings(
+          enabled: true,
+          prayers: const {},
+          sound: sound,
+          salawat: salawat,
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(held(f), isNotEmpty);
+      return f;
+    }
+
+    test(
+      'the first recording is the default, played as a notification',
+      () async {
+        final f = await planned(SalawatSettings(enabled: true));
+        for (final h in held(f)) {
+          expect(h.content.bundledSound?.resource, 'salawat_1');
+          expect(h.content.bundledSound?.alarm, isFalse);
+        }
+      },
+    );
+
+    test(
+      'the second recording can be chosen, for the earlier reminder too',
+      () async {
+        final f = await planned(
+          SalawatSettings(enabled: true, leadMinutes: 10, tone: 'salawat_2'),
+        );
+        expect(
+          held(f).every((h) => h.content.bundledSound?.resource == 'salawat_2'),
+          isTrue,
+        );
+      },
+    );
+
+    test('the phone sound can be chosen instead', () async {
+      final f = await planned(
+        SalawatSettings(enabled: true).copyWith(clearTone: true),
+      );
+      expect(held(f).every((h) => h.content.bundledSound == null), isTrue);
+    });
+
+    test('silent reminders stay silent', () async {
+      final f = await planned(
+        SalawatSettings(enabled: true),
+        sound: NotificationSound.silent,
+      );
+      expect(held(f).every((h) => h.content.bundledSound == null), isTrue);
+    });
+
+    test(
+      'they have a file in the app, and no prayer reminder uses them',
+      () async {
+        for (final tone in SalawatSettings.toneOptions) {
+          expect(
+            File('android/app/src/main/res/raw/$tone.mp3').existsSync(),
+            isTrue,
+            reason: tone,
+          );
+        }
+        final f = _fixture(reminders: ReminderSettings(enabled: true));
+        await f.services.reminders.reconcile();
+        expect(
+          f.notifications.held.values.every(
+            (h) =>
+                h.content.bundledSound?.resource.startsWith('salawat') != true,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('changing the recording re-schedules the reminders', () async {
+      final f = await planned(SalawatSettings(enabled: true));
+      final before = f.notifications.schedules;
+      await f.services.preferences.save(
+        _prefs(
+          reminders: ReminderSettings(
+            enabled: true,
+            prayers: const {},
+            salawat: SalawatSettings(enabled: true, tone: 'salawat_2'),
+          ),
+        ),
+      );
+      await f.services.reminders.reconcile();
+      expect(f.notifications.schedules, greaterThan(before));
+      expect(
+        held(f).every((h) => h.content.bundledSound?.resource == 'salawat_2'),
+        isTrue,
+      );
+    });
   });
 
   group('the test reminder', () {

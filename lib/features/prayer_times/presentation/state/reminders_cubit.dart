@@ -192,8 +192,25 @@ class RemindersCubit extends Cubit<RemindersState> {
   Future<void> setLead(int minutes) =>
       _apply(_settings.copyWith(leadMinutes: minutes));
 
+  /// Choosing the system sound or silence also forgets any adhan recording.
   Future<void> setSound(NotificationSound sound) =>
-      _apply(_settings.copyWith(sound: sound));
+      _apply(_settings.copyWith(sound: sound, clearAdhan: true));
+
+  /// Plays the downloaded adhan [id] at prayer times; null goes back to the system sound.
+  Future<void> setAdhan(String? id) => id == null
+      ? _apply(
+          _settings.copyWith(sound: NotificationSound.system, clearAdhan: true),
+        )
+      : _apply(
+          _settings.copyWith(sound: NotificationSound.system, adhanId: id),
+        );
+
+  /// The wake-up alarm before Fajr, on or off.
+  Future<void> setWakeUp({required bool on}) =>
+      _apply(_settings.copyWith(wakeUp: on));
+
+  Future<void> setWakeUpMinutes(int minutes) =>
+      _apply(_settings.copyWith(wakeUpMinutes: minutes));
 
   Future<void> setVibrate({required bool on}) =>
       _apply(_settings.copyWith(vibrate: on));
