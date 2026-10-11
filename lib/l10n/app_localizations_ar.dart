@@ -997,6 +997,21 @@ class AppLocalizationsAr extends AppLocalizations {
   }
 
   @override
+  String quranSuraTitle(Object name) {
+    return 'سورة $name';
+  }
+
+  @override
+  String quranJuz(Object number) {
+    return 'الجزء $number';
+  }
+
+  @override
+  String quranPage(Object number) {
+    return 'صفحة $number';
+  }
+
+  @override
   String get quranBookmarkAdd => 'وضع علامة على هذه الآية';
 
   @override

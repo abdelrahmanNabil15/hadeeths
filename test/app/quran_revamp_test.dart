@@ -9,6 +9,7 @@ import 'package:mynewapp/l10n/app_localizations.dart';
 
 import '../support/fake_backend.dart';
 import '../support/quran_fakes.dart';
+import '../support/quran_reader.dart';
 import '../support/test_app.dart';
 
 Future<AppLocalizations> _open(
@@ -38,52 +39,53 @@ Future<AppLocalizations> _open(
 }
 
 void main() {
-  testWidgets('the reader opens with the sura name, its count and an ornament', (
-    tester,
-  ) async {
-    final handle = tester.ensureSemantics();
-    await _open(tester);
-    await tester.tap(find.text('1. ${SuraNames.latin(1)}'));
-    await tester.pumpAndSettle();
-    final header = find.text(SuraNames.latin(1));
-    expect(header, findsWidgets);
-    expect(
-      tester.getSemantics(header.last),
-      isSemantics(label: SuraNames.latin(1), isHeader: true),
-    );
-    expect(find.text('7 verses'), findsOneWidget);
-    // Interface text keeps the app's direction inside the right-to-left reader.
-    expect(
-      tester
-          .widget<Directionality>(
-            find
-                .ancestor(
-                  of: find.text('7 verses'),
-                  matching: find.byType(Directionality),
-                )
-                .first,
-          )
-          .textDirection,
-      TextDirection.ltr,
-    );
-    expect(find.byType(VerseMarker), findsNWidgets(7));
-    handle.dispose();
-  });
+  testWidgets(
+    'the reader opens on the page with the sura banner, the juz and the verse numbers',
+    (tester) async {
+      final handle = tester.ensureSemantics();
+      final l10n = await _open(tester);
+      await tester.tap(find.text('1. ${SuraNames.latin(1)}'));
+      await tester.pumpAndSettle();
+      final title = l10n.quranSuraTitle(SuraNames.latin(1));
+      expect(find.text(title), findsOneWidget);
+      expect(
+        tester.getSemantics(find.text(title)),
+        isSemantics(label: title, isHeader: true),
+      );
+      expect(find.text(l10n.quranJuz('1')), findsOneWidget);
+      // Interface text keeps the app's direction inside the right-to-left reader.
+      expect(
+        tester
+            .widget<Directionality>(
+              find
+                  .ancestor(
+                    of: find.text(title),
+                    matching: find.byType(Directionality),
+                  )
+                  .first,
+            )
+            .textDirection,
+        TextDirection.ltr,
+      );
+      expect(find.byType(VerseMarker), findsNWidgets(7));
+      handle.dispose();
+    },
+  );
 
   testWidgets(
-    'verse markers are hidden from screen readers and fill when bookmarked',
+    'verse markers are announced as the verse, and fill when bookmarked',
     (tester) async {
       final handle = tester.ensureSemantics();
       final l10n = await _open(tester);
       await tester.tap(find.text('1. ${SuraNames.latin(1)}'));
       await tester.pumpAndSettle();
       final first = find.byType(VerseMarker).first;
-      // The number is drawn, not announced on its own: only the verse's label carries it.
+      // The number is drawn, not announced on its own: its label names the verse ("Verse 1").
       expect(find.bySemanticsLabel(RegExp(r'^1$')), findsNothing);
+      expect(find.bySemanticsLabel(l10n.quranVerseLabel('1')), findsOneWidget);
       expect(tester.widget<VerseMarker>(first).bookmarked, isFalse);
 
-      await tester.longPress(find.text(placeholderVerse(1, 1)));
-      await tester.pumpAndSettle();
+      await longPressVerse(tester, placeholderVerse(1, 1));
       // The shared options sheet, titled with the verse it acts on.
       expect(find.textContaining(l10n.quranVerseLabel('1')), findsOneWidget);
       await tester.tap(find.text(l10n.quranBookmarkAdd));
@@ -95,6 +97,24 @@ void main() {
       handle.dispose();
     },
   );
+
+  testWidgets('a sura is set page by page, each page ending with its number', (
+    tester,
+  ) async {
+    final handle = tester.ensureSemantics();
+    final l10n = await _open(tester);
+    await tester.tap(find.text('2. ${SuraNames.latin(2)}'));
+    await tester.pumpAndSettle();
+    // The made-up sura has 12 lines: the mushaf puts the first five on page 2 and the rest on page 3.
+    expect(find.bySemanticsLabel(l10n.quranPage('2')), findsOneWidget);
+    expect(find.text(l10n.quranJuz('1')), findsOneWidget);
+    await turnPage(tester);
+    expect(find.bySemanticsLabel(l10n.quranPage('3')), findsOneWidget);
+    expect(verseTexts(tester), [
+      for (var v = 6; v <= 12; v++) placeholderVerse(2, v),
+    ]);
+    handle.dispose();
+  });
 
   testWidgets('search prompts before typing and shows results on cards', (
     tester,
