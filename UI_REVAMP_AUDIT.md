@@ -146,3 +146,9 @@ parts still old; **Not revamped** = old design; **Needs verification** = built o
   unchanged: the opening line is split off only when the file's own first verse (1:1) is its exact prefix. New string:
   `quranSuraTitle` (needs the owner's wording review). Not done (needs data the app does not have): mushaf page numbers and
   juz/hizb header strips.
+- 2026-10-10, on `feature/quran-structure` (local, not pushed): the Quran reader is now the mushaf itself, page by page (604 pages,
+  swipe to turn, opens at the page of the verse): each page is a justified paragraph fitted to the screen with gold rosette verse
+  numbers, a banner and the opening line where a sura begins, the juz in the bar and the page number at the foot. Page, juz, hizb
+  quarter and sajdah data come from a one-time QuranHub export (numbers only, checked against the bundled text and against quran.com);
+  the verse text still comes only from the bundled Tanzil file. At a larger reading size or system text size the page is shown at that
+  size and scrolls. New strings: `quranSuraTitle`, `quranJuz`, `quranPage` (owner wording review).

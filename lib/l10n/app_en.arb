@@ -303,6 +303,8 @@
   "quranVerses": "{count, plural, =1{1 verse} other{{count} verses}}",
   "quranVerseLabel": "Verse {number}",
   "quranSuraTitle": "Surah {name}",
+  "quranJuz": "Juz {number}",
+  "quranPage": "Page {number}",
   "quranBookmarkAdd": "Bookmark this verse",
   "quranBookmarkRemove": "Remove the bookmark",
   "quranSurasHeading": "Suras",

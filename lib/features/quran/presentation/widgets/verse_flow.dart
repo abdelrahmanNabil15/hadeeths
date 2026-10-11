@@ -26,7 +26,6 @@ class VerseFlow extends StatefulWidget {
     required this.verses,
     required this.style,
     required this.bookmarks,
-    required this.markerKeys,
     required this.onVerseActions,
     this.skipFromFirst = '',
   });
@@ -35,8 +34,6 @@ class VerseFlow extends StatefulWidget {
   final TextStyle style;
   final List<VerseRef> bookmarks;
 
-  /// One key per verse, on its number: where the reader scrolls to and measures from.
-  final List<GlobalKey> markerKeys;
   final void Function(Verse verse) onVerseActions;
 
   /// A start of the first verse that is shown elsewhere (the opening line, set above the page).
@@ -99,7 +96,6 @@ class _VerseFlowState extends State<VerseFlow> {
                   : l10n.quranBookmarkAdd,
               excludeSemantics: true,
               child: GestureDetector(
-                key: widget.markerKeys[i],
                 behavior: HitTestBehavior.opaque,
                 onLongPress: () => widget.onVerseActions(verse),
                 child: VerseMarker(
