@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/format/clock_format.dart';
 import 'package:mynewapp/core/format/digits.dart';
+import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/notifications/notification_gateway.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/core/time/zone.dart';
+import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
@@ -15,6 +17,9 @@ import 'package:mynewapp/features/prayer_times/domain/place_zone.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
+import 'package:mynewapp/features/prayer_times/presentation/notification_explain.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/quiet_hours_page.dart';
+import 'package:mynewapp/features/prayer_times/presentation/pages/salawat_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/prayer_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/reminders_cubit.dart';
@@ -87,26 +92,21 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
     return agreed ?? false;
   }
 
-  Future<bool> _explain() async {
-    final l10n = context.l10n;
-    final agreed = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(l10n.remindersExplainTitle),
-        content: Text(l10n.remindersExplainBody),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: Text(l10n.notNow),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: Text(l10n.continueAction),
-          ),
-        ],
+  Future<bool> _explain() => explainNotifications(context);
+
+  /// Opens a reminders sub-page that shares this page's state.
+  void _openSub(Widget page) {
+    Navigator.of(context).push(
+      appRoute<void>(
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: context.read<PrayerCubit>()),
+            BlocProvider.value(value: context.read<RemindersCubit>()),
+          ],
+          child: page,
+        ),
       ),
     );
-    return agreed ?? false;
   }
 
   @override
@@ -174,6 +174,26 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
                                 : digits.localize(l10n.remindersLeadMinutes(m)),
                           ),
                       ],
+                    ),
+                    const SizedBox(height: AppSpacing.xl),
+                    SectionHeading(l10n.remindersMore),
+                    const SizedBox(height: AppSpacing.sm),
+                    AppTile(
+                      title: l10n.salawatTitle,
+                      leadingIcon: Icons.notifications_none_rounded,
+                      trailingText: settings.salawat.enabled
+                          ? l10n.statusOn
+                          : l10n.statusOff,
+                      onTap: () => _openSub(const SalawatPage()),
+                    ),
+                    const SizedBox(height: AppSpacing.sm),
+                    AppTile(
+                      title: l10n.quietTitle,
+                      leadingIcon: Icons.bedtime_outlined,
+                      trailingText: settings.quietEnabled
+                          ? l10n.statusOn
+                          : l10n.statusOff,
+                      onTap: () => _openSub(const QuietHoursPage()),
                     ),
                     const SizedBox(height: AppSpacing.xl),
                     if (isAndroid) ...[
@@ -245,8 +265,11 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
   ) {
     final l10n = context.l10n;
     if (!settings.enabled) return l10n.remindersOff;
-    final count = digits.localize(l10n.remindersCount(state.scheduled));
-    final next = state.next;
+    // Prayer reminders only: salawat reminders have their own page.
+    final count = digits.localize(
+      l10n.remindersCount(state.status.scheduledPrayers),
+    );
+    final next = state.status.nextPrayer;
     final place = prayerState.preferences.location;
     if (next == null || place == null) return count;
     final zone = zoneForPlace(place);

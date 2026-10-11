@@ -18,6 +18,7 @@ import 'package:mynewapp/features/prayer_times/domain/method_suggestion.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/prayer_times/presentation/countdown_text.dart';
 import 'package:mynewapp/features/prayer_times/presentation/date_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/hijri_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/method_page.dart';
@@ -25,6 +26,7 @@ import 'package:mynewapp/features/prayer_times/presentation/pages/qibla_page.dar
 import 'package:mynewapp/features/prayer_times/presentation/pages/reminders_page.dart';
 import 'package:mynewapp/features/prayer_times/presentation/prayer_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
+import 'package:mynewapp/features/prayer_times/presentation/widgets/prayer_countdown.dart';
 import 'package:mynewapp/features/prayer_times/presentation/widgets/prayer_setup_view.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
@@ -149,10 +151,22 @@ class _TimesView extends StatelessWidget {
                 )
               else ...[
                 if (state.moment != null)
-                  _NextBanner(
-                    label: l10n.nextPrayerLabel,
-                    name: prayerName(l10n, state.moment!.next),
-                    time: clock(state.moment!.nextAt),
+                  // Ticks once a second while the page can be seen; at zero (and when the page is
+                  // seen again) the page recalculates, which moves on to the following prayer.
+                  PrayerCountdown(
+                    nextAt: state.moment!.nextAt,
+                    clock: context.read<PrayerServices>().clock,
+                    onReachedZero: context.read<PrayerCubit>().refresh,
+                    onResumed: context.read<PrayerCubit>().refresh,
+                    builder: (context, remaining) => _NextBanner(
+                      label: l10n.nextPrayerLabel,
+                      name: prayerName(l10n, state.moment!.next),
+                      time: clock(state.moment!.nextAt),
+                      countdown: l10n.countdownIn(
+                        countdownClock(remaining, digits),
+                      ),
+                      countdownSpoken: countdownSpoken(l10n, remaining, digits),
+                    ),
                   ),
                 const SizedBox(height: AppSpacing.md),
                 for (final prayer in Prayer.values) ...[
@@ -258,11 +272,19 @@ class _NextBanner extends StatelessWidget {
     required this.label,
     required this.name,
     required this.time,
+    required this.countdown,
+    required this.countdownSpoken,
   });
 
   final String label;
   final String name;
   final String time;
+
+  /// Time left as a clock face, updated every second.
+  final String countdown;
+
+  /// Time left in words, to the minute: what a screen reader hears.
+  final String countdownSpoken;
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +294,7 @@ class _NextBanner extends StatelessWidget {
     // fact on the page reads as its headline.
     return Semantics(
       container: true,
-      label: '$label: $name, $time',
+      label: '$label: $name, $time, $countdownSpoken',
       excludeSemantics: true,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppRadius.card),
@@ -319,13 +341,27 @@ class _NextBanner extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Text(
-                        time,
-                        style: type.number.copyWith(
-                          fontSize: AppTextSize.title,
-                          fontWeight: FontWeight.w700,
-                          color: colors.onHero,
-                        ),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            time,
+                            style: type.number.copyWith(
+                              fontSize: AppTextSize.title,
+                              fontWeight: FontWeight.w700,
+                              color: colors.onHero,
+                            ),
+                          ),
+                          Text(
+                            countdown,
+                            style: type.number.copyWith(
+                              fontSize: AppTextSize.meta,
+                              fontWeight: FontWeight.w500,
+                              color: colors.onHeroMuted,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

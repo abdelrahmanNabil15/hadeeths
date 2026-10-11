@@ -231,7 +231,7 @@ class ShareCard extends StatelessWidget {
                     Container(width: 4, height: 18, color: colors.primary),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
-                      l10n.appTitle,
+                      l10n.appName,
                       style: TextStyle(
                         fontFamily: AppFonts.ui,
                         fontSize: 13,

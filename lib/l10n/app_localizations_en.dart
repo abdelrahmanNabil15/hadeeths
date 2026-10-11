@@ -1043,4 +1043,143 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quranSearchPrompt => 'Type a word to search the verses.';
+
+  @override
+  String get appName => 'Sakina';
+
+  @override
+  String countdownIn(String time) {
+    return 'in $time';
+  }
+
+  @override
+  String durationHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count hours',
+      one: '1 hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationMinutes(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count minutes',
+      one: '1 minute',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String durationJoin(String hours, String minutes) {
+    return '$hours and $minutes';
+  }
+
+  @override
+  String get durationUnderAMinute => 'less than a minute';
+
+  @override
+  String get remindersMore => 'More reminders';
+
+  @override
+  String get statusOn => 'On';
+
+  @override
+  String get statusOff => 'Off';
+
+  @override
+  String get salawatTitle => 'Salawat reminders';
+
+  @override
+  String get salawatSwitch => 'Send reminders';
+
+  @override
+  String get salawatIntro =>
+      'Regular reminders during the day, on your phone\'s clock.';
+
+  @override
+  String get salawatPreview => 'The reminder reads';
+
+  @override
+  String get salawatInterval => 'How often';
+
+  @override
+  String salawatEveryHours(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Every $count hours',
+      one: 'Every hour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get salawatWindow => 'Between';
+
+  @override
+  String get timeFrom => 'From';
+
+  @override
+  String get timeTo => 'To';
+
+  @override
+  String get salawatLeadNone => 'No earlier reminder';
+
+  @override
+  String get windowInvalid => 'The end must be after the start.';
+
+  @override
+  String get quietTitle => 'Quiet hours';
+
+  @override
+  String get quietSwitch => 'Use quiet hours';
+
+  @override
+  String get quietIntro =>
+      'Salawat reminders are not sent in quiet hours. Prayer reminders always arrive.';
+
+  @override
+  String get quietPrayersSilent =>
+      'Prayer reminders arrive silently in quiet hours';
+
+  @override
+  String quietHeldBack(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count salawat reminders in the next 2 days fall in quiet hours and will not be sent.',
+      one:
+          '1 salawat reminder in the next 2 days falls in quiet hours and will not be sent.',
+      zero: 'Nothing is held back in the next 2 days.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dailyHadithHeading => 'Hadith of the day';
+
+  @override
+  String dailyHadithFrom(String category) {
+    return 'From: $category';
+  }
+
+  @override
+  String get dailyHadithUnavailable =>
+      'Today\'s hadith cannot be shown right now.';
+
+  @override
+  String get dailyHadithRemember => 'Choose from the categories I open';
+
+  @override
+  String get dailyHadithRememberHint =>
+      'Otherwise it is chosen from all the main categories. This list stays on your phone.';
+
+  @override
+  String get widgetThen => 'Then';
 }

@@ -1,5 +1,6 @@
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
+import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
@@ -16,12 +17,16 @@ class UserDataEraser {
     required this.cache,
     this.userData,
     this.prayer,
+    this.dailyHadith,
   });
 
   final SettingsRepository settings;
   final ResponseCache cache;
   final UserDatabase? userData;
   final PrayerServices? prayer;
+
+  /// The hadith of the day's memory (opened categories, picks, history).
+  final DailyHadithStore? dailyHadith;
 
   /// True when every step succeeded.
   Future<bool> eraseAll() async {
@@ -41,6 +46,8 @@ class UserDataEraser {
     }
     final userData = this.userData;
     if (userData != null) await step(() async => userData.clearUserTables());
+    final dailyHadith = this.dailyHadith;
+    if (dailyHadith != null) await step(dailyHadith.clear);
     await step(cache.clear);
     await step(() => settings.save(const AppSettings()));
     return ok;

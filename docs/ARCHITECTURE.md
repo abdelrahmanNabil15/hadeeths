@@ -266,3 +266,40 @@ translation parity, and the architecture rules. Nothing touches the live API.
   collapsed (tested); a word longer than a card gets a card of its own, uncut.
 - `ImageSharer` (core) writes the PNGs to the app's temporary folder and opens the system share sheet; nothing is uploaded by the app. Every card is
   built (not only those on screen) so each one can be captured; the share button stays at the bottom of the screen.
+
+## Salawat reminders and quiet hours (Phase 3 step 2)
+
+- Settings live in `ReminderSettings` (saved under `reminders` with the prayer preferences, so Delete-all already clears them):
+  `salawat` (`SalawatSettings`) and `quietEnabled`, `quietStartMinute`, `quietEndMinute`, `quietForPrayers`.
+- One scheduling path: `ReminderCoordinator` plans prayer reminders (place zone) and salawat reminders (`DeviceTimeZone`) together.
+  Salawat has a lower priority than prayers, so the 60-item cap can never push a prayer reminder out. It is planned two days ahead.
+- Quiet hours are read on the phone's clock (`NotificationPlanner.quietZone`). They drop salawat reminders and never prayer
+  reminders. With `quietForPrayers` on, a prayer reminder in quiet hours is delivered with `NotificationSound.silent` and no
+  vibration. `ReminderStatus.heldBackByQuietHours` is shown on the Quiet hours page.
+- The salawat text is the owner-approved Arabic, in `presentation/salawat_wording.dart`, and a test pins it.
+
+## Daily hadith (Phase 3 step 3)
+
+- Feature `lib/features/daily_hadith/`: `DailyHadithStore` (interface) with `PrefsDailyHadithStore` (shared preferences, key
+  `daily_hadith_v1`), pure rules in `daily_selection.dart`, `DailyHadithService` (uses the categories and hadiths repositories, so
+  the saved-copy cache applies), `DailyHadithCubit` and `DailyHadithSection` on the home screen.
+- Behind `FeatureFlags.dailyHadith`. `AppDependencies.dailyHadithIfEnabled` and `dailyHadithServiceIfEnabled` are provided as
+  nullable repositories; screens do nothing when they are null.
+- `HadithListPage` records the category it opens. The pick is saved per day and language, so the hadith does not change during the
+  day. Shown hadiths are avoided for 60 days. `UserDataEraser` clears the store.
+- Stored in shared preferences rather than the user database, to avoid a schema clash with the Quran migration (PR #8). It can move
+  to a migration after both are merged, if wanted.
+
+## Android home-screen widget (Phase 3 step 4)
+
+- Dart writes, Kotlin shows: `buildWidgetSnapshot` (lib/app) produces plain lines (header, heading, "then" label, then
+  `millis\tname\ttime` for seven days). `WidgetUpdatingReminderService` wraps the reminder service, so every reconcile refreshes it
+  and `cancelAll` (Delete-all) clears it. `HomeWidgetBridge` (core/platform) is the `hadeeths/home_widget` channel; it exists only on
+  Android with the prayer section on.
+- `NextPrayerWidget` (android/.../widget) parses with pure Kotlin (`WidgetSnapshot.kt`, unit-tested on the JVM), shows the next time
+  and the one after it, and schedules its own redraw at the next prayer time: exact when the user allowed exact alarms, otherwise
+  inexact. It also redraws after boot, time and time-zone changes, and app updates. The receiver is disabled in the manifest and
+  switched on by `MainActivity.setWidgetEnabled` when the prayer section is on.
+- No live countdown on the widget (see `docs/PHASE3_CHECKLIST.md`, step 4). No location data reaches the widget.
+- A tap opens `MainActivity` with `hadeeths.route=prayer`; Flutter reads it with `takeLaunchRoute` (cold start) or receives `openRoute`
+  (running), and `AppShell.tabRequests` shows the Prayer section.

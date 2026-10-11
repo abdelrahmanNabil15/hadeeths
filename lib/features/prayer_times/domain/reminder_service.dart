@@ -9,13 +9,20 @@ class ReminderStatus {
     this.failed = 0,
     this.needsPlace = false,
     this.exactDenied = false,
+    this.heldBackByQuietHours = 0,
+    this.scheduledPrayers = 0,
+    this.nextPrayer,
   });
 
   /// How many reminders the platform is holding for the app.
   final int scheduled;
 
-  /// The nearest one, if any.
+  /// The nearest one, if any (a prayer or a salawat reminder).
   final PlannedNotification? next;
+
+  /// How many of them are prayer reminders, and the nearest of those.
+  final int scheduledPrayers;
+  final PlannedNotification? nextPrayer;
 
   /// Whether the system lets the app show notifications at all.
   final bool notificationsAllowed;
@@ -29,6 +36,10 @@ class ReminderStatus {
   /// Exact timing is switched on but the system does not allow it, so reminders are scheduled
   /// inexactly and may arrive late.
   final bool exactDenied;
+
+  /// Salawat reminders in the planned period that quiet hours kept from being sent. Shown to the
+  /// user, so nothing is held back silently.
+  final int heldBackByQuietHours;
 }
 
 /// Keeps the platform's reminders in line with the saved place, calculation settings and reminder
