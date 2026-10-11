@@ -9,12 +9,14 @@ import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/core/widgets/switch_row.dart';
+import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/date_labels.dart';
 import 'package:mynewapp/features/prayer_times/presentation/prayer_labels.dart';
 import 'package:mynewapp/features/tracker/domain/day_key.dart';
 import 'package:mynewapp/features/tracker/domain/prayer_log_repository.dart';
 import 'package:mynewapp/features/tracker/presentation/state/tracker_cubit.dart';
+import 'package:mynewapp/features/tracker/presentation/state/tracker_review_events.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// Mark which of the five prayers were prayed, for today and the six days before. Everything stays
@@ -30,7 +32,7 @@ class TrackerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => TrackerCubit(log: log, services: services)..load(),
-      child: const _TrackerScaffold(),
+      child: const _MarkedPrayersReporter(child: _TrackerScaffold()),
     );
   }
 }
@@ -277,4 +279,34 @@ class _DayChip extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Tells the rating logic when the user marks a prayer as prayed (not when the page loads what was
+/// marked before). It remembers the state it last saw, because a listener is only given the new one.
+class _MarkedPrayersReporter extends StatefulWidget {
+  const _MarkedPrayersReporter({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_MarkedPrayersReporter> createState() => _MarkedPrayersReporterState();
+}
+
+class _MarkedPrayersReporterState extends State<_MarkedPrayersReporter> {
+  late TrackerState _seen = context.read<TrackerCubit>().state;
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocListener<TrackerCubit, TrackerState>(
+        listener: (context, state) {
+          final previous = _seen;
+          _seen = state;
+          final review = ReviewScope.maybeOf(context);
+          if (review == null) return;
+          for (final key in newlyMarked(previous, state)) {
+            review.recordAction(key);
+          }
+        },
+        child: widget.child,
+      );
 }

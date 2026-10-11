@@ -57,11 +57,28 @@ class FileAdhanLibrary implements AdhanLibrary {
     return known.contains(id) ? id : null;
   }
 
+  int _active = 0;
+
+  @override
+  bool get downloading => _active > 0;
+
   @override
   Future<void> download(
     AdhanSound sound, {
     void Function(double fraction)? onProgress,
   }) async {
+    _active++;
+    try {
+      await _download(sound, onProgress);
+    } finally {
+      _active--;
+    }
+  }
+
+  Future<void> _download(
+    AdhanSound sound,
+    void Function(double fraction)? onProgress,
+  ) async {
     if (!await bridge.isSupported()) {
       throw const AdhanDownloadException(AdhanDownloadFailure.unsupported);
     }

@@ -13,6 +13,7 @@ import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/expandable_section.dart';
 import 'package:mynewapp/core/widgets/ornament_divider.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/favorites/presentation/favorite_button.dart';
 import 'package:mynewapp/features/hadiths/domain/hadith_details.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
@@ -42,56 +43,64 @@ class HadithDetailsPage extends StatelessWidget {
         id,
         language: language,
       )..load(),
-      child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            FavoriteButton(hadithId: id),
-            const ReadingSizeButton(),
-            BlocBuilder<HadithDetailCubit, HadithDetailState>(
-              builder: (context, state) {
-                final details = state.details;
-                if (details == null) return const SizedBox.shrink();
-                void shareText() => SharePlus.instance.share(
-                  ShareParams(
-                    text: hadithShareText(details, credit: l10n.sourceCredit),
-                  ),
-                );
-                final sharer = context.read<ImageSharer?>();
-                return IconButton(
-                  tooltip: l10n.shareHadith,
-                  icon: const Icon(Icons.share),
-                  // The released app shares text straight away; with image sharing on, the user
-                  // chooses text or image first.
-                  onPressed: sharer == null
-                      ? shareText
-                      : () => _chooseShare(
-                          context,
-                          details: details,
-                          sharer: sharer,
-                          shareText: shareText,
-                        ),
-                );
-              },
-            ),
-          ],
-        ),
-        body: BlocBuilder<HadithDetailCubit, HadithDetailState>(
-          builder: (context, state) {
-            // The hadith itself is never faded: it appears exactly as before. Only the loading
-            // and error states fade into each other (for example after a retry).
-            if (state.status == LoadStatus.success) {
-              return HadithDetailsBody(details: state.details!);
-            }
-            return AnimatedStateSwitcher(
-              child: state.status == LoadStatus.failure
-                  ? ErrorView(
-                      key: const ValueKey('failure'),
-                      failure: state.failure!,
-                      onRetry: context.read<HadithDetailCubit>().load,
-                    )
-                  : const LoadingView(key: ValueKey('loading')),
-            );
-          },
+      // A hadith read: its text loaded and shown. Counted once per hadith per day.
+      child: BlocListener<HadithDetailCubit, HadithDetailState>(
+        listenWhen: (previous, current) =>
+            previous.status != LoadStatus.success &&
+            current.status == LoadStatus.success,
+        listener: (context, state) =>
+            ReviewScope.maybeOf(context)?.recordAction('hadith:$id'),
+        child: Scaffold(
+          appBar: AppBar(
+            actions: [
+              FavoriteButton(hadithId: id),
+              const ReadingSizeButton(),
+              BlocBuilder<HadithDetailCubit, HadithDetailState>(
+                builder: (context, state) {
+                  final details = state.details;
+                  if (details == null) return const SizedBox.shrink();
+                  void shareText() => SharePlus.instance.share(
+                    ShareParams(
+                      text: hadithShareText(details, credit: l10n.sourceCredit),
+                    ),
+                  );
+                  final sharer = context.read<ImageSharer?>();
+                  return IconButton(
+                    tooltip: l10n.shareHadith,
+                    icon: const Icon(Icons.share),
+                    // The released app shares text straight away; with image sharing on, the user
+                    // chooses text or image first.
+                    onPressed: sharer == null
+                        ? shareText
+                        : () => _chooseShare(
+                            context,
+                            details: details,
+                            sharer: sharer,
+                            shareText: shareText,
+                          ),
+                  );
+                },
+              ),
+            ],
+          ),
+          body: BlocBuilder<HadithDetailCubit, HadithDetailState>(
+            builder: (context, state) {
+              // The hadith itself is never faded: it appears exactly as before. Only the loading
+              // and error states fade into each other (for example after a retry).
+              if (state.status == LoadStatus.success) {
+                return HadithDetailsBody(details: state.details!);
+              }
+              return AnimatedStateSwitcher(
+                child: state.status == LoadStatus.failure
+                    ? ErrorView(
+                        key: const ValueKey('failure'),
+                        failure: state.failure!,
+                        onRetry: context.read<HadithDetailCubit>().load,
+                      )
+                    : const LoadingView(key: ValueKey('loading')),
+              );
+            },
+          ),
         ),
       ),
     );
