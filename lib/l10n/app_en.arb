@@ -1,10 +1,6 @@
 {
   "@@locale": "en",
   "appTitle": "Prophetic Hadiths",
-  "appName": "Sakina",
-  "@appName": {
-    "description": "The name of the app: the task switcher title and the About page."
-  },
   "homeIntro": "Browse hadiths by topic, or search by a word.",
   "mainCategories": "Main categories",
   "noCategories": "No categories",
@@ -317,6 +313,13 @@
   "shareCardShareOne": "Share the image",
   "shareCardShareMany": "{count, plural, other{Share the {count} images}}",
   "shareCardFailed": "The image could not be made or shared. Try again.",
+  "quranFilterHint": "Find a sura by name or number",
+  "quranFilterNone": "No sura matches.",
+  "quranSearchPrompt": "Type a word to search the verses.",
+  "appName": "Sakina",
+  "@appName": {
+    "description": "The name of the app: the task switcher title and the About page."
+  },
   "countdownIn": "in {time}",
   "durationHours": "{count, plural, =1{1 hour} other{{count} hours}}",
   "durationMinutes": "{count, plural, =1{1 minute} other{{count} minutes}}",
@@ -346,6 +349,5 @@
   "dailyHadithUnavailable": "Today's hadith cannot be shown right now.",
   "dailyHadithRemember": "Choose from the categories I open",
   "dailyHadithRememberHint": "Otherwise it is chosen from all the main categories. This list stays on your phone.",
-  "widgetThen": "Then",
-  "quranSearchPrompt": "Type a word to search the verses."
+  "widgetThen": "Then"
 }

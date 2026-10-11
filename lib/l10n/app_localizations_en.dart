@@ -12,9 +12,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Prophetic Hadiths';
 
   @override
-  String get appName => 'Sakina';
-
-  @override
   String get homeIntro => 'Browse hadiths by topic, or search by a word.';
 
   @override
@@ -1039,6 +1036,18 @@ class AppLocalizationsEn extends AppLocalizations {
       'The image could not be made or shared. Try again.';
 
   @override
+  String get quranFilterHint => 'Find a sura by name or number';
+
+  @override
+  String get quranFilterNone => 'No sura matches.';
+
+  @override
+  String get quranSearchPrompt => 'Type a word to search the verses.';
+
+  @override
+  String get appName => 'Sakina';
+
+  @override
   String countdownIn(String time) {
     return 'in $time';
   }
@@ -1173,7 +1182,4 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get widgetThen => 'Then';
-
-  @override
-  String get quranSearchPrompt => 'Type a word to search the verses.';
 }

@@ -104,12 +104,6 @@ abstract class AppLocalizations {
   /// **'الأحاديث النبوية'**
   String get appTitle;
 
-  /// The name of the app: the task switcher title and the About page.
-  ///
-  /// In ar, this message translates to:
-  /// **'سكينة'**
-  String get appName;
-
   /// No description provided for @homeIntro.
   ///
   /// In ar, this message translates to:
@@ -1844,6 +1838,30 @@ abstract class AppLocalizations {
   /// **'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.'**
   String get shareCardFailed;
 
+  /// Phase 3 step 5; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث عن سورة بالاسم أو الرقم'**
+  String get quranFilterHint;
+
+  /// Phase 3 step 5; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد سورة مطابقة.'**
+  String get quranFilterNone;
+
+  /// UI revamp; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة للبحث في الآيات.'**
+  String get quranSearchPrompt;
+
+  /// The name of the app: the task switcher title and the About page.
+  ///
+  /// In ar, this message translates to:
+  /// **'سكينة'**
+  String get appName;
+
   /// Time left until the next prayer. [time] is a clock face (1:05:09) or words (ساعة و5 دقائق). Wording for owner review.
   ///
   /// In ar, this message translates to:
@@ -2023,12 +2041,6 @@ abstract class AppLocalizations {
   /// In ar, this message translates to:
   /// **'ثم'**
   String get widgetThen;
-
-  /// UI revamp; wording for owner review.
-  ///
-  /// In ar, this message translates to:
-  /// **'اكتب كلمة للبحث في الآيات.'**
-  String get quranSearchPrompt;
 }
 
 class _AppLocalizationsDelegate

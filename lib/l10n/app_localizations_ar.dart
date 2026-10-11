@@ -12,9 +12,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'الأحاديث النبوية';
 
   @override
-  String get appName => 'سكينة';
-
-  @override
   String get homeIntro => 'تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.';
 
   @override
@@ -1045,6 +1042,18 @@ class AppLocalizationsAr extends AppLocalizations {
       'تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.';
 
   @override
+  String get quranFilterHint => 'ابحث عن سورة بالاسم أو الرقم';
+
+  @override
+  String get quranFilterNone => 'لا توجد سورة مطابقة.';
+
+  @override
+  String get quranSearchPrompt => 'اكتب كلمة للبحث في الآيات.';
+
+  @override
+  String get appName => 'سكينة';
+
+  @override
   String countdownIn(String time) {
     return 'بعد $time';
   }
@@ -1184,7 +1193,4 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get widgetThen => 'ثم';
-
-  @override
-  String get quranSearchPrompt => 'اكتب كلمة للبحث في الآيات.';
 }

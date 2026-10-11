@@ -4,10 +4,6 @@
   "@appTitle": {
     "description": "App name shown in the home app bar and the task switcher."
   },
-  "appName": "سكينة",
-  "@appName": {
-    "description": "The name of the app: the task switcher title and the About page."
-  },
   "homeIntro": "تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.",
   "mainCategories": "التصنيفات الرئيسية",
   "noCategories": "لا توجد تصنيفات",
@@ -472,6 +468,22 @@
   "shareCardShareOne": "مشاركة الصورة",
   "shareCardShareMany": "{count, plural, =2{مشاركة الصورتين} few{مشاركة الصور الـ{count}} other{مشاركة الصور الـ{count}}}",
   "shareCardFailed": "تعذّر إنشاء الصورة أو مشاركتها. حاول مرة أخرى.",
+  "quranFilterHint": "ابحث عن سورة بالاسم أو الرقم",
+  "@quranFilterHint": {
+    "description": "Phase 3 step 5; wording for owner review."
+  },
+  "quranFilterNone": "لا توجد سورة مطابقة.",
+  "@quranFilterNone": {
+    "description": "Phase 3 step 5; wording for owner review."
+  },
+  "quranSearchPrompt": "اكتب كلمة للبحث في الآيات.",
+  "@quranSearchPrompt": {
+    "description": "UI revamp; wording for owner review."
+  },
+  "appName": "سكينة",
+  "@appName": {
+    "description": "The name of the app: the task switcher title and the About page."
+  },
   "countdownIn": "بعد {time}",
   "@countdownIn": {
     "description": "Time left until the next prayer. [time] is a clock face (1:05:09) or words (ساعة و5 دقائق). Wording for owner review.",
@@ -625,9 +637,5 @@
   "widgetThen": "ثم",
   "@widgetThen": {
     "description": "Home-screen widget: before the prayer after the next one. Phase 3 step 4; wording for owner review."
-  },
-  "quranSearchPrompt": "اكتب كلمة للبحث في الآيات.",
-  "@quranSearchPrompt": {
-    "description": "UI revamp; wording for owner review."
   }
 }
