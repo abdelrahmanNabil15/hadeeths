@@ -1,4 +1,4 @@
-# الأحاديث النبوية (Hadeeths)
+# سكينة (Sakina)
 
 Flutter app for browsing Prophetic hadiths in Arabic. Content and explanations come from the
 [HadeethEnc.com](https://hadeethenc.com) API and are displayed unmodified; HadeethEnc is the source and publisher.

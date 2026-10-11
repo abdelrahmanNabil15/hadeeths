@@ -23,7 +23,7 @@ class LocalNotificationsGateway implements NotificationGateway {
   /// Starts the plugin once. It never asks for a permission by itself.
   Future<bool?> _ensureInitialised() => _initialised ??= _plugin.initialize(
     settings: const InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      android: AndroidInitializationSettings('@drawable/ic_notification'),
       iOS: DarwinInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,

@@ -12,6 +12,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Prophetic Hadiths';
 
   @override
+  String get appName => 'Sakina';
+
+  @override
   String get homeIntro => 'Browse hadiths by topic, or search by a word.';
 
   @override

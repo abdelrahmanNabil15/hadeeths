@@ -12,6 +12,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appTitle => 'الأحاديث النبوية';
 
   @override
+  String get appName => 'سكينة';
+
+  @override
   String get homeIntro => 'تصفّح الأحاديث حسب التصنيف، أو ابحث بكلمة.';
 
   @override
