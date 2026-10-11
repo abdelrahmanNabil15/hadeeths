@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+<title>Sakina app icon (master: background and foreground layers)</title>
+<g id="background"><rect width="1024" height="1024" fill="#D6B568"/></g>
+<g id="foreground" transform="translate(512 512) scale(1.12) translate(-512 -620)">
+<path id="stand" d="M350 640 L674 900 M674 640 L350 900" fill="none" stroke="#0B3F33" stroke-width="34" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="cover" d="M512 358 Q360 312 186 334 L186 662 Q360 640 512 692 Q664 640 838 662 L838 334 Q664 312 512 358 Z" fill="#0B3F33"/>
+<path id="page-left" d="M500 376 Q356 332 208 352 L208 636 Q356 616 500 660 Z" fill="#FAF6EC"/>
+<path id="page-right" d="M524 376 Q668 332 816 352 L816 636 Q668 616 524 660 Z" fill="#FAF6EC"/>
+<path id="text-1" d="M256 446 Q354 438 452 460" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-2" d="M768 446 Q670 438 572 460" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-3" d="M256 484 Q354 476 452 498" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-4" d="M768 484 Q670 476 572 498" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-5" d="M256 522 Q354 514 452 536" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-6" d="M768 522 Q670 514 572 536" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-7" d="M256 560 Q354 552 452 574" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-8" d="M768 560 Q670 552 572 574" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-9" d="M256 598 Q354 590 452 612" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="text-10" d="M768 598 Q670 590 572 612" fill="none" stroke="#0B3F33" stroke-width="9" stroke-linejoin="miter" stroke-miterlimit="10" stroke-linecap="round" opacity="0.55"/>
+<path id="star-left" d="M354.0 374.0 L361.0 381.0 L371.0 381.0 L371.0 391.0 L378.0 398.0 L371.0 405.0 L371.0 415.0 L361.0 415.0 L354.0 422.0 L347.0 415.0 L337.0 415.0 L337.0 405.0 L330.0 398.0 L337.0 391.0 L337.0 381.0 L347.0 381.0 Z" fill="#D6B568"/>
+<path id="star-right" d="M670.0 374.0 L677.0 381.0 L687.0 381.0 L687.0 391.0 L694.0 398.0 L687.0 405.0 L687.0 415.0 L677.0 415.0 L670.0 422.0 L663.0 415.0 L653.0 415.0 L653.0 405.0 L646.0 398.0 L653.0 391.0 L653.0 381.0 L663.0 381.0 Z" fill="#D6B568"/>
+</g>
+</svg>

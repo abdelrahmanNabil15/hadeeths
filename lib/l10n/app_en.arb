@@ -1,6 +1,10 @@
 {
   "@@locale": "en",
   "appTitle": "Prophetic Hadiths",
+  "appName": "Sakina",
+  "@appName": {
+    "description": "The name of the app: the task switcher title and the About page."
+  },
   "homeIntro": "Browse hadiths by topic, or search by a word.",
   "mainCategories": "Main categories",
   "noCategories": "No categories",
