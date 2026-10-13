@@ -40,6 +40,7 @@ class AppShell extends StatefulWidget {
     this.tabRequests,
     this.quran,
     this.quranUserData,
+    this.onHomeReturn,
   });
 
   final FeatureFlags features;
@@ -67,6 +68,10 @@ class AppShell extends StatefulWidget {
   final QuranSource? quran;
   final QuranUserData? quranUserData;
 
+  /// The user is back on the hadith home screen (a page above it closed, or its section was
+  /// selected while it showed its first page).
+  final VoidCallback? onHomeReturn;
+
   @override
   State<AppShell> createState() => _AppShellState();
 }
@@ -82,7 +87,11 @@ class _AppShellState extends State<AppShell> {
     for (final _ in _tabs) GlobalKey<NavigatorState>(),
   ];
   late final List<_StackObserver> _observers = [
-    for (final _ in _tabs) _StackObserver(_stackChanged),
+    for (final tab in _tabs)
+      _StackObserver(
+        _stackChanged,
+        onFirstPageShown: tab == ShellTab.hadiths ? _homeReturned : null,
+      ),
   ];
   final Set<int> _opened = {0};
   int _index = 0;
@@ -112,6 +121,8 @@ class _AppShellState extends State<AppShell> {
     super.dispose();
   }
 
+  void _homeReturned() => widget.onHomeReturn?.call();
+
   void _stackChanged() {
     // Navigator callbacks can arrive while the tree is building; update afterwards.
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -128,6 +139,11 @@ class _AppShellState extends State<AppShell> {
       _index = index;
       _opened.add(index);
     });
+    // Selecting the hadith section while it shows its first page is also being back on the home screen.
+    if (_tabs[index] == ShellTab.hadiths &&
+        !(_navigators[index].currentState?.canPop() ?? false)) {
+      _homeReturned();
+    }
   }
 
   Future<void> _handleBack(bool didPop, Object? result) async {
@@ -253,17 +269,24 @@ class _AppShellState extends State<AppShell> {
 
 /// Tells the shell when a section's stack changes, so back handling stays correct.
 class _StackObserver extends NavigatorObserver {
-  _StackObserver(this._onChange);
+  _StackObserver(this._onChange, {this.onFirstPageShown});
 
   final VoidCallback _onChange;
+
+  /// Called when a page above the first one closes, so the first page is showing again.
+  final VoidCallback? onFirstPageShown;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) =>
       _onChange();
 
   @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) =>
-      _onChange();
+  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _onChange();
+    if (previousRoute != null && previousRoute.isFirst) {
+      onFirstPageShown?.call();
+    }
+  }
 
   @override
   void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) =>

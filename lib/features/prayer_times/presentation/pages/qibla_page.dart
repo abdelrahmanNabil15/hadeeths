@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
+import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/haptics/haptics.dart';
 import 'package:mynewapp/core/widgets/animated_state_switcher.dart';
@@ -145,70 +146,60 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
           return ListView(
             padding: const EdgeInsets.all(AppSpacing.lg),
             children: [
-              Center(
-                child: Semantics(
-                  container: true,
-                  liveRegion: isLive,
-                  label: isLive ? _liveLabel(l10n, digits, live) : description,
-                  excludeSemantics: true,
-                  child: SizedBox(
-                    width: 260,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          isLive ? ' ' : l10n.compassN,
-                          style: TextStyle(
-                            fontSize: AppTextSize.meta,
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        SizedBox(
-                          width: 240,
-                          height: 240,
-                          // Only the drawing is eased towards each reading. A missing marker
-                          // (interference) disappears at once, never fading while it is wrong.
-                          child: SmoothAngle(
-                            angle: isLive ? -live.trueHeading! : null,
-                            builder: (context, north) => SmoothAngle(
-                              angle: isLive
-                                  ? (live.interference ? null : live.turn)
-                                  : bearing,
-                              builder: (context, marker) => CustomPaint(
-                                painter: _DialPainter(
-                                  markerAngle: marker,
-                                  northAngle: north,
-                                  aligned: live.aligned,
-                                  ring: scheme.outline,
-                                  accent: live.aligned
-                                      ? scheme.secondary
-                                      : scheme.primary,
-                                  tick: scheme.onSurfaceVariant,
-                                  face: scheme.surfaceContainerLowest,
-                                  hairline: scheme.outlineVariant,
-                                  gold: AppColors.of(context).gold,
-                                ),
+              _Panel(
+                children: [
+                  Center(
+                    child: Semantics(
+                      container: true,
+                      liveRegion: isLive,
+                      label: isLive
+                          ? _liveLabel(l10n, digits, live)
+                          : description,
+                      excludeSemantics: true,
+                      // Only the drawing is eased towards each reading. A missing marker
+                      // (interference) disappears at once, never fading while it is wrong.
+                      child: SizedBox.square(
+                        dimension: _dialSize,
+                        child: SmoothAngle(
+                          angle: isLive ? -live.trueHeading! : null,
+                          builder: (context, north) => SmoothAngle(
+                            angle: isLive
+                                ? (live.interference ? null : live.turn)
+                                : bearing,
+                            builder: (context, marker) => CustomPaint(
+                              painter: _DialPainter(
+                                markerAngle: marker,
+                                northAngle: north,
+                                aligned: live.aligned,
+                                colors: _DialColors.of(context),
+                                labels: [
+                                  l10n.compassN,
+                                  l10n.compassE,
+                                  l10n.compassS,
+                                  l10n.compassW,
+                                ],
+                                textDirection: Directionality.of(context),
                               ),
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(height: AppSpacing.lg),
+                  if (isLive)
+                    ..._liveHeadline(context, live)
+                  else
+                    ..._staticTexts(
+                      context,
+                      degrees: degrees,
+                      direction: direction,
+                      kilometres: kilometres,
+                    ),
+                ],
               ),
               const SizedBox(height: AppSpacing.lg),
-              if (isLive)
-                ..._liveTexts(context, live)
-              else
-                ..._staticTexts(
-                  context,
-                  degrees: degrees,
-                  direction: direction,
-                  kilometres: kilometres,
-                ),
-              const SizedBox(height: AppSpacing.lg),
+              if (isLive) ..._liveDetails(context, live),
               _CompassSwitch(compass: _compass, live: live),
               const SizedBox(height: AppSpacing.lg),
               Text(
@@ -226,6 +217,9 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
     );
   }
 
+  static const _dialSize = 280.0;
+
+  /// On the panel: the bearing in large figures, the compass word, and how far the Kaaba is.
   List<Widget> _staticTexts(
     BuildContext context, {
     required String degrees,
@@ -233,18 +227,16 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
     required int kilometres,
   }) {
     final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
+    final type = AppTypography.of(context);
     final digits = context.digits;
-    TextStyle small() =>
-        TextStyle(fontSize: AppTextSize.meta, color: scheme.onSurfaceVariant);
     return [
       Text(
         '$degrees°',
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: type.number.copyWith(
           fontSize: AppTextSize.display,
-          fontWeight: FontWeight.w700,
-          color: scheme.onSurface,
+          color: colors.onHero,
         ),
       ),
       Text(
@@ -252,39 +244,36 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: AppTextSize.heading,
-          color: scheme.onSurface,
+          color: colors.heroAccent,
         ),
       ),
       const SizedBox(height: AppSpacing.sm),
       Text(
         l10n.qiblaBearing(degrees),
         textAlign: TextAlign.center,
-        style: small(),
+        style: type.meta.copyWith(color: colors.onHeroMuted),
       ),
       const SizedBox(height: AppSpacing.xs),
       Text(
         l10n.qiblaDistance(digits.format(kilometres)),
         textAlign: TextAlign.center,
-        style: small(),
+        style: type.meta.copyWith(color: colors.onHeroMuted),
       ),
     ];
   }
 
-  List<Widget> _liveTexts(BuildContext context, QiblaCompassState live) {
+  /// On the panel while the compass is live: what to do next, or that the phone faces the Qibla.
+  /// Alignment is shown by the words and the check mark, not by colour alone.
+  List<Widget> _liveHeadline(BuildContext context, QiblaCompassState live) {
     final l10n = context.l10n;
-    final scheme = Theme.of(context).colorScheme;
+    final colors = AppColors.of(context);
     final digits = context.digits;
-    TextStyle small() => TextStyle(
-      fontSize: AppTextSize.meta,
-      height: AppLineHeight.body,
-      color: scheme.onSurfaceVariant,
-    );
     return [
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (live.aligned) ...[
-            Icon(Icons.check_circle, color: scheme.secondary),
+            Icon(Icons.check_circle, color: colors.heroAccent),
             const SizedBox(width: AppSpacing.sm),
           ],
           Flexible(
@@ -294,13 +283,26 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
               style: TextStyle(
                 fontSize: AppTextSize.title,
                 fontWeight: FontWeight.w700,
-                color: scheme.onSurface,
+                color: colors.onHero,
               ),
             ),
           ),
         ],
       ),
-      const SizedBox(height: AppSpacing.sm),
+    ];
+  }
+
+  /// Under the panel while the compass is live: interference, how to hold the phone, calibration.
+  List<Widget> _liveDetails(BuildContext context, QiblaCompassState live) {
+    final l10n = context.l10n;
+    final scheme = Theme.of(context).colorScheme;
+    final digits = context.digits;
+    TextStyle small() => TextStyle(
+      fontSize: AppTextSize.meta,
+      height: AppLineHeight.body,
+      color: scheme.onSurfaceVariant,
+    );
+    return [
       AnimatedStateSwitcher(
         child: live.interference
             ? StatusBanner(
@@ -322,6 +324,7 @@ class _QiblaBodyState extends State<_QiblaBody> with WidgetsBindingObserver {
           style: small(),
         ),
       ],
+      const SizedBox(height: AppSpacing.lg),
     ];
   }
 
@@ -417,57 +420,179 @@ class _CompassSwitch extends StatelessWidget {
   }
 }
 
-/// A ring with a marker. Static: north at the top, the marker at the Qibla bearing. Live: the top
-/// is where the phone points, the marker is the Qibla relative to that, and a small tick shows
-/// where north is.
+/// The midnight-emerald panel the dial sits on, with the faint star lattice of the home screen.
+class _Panel extends StatelessWidget {
+  const _Panel({required this.children});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColors.of(context);
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppRadius.sheet),
+      child: ColoredBox(
+        color: colors.hero,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: GeometricPattern(
+                color: colors.heroAccent.withValues(alpha: 0.08),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.xl),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: children,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// The dial's colours on the panel, all from the theme.
+class _DialColors {
+  const _DialColors({
+    required this.face,
+    required this.ring,
+    required this.hairline,
+    required this.tick,
+    required this.label,
+    required this.needle,
+    required this.aligned,
+    required this.gold,
+    required this.kaaba,
+  });
+
+  factory _DialColors.of(BuildContext context) {
+    final colors = AppColors.of(context);
+    return _DialColors(
+      face: Color.alphaBlend(
+        colors.onHero.withValues(alpha: 0.06),
+        colors.hero,
+      ),
+      ring: colors.onHeroMuted.withValues(alpha: 0.6),
+      hairline: colors.onHero.withValues(alpha: 0.16),
+      tick: colors.onHeroMuted,
+      label: colors.onHeroMuted,
+      needle: colors.heroAccent,
+      aligned: colors.onHero,
+      gold: colors.heroAccent,
+      kaaba: HSLColor.fromColor(colors.hero).withLightness(0.04).toColor(),
+    );
+  }
+
+  final Color face;
+  final Color ring;
+  final Color hairline;
+  final Color tick;
+  final Color label;
+  final Color needle;
+  final Color aligned;
+  final Color gold;
+  final Color kaaba;
+
+  @override
+  bool operator ==(Object other) =>
+      other is _DialColors &&
+      other.face == face &&
+      other.ring == ring &&
+      other.hairline == hairline &&
+      other.tick == tick &&
+      other.label == label &&
+      other.needle == needle &&
+      other.aligned == aligned &&
+      other.gold == gold &&
+      other.kaaba == kaaba;
+
+  @override
+  int get hashCode => Object.hash(
+    face,
+    ring,
+    hairline,
+    tick,
+    label,
+    needle,
+    aligned,
+    gold,
+    kaaba,
+  );
+}
+
+/// A compass rose with a marker. Static: north at the top, the marker at the Qibla bearing. Live:
+/// the top is where the phone points, the marker is the Qibla relative to that, and the rose turns
+/// so its north stays true. The marker is a small Kaaba on the rim. Decoration for the eyes only:
+/// the page reads the same information aloud.
 class _DialPainter extends CustomPainter {
   _DialPainter({
     required this.markerAngle,
     required this.northAngle,
     required this.aligned,
-    required this.ring,
-    required this.accent,
-    required this.tick,
-    required this.face,
-    required this.hairline,
-    required this.gold,
+    required this.colors,
+    required this.labels,
+    required this.textDirection,
   });
 
   final double? markerAngle;
   final double? northAngle;
   final bool aligned;
-  final Color ring;
-  final Color accent;
-  final Color tick;
+  final _DialColors colors;
 
-  /// The dial's face (the card colour), its fine rules, and the gold of the ornaments.
-  final Color face;
-  final Color hairline;
-  final Color gold;
+  /// North, east, south and west, in the interface language.
+  final List<String> labels;
+  final TextDirection textDirection;
 
   Offset _at(Offset center, double radius, double degrees) {
     final a = degrees * math.pi / 180;
     return center + Offset(math.sin(a), -math.cos(a)) * radius;
   }
 
+  void _label(Canvas canvas, String text, Offset at, Color color, bool bold) {
+    final painter = TextPainter(
+      text: TextSpan(
+        text: text,
+        style: TextStyle(
+          fontFamily: AppFonts.ui,
+          fontSize: 12,
+          fontWeight: bold ? FontWeight.w700 : FontWeight.w500,
+          color: color,
+        ),
+      ),
+      textDirection: textDirection,
+    )..layout();
+    painter.paint(canvas, at - Offset(painter.width / 2, painter.height / 2));
+  }
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = size.center(Offset.zero);
     final radius = size.shortestSide / 2 - 8;
-    // A calm face with a fine inner rule and a tick every 30 degrees, like the rest of the app's
-    // hairlines; the outer ring keeps its weight and turns gold when the phone faces the Qibla.
-    canvas.drawCircle(center, radius, Paint()..color = face);
     final fine = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1
-      ..color = hairline;
+      ..color = colors.hairline;
+
+    // The face, a fine inner rule, and an eight-pointed star pressed faintly into it.
+    canvas.drawCircle(center, radius, Paint()..color = colors.face);
     canvas.drawCircle(center, radius - 18, fine);
-    for (var i = 0; i < 12; i++) {
-      if (i % 3 == 0) continue;
+    canvas.drawPath(eightPointStar(center, radius * 0.62), fine);
+
+    // A tick every 10 degrees, longer every 30, then the ring.
+    final north = northAngle ?? 0;
+    final longTick = Paint()
+      ..strokeWidth = 1.5
+      ..color = colors.tick;
+    for (var i = 0; i < 36; i++) {
+      final long = i % 3 == 0;
       canvas.drawLine(
-        _at(center, radius - 7, i * 30.0),
-        _at(center, radius, i * 30.0),
-        fine,
+        _at(center, radius - (long ? 12 : 6), north + i * 10.0),
+        _at(center, radius, north + i * 10.0),
+        long ? longTick : fine,
       );
     }
     canvas.drawCircle(
@@ -476,55 +601,70 @@ class _DialPainter extends CustomPainter {
       Paint()
         ..style = PaintingStyle.stroke
         ..strokeWidth = aligned ? 4 : 2
-        ..color = aligned ? accent : ring,
+        ..color = aligned ? colors.aligned : colors.ring,
     );
-    final tickPaint = Paint()
-      ..strokeWidth = 2
-      ..color = tick;
-    if (northAngle == null) {
-      for (var i = 0; i < 4; i++) {
-        canvas.drawLine(
-          _at(center, radius - 12, i * 90),
-          _at(center, radius, i * 90),
-          tickPaint,
-        );
-      }
-    } else {
-      // The top of the dial is "ahead"; a long tick marks north as it swings round.
-      final north = northAngle!;
-      canvas.drawLine(
-        _at(center, radius - 22, north),
-        _at(center, radius, north),
-        Paint()
-          ..strokeWidth = 4
-          ..color = tick,
+
+    // The four directions turn with north, so they always read upright.
+    for (var i = 0; i < 4; i++) {
+      _label(
+        canvas,
+        labels[i],
+        _at(center, radius - 36, north + i * 90.0),
+        i == 0 ? colors.gold : colors.label,
+        i == 0,
       );
-      final front = Path()
-        ..moveTo(center.dx, center.dy - radius - 4)
-        ..lineTo(center.dx - 9, center.dy - radius + 12)
-        ..lineTo(center.dx + 9, center.dy - radius + 12)
-        ..close();
-      canvas.drawPath(front, Paint()..color = tick);
     }
+    if (northAngle != null) {
+      // Live: a pointer at the top marks where the phone is aimed.
+      final front = Path()
+        ..moveTo(center.dx, center.dy - radius - 6)
+        ..lineTo(center.dx - 8, center.dy - radius + 8)
+        ..lineTo(center.dx + 8, center.dy - radius + 8)
+        ..close();
+      canvas.drawPath(front, Paint()..color = colors.gold);
+    }
+
     // No marker while the reading is being disturbed: a wrong arrow is worse than none.
     final angle = markerAngle;
     if (angle != null) {
-      final tip = _at(center, radius - 6, angle);
       canvas.drawLine(
         center,
-        tip,
+        _at(center, radius - 36, angle),
         Paint()
-          ..strokeWidth = 5
+          ..strokeWidth = 4
           ..strokeCap = StrokeCap.round
-          ..color = accent,
+          ..color = aligned ? colors.aligned : colors.needle,
       );
-      // An eight-pointed star marks the Qibla at the end of the needle.
-      canvas.drawPath(eightPointStar(tip, 13), Paint()..color = accent);
+      _kaaba(canvas, _at(center, radius - 24, angle));
     }
     canvas.drawPath(
-      eightPointStar(center, 9),
-      Paint()..color = angle == null ? ring : gold,
+      eightPointStar(center, 10),
+      Paint()..color = angle == null ? colors.ring : colors.gold,
     );
+  }
+
+  /// A small Kaaba: a dark cube with a gold band and a gold edge.
+  void _kaaba(Canvas canvas, Offset at) {
+    final body = RRect.fromRectAndRadius(
+      Rect.fromCenter(center: at, width: 26, height: 26),
+      const Radius.circular(4),
+    );
+    canvas
+      ..drawRRect(body, Paint()..color = colors.kaaba)
+      ..save()
+      ..clipRRect(body)
+      ..drawRect(
+        Rect.fromLTWH(body.left, body.top + 6, body.width, 5),
+        Paint()..color = colors.gold,
+      )
+      ..restore()
+      ..drawRRect(
+        body,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5
+          ..color = aligned ? colors.aligned : colors.gold,
+      );
   }
 
   @override
@@ -532,10 +672,14 @@ class _DialPainter extends CustomPainter {
       old.markerAngle != markerAngle ||
       old.northAngle != northAngle ||
       old.aligned != aligned ||
-      old.ring != ring ||
-      old.accent != accent ||
-      old.tick != tick ||
-      old.face != face ||
-      old.hairline != hairline ||
-      old.gold != gold;
+      old.colors != colors ||
+      old.textDirection != textDirection ||
+      !_sameLabels(old.labels);
+
+  bool _sameLabels(List<String> other) {
+    for (var i = 0; i < labels.length; i++) {
+      if (labels[i] != other[i]) return false;
+    }
+    return true;
+  }
 }

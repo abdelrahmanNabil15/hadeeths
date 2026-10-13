@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mynewapp/app/app.dart';
@@ -9,12 +10,18 @@ import 'package:mynewapp/app/app_dependencies.dart';
 import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/app/prayer_wiring.dart';
 import 'package:mynewapp/app/quran_wiring.dart';
+import 'package:mynewapp/app/review_coordinator.dart';
+import 'package:mynewapp/app/review_wiring.dart';
 import 'package:mynewapp/core/cache/file_response_cache.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/licences.dart';
 import 'package:mynewapp/core/logging/app_bloc_observer.dart';
+import 'package:mynewapp/core/platform/app_version_source.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
+import 'package:mynewapp/core/platform/review_gateway.dart';
+import 'package:mynewapp/features/app_review/data/prefs_review_store.dart';
+import 'package:mynewapp/firebase_options.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +29,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode) Bloc.observer = AppBlocObserver();
   registerFontLicences();
+
+  // Firebase is set up for Android, iOS and web only. If it cannot start (an unsupported
+  // platform, a bad config) the app still runs; nothing here depends on it yet.
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } on Object catch (error) {
+    if (kDebugMode) debugPrint('firebase unavailable: $error');
+  }
 
   // Saved copies live in the app's private storage (not the OS-clearable cache folder), so
   // opened hadiths stay readable offline. Only this app can read them.
@@ -63,14 +80,28 @@ Future<void> main() async {
   // The reminders read the saved language and numerals through the app's own settings
   // repository, which exists once the dependencies are built; they only look when asked, later.
   late final AppDependencies dependencies;
+  final prayer = buildPrayerServices(
+    preferences: preferences,
+    loadAppSettings: () => dependencies.settings.load(),
+    homeWidget: features.prayer ? homeWidget : null,
+    adhanSounds: features.adhanSounds && Platform.isAndroid,
+  );
+  // Asking for a rating (Android and iOS only). It leaves a due prayer and a download alone.
+  final review = features.inAppReview && (Platform.isAndroid || Platform.isIOS)
+      ? ReviewCoordinator(
+          store: PrefsReviewStore(preferences),
+          gateway: InAppReviewBridge(),
+          versions: MethodChannelAppVersionSource(),
+          canInterrupt: reviewCanInterrupt(
+            prayer: features.prayer ? prayer : null,
+          ),
+        )
+      : null;
+  if (review != null) unawaited(review.start().catchError((Object _) {}));
   dependencies = AppDependencies.live(
     preferences: preferences,
-    prayer: buildPrayerServices(
-      preferences: preferences,
-      loadAppSettings: () => dependencies.settings.load(),
-      homeWidget: features.prayer ? homeWidget : null,
-      adhanSounds: features.adhanSounds && Platform.isAndroid,
-    ),
+    prayer: prayer,
+    review: review,
     homeWidget: features.prayer ? homeWidget : null,
     cache: cache,
     userData: userData,

@@ -5,6 +5,10 @@
          approximate choice is enough). No background location. Manual city choice needs neither. -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- The location permissions imply required location hardware; the app works without it
+         (the user picks a city), so Google Play must not hide it from devices that lack it. -->
+    <uses-feature android:name="android.hardware.location" android:required="false"/>
+    <uses-feature android:name="android.hardware.location.gps" android:required="false"/>
     <!-- Prayer reminders: put the scheduled reminders back after the phone restarts. The app asks
          for the notification permission itself, and only when the user switches reminders on.
          Exact timing is optional (off by default): SCHEDULE_EXACT_ALARM lets the user allow "Alarms
