@@ -152,3 +152,4 @@ parts still old; **Not revamped** = old design; **Needs verification** = built o
   quarter and sajdah data come from a one-time QuranHub export (numbers only, checked against the bundled text and against quran.com);
   the verse text still comes only from the bundled Tanzil file. At a larger reading size or system text size the page is shown at that
   size and scrolls. New strings: `quranSuraTitle`, `quranJuz`, `quranPage` (owner wording review).
+- 2026-10-10, on `ui/j-qibla-revamp` (local, not pushed): Qibla page redone: the dial sits on the midnight-emerald panel with the star lattice, a compass rose (ticks every 10 degrees, four directions that turn with north, a faint star), a small Kaaba as the Qibla marker, large bearing figures and the compass word in gold. Alignment is shown by a thicker ring, the check mark and the words, not by colour alone. Same texts, buttons and behaviour; no new strings.
