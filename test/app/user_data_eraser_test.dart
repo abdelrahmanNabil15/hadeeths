@@ -1,15 +1,18 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mynewapp/app/review_coordinator.dart';
 import 'package:mynewapp/app/user_data_eraser.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/schema.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
+import 'package:mynewapp/features/app_review/domain/review_state.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_preferences.dart';
 import 'package:mynewapp/features/prayer_times/domain/reminder_settings.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/domain/settings_repository.dart';
 
 import '../support/prayer_fakes.dart';
+import '../support/review_fakes.dart';
 
 class _Settings implements SettingsRepository {
   AppSettings saved = const AppSettings(theme: ThemePreference.dark);
@@ -132,6 +135,54 @@ void main() {
       expect(settings.saved, const AppSettings());
     });
 
+    test(
+      'forgets the rating memory too, and starts it again from now',
+      () async {
+        final store = InMemoryReviewStore(
+          ReviewState(
+            firstSeen: DateTime.utc(2026, 1, 1),
+            actions: 30,
+            pendingAction: true,
+            requests: [
+              ReviewRequest(at: DateTime.utc(2026, 5, 1), version: '1.0.0+1'),
+            ],
+          ),
+        );
+        final review = ReviewCoordinator(
+          store: store,
+          gateway: FakeReviewGateway(),
+          versions: FakeAppVersion(),
+        );
+        final erase = UserDataEraser(
+          settings: settings,
+          cache: cache,
+          userData: database,
+          prayer: prayer.services,
+          review: review,
+        );
+        expect(await erase.eraseAll(), isTrue);
+        expect(store.clears, 1);
+        final state = await review.state;
+        expect(state.actions, 0);
+        expect(state.requests, isEmpty);
+        expect(state.pendingAction, isFalse);
+        expect(state.firstSeen, isNot(DateTime.utc(2026, 1, 1)));
+      },
+    );
+
+    test('a failure in the rating memory does not stop the rest', () async {
+      final review = _FailingReview();
+      final erase = UserDataEraser(
+        settings: settings,
+        cache: cache,
+        userData: database,
+        review: review,
+      );
+      expect(await erase.eraseAll(), isFalse);
+      expect(_rows(database, 'favorites'), 0);
+      expect(cache.clears, 1);
+    });
+
     test('cancels every scheduled reminder', () async {
       await prayer.services.reminders.reconcile();
       expect(prayer.notifications.held, isNotEmpty);
@@ -159,4 +210,16 @@ void main() {
       expect(settings.saved, const AppSettings());
     });
   });
+}
+
+class _FailingReview extends ReviewCoordinator {
+  _FailingReview()
+    : super(
+        store: InMemoryReviewStore(),
+        gateway: FakeReviewGateway(),
+        versions: FakeAppVersion(),
+      );
+
+  @override
+  Future<void> forget() async => throw StateError('cannot clear');
 }

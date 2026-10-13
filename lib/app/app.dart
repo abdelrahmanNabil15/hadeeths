@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mynewapp/app/app_dependencies.dart';
+import 'package:mynewapp/app/review_wiring.dart';
 import 'package:mynewapp/app/shell/app_shell.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
@@ -11,6 +12,7 @@ import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
+import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/categories/domain/categories_repository.dart';
 import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/categories/presentation/state/categories_cubit.dart';
@@ -51,6 +53,23 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   int _generation = 0;
   final _messenger = GlobalKey<ScaffoldMessengerState>();
 
+  /// The root navigator, so the rating logic can look at the hadith home screen it returned to.
+  ///
+  /// A new one after "Delete all my data": one key must never carry the old navigator (and the
+  /// page it showed) into the fresh app.
+  var _navigator = GlobalKey<NavigatorState>();
+
+  /// Told when the user is back on the hadith home screen without a bottom navigation (the shell
+  /// does the same for its first section).
+  late var _homeReturn = HomeReturnObserver(_backOnHome);
+
+  /// The user is back on the hadith home screen: the rating prompt may ask now, if everything
+  /// holds at this moment.
+  void _backOnHome() => requestOnHomeReturn(
+    widget.dependencies.reviewIfEnabled,
+    _navigator.currentContext,
+  );
+
   /// Kept here (not only in the tree) so that deleting all data can reset it.
   late final SettingsCubit _settings = SettingsCubit(
     widget.dependencies.settings,
@@ -61,7 +80,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     final ok = await widget.dependencies.eraser.eraseAll();
     if (!ok || !mounted) return ok;
     await _settings.resetToDefaults();
-    setState(() => _generation++);
+    setState(() {
+      _generation++;
+      _navigator = GlobalKey<NavigatorState>();
+      _homeReturn = HomeReturnObserver(_backOnHome);
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final messengerContext = _messenger.currentContext;
       if (messengerContext == null) return;
@@ -173,6 +196,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 return MaterialApp(
                   key: ValueKey(_generation),
                   scaffoldMessengerKey: _messenger,
+                  navigatorKey: _navigator,
+                  navigatorObservers: deps.features.usesShell
+                      ? const []
+                      : [_homeReturn],
                   onGenerateTitle: (context) => context.l10n.appName,
                   theme: _lightTheme,
                   darkTheme: _darkTheme,
@@ -201,13 +228,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                     };
                     return DigitScope(
                       digits: Digits(arabicIndic: arabicIndic),
-                      child: BlocProvider(
-                        key: ValueKey(language),
-                        create: (context) => CategoriesCubit(
-                          context.read<CategoriesRepository>(),
-                          language: language,
-                        )..load(),
-                        child: child!,
+                      child: ReviewScope(
+                        actions: deps.reviewIfEnabled,
+                        child: BlocProvider(
+                          key: ValueKey(language),
+                          create: (context) => CategoriesCubit(
+                            context.read<CategoriesRepository>(),
+                            language: language,
+                          )..load(),
+                          child: child!,
+                        ),
                       ),
                     );
                   },
@@ -224,6 +254,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             favorites: deps.favoritesIfEnabled,
                             onDeleteAll: _eraseAll,
                             tabRequests: _widgetTabs,
+                            onHomeReturn: _backOnHome,
                             quran: deps.quran,
                             quranUserData: deps.quranUserData,
                           )

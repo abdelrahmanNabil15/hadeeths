@@ -14,6 +14,7 @@ class FeatureFlags {
     this.shareCards = false,
     this.dailyHadith = false,
     this.adhanSounds = false,
+    this.inAppReview = false,
   });
 
   /// Everything on (previews and tests).
@@ -23,7 +24,8 @@ class FeatureFlags {
       favorites = true,
       shareCards = true,
       dailyHadith = true,
-      adhanSounds = true;
+      adhanSounds = true,
+      inAppReview = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -47,6 +49,10 @@ class FeatureFlags {
   /// Downloadable adhan recordings as the sound of the prayer reminders (Android 10 and later).
   /// Off until the owner has confirmed the right to offer the recordings (`docs/ADHAN_SOUNDS.md`).
   final bool adhanSounds;
+
+  /// Asking the system to show its rating sheet at the right moment, and a "Rate" entry that opens the
+  /// store page. Off until the implementation has been reviewed (`docs/IN_APP_REVIEW.md`).
+  final bool inAppReview;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

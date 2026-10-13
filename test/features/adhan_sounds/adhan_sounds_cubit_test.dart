@@ -101,6 +101,9 @@ class _CountingLibrary implements AdhanLibrary {
   final void Function() _onDownload;
 
   @override
+  bool get downloading => _inner.downloading;
+
+  @override
   Future<bool> isSupported() => _inner.isSupported();
 
   @override

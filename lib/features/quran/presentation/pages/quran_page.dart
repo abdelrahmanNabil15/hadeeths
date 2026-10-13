@@ -9,6 +9,7 @@ import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
+import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/domain/sura_lookup.dart';
@@ -31,24 +32,35 @@ class QuranPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => QuranCubit(source: source, userData: userData)..load(),
-      child: Scaffold(
-        appBar: AppBar(title: Text(context.l10n.navQuran)),
-        body: BlocBuilder<QuranCubit, QuranState>(
-          builder: (context, state) => AnimatedStateSwitcher(
-            child: switch (state.status) {
-              QuranStatus.loading => const LoadingView(
-                key: ValueKey('loading'),
-              ),
-              QuranStatus.unavailable => EmptyView(
-                key: const ValueKey('unavailable'),
-                message: context.l10n.quranUnavailable,
-                icon: Icons.menu_book_outlined,
-              ),
-              QuranStatus.ready => _Index(
-                key: const ValueKey('ready'),
-                state: state,
-              ),
-            },
+      // Reading: the saved place moves on to another verse. Counted once per sura per day.
+      child: BlocListener<QuranCubit, QuranState>(
+        listenWhen: (previous, current) =>
+            previous.status == QuranStatus.ready &&
+            previous.lastRead != null &&
+            current.lastRead != null &&
+            previous.lastRead != current.lastRead,
+        listener: (context, state) => ReviewScope.maybeOf(
+          context,
+        )?.recordAction('quran:${state.lastRead!.sura}'),
+        child: Scaffold(
+          appBar: AppBar(title: Text(context.l10n.navQuran)),
+          body: BlocBuilder<QuranCubit, QuranState>(
+            builder: (context, state) => AnimatedStateSwitcher(
+              child: switch (state.status) {
+                QuranStatus.loading => const LoadingView(
+                  key: ValueKey('loading'),
+                ),
+                QuranStatus.unavailable => EmptyView(
+                  key: const ValueKey('unavailable'),
+                  message: context.l10n.quranUnavailable,
+                  icon: Icons.menu_book_outlined,
+                ),
+                QuranStatus.ready => _Index(
+                  key: const ValueKey('ready'),
+                  state: state,
+                ),
+              },
+            ),
           ),
         ),
       ),

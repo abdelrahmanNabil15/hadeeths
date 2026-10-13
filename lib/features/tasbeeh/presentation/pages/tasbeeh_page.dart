@@ -9,6 +9,7 @@ import 'package:mynewapp/core/widgets/option_group.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/core/widgets/status_banner.dart';
+import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_counter.dart';
 import 'package:mynewapp/features/tasbeeh/domain/tasbeeh_repository.dart';
 import 'package:mynewapp/features/tasbeeh/presentation/state/tasbeeh_cubit.dart';
@@ -30,12 +31,22 @@ class TasbeehPage extends StatelessWidget {
     return BlocProvider(
       create: (_) =>
           TasbeehCubit(repository: repository, haptics: haptics)..load(),
-      child: Scaffold(
-        appBar: AppBar(title: Text(context.l10n.tasbeehTitle)),
-        body: ContentWidth(
-          child: BlocBuilder<TasbeehCubit, TasbeehState>(
-            builder: (context, state) =>
-                state.loaded ? _Counter(state: state) : const LoadingView(),
+      // A round finished: the count reaches its target. Counted once a day.
+      child: BlocListener<TasbeehCubit, TasbeehState>(
+        listenWhen: (previous, current) =>
+            previous.loaded &&
+            current.loaded &&
+            !previous.counter.onTarget &&
+            current.counter.onTarget,
+        listener: (context, state) =>
+            ReviewScope.maybeOf(context)?.recordAction('tasbeeh:round'),
+        child: Scaffold(
+          appBar: AppBar(title: Text(context.l10n.tasbeehTitle)),
+          body: ContentWidth(
+            child: BlocBuilder<TasbeehCubit, TasbeehState>(
+              builder: (context, state) =>
+                  state.loaded ? _Counter(state: state) : const LoadingView(),
+            ),
           ),
         ),
       ),

@@ -163,6 +163,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutFontsHeading => 'Fonts';
 
   @override
+  String get rateApp => 'Rate Sakina';
+
+  @override
   String get aboutFontsBody =>
       'Cairo and Amiri, under the SIL Open Font License 1.1.';
 

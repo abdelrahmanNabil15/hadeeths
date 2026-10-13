@@ -4,6 +4,7 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_icons.dart';
 import 'package:mynewapp/core/widgets/app_tile.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
+import 'package:mynewapp/features/app_review/presentation/rate_app_tile.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/favorites/presentation/favorites_page.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
@@ -94,6 +95,10 @@ class MorePage extends StatelessWidget {
               pressFeedback: true,
               onTap: () => open(const AboutPage(extended: true)),
             ),
+            if (RateAppTile.isShown(context)) ...[
+              const SizedBox(height: AppSpacing.md),
+              const RateAppTile(),
+            ],
           ],
         ),
       ),
