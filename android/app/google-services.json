@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "380151637916",
+    "project_id": "sakina-9468f",
+    "storage_bucket": "sakina-9468f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380151637916:android:958a5b676e25265c3aca59",
+        "android_client_info": {
+          "package_name": "com.hadeeths.eg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs4g4Jx24_M2C3KE2_N4bywG-CRXXnAjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380151637916:android:9252ff22f0232ca23aca59",
+        "android_client_info": {
+          "package_name": "com.hadeeths.eg.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDs4g4Jx24_M2C3KE2_N4bywG-CRXXnAjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
