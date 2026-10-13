@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mynewapp/app/app.dart';
@@ -20,6 +21,7 @@ import 'package:mynewapp/core/platform/app_version_source.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/platform/review_gateway.dart';
 import 'package:mynewapp/features/app_review/data/prefs_review_store.dart';
+import 'package:mynewapp/firebase_options.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +29,16 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if (kDebugMode) Bloc.observer = AppBlocObserver();
   registerFontLicences();
+
+  // Firebase is set up for Android, iOS and web only. If it cannot start (an unsupported
+  // platform, a bad config) the app still runs; nothing here depends on it yet.
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } on Object catch (error) {
+    if (kDebugMode) debugPrint('firebase unavailable: $error');
+  }
 
   // Saved copies live in the app's private storage (not the OS-clearable cache folder), so
   // opened hadiths stay readable offline. Only this app can read them.
