@@ -180,6 +180,9 @@ class _MushafPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scale = context.select((SettingsCubit c) => c.state.readingScale);
+    final markerStyle = context.select(
+      (SettingsCubit c) => c.state.ayahMarkerStyle,
+    );
     final bookmarks = context.select((QuranCubit c) => c.state.bookmarks);
     final fitted =
         scale == 1 && MediaQuery.textScalerOf(context).scale(10) == 10;
@@ -229,6 +232,7 @@ class _MushafPageView extends StatelessWidget {
                   skipFromFirst: group.first.number == 1
                       ? (leadingBasmala(text, group.first.sura) ?? '')
                       : '',
+                  markerStyle: markerStyle,
                 ),
               ],
             ),

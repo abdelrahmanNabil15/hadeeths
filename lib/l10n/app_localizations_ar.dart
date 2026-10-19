@@ -200,6 +200,15 @@ class AppLocalizationsAr extends AppLocalizations {
   String get digitsWestern => 'الأرقام الغربية (0123)';
 
   @override
+  String get ayahMarkerStyleHeading => 'علامة الآية';
+
+  @override
+  String get ayahMarkerStyleRosette => 'الوردة الذهبية (الافتراضي)';
+
+  @override
+  String get ayahMarkerStyleMushafGlyph => 'رسم مصحفي (أميري)';
+
+  @override
   String get navHadiths => 'الأحاديث';
 
   @override

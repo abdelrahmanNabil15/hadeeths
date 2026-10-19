@@ -202,6 +202,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitsWestern => 'Western (0123)';
 
   @override
+  String get ayahMarkerStyleHeading => 'Ayah marker';
+
+  @override
+  String get ayahMarkerStyleRosette => 'Rosette (default)';
+
+  @override
+  String get ayahMarkerStyleMushafGlyph => 'Mushaf glyph (Amiri)';
+
+  @override
   String get navHadiths => 'Hadiths';
 
   @override

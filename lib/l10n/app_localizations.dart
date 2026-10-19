@@ -452,6 +452,24 @@ abstract class AppLocalizations {
   /// **'الأرقام الغربية (0123)'**
   String get digitsWestern;
 
+  /// No description provided for @ayahMarkerStyleHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'علامة الآية'**
+  String get ayahMarkerStyleHeading;
+
+  /// No description provided for @ayahMarkerStyleRosette.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوردة الذهبية (الافتراضي)'**
+  String get ayahMarkerStyleRosette;
+
+  /// No description provided for @ayahMarkerStyleMushafGlyph.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم مصحفي (أميري)'**
+  String get ayahMarkerStyleMushafGlyph;
+
   /// No description provided for @navHadiths.
   ///
   /// In ar, this message translates to:

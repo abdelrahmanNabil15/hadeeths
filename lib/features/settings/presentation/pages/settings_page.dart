@@ -71,6 +71,20 @@ class SettingsPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.ayahMarkerStyleHeading),
+              const SizedBox(height: AppSpacing.sm),
+              OptionGroup<AyahMarkerStyle>(
+                selected: settings.ayahMarkerStyle,
+                onSelected: cubit.setAyahMarkerStyle,
+                options: [
+                  (AyahMarkerStyle.rosette, l10n.ayahMarkerStyleRosette),
+                  (
+                    AyahMarkerStyle.mushafGlyph,
+                    l10n.ayahMarkerStyleMushafGlyph,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
               SectionHeading(l10n.textSize),
               const SizedBox(height: AppSpacing.sm),
               const ReadingSizeControl(),

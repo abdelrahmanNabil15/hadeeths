@@ -13,6 +13,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
   static const readingScaleKey = 'settings.readingScale';
   static const offlineCopiesKey = 'settings.offlineCopies';
   static const digitsKey = 'settings.digits';
+  static const ayahMarkerStyleKey = 'settings.ayahMarkerStyle';
 
   @override
   Future<AppSettings> load() async {
@@ -40,6 +41,12 @@ class SettingsRepositoryImpl implements SettingsRepository {
             _read(() => _prefs.getString(digitsKey)),
           ) ??
           DigitStyle.automatic,
+      ayahMarkerStyle:
+          _enumByName(
+            AyahMarkerStyle.values,
+            _read(() => _prefs.getString(ayahMarkerStyleKey)),
+          ) ??
+          AyahMarkerStyle.rosette,
     );
   }
 
@@ -50,6 +57,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
     await _prefs.setDouble(readingScaleKey, settings.readingScale);
     await _prefs.setBool(offlineCopiesKey, settings.offlineCopies);
     await _prefs.setString(digitsKey, settings.digits.name);
+    await _prefs.setString(ayahMarkerStyleKey, settings.ayahMarkerStyle.name);
   }
 
   /// A value of the wrong type (a corrupted or hand-edited store) counts as missing.

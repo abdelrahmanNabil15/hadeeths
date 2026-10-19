@@ -17,6 +17,15 @@ enum AppLanguage {
 
 enum ThemePreference { system, light, dark }
 
+/// How the verse-number marker is drawn in the Quran reader.
+enum AyahMarkerStyle {
+  /// The app's own painted rosette (gold ring, sage when bookmarked). The default.
+  rosette,
+
+  /// A traced Mushaf ayah-marker glyph from Quran.ws Quran Assets (OFL-1.1, confirmed assets only).
+  mushafGlyph,
+}
+
 /// How the app writes its own numbers.
 enum DigitStyle {
   /// Arabic-Indic digits (٠١٢٣) when the interface is Arabic, Western digits (0123) otherwise.
@@ -33,6 +42,7 @@ class AppSettings extends Equatable {
     this.readingScale = defaultReadingScale,
     this.offlineCopies = true,
     this.digits = DigitStyle.automatic,
+    this.ayahMarkerStyle = AyahMarkerStyle.rosette,
   });
 
   /// Allowed multipliers for the reading text (hadith and explanation), smallest first.
@@ -51,6 +61,9 @@ class AppSettings extends Equatable {
 
   /// Which digits the app's own numbers use. Content from sources is never changed.
   final DigitStyle digits;
+
+  /// How the Quran reader draws the verse-number marker.
+  final AyahMarkerStyle ayahMarkerStyle;
 
   /// Index of [readingScale] in [readingScales].
   int get readingScaleIndex => readingScales.indexOf(readingScale);
@@ -74,12 +87,14 @@ class AppSettings extends Equatable {
     double? readingScale,
     bool? offlineCopies,
     DigitStyle? digits,
+    AyahMarkerStyle? ayahMarkerStyle,
   }) => AppSettings(
     language: language ?? this.language,
     theme: theme ?? this.theme,
     readingScale: readingScale ?? this.readingScale,
     offlineCopies: offlineCopies ?? this.offlineCopies,
     digits: digits ?? this.digits,
+    ayahMarkerStyle: ayahMarkerStyle ?? this.ayahMarkerStyle,
   );
 
   @override
@@ -89,5 +104,6 @@ class AppSettings extends Equatable {
     readingScale,
     offlineCopies,
     digits,
+    ayahMarkerStyle,
   ];
 }
