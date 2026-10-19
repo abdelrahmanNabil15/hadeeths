@@ -82,6 +82,10 @@ class SettingsPage extends StatelessWidget {
                     AyahMarkerStyle.mushafGlyph,
                     l10n.ayahMarkerStyleMushafGlyph,
                   ),
+                  (
+                    AyahMarkerStyle.scheherazadeColor,
+                    l10n.ayahMarkerStyleScheherazadeColor,
+                  ),
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),

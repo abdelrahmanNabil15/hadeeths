@@ -41,6 +41,15 @@ class AyahMarker extends StatelessWidget {
           size: size,
           semanticLabel: semanticLabel,
         );
+      case AyahMarkerStyle.scheherazadeColor:
+        return MushafGlyphMarker(
+          asset: scheherazadeColorGlyph,
+          number: number,
+          bookmarked: bookmarked,
+          tinted: false,
+          size: size,
+          semanticLabel: semanticLabel,
+        );
     }
   }
 }

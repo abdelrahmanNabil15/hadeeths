@@ -209,6 +209,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get ayahMarkerStyleMushafGlyph => 'رسم مصحفي (أميري)';
 
   @override
+  String get ayahMarkerStyleScheherazadeColor => 'رسم مصحفي ملوّن (شهرزاد)';
+
+  @override
   String get navHadiths => 'الأحاديث';
 
   @override

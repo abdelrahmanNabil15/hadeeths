@@ -211,6 +211,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ayahMarkerStyleMushafGlyph => 'Mushaf glyph (Amiri)';
 
   @override
+  String get ayahMarkerStyleScheherazadeColor =>
+      'Mushaf glyph, full colour (Scheherazade)';
+
+  @override
   String get navHadiths => 'Hadiths';
 
   @override

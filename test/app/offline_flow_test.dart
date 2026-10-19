@@ -132,6 +132,8 @@ void main() {
       await goBack(tester);
       await tapVisible(tester, find.byIcon(Icons.tune));
       await tester.scrollUntilVisible(find.byType(SwitchListTile), 200);
+      await tester.ensureVisible(find.byType(SwitchListTile));
+      await tester.pumpAndSettle();
       await tester.tap(find.byType(SwitchListTile));
       await tester.pumpAndSettle();
       expect(cache.enabled, isFalse);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mynewapp/core/design_system/app_theme.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/ayah_marker.dart';
@@ -39,6 +40,56 @@ void main() {
       expect(find.byType(MushafGlyphMarker), findsOneWidget);
       expect(find.byType(VerseMarker), findsNothing);
     });
+
+    testWidgets(
+      'draws the Mushaf glyph for AyahMarkerStyle.scheherazadeColor',
+      (tester) async {
+        await tester.pumpWidget(
+          _host(
+            const AyahMarker(
+              style: AyahMarkerStyle.scheherazadeColor,
+              number: 3,
+            ),
+          ),
+        );
+        expect(find.byType(MushafGlyphMarker), findsOneWidget);
+        expect(find.byType(VerseMarker), findsNothing);
+      },
+    );
+
+    testWidgets(
+      'scheherazadeColor is never tinted, bookmarked or not — mushafGlyph always is',
+      (tester) async {
+        Future<ColorFilter?> colorFilterFor(
+          AyahMarkerStyle style, {
+          required bool bookmarked,
+        }) async {
+          await tester.pumpWidget(
+            _host(AyahMarker(style: style, number: 1, bookmarked: bookmarked)),
+          );
+          return tester.widget<SvgPicture>(find.byType(SvgPicture)).colorFilter;
+        }
+
+        expect(
+          await colorFilterFor(
+            AyahMarkerStyle.scheherazadeColor,
+            bookmarked: false,
+          ),
+          isNull,
+        );
+        expect(
+          await colorFilterFor(
+            AyahMarkerStyle.scheherazadeColor,
+            bookmarked: true,
+          ),
+          isNull,
+        );
+        expect(
+          await colorFilterFor(AyahMarkerStyle.mushafGlyph, bookmarked: false),
+          isNotNull,
+        );
+      },
+    );
 
     testWidgets('announces the given semantic label for both styles', (
       tester,

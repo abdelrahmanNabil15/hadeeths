@@ -108,6 +108,23 @@ void main() {
       },
     );
 
+    test('the colour glyph is Scheherazade New, semibold', () {
+      expect(scheherazadeColorGlyph.id, 'font-013-semibold');
+      expect(scheherazadeColorGlyph.families, contains('Scheherazade New'));
+    });
+
+    test('the colour glyph\'s colour SVG is not single-colour currentColor', () {
+      final contents = File(
+        scheherazadeColorGlyph.colorAsset,
+      ).readAsStringSync();
+      expect(
+        contents.contains('currentColor'),
+        isFalse,
+        reason:
+            'font-013-semibold-color.svg should keep its own published palette',
+      );
+    });
+
     test('every source family has a licence file on the Licences page', () {
       final families = confirmedAyahMarkers.expand((a) => a.families).toSet();
       for (final family in families) {

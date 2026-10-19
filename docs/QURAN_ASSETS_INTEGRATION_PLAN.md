@@ -311,8 +311,17 @@ true "corrupt/missing SVG falls back to the rosette" runtime guard was dropped �
 Rosette / Mushaf glyph), defaulting to **Rosette** — the app's existing painted marker, unchanged. Choosing
 "Mushaf glyph" switches every verse-number marker in the reader to the Amiri-traced glyph (`font-002-regular`),
 tinted gold / sage-on-bookmark the same way the rosette is. All 40 confirmed assets are in the data-layer manifest
-and available to a future style picker; today's UI exposes one of them (§9, decision 3's open question, resolved
-in the direction this plan already recommended).
+and available to a future style picker; today's UI exposes two of them (§9, decision 3's open question, resolved
+in the direction this plan already recommended, then extended once more — see below).
+
+**2026-10-19, follow-up:** a second style was added on request: `font-013-semibold` (Scheherazade New), shown as
+"Mushaf glyph, full colour (Scheherazade)". Unlike the Amiri option, this one renders from the asset's own
+`colorAsset` (its fixed decorative palette) rather than the tinted `monoAsset`, and is deliberately **never**
+recoloured for gold/sage/bookmark state — `MushafGlyphMarker` gained a `tinted` flag for exactly this case. The
+trade-off, stated plainly: this style has no visual bookmark indicator of its own (the digit's colour is the only
+thing that could change, and it doesn't either, to keep the glyph's look consistent) — a deliberate choice, not an
+oversight. `flutter_svg`, the manifest and the 40-asset inventory are unchanged; this only adds a second UI-exposed
+option over data that was already vendored and licensed.
 
 **Files changed:** 14 modified, 22 new paths added (one of which, `assets/quran_assets/ayah_markers/`, holds the 80
 SVG files — color + mono for each of the 40 confirmed markers):

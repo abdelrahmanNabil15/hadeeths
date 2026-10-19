@@ -24,6 +24,10 @@ enum AyahMarkerStyle {
 
   /// A traced Mushaf ayah-marker glyph from Quran.ws Quran Assets (OFL-1.1, confirmed assets only).
   mushafGlyph,
+
+  /// The Scheherazade New ayah-marker glyph (also from Quran.ws Quran Assets, OFL-1.1, confirmed),
+  /// shown in its own full-colour palette — never tinted gold or sage, unlike [mushafGlyph].
+  scheherazadeColor,
 }
 
 /// How the app writes its own numbers.

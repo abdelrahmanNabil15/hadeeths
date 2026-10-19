@@ -589,3 +589,8 @@ const confirmedAyahMarkers = <MushafAsset>[
 /// bundled by the app for reading (see `docs/QURAN_ASSETS_INTEGRATION_PLAN.md` §9, decision 3).
 MushafAsset get defaultMushafGlyph =>
     confirmedAyahMarkers.firstWhere((a) => a.id == 'font-002-regular');
+
+/// Scheherazade New (semibold), shown in its own full-colour palette, never tinted gold or sage —
+/// the one marker style the reader does not recolour for the theme or the bookmark state.
+MushafAsset get scheherazadeColorGlyph =>
+    confirmedAyahMarkers.firstWhere((a) => a.id == 'font-013-semibold');

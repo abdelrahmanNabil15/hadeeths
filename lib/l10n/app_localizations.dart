@@ -470,6 +470,12 @@ abstract class AppLocalizations {
   /// **'رسم مصحفي (أميري)'**
   String get ayahMarkerStyleMushafGlyph;
 
+  /// No description provided for @ayahMarkerStyleScheherazadeColor.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم مصحفي ملوّن (شهرزاد)'**
+  String get ayahMarkerStyleScheherazadeColor;
+
   /// No description provided for @navHadiths.
   ///
   /// In ar, this message translates to:
