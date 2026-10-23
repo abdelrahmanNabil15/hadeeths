@@ -1014,6 +1014,106 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quranBookmarkRemove => 'Remove the bookmark';
 
   @override
+  String get quranReadingMode => 'Reading mode';
+
+  @override
+  String get quranReadingModeMushaf => 'Mushaf';
+
+  @override
+  String get quranReadingModeVerseByVerse => 'Verse by verse';
+
+  @override
+  String get quranTranslation => 'Translation';
+
+  @override
+  String get quranChooseTranslation => 'Choose a translation';
+
+  @override
+  String get quranTranslationNone => 'No translation';
+
+  @override
+  String get quranTranslationSearchHint => 'Search by name, author or language';
+
+  @override
+  String get quranTranslationNoMatch => 'No translation matches.';
+
+  @override
+  String quranTranslationCredit(Object name) {
+    return 'Translation: $name';
+  }
+
+  @override
+  String get quranTafsir => 'Tafsir';
+
+  @override
+  String get quranChooseTafsir => 'Choose a tafsir';
+
+  @override
+  String get quranTafsirNone => 'No tafsir';
+
+  @override
+  String get quranTafsirSearchHint => 'Search by name, author or language';
+
+  @override
+  String get quranTafsirNoMatch => 'No tafsir matches.';
+
+  @override
+  String quranTafsirCredit(Object name) {
+    return 'Tafsir: $name';
+  }
+
+  @override
+  String get quranTafsirRead => 'Read the tafsir';
+
+  @override
+  String get quranTafsirDisclaimer =>
+      'A scholar\'s interpretation, not the Quran itself.';
+
+  @override
+  String get quranRecitation => 'Recitation';
+
+  @override
+  String get quranChooseReciter => 'Choose a reciter';
+
+  @override
+  String get quranReciterNone => 'No reciter';
+
+  @override
+  String get quranListen => 'Listen';
+
+  @override
+  String get quranAudioPlay => 'Play';
+
+  @override
+  String get quranAudioPause => 'Pause';
+
+  @override
+  String get quranAudioPrevious => 'Previous verse';
+
+  @override
+  String get quranAudioNext => 'Next verse';
+
+  @override
+  String get quranAudioStop => 'Stop';
+
+  @override
+  String get quranSearchTabQuran => 'Qur\'an text';
+
+  @override
+  String get quranTranslationSearchPrompt =>
+      'Type a word to search the translation.';
+
+  @override
+  String get quranTranslationSearchNeedsEdition =>
+      'Choose a translation first to search its text.';
+
+  @override
+  String get quranSearchLoadMore => 'Load more';
+
+  @override
+  String get quranSearchLoadMoreFailed => 'Couldn\'t load more results.';
+
+  @override
   String get quranSurasHeading => 'Suras';
 
   @override

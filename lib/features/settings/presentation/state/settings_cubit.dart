@@ -18,6 +18,40 @@ class SettingsCubit extends Cubit<AppSettings> {
   Future<void> setDigits(DigitStyle digits) =>
       _update(state.copyWith(digits: digits));
 
+  Future<void> setQuranReadingMode(QuranReadingMode mode) =>
+      _update(state.copyWith(quranReadingMode: mode));
+
+  /// `null` shows no translation. [name] is required when [editionId] is not null, so the
+  /// credit line under each verse never needs the edition list reloaded.
+  Future<void> setQuranTranslationEdition(int? editionId, {String? name}) =>
+      _update(
+        editionId == null
+            ? state.copyWith(clearQuranTranslationEditionId: true)
+            : state.copyWith(
+                quranTranslationEditionId: editionId,
+                quranTranslationEditionName: name,
+              ),
+      );
+
+  /// `null` shows no tafsir. [name] is required when [editionId] is not null, same rule as
+  /// [setQuranTranslationEdition].
+  Future<void> setQuranTafsirEdition(int? editionId, {String? name}) => _update(
+    editionId == null
+        ? state.copyWith(clearQuranTafsirEditionId: true)
+        : state.copyWith(
+            quranTafsirEditionId: editionId,
+            quranTafsirEditionName: name,
+          ),
+  );
+
+  /// `null` means no reciter is chosen. [name] is required when [reciterId] is not null, same
+  /// rule as [setQuranTranslationEdition].
+  Future<void> setQuranReciter(int? reciterId, {String? name}) => _update(
+    reciterId == null
+        ? state.copyWith(clearQuranReciterId: true)
+        : state.copyWith(quranReciterId: reciterId, quranReciterName: name),
+  );
+
   Future<void> setOfflineCopies({required bool enabled}) =>
       _update(state.copyWith(offlineCopies: enabled));
 

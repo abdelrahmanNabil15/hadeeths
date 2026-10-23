@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
+import 'package:mynewapp/core/network/quran_content_client.dart';
 
 typedef FakeHandler =
     Future<ResponseBody> Function(RequestOptions options, int callNumber);
@@ -49,6 +50,13 @@ DioException dioError(RequestOptions o, DioExceptionType type) =>
   final adapter = FakeAdapter(handler);
   final dio = HadeethClient.createDio()..httpClientAdapter = adapter;
   return (HadeethClient(dio: dio, retryDelay: Duration.zero), adapter);
+}
+
+/// A [QuranContentClient] wired to a fake adapter, with no retry delay.
+(QuranContentClient, FakeAdapter) fakeQuranContentClient(FakeHandler handler) {
+  final adapter = FakeAdapter(handler);
+  final dio = QuranContentClient.createDio()..httpClientAdapter = adapter;
+  return (QuranContentClient(dio: dio, retryDelay: Duration.zero), adapter);
 }
 
 /// A fetcher whose cache is switched off, so a data source behaves as if nothing is saved.

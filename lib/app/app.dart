@@ -257,6 +257,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             onHomeReturn: _backOnHome,
                             quran: deps.quran,
                             quranUserData: deps.quranUserData,
+                            quranContent: deps.quranContentIfEnabled,
+                            quranAudioPlayerFactory:
+                                deps.quranAudioPlayerFactoryIfEnabled,
                           )
                         : const HomePage(),
                   ),

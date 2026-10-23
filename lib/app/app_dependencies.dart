@@ -5,6 +5,7 @@ import 'package:mynewapp/core/cache/cached_fetcher.dart';
 import 'package:mynewapp/core/cache/response_cache.dart';
 import 'package:mynewapp/core/database/user_database.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart';
+import 'package:mynewapp/core/network/quran_content_client.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/categories/data/categories_remote_data_source.dart';
@@ -19,7 +20,12 @@ import 'package:mynewapp/features/hadiths/data/hadiths_remote_data_source.dart';
 import 'package:mynewapp/features/hadiths/data/hadiths_repository_impl.dart';
 import 'package:mynewapp/features/hadiths/domain/hadiths_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/quran/data/just_audio_quran_player.dart';
+import 'package:mynewapp/features/quran/data/quran_content_remote_data_source.dart';
+import 'package:mynewapp/features/quran/data/quran_content_repository_impl.dart';
 import 'package:mynewapp/features/quran/data/quran_user_data_impl.dart';
+import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
+import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/search/data/search_remote_data_source.dart';
@@ -50,6 +56,8 @@ class AppDependencies {
     this.favorites,
     this.quran,
     this.quranUserData,
+    this.quranContent,
+    this.quranAudioPlayerFactory,
     this.imageSharer = const SystemImageSharer(),
     this.dailyHadith,
     this.homeWidget,
@@ -62,6 +70,7 @@ class AppDependencies {
     required SharedPreferences preferences,
     required SwitchableResponseCache cache,
     HadeethClient? client,
+    QuranContentClient? quranContentClient,
     UserDatabase? userData,
     FeatureFlags features = const FeatureFlags(),
     PrayerServices? prayer,
@@ -71,6 +80,9 @@ class AppDependencies {
   }) {
     final http = client ?? HadeethClient();
     final fetcher = CachedFetcher(cache);
+    // Shares the hadith content's cache: its paths (editions/..., translations/...) never
+    // collide with HadeethEnc's (categories/list, hadeeths/list, ...).
+    final quranContentHttp = quranContentClient ?? QuranContentClient();
     return AppDependencies(
       categories: CategoriesRepositoryImpl(
         HttpCategoriesRemoteDataSource(http, fetcher),
@@ -95,6 +107,10 @@ class AppDependencies {
       homeWidget: homeWidget,
       quran: quran,
       quranUserData: userData == null ? null : SqliteQuranUserData(userData.db),
+      quranContent: QuranContentRepositoryImpl(
+        HttpQuranContentRemoteDataSource(quranContentHttp, fetcher),
+      ),
+      quranAudioPlayerFactory: JustAudioQuranPlayer.new,
       review: review,
     );
   }
@@ -133,6 +149,15 @@ class AppDependencies {
   /// Last-read place and bookmarks; `null` when the user database could not be opened.
   final QuranUserData? quranUserData;
 
+  /// Translation, tafsir and recitation-audio editions and content, through hadeeths' own
+  /// backend proxy; `null` in tests that do not use it. Never the verse text itself.
+  final QuranContentRepository? quranContent;
+
+  /// Builds a fresh audio player for the reader's mini player; a factory, not a shared instance,
+  /// since each `SuraReaderPage` owns and disposes its own player. `null` in tests that do not
+  /// use it.
+  final QuranAudioPlayer Function()? quranAudioPlayerFactory;
+
   /// Opens the system share sheet with images.
   final ImageSharer imageSharer;
 
@@ -169,6 +194,19 @@ class AppDependencies {
   /// Image sharing as the screens should see it: only when its section is on.
   ImageSharer? get imageSharerIfEnabled =>
       features.shareCards && features.usesShell ? imageSharer : null;
+
+  /// Translations, tafsir and recitation-audio content as the reader should see it: the
+  /// repository itself is available once any one of those flags is on; each flag then decides
+  /// independently, inside the reader, whether its own entry point (translation, tafsir, audio)
+  /// is actually shown.
+  QuranContentRepository? get quranContentIfEnabled =>
+      features.quranTranslations || features.quranTafsir || features.quranAudio
+      ? quranContent
+      : null;
+
+  /// The audio player factory as the reader should see it: only when its section is on.
+  QuranAudioPlayer Function()? get quranAudioPlayerFactoryIfEnabled =>
+      features.quranAudio ? quranAudioPlayerFactory : null;
 
   /// Favourites as the screens should see them: only when their section is on and the bottom
   /// navigation exists.

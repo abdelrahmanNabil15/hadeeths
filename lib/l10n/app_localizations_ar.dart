@@ -1018,6 +1018,105 @@ class AppLocalizationsAr extends AppLocalizations {
   String get quranBookmarkRemove => 'إزالة العلامة';
 
   @override
+  String get quranReadingMode => 'وضع القراءة';
+
+  @override
+  String get quranReadingModeMushaf => 'المصحف';
+
+  @override
+  String get quranReadingModeVerseByVerse => 'آية بآية';
+
+  @override
+  String get quranTranslation => 'الترجمة';
+
+  @override
+  String get quranChooseTranslation => 'اختر ترجمة';
+
+  @override
+  String get quranTranslationNone => 'بلا ترجمة';
+
+  @override
+  String get quranTranslationSearchHint => 'ابحث بالاسم أو المؤلف أو اللغة';
+
+  @override
+  String get quranTranslationNoMatch => 'لا توجد ترجمة مطابقة.';
+
+  @override
+  String quranTranslationCredit(Object name) {
+    return 'الترجمة: $name';
+  }
+
+  @override
+  String get quranTafsir => 'التفسير';
+
+  @override
+  String get quranChooseTafsir => 'اختر تفسيرًا';
+
+  @override
+  String get quranTafsirNone => 'بلا تفسير';
+
+  @override
+  String get quranTafsirSearchHint => 'ابحث بالاسم أو المؤلف أو اللغة';
+
+  @override
+  String get quranTafsirNoMatch => 'لا يوجد تفسير مطابق.';
+
+  @override
+  String quranTafsirCredit(Object name) {
+    return 'التفسير: $name';
+  }
+
+  @override
+  String get quranTafsirRead => 'قراءة التفسير';
+
+  @override
+  String get quranTafsirDisclaimer =>
+      'هذا اجتهاد أحد العلماء في التفسير، وليس نص القرآن نفسه.';
+
+  @override
+  String get quranRecitation => 'التلاوة الصوتية';
+
+  @override
+  String get quranChooseReciter => 'اختر قارئًا';
+
+  @override
+  String get quranReciterNone => 'بدون قارئ';
+
+  @override
+  String get quranListen => 'استماع';
+
+  @override
+  String get quranAudioPlay => 'تشغيل';
+
+  @override
+  String get quranAudioPause => 'إيقاف مؤقت';
+
+  @override
+  String get quranAudioPrevious => 'الآية السابقة';
+
+  @override
+  String get quranAudioNext => 'الآية التالية';
+
+  @override
+  String get quranAudioStop => 'إيقاف';
+
+  @override
+  String get quranSearchTabQuran => 'نص القرآن';
+
+  @override
+  String get quranTranslationSearchPrompt => 'اكتب كلمة للبحث في الترجمة.';
+
+  @override
+  String get quranTranslationSearchNeedsEdition =>
+      'اختر ترجمة أولاً للبحث في نصها.';
+
+  @override
+  String get quranSearchLoadMore => 'تحميل المزيد';
+
+  @override
+  String get quranSearchLoadMoreFailed => 'تعذّر تحميل مزيد من النتائج.';
+
+  @override
   String get quranSurasHeading => 'السور';
 
   @override

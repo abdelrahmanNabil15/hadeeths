@@ -1802,6 +1802,192 @@ abstract class AppLocalizations {
   /// **'إزالة العلامة'**
   String get quranBookmarkRemove;
 
+  /// No description provided for @quranReadingMode.
+  ///
+  /// In ar, this message translates to:
+  /// **'وضع القراءة'**
+  String get quranReadingMode;
+
+  /// No description provided for @quranReadingModeMushaf.
+  ///
+  /// In ar, this message translates to:
+  /// **'المصحف'**
+  String get quranReadingModeMushaf;
+
+  /// No description provided for @quranReadingModeVerseByVerse.
+  ///
+  /// In ar, this message translates to:
+  /// **'آية بآية'**
+  String get quranReadingModeVerseByVerse;
+
+  /// No description provided for @quranTranslation.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترجمة'**
+  String get quranTranslation;
+
+  /// No description provided for @quranChooseTranslation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ترجمة'**
+  String get quranChooseTranslation;
+
+  /// No description provided for @quranTranslationNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا ترجمة'**
+  String get quranTranslationNone;
+
+  /// No description provided for @quranTranslationSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم أو المؤلف أو اللغة'**
+  String get quranTranslationSearchHint;
+
+  /// No description provided for @quranTranslationNoMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد ترجمة مطابقة.'**
+  String get quranTranslationNoMatch;
+
+  /// No description provided for @quranTranslationCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'الترجمة: {name}'**
+  String quranTranslationCredit(Object name);
+
+  /// No description provided for @quranTafsir.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفسير'**
+  String get quranTafsir;
+
+  /// No description provided for @quranChooseTafsir.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر تفسيرًا'**
+  String get quranChooseTafsir;
+
+  /// No description provided for @quranTafsirNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا تفسير'**
+  String get quranTafsirNone;
+
+  /// No description provided for @quranTafsirSearchHint.
+  ///
+  /// In ar, this message translates to:
+  /// **'ابحث بالاسم أو المؤلف أو اللغة'**
+  String get quranTafsirSearchHint;
+
+  /// No description provided for @quranTafsirNoMatch.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا يوجد تفسير مطابق.'**
+  String get quranTafsirNoMatch;
+
+  /// No description provided for @quranTafsirCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'التفسير: {name}'**
+  String quranTafsirCredit(Object name);
+
+  /// No description provided for @quranTafsirRead.
+  ///
+  /// In ar, this message translates to:
+  /// **'قراءة التفسير'**
+  String get quranTafsirRead;
+
+  /// No description provided for @quranTafsirDisclaimer.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذا اجتهاد أحد العلماء في التفسير، وليس نص القرآن نفسه.'**
+  String get quranTafsirDisclaimer;
+
+  /// No description provided for @quranRecitation.
+  ///
+  /// In ar, this message translates to:
+  /// **'التلاوة الصوتية'**
+  String get quranRecitation;
+
+  /// No description provided for @quranChooseReciter.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر قارئًا'**
+  String get quranChooseReciter;
+
+  /// No description provided for @quranReciterNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بدون قارئ'**
+  String get quranReciterNone;
+
+  /// No description provided for @quranListen.
+  ///
+  /// In ar, this message translates to:
+  /// **'استماع'**
+  String get quranListen;
+
+  /// No description provided for @quranAudioPlay.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل'**
+  String get quranAudioPlay;
+
+  /// No description provided for @quranAudioPause.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف مؤقت'**
+  String get quranAudioPause;
+
+  /// No description provided for @quranAudioPrevious.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية السابقة'**
+  String get quranAudioPrevious;
+
+  /// No description provided for @quranAudioNext.
+  ///
+  /// In ar, this message translates to:
+  /// **'الآية التالية'**
+  String get quranAudioNext;
+
+  /// No description provided for @quranAudioStop.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف'**
+  String get quranAudioStop;
+
+  /// No description provided for @quranSearchTabQuran.
+  ///
+  /// In ar, this message translates to:
+  /// **'نص القرآن'**
+  String get quranSearchTabQuran;
+
+  /// No description provided for @quranTranslationSearchPrompt.
+  ///
+  /// In ar, this message translates to:
+  /// **'اكتب كلمة للبحث في الترجمة.'**
+  String get quranTranslationSearchPrompt;
+
+  /// No description provided for @quranTranslationSearchNeedsEdition.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختر ترجمة أولاً للبحث في نصها.'**
+  String get quranTranslationSearchNeedsEdition;
+
+  /// No description provided for @quranSearchLoadMore.
+  ///
+  /// In ar, this message translates to:
+  /// **'تحميل المزيد'**
+  String get quranSearchLoadMore;
+
+  /// No description provided for @quranSearchLoadMoreFailed.
+  ///
+  /// In ar, this message translates to:
+  /// **'تعذّر تحميل مزيد من النتائج.'**
+  String get quranSearchLoadMoreFailed;
+
   /// No description provided for @quranSurasHeading.
   ///
   /// In ar, this message translates to:

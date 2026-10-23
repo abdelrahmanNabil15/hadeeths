@@ -1,4 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
+import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_search.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
@@ -31,12 +34,28 @@ class QuranState {
 /// The Quran section: the verified text, where the user stopped, and their bookmarks. Shared by
 /// the list, the reader and search, so a bookmark made in the reader shows in the list at once.
 class QuranCubit extends Cubit<QuranState> {
-  QuranCubit({required this.source, this.userData}) : super(const QuranState());
+  QuranCubit({
+    required this.source,
+    this.userData,
+    this.content,
+    this.features = const FeatureFlags(),
+    this.audioPlayerFactory,
+  }) : super(const QuranState());
 
   final QuranSource source;
 
   /// Null when the user's storage could not be opened: reading still works, nothing is remembered.
   final QuranUserData? userData;
+
+  /// Translation, tafsir and recitation-audio content; `null` when none of its flags is on.
+  final QuranContentRepository? content;
+
+  /// Which of [content]'s features the reader should actually offer.
+  final FeatureFlags features;
+
+  /// Builds a fresh audio player for the reader's mini player; `null` when `features.quranAudio`
+  /// is off.
+  final QuranAudioPlayer Function()? audioPlayerFactory;
 
   QuranSearch? _search;
 

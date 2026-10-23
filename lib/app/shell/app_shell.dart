@@ -11,6 +11,8 @@ import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
+import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
+import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/pages/quran_page.dart';
@@ -40,6 +42,8 @@ class AppShell extends StatefulWidget {
     this.tabRequests,
     this.quran,
     this.quranUserData,
+    this.quranContent,
+    this.quranAudioPlayerFactory,
     this.onHomeReturn,
   });
 
@@ -67,6 +71,12 @@ class AppShell extends StatefulWidget {
   /// The Quran text; without it the Quran section shows its placeholder.
   final QuranSource? quran;
   final QuranUserData? quranUserData;
+
+  /// Translation, tafsir and recitation-audio content; `null` when the flag is off.
+  final QuranContentRepository? quranContent;
+
+  /// Builds a fresh audio player for the reader's mini player; `null` when the flag is off.
+  final QuranAudioPlayer Function()? quranAudioPlayerFactory;
 
   /// The user is back on the hadith home screen (a page above it closed, or its section was
   /// selected while it showed its first page).
@@ -230,7 +240,13 @@ class _AppShellState extends State<AppShell> {
               title: context.l10n.navQuran,
               icon: Icons.auto_stories_outlined,
             )
-          : QuranPage(source: widget.quran!, userData: widget.quranUserData),
+          : QuranPage(
+              source: widget.quran!,
+              userData: widget.quranUserData,
+              content: widget.quranContent,
+              features: widget.features,
+              audioPlayerFactory: widget.quranAudioPlayerFactory,
+            ),
     ShellTab.prayer =>
       widget.prayer == null
           ? ComingSoonPage(
