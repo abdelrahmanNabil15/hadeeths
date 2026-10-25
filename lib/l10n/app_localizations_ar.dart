@@ -1101,6 +1101,29 @@ class AppLocalizationsAr extends AppLocalizations {
   String get quranAudioStop => 'إيقاف';
 
   @override
+  String get quranQiraat => 'اختلافات القراءات';
+
+  @override
+  String get quranQiraatNone => 'لا توجد اختلافات قراءات معتمدة في هذه الآية.';
+
+  @override
+  String get quranQiraatDisclaimer =>
+      'هذه قراءات أصيلة متواترة للقرآن، وليست تفسيرات بديلة.';
+
+  @override
+  String get quranQiraatCredit =>
+      'بيانات القراءات: مؤسسة القرآن (Quran Foundation).';
+
+  @override
+  String get quranQiraatCategoryMeaning => 'المعنى';
+
+  @override
+  String get quranQiraatCategoryWording => 'الرسم';
+
+  @override
+  String get quranQiraatCategoryPronunciation => 'اللفظ';
+
+  @override
   String get quranSearchTabQuran => 'نص القرآن';
 
   @override
@@ -1315,6 +1338,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get remindersSoundAdhan => 'الأذان';
 
   @override
+  String get remindersFullAdhan => 'تشغيل الأذان كاملًا في التطبيق';
+
+  @override
+  String get remindersFullAdhanHint =>
+      'صوت الإشعار نفسه مقطع قصير (الحد الأقصى لنظام آيفون نصف دقيقة). مع هذا الخيار، يُشغَّل الأذان كاملًا داخل التطبيق إذا كان مفتوحًا وقت التذكير، أو عند الضغط على الإشعار.';
+
+  @override
   String get adhanTitle => 'صوت الأذان';
 
   @override
@@ -1356,7 +1386,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adhanUnsupported =>
-      'تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.';
+      'تعذّر على هذا الهاتف استخدام التسجيل صوتًا للإشعار.';
+
+  @override
+  String get adhanNoReminderSound =>
+      'يمكن لهذا الهاتف تنزيل تسجيل وتشغيله هنا، لكن لا يمكن استخدامه صوتًا لتذكير الصلاة.';
+
+  @override
+  String get adhanBrowseTile => 'تسجيلات الأذان';
+
+  @override
+  String get adhanPlay => 'تشغيل';
+
+  @override
+  String get adhanStop => 'إيقاف';
+
+  @override
+  String get adhanVolume => 'مستوى الصوت';
 
   @override
   String adhanSourceLine(String source) {

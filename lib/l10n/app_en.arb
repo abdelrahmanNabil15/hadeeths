@@ -334,6 +334,13 @@
   "quranAudioPrevious": "Previous verse",
   "quranAudioNext": "Next verse",
   "quranAudioStop": "Stop",
+  "quranQiraat": "Qira'at variations",
+  "quranQiraatNone": "No approved Qira'at variations for this verse.",
+  "quranQiraatDisclaimer": "These are authentic, transmitted readings of the Qur'an, not alternate interpretations.",
+  "quranQiraatCredit": "Qira'at data: Quran Foundation.",
+  "quranQiraatCategoryMeaning": "Meaning",
+  "quranQiraatCategoryWording": "Wording",
+  "quranQiraatCategoryPronunciation": "Pronunciation",
   "quranSearchTabQuran": "Qur'an text",
   "quranTranslationSearchPrompt": "Type a word to search the translation.",
   "quranTranslationSearchNeedsEdition": "Choose a translation first to search its text.",
@@ -390,6 +397,14 @@
   "@remindersSoundAdhan": {
     "description": "Adhan sounds; wording for owner review."
   },
+  "remindersFullAdhan": "Play the full adhan in the app",
+  "@remindersFullAdhan": {
+    "description": "Adhan sounds, iOS only; wording for owner review."
+  },
+  "remindersFullAdhanHint": "The notification's own sound is a short clip (capped at 30 seconds by iPhone). With this on, the full adhan plays in the app when it is open at the reminder's time, or when you tap the notification.",
+  "@remindersFullAdhanHint": {
+    "description": "Adhan sounds, iOS only; wording for owner review."
+  },
   "adhanTitle": "Adhan sound",
   "@adhanTitle": {
     "description": "Adhan sounds; wording for owner review."
@@ -444,8 +459,28 @@
   "@adhanFailedFile": {
     "description": "Adhan sounds; wording for owner review."
   },
-  "adhanUnsupported": "Downloaded adhan recordings need Android 10 or later.",
+  "adhanUnsupported": "This phone could not use the recording as a notification sound.",
   "@adhanUnsupported": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanNoReminderSound": "This phone can download a recording and play it here, but cannot use it as the sound of a prayer reminder.",
+  "@adhanNoReminderSound": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanBrowseTile": "Adhan recordings",
+  "@adhanBrowseTile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanPlay": "Play",
+  "@adhanPlay": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanStop": "Stop",
+  "@adhanStop": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanVolume": "Volume",
+  "@adhanVolume": {
     "description": "Adhan sounds; wording for owner review."
   },
   "adhanSourceLine": "Recordings: {source}. Their rights belong to their publishers.",

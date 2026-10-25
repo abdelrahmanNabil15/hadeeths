@@ -1,4 +1,5 @@
 import 'package:mynewapp/core/json/json_helpers.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_editions.dart';
 import 'package:mynewapp/features/quran/domain/quran_translation_search.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
@@ -124,16 +125,30 @@ String translationTextFromJson(Object? data) {
   return asString(asMap(list.first, 'translation entry')['text']);
 }
 
-/// Parses `{"tafsir": {"text": ..., ...}}` (`/tafsirs/:id/by_ayah/:verseKey`).
+/// Parses `{"tafsir": {"text": ..., ...}}` (`/tafsirs/:id/by_ayah/:verseKey`). `text` is lightly
+/// HTML-formatted for at least some editions (confirmed live, 2026-10-22, against Tafsir Ibn
+/// Kathir: `<p>` paragraphs and `<span class="blue"|"red"|"reference brown"|"arabic qpc-hafs">`
+/// highlights for quoted opinions, emphasis, citations and embedded Quran text) -- returned as
+/// given, unparsed: rendering it is `TafsirSheet`'s job (`simple_html_css`), not this layer's.
 String tafsirTextFromJson(Object? data) {
   final map = asMap(data, 'tafsir');
   final tafsir = asMap(map['tafsir'], 'tafsir');
   return asString(tafsir['text']);
 }
 
+/// The Content API's audio CDN, for `recitationAudioUrlFromJson`'s plain-relative-path case
+/// (confirmed live, 2026-10-22: `GET /recitations/:id/ayah/:verseKey` on the deployed proxy
+/// returned `"url": "Minshawi/Murattal/mp3/001002.mp3"`, no scheme and no leading `//` -- not the
+/// protocol-relative shape originally assumed from the docs alone; resolving it against this CDN
+/// returned a real, playable `audio/mpeg` file). Matches the JS SDK's own documented advice for
+/// the sibling word-audio case ("resolve it against https://audio.qurancdn.com/").
+const _audioCdnBase = 'https://audio.qurancdn.com/';
+
 /// Parses `{"audio_files": [{"url": ...}], "pagination": {...}}`
 /// (`/recitations/:id/by_ayah/:verseKey`): one entry for the single ayah asked for. The API's
-/// urls are protocol-relative (`//...`); this always returns an `https` one.
+/// `url` has been observed both protocol-relative (`//...`) and as a plain relative path with no
+/// leading slash at all; either is resolved to an `https` url on [_audioCdnBase]. An already
+/// absolute url (`http(s)://...`) is returned unchanged.
 Uri recitationAudioUrlFromJson(Object? data) {
   final map = asMap(data, 'recitation');
   final list = asList(map['audio_files'], 'audio_files');
@@ -141,7 +156,11 @@ Uri recitationAudioUrlFromJson(Object? data) {
     throw const FormatException('recitation response had no audio files');
   }
   final url = asString(asMap(list.first, 'audio file')['url']);
-  final normalized = url.startsWith('//') ? 'https:$url' : url;
+  final normalized = switch (url) {
+    _ when url.startsWith('//') => 'https:$url',
+    _ when url.startsWith('http://') || url.startsWith('https://') => url,
+    _ => '$_audioCdnBase$url',
+  };
   final parsed = Uri.tryParse(normalized);
   if (parsed == null || !parsed.hasScheme) {
     throw FormatException('could not parse audio url: $url');
@@ -183,4 +202,92 @@ TranslationSearchMatch _translationSearchMatchFromJson(
     verse: VerseRef(sura, verse),
     snippet: asString(json['name']),
   );
+}
+
+// --- Qira'at ---
+
+/// Parses `{"readers": [...], "transmitters": [...], "junctures": [...]}` (`/qiraat/matrix/
+/// by_verse/:verseKey`). Readers and transmitters are only looked up here to turn each reading's
+/// `matrix.cells` ids into display names (e.g. "Hafs", "Warsh (Nafi')"); nothing else about them
+/// is kept.
+QiraatMatrix qiraatMatrixFromJson(Object? data) {
+  final map = asMap(data, 'qiraat matrix');
+  final readerNames = <int, String>{
+    for (final entry in asList(map['readers'], 'readers'))
+      asInt(asMap(entry, 'reader')['id'], -1): asString(
+        asMap(entry, 'reader')['name'],
+      ),
+  };
+  final transmitterNames = <int, String>{
+    for (final entry in asList(map['transmitters'], 'transmitters'))
+      asInt(asMap(entry, 'transmitter')['id'], -1): asString(
+        asMap(entry, 'transmitter')['name'],
+      ),
+  };
+  return QiraatMatrix(
+    junctures: [
+      for (final entry in asList(map['junctures'], 'junctures'))
+        _qiraatJunctureFromJson(
+          asMap(entry, 'juncture'),
+          readerNames,
+          transmitterNames,
+        ),
+    ],
+  );
+}
+
+QiraatJuncture _qiraatJunctureFromJson(
+  Map<String, dynamic> json,
+  Map<int, String> readerNames,
+  Map<int, String> transmitterNames,
+) => QiraatJuncture(
+  text: asString(json['text']),
+  category: qiraatCategoryFromCode(asString(json['category'])),
+  commentary: _asNullableString(json['commentary']),
+  readings: [
+    for (final entry in asList(json['readings'], 'readings'))
+      _qiraatReadingFromJson(
+        asMap(entry, 'reading'),
+        readerNames,
+        transmitterNames,
+      ),
+  ],
+);
+
+QiraatReading _qiraatReadingFromJson(
+  Map<String, dynamic> json,
+  Map<int, String> readerNames,
+  Map<int, String> transmitterNames,
+) {
+  final cells = asList(
+    asMap(json['matrix'], 'reading matrix')['cells'],
+    'cells',
+  );
+  final attributions = [
+    for (final entry in cells)
+      _qiraatAttributionFromJson(
+        asMap(entry, 'cell'),
+        readerNames,
+        transmitterNames,
+      ),
+  ];
+  return QiraatReading(
+    text: asString(json['text']),
+    attributions: attributions,
+    translation: _asNullableString(json['translation']),
+  );
+}
+
+String _qiraatAttributionFromJson(
+  Map<String, dynamic> cell,
+  Map<int, String> readerNames,
+  Map<int, String> transmitterNames,
+) {
+  final readerId = asInt(cell['reader_id'], -1);
+  final readerName = readerNames[readerId] ?? 'Reader #$readerId';
+  final transmitterId = cell['transmitter_id'];
+  if (transmitterId == null) return readerName;
+  final id = asInt(transmitterId, -1);
+  final transmitterName = transmitterNames[id] ?? 'Transmitter #$id';
+  return '$readerName ($transmitterName)';
 }

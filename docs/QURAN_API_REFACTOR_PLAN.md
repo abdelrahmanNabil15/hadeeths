@@ -510,6 +510,59 @@ question §3 flagged as this flag's risk, until that is reviewed on its own):
   (see above); no download/offline audio (§7.6, already out of scope for this whole plan); no scrolling into the
   next sura's audio once the open sura ends (matches verse-by-verse's existing same limit).
 
-**What's left is flag F (qira'at)** and, separately, granting the Search API scope so flag E can be verified live
-(§7.2/flag E's own section above). `F` is niche and explicitly ordered last in §3/§7.5; nothing else in this plan
-depends on it.
+**Flag F (qira'at) is also done, 2026-10-22, and turned out to need an owner decision §3's one-line description didn't
+anticipate.** The plan read it as parity with B/C ("pick an edition, see the verse's text in it"); the real API is a
+different shape entirely:
+
+- Qira'at content (`api-docs.quran.foundation`, read 2026-10-22) is a scholarly comparison, not alternate editions:
+  **readers** (the canonical reciters) → **transmitters** (e.g. Hafs/Shu'bah for 'Asim) → **junctures** (specific
+  points where readings diverge within a verse, categorized A/meaning, B/wording or C/pronunciation) → **readings**
+  at that point, tied together by a **matrix** endpoint. Coverage is sparse by design -- most verses have *no*
+  approved junctures at all (confirmed by the docs' own count/matrix descriptions, and by the OAuth2 Scopes page
+  flagging it production-only, no prelive data). There is no "whole alternate verse text" to show; only the exact
+  words that differ, when a verse happens to have any.
+  Given this mismatch, the owner was asked how to proceed (build a variants viewer to match the real data, or
+  defer); the answer was to build it.
+- Same blocker pattern as flag E, found the same way (live `curl` + `wrangler tail` against the deployed proxy, not
+  guessed): the token request for `scope=qiraat` returns HTTP 400. Qira'at needs its own OAuth scope (`qiraat` or
+  the narrower `qiraat.read`; the Worker requests the parent `qiraat`, per the OAuth2 Scopes page's own guidance to
+  request a parent scope when approved for it), separate from both `content` and `search`. **Owner action needed**,
+  same place as flag E's: grant the `qiraat` scope for the existing client in the Developer Console
+  (`https://dev-console.quran.foundation`) -- production only, since Qira'at has no prelive data to test against
+  even once granted.
+- The Worker (§2) gained a third scope to its per-`(environment, scope)` token cache, and one new route,
+  `GET /:env/qiraat/matrix/ayah/:verseKey`, forwarding to the Content API's own base url (same as B/C) but with a
+  `qiraat`-scoped token. A 404 from upstream ("no approved variations for this verse") is forwarded through
+  as-is -- the Flutter side treats that as the normal empty result, not an error.
+- Scope was deliberately kept to a *viewer*, not an *edition*: the matrix endpoint has no "filter by reader"
+  parameter -- it always returns every approved reading for a verse -- so there is nothing to "choose" the way a
+  translation or tafsir edition is chosen. No new `AppSettings` field, no picker page. New flag
+  `FeatureFlags.quranQiraat` (off by default) simply gates a "Qira'at variations" option in the verse long-press
+  menu (same precedent as tafsir's "Read the tafsir"), always offered when the flag and repository are on --
+  unlike tafsir/translations, nothing needs to be "chosen" first, since whether a verse has variations is itself
+  not something a reader could know in advance.
+- Tapping it opens a bottom sheet (`showQiraatSheet`, same `DraggableScrollableSheet` shape as `showTafsirSheet`)
+  that fetches and shows, per approved juncture: its category, the base and alternate wording, each reading's
+  translation (when the API has one) and who holds it (reader, or reader-with-transmitter when a specific
+  transmitter's reading differs from their reader's others), a scholarly commentary when present, and a closing
+  disclaimer that these are **all authentic, transmitted readings, not alternate interpretations** (the opposite
+  emphasis from tafsir's disclaimer, and intentionally so) plus a Quran Foundation credit line. A verse with no
+  approved junctures says so explicitly rather than showing nothing, since silence here would look like a bug, not
+  an absence of data.
+- New domain type `QiraatCubit`, kept separate from `QuranContentCubit` on purpose: with no edition dimension and
+  no edition-list to load, its state is a plain per-verse `Map<String, QiraatMatrix>` cache, far simpler than
+  `QuranContentCubit`'s machinery -- adding two more fields to that already-large shared state (and re-touching
+  every one of its existing full-rebuild call sites again) would have cost more than it was worth for a
+  self-contained concern.
+- New tests: 4 more data-layer tests (`quran_content_data_test.dart` -- reader/transmitter attribution, the 404-to-
+  empty mapping at both the remote-data-source and repository layers, a real 500 still surfacing as a failure),
+  `test/features/quran/qiraat_cubit_test.dart` (7 -- per-verse caching including the "no variations" case, failure
+  held not silent, no retry-on-its-own, explicit retry), and `test/app/quran_qiraat_test.dart` (6 -- flag gating
+  independent of tafsir, the full view-a-comparison flow with credit, the explicit "no variations" state, fetch
+  failure/retry). Full suite passing; `flutter analyze` clean; `dart format` clean; the Worker's `tsc --noEmit` is
+  clean and it is deployed.
+
+**What's left is granting the account-level scopes flags E and F are both blocked on** (`search` and `qiraat`, same
+Developer Console, same client, both production only for the scope itself -- E's Search API works in prelive too,
+once granted). Every flag this plan proposed (A-F) now has its Flutter-side code built and tested; E and F additionally
+need that one owner action each before their live behaviour can be reviewed on a device.

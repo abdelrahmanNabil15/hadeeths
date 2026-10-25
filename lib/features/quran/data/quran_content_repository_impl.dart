@@ -1,5 +1,6 @@
 import 'package:mynewapp/core/result/result.dart';
 import 'package:mynewapp/features/quran/data/quran_content_remote_data_source.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_editions.dart';
 import 'package:mynewapp/features/quran/domain/quran_translation_search.dart';
@@ -75,4 +76,8 @@ class QuranContentRepositoryImpl implements QuranContentRepository {
       page: page,
     ),
   );
+
+  @override
+  Future<Result<QiraatMatrix>> qiraatMatrix(VerseRef verse) =>
+      Result.guard(() => _remote.fetchQiraatMatrix(verseKey: _verseKey(verse)));
 }

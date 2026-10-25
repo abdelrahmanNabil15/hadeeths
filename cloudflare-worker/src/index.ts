@@ -39,8 +39,11 @@ type QfEnv = "prelive" | "production";
 // The Search API is a separate product from the Content API (api-docs.quran.foundation, Search
 // APIs section, read 2026-10-17): its own base URL, and it requires an OAuth token carrying the
 // `search` scope rather than `content` -- a token fetched for one is rejected for the other, so
-// tokens are cached per (environment, scope) pair below, not just per environment.
-type QfScope = "content" | "search";
+// tokens are cached per (environment, scope) pair below, not just per environment. Qira'at
+// (docs/QURAN_API_REFACTOR_PLAN.md flag F) is a third such case: same Content API base url, but
+// its own `qiraat` scope (`content` alone gets HTTP 403 insufficient_scope), and -- per the
+// OAuth2 Scopes page, read 2026-10-22 -- production only; prelive has no Qira'at data at all.
+type QfScope = "content" | "search" | "qiraat";
 
 const ENVIRONMENTS: Record<QfEnv, {authBaseUrl: string; apiBaseUrl: string; searchBaseUrl: string}> = {
   prelive: {
@@ -88,6 +91,8 @@ const tokenState: Record<string, TokenState> = {
   "production:content": emptyTokenState(),
   "prelive:search": emptyTokenState(),
   "production:search": emptyTokenState(),
+  "prelive:qiraat": emptyTokenState(),
+  "production:qiraat": emptyTokenState(),
 };
 
 const EARLY_REFRESH_MS = 30_000;
@@ -233,6 +238,28 @@ async function forwardSearch(
   }
 }
 
+async function forwardQiraat(
+  env: Env,
+  qfEnv: QfEnv,
+  path: string,
+  searchParams?: Record<string, string>
+): Promise<Response> {
+  try {
+    // Same Content API base url as `forward`, but a `qiraat`-scoped token -- `content` alone
+    // gets HTTP 403 insufficient_scope on these routes.
+    const {apiBaseUrl} = ENVIRONMENTS[qfEnv];
+    const upstream = await callApi(env, qfEnv, "qiraat", apiBaseUrl, path, searchParams);
+    const body = await upstream.text();
+    return new Response(body, {
+      status: upstream.status,
+      headers: {"Content-Type": "application/json"},
+    });
+  } catch (error) {
+    console.error("quran proxy qiraat request failed", path, (error as Error).message);
+    return jsonResponse(502, {error: "upstream request failed"});
+  }
+}
+
 // Routes, all under /:env/... where :env is 'prelive' or 'production'. Mirrors the allow-list in
 // the (removed) Firebase Functions scaffold this replaced -- see git history if that's needed for
 // reference.
@@ -293,6 +320,14 @@ const ROUTES: Array<{
         highlight: "0",
       });
     },
+  },
+  // Qira'at variations for one verse (docs/QURAN_API_REFACTOR_PLAN.md flag F): the full matrix
+  // (every approved juncture, its readings, and which readers/transmitters hold each), not a
+  // per-reader filter -- the upstream endpoint has none. A 404 ("no variations for this verse")
+  // is forwarded as-is; the app treats that as a normal empty result, not an error.
+  {
+    pattern: /^\/qiraat\/matrix\/ayah\/(\d+:\d+)$/,
+    handle: (env, qfEnv, m) => forwardQiraat(env, qfEnv, `/qiraat/matrix/by_verse/${m[1]}`),
   },
 ];
 

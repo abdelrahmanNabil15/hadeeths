@@ -17,3 +17,5 @@ String tafsirByAyahPath(int editionId, String verseKey) =>
 
 String recitationByAyahPath(int recitationId, String verseKey) =>
     'recitations/$recitationId/ayah/$verseKey';
+
+String qiraatMatrixPath(String verseKey) => 'qiraat/matrix/ayah/$verseKey';

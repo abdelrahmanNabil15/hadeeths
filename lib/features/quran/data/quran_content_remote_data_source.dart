@@ -1,8 +1,10 @@
 import 'package:mynewapp/core/cache/cached_fetcher.dart';
+import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/network/hadeeth_client.dart' show parseResponse;
 import 'package:mynewapp/core/network/quran_content_client.dart';
 import 'package:mynewapp/core/network/quran_content_endpoints.dart';
 import 'package:mynewapp/features/quran/data/quran_content_dtos.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_translation_search.dart';
 
 abstract interface class QuranContentRemoteDataSource {
@@ -35,6 +37,8 @@ abstract interface class QuranContentRemoteDataSource {
     required String query,
     required int page,
   });
+
+  Future<QiraatMatrix> fetchQiraatMatrix({required String verseKey});
 }
 
 class HttpQuranContentRemoteDataSource implements QuranContentRemoteDataSource {
@@ -146,5 +150,24 @@ class HttpQuranContentRemoteDataSource implements QuranContentRemoteDataSource {
       'page': '$page',
     });
     return parseResponse(() => translationSearchResultsFromJson(data));
+  }
+
+  @override
+  Future<QiraatMatrix> fetchQiraatMatrix({required String verseKey}) async {
+    final path = qiraatMatrixPath(verseKey);
+    const query = <String, dynamic>{};
+    try {
+      return await _fetcher.fetch(
+        key: CachedFetcher.keyFor(path, query),
+        policy: contentPolicy,
+        load: () => _client.get(path, query),
+        parse: (data) => parseResponse(() => qiraatMatrixFromJson(data)),
+      );
+    } on Failure catch (e) {
+      // The upstream API's own way of saying "this verse has no approved variations" -- the
+      // normal case for most verses, not an error.
+      if (e.kind == FailureKind.notFound) return QiraatMatrix.empty;
+      rethrow;
+    }
   }
 }

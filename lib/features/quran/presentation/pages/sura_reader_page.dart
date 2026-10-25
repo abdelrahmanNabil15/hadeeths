@@ -18,10 +18,12 @@ import 'package:mynewapp/features/quran/presentation/pages/reciter_picker_page.d
 import 'package:mynewapp/features/quran/presentation/pages/tafsir_edition_picker_page.dart';
 import 'package:mynewapp/features/quran/presentation/pages/translation_edition_picker_page.dart';
 import 'package:mynewapp/features/quran/presentation/quran_labels.dart';
+import 'package:mynewapp/features/quran/presentation/state/qiraat_cubit.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_audio_cubit.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_content_cubit.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_cubit.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/audio_mini_player.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/qiraat_sheet.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/tafsir_sheet.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/translation_block.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/verse_flow.dart';
@@ -67,7 +69,7 @@ class SuraReaderPage extends StatefulWidget {
   State<SuraReaderPage> createState() => _SuraReaderPageState();
 }
 
-enum _VerseSheetAction { bookmark, tafsir, listen }
+enum _VerseSheetAction { bookmark, tafsir, listen, qiraat }
 
 class _SuraReaderPageState extends State<SuraReaderPage> {
   static final _structure = QuranStructure.madinah;
@@ -95,6 +97,10 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
   /// reader -- foreground playback only, see `docs/QURAN_API_REFACTOR_PLAN.md` flag D.
   QuranAudioCubit? _audioCubit;
 
+  /// Not null only when `features.quranQiraat` is also on: per-verse recitation-variant
+  /// comparisons, see flag F.
+  QiraatCubit? _qiraatCubit;
+
   @override
   void initState() {
     super.initState();
@@ -105,7 +111,10 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     _controller = PageController(initialPage: _index);
     final quranCubit = context.read<QuranCubit>();
     final content = quranCubit.content;
-    if (content != null) _contentCubit = QuranContentCubit(content);
+    if (content != null) {
+      _contentCubit = QuranContentCubit(content);
+      _qiraatCubit = QiraatCubit(content);
+    }
     final audioPlayerFactory = quranCubit.audioPlayerFactory;
     if (content != null && audioPlayerFactory != null) {
       _audioCubit = QuranAudioCubit(content, audioPlayerFactory());
@@ -115,6 +124,7 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
   @override
   void dispose() {
     unawaited(_audioCubit?.close());
+    _qiraatCubit?.close();
     _contentCubit?.close();
     _controller.dispose();
     super.dispose();
@@ -179,6 +189,7 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     final reciterId = _audioCubit != null && features.quranAudio
         ? context.read<SettingsCubit>().state.quranReciterId
         : null;
+    final qiraatOn = _qiraatCubit != null && features.quranQiraat;
     final title =
         '${suraName(context, verse.sura)} · '
         '${l10n.quranVerseLabel(context.digits.format(verse.number))}';
@@ -204,6 +215,12 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
             label: l10n.quranListen,
             icon: Icons.headphones,
           ),
+        if (qiraatOn)
+          SheetOption(
+            value: _VerseSheetAction.qiraat,
+            label: l10n.quranQiraat,
+            icon: Icons.compare_arrows,
+          ),
       ],
     );
     switch (action) {
@@ -223,6 +240,15 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
             contentCubit: _contentCubit!,
             editionId: tafsirEditionId!,
             editionName: tafsirEditionName ?? '',
+            verse: place,
+            title: title,
+          );
+        }
+      case _VerseSheetAction.qiraat:
+        if (mounted) {
+          await showQiraatSheet(
+            context,
+            cubit: _qiraatCubit!,
             verse: place,
             title: title,
           );
@@ -262,6 +288,10 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     final audioCubit = _audioCubit;
     if (audioCubit != null) {
       body = BlocProvider.value(value: audioCubit, child: body);
+    }
+    final qiraatCubit = _qiraatCubit;
+    if (qiraatCubit != null) {
+      body = BlocProvider.value(value: qiraatCubit, child: body);
     }
     final contentCubit = _contentCubit;
     if (contentCubit != null) {

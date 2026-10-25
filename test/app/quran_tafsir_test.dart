@@ -121,7 +121,12 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(
-        find.text(placeholderTafsir(10, const VerseRef(1, 1))),
+        // The tafsir body is rendered as a RichText (simple_html_css), not a plain Text, so the
+        // finder needs to look at RichText content too.
+        find.text(
+          placeholderTafsir(10, const VerseRef(1, 1)),
+          findRichText: true,
+        ),
         findsOneWidget,
       );
       expect(find.text(l10n.quranTafsirDisclaimer), findsOneWidget);
@@ -154,7 +159,10 @@ void main() {
     await tester.tap(find.text(l10n.retry));
     await tester.pumpAndSettle();
     expect(
-      find.text(placeholderTafsir(10, const VerseRef(1, 1))),
+      find.text(
+        placeholderTafsir(10, const VerseRef(1, 1)),
+        findRichText: true,
+      ),
       findsOneWidget,
     );
   });

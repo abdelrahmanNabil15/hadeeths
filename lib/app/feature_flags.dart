@@ -19,6 +19,7 @@ class FeatureFlags {
     this.quranTafsir = false,
     this.quranTranslationSearch = false,
     this.quranAudio = false,
+    this.quranQiraat = false,
   });
 
   /// Everything on (previews and tests).
@@ -33,7 +34,8 @@ class FeatureFlags {
       quranTranslations = true,
       quranTafsir = true,
       quranTranslationSearch = true,
-      quranAudio = true;
+      quranAudio = true,
+      quranQiraat = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -82,6 +84,12 @@ class FeatureFlags {
   /// lock-screen controls or background-audio entitlement yet (deliberately deferred, see
   /// `docs/QURAN_API_REFACTOR_PLAN.md` flag D). Off until reviewed on a device.
   final bool quranAudio;
+
+  /// A per-verse "Qira'at variations" action, showing the approved recitation-variant comparison
+  /// for that verse through the same proxy. Most verses have none; the sheet says so rather than
+  /// not offering the action, since whether a verse has variations is itself not obvious to a
+  /// reader. Off until reviewed on a device.
+  final bool quranQiraat;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

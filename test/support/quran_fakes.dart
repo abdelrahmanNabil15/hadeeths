@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/result/result.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_editions.dart';
@@ -145,6 +146,34 @@ Uri placeholderRecitationUrl(int reciterId, VerseRef verse) => Uri.parse(
   'https://example.test/audio/$reciterId/${verse.sura}_${verse.verse}.mp3',
 );
 
+/// The one verse [FakeQuranContentRepository.qiraatMatrix] treats as having approved
+/// variations; every other verse gets [QiraatMatrix.empty], matching the real API's sparse
+/// coverage (most verses have none at all).
+const placeholderQiraatVerse = VerseRef(1, 1);
+
+/// Placeholder Qira'at data, **not a real Quran Foundation comparison** -- same rule as
+/// [placeholderVerse].
+final placeholderQiraatMatrix = QiraatMatrix(
+  junctures: [
+    QiraatJuncture(
+      text: 'سطر تجريبي للمقارنة',
+      category: QiraatCategory.wording,
+      commentary: 'شرح تجريبي لنقطة الاختلاف',
+      readings: [
+        const QiraatReading(
+          text: 'قراءة تجريبية أولى',
+          attributions: ['قارئ تجريبي أول'],
+          translation: 'placeholder reading one',
+        ),
+        const QiraatReading(
+          text: 'قراءة تجريبية ثانية',
+          attributions: ['قارئ تجريبي ثاني (راوٍ تجريبي)'],
+        ),
+      ],
+    ),
+  ],
+);
+
 /// A `QuranContentRepository` test double: configurable editions and translation/tafsir text,
 /// with `fail*` flags to simulate a server failure instead.
 class FakeQuranContentRepository implements QuranContentRepository {
@@ -159,6 +188,7 @@ class FakeQuranContentRepository implements QuranContentRepository {
     this.failSearch = false,
     this.failReciters = false,
     this.failRecitation = false,
+    this.failQiraat = false,
   }) : _translationEditions =
            translationEditions ?? placeholderTranslationEditions,
        _tafsirEditions = tafsirEditions ?? placeholderTafsirEditions,
@@ -174,10 +204,12 @@ class FakeQuranContentRepository implements QuranContentRepository {
   bool failSearch;
   bool failReciters;
   bool failRecitation;
+  bool failQiraat;
   int translationCalls = 0;
   int tafsirCalls = 0;
   int searchCalls = 0;
   int recitationCalls = 0;
+  int qiraatCalls = 0;
 
   /// Matches [placeholderSearchMatches] two per page, like the real Search API's pagination.
   static const _searchPageSize = 2;
@@ -258,6 +290,17 @@ class FakeQuranContentRepository implements QuranContentRepository {
         page: page,
         totalPages: totalPages,
       ),
+    );
+  }
+
+  @override
+  Future<Result<QiraatMatrix>> qiraatMatrix(VerseRef verse) async {
+    qiraatCalls++;
+    if (failQiraat) return const Err(Failure(FailureKind.server));
+    return Success(
+      verse == placeholderQiraatVerse
+          ? placeholderQiraatMatrix
+          : QiraatMatrix.empty,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:mynewapp/core/result/result.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_editions.dart';
 import 'package:mynewapp/features/quran/domain/quran_translation_search.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
@@ -43,4 +44,8 @@ abstract interface class QuranContentRepository {
     required String query,
     int page = 1,
   });
+
+  /// The approved Qira'at (recitation-variant) comparison for [verse]. Most verses have none;
+  /// that is [QiraatMatrix.empty], not a failure.
+  Future<Result<QiraatMatrix>> qiraatMatrix(VerseRef verse);
 }

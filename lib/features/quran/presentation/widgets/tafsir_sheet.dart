@@ -6,6 +6,7 @@ import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_content_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
+import 'package:simple_html_css/simple_html_css.dart';
 
 /// Opens [editionId]'s tafsir of [verse] in a resizable, scrollable bottom sheet: a loading
 /// state, the text once fetched (with a credit line and a note that it is a scholar's
@@ -116,7 +117,16 @@ class _TafsirSheetContentState extends State<_TafsirSheetContent> {
                   : ListView(
                       controller: widget.scrollController,
                       children: [
-                        Text(text, style: AppTypography.of(context).body),
+                        // The API's tafsir text is lightly HTML-formatted for at least some
+                        // editions (paragraphs, highlighted quotes and citations); rendered as
+                        // such rather than shown as raw markup.
+                        RichText(
+                          text: HTML.toTextSpan(
+                            context,
+                            text,
+                            defaultTextStyle: AppTypography.of(context).body,
+                          ),
+                        ),
                         const SizedBox(height: AppSpacing.md),
                         Text(
                           l10n.quranTafsirDisclaimer,

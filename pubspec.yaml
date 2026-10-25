@@ -49,6 +49,7 @@ dependencies:
   sensors_plus: ^7.1.1
   share_plus: ^13.3.1
   shared_preferences: ^2.5.3
+  simple_html_css: ^5.0.0
   sqlite3: ^3.5.2
   timezone: ^0.11.1
 

@@ -3,6 +3,7 @@ import 'package:mynewapp/core/errors/failure.dart';
 import 'package:mynewapp/core/result/result.dart';
 import 'package:mynewapp/features/quran/data/quran_content_remote_data_source.dart';
 import 'package:mynewapp/features/quran/data/quran_content_repository_impl.dart';
+import 'package:mynewapp/features/quran/domain/qiraat.dart';
 import 'package:mynewapp/features/quran/domain/quran_editions.dart';
 import 'package:mynewapp/features/quran/domain/quran_translation_search.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
@@ -114,6 +115,24 @@ void main() {
       expect(adapter.requests.single.path, 'tafsirs/926/ayah/1:1');
     });
 
+    test('tafsir content: HTML markup (confirmed live, 2026-10-22, against '
+        'Tafsir Ibn Kathir) passes through unchanged -- rendering it is the '
+        'sheet widget\'s job, not this layer\'s', () async {
+      const html =
+          '<p lang="ar" class="ar ">placeholder '
+          '<span class="blue">quoted opinion</span> text.</p>';
+      final (client, _) = fakeQuranContentClient(
+        (o, n) async => jsonResponse({
+          'tafsir': {'resource_id': 14, 'text': html},
+        }),
+      );
+      final text = await HttpQuranContentRemoteDataSource(
+        client,
+        uncachedFetcher(),
+      ).fetchTafsir(editionId: 14, verseKey: '1:2');
+      expect(text, html);
+    });
+
     test(
       'recitation audio: a protocol-relative url is normalised to https',
       () async {
@@ -131,6 +150,45 @@ void main() {
         ).fetchRecitationAudioUrl(reciterId: 6, verseKey: '1:1');
         expect(url.toString(), 'https://mirrors.example.com/001001.mp3');
         expect(adapter.requests.single.path, 'recitations/6/ayah/1:1');
+      },
+    );
+
+    test('recitation audio: a plain relative path (the real shape, confirmed '
+        'live 2026-10-22) resolves against the audio CDN', () async {
+      final (client, _) = fakeQuranContentClient(
+        (o, n) async => jsonResponse({
+          'audio_files': [
+            {'verse_key': '1:2', 'url': 'Minshawi/Murattal/mp3/001002.mp3'},
+          ],
+          'pagination': {'total_records': 1},
+        }),
+      );
+      final url = await HttpQuranContentRemoteDataSource(
+        client,
+        uncachedFetcher(),
+      ).fetchRecitationAudioUrl(reciterId: 9, verseKey: '1:2');
+      expect(
+        url.toString(),
+        'https://audio.qurancdn.com/Minshawi/Murattal/mp3/001002.mp3',
+      );
+    });
+
+    test(
+      'recitation audio: an already absolute url is left unchanged',
+      () async {
+        final (client, _) = fakeQuranContentClient(
+          (o, n) async => jsonResponse({
+            'audio_files': [
+              {'verse_key': '1:1', 'url': 'https://cdn.example.com/001001.mp3'},
+            ],
+            'pagination': {'total_records': 1},
+          }),
+        );
+        final url = await HttpQuranContentRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchRecitationAudioUrl(reciterId: 6, verseKey: '1:1');
+        expect(url.toString(), 'https://cdn.example.com/001001.mp3');
       },
     );
 
@@ -231,6 +289,100 @@ void main() {
         );
       },
     );
+
+    test(
+      'qiraat matrix: readings are attributed by reader and transmitter name',
+      () async {
+        final (client, adapter) = fakeQuranContentClient(
+          (o, n) async => jsonResponse({
+            'readers': [
+              {'id': 1, 'name': 'Placeholder Reader'},
+            ],
+            'transmitters': [
+              {'id': 10, 'name': 'Placeholder Transmitter', 'reader_id': 1},
+            ],
+            'junctures': [
+              {
+                'text': 'placeholder juncture text',
+                'category': 'B',
+                'commentary': 'placeholder commentary',
+                'readings': [
+                  {
+                    'text': 'placeholder reading one',
+                    'translation': 'placeholder translation',
+                    'matrix': {
+                      'cells': [
+                        {
+                          'reader_id': 1,
+                          'transmitter_id': null,
+                          'type': 'reader',
+                        },
+                      ],
+                    },
+                  },
+                  {
+                    'text': 'placeholder reading two',
+                    'matrix': {
+                      'cells': [
+                        {
+                          'reader_id': 1,
+                          'transmitter_id': 10,
+                          'type': 'transmitter',
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            ],
+          }),
+        );
+        final matrix = await HttpQuranContentRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchQiraatMatrix(verseKey: '1:1');
+        expect(matrix.hasVariations, isTrue);
+        final juncture = matrix.junctures.single;
+        expect(juncture.text, 'placeholder juncture text');
+        expect(juncture.category, QiraatCategory.wording);
+        expect(juncture.commentary, 'placeholder commentary');
+        expect(juncture.readings.first.attributions, ['Placeholder Reader']);
+        expect(juncture.readings.first.translation, 'placeholder translation');
+        expect(juncture.readings.last.attributions, [
+          'Placeholder Reader (Placeholder Transmitter)',
+        ]);
+        expect(adapter.requests.single.path, 'qiraat/matrix/ayah/1:1');
+      },
+    );
+
+    test(
+      'qiraat matrix: a 404 ("no variations") is empty, not a thrown Failure',
+      () async {
+        final (client, _) = fakeQuranContentClient(
+          (o, n) async => emptyResponse(404),
+        );
+        final matrix = await HttpQuranContentRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchQiraatMatrix(verseKey: '1:1');
+        expect(matrix.hasVariations, isFalse);
+      },
+    );
+
+    test('qiraat matrix: a 500 is still a thrown Failure', () async {
+      final (client, _) = fakeQuranContentClient(
+        (o, n) async => emptyResponse(500),
+      );
+      expect(
+        HttpQuranContentRemoteDataSource(
+          client,
+          uncachedFetcher(),
+        ).fetchQiraatMatrix(verseKey: '1:1'),
+        throwsA(
+          isA<Failure>().having((f) => f.kind, 'kind', FailureKind.server),
+        ),
+      );
+    });
   });
 
   group('QuranContentRepositoryImpl', () {
@@ -296,6 +448,24 @@ void main() {
       final results = (result as Success<TranslationSearchResults>).value;
       expect(results.matches.single.snippet, 'snippet');
       expect(results.hasMore, isFalse);
+    });
+
+    test(
+      'qiraat matrix: builds the verse key from sura and verse, maps a 404 to an empty success',
+      () async {
+        final result = await repo(
+          (o, n) async => emptyResponse(404),
+        ).qiraatMatrix(const VerseRef(2, 255));
+        final matrix = (result as Success<QiraatMatrix>).value;
+        expect(matrix.hasVariations, isFalse);
+      },
+    );
+
+    test('qiraat matrix: a real failure is still an Err', () async {
+      final result = await repo(
+        (o, n) async => emptyResponse(500),
+      ).qiraatMatrix(const VerseRef(1, 1));
+      expect((result as Err).failure.kind, FailureKind.server);
     });
   });
 }

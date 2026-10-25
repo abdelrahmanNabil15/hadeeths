@@ -1958,6 +1958,48 @@ abstract class AppLocalizations {
   /// **'إيقاف'**
   String get quranAudioStop;
 
+  /// No description provided for @quranQiraat.
+  ///
+  /// In ar, this message translates to:
+  /// **'اختلافات القراءات'**
+  String get quranQiraat;
+
+  /// No description provided for @quranQiraatNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'لا توجد اختلافات قراءات معتمدة في هذه الآية.'**
+  String get quranQiraatNone;
+
+  /// No description provided for @quranQiraatDisclaimer.
+  ///
+  /// In ar, this message translates to:
+  /// **'هذه قراءات أصيلة متواترة للقرآن، وليست تفسيرات بديلة.'**
+  String get quranQiraatDisclaimer;
+
+  /// No description provided for @quranQiraatCredit.
+  ///
+  /// In ar, this message translates to:
+  /// **'بيانات القراءات: مؤسسة القرآن (Quran Foundation).'**
+  String get quranQiraatCredit;
+
+  /// No description provided for @quranQiraatCategoryMeaning.
+  ///
+  /// In ar, this message translates to:
+  /// **'المعنى'**
+  String get quranQiraatCategoryMeaning;
+
+  /// No description provided for @quranQiraatCategoryWording.
+  ///
+  /// In ar, this message translates to:
+  /// **'الرسم'**
+  String get quranQiraatCategoryWording;
+
+  /// No description provided for @quranQiraatCategoryPronunciation.
+  ///
+  /// In ar, this message translates to:
+  /// **'اللفظ'**
+  String get quranQiraatCategoryPronunciation;
+
   /// No description provided for @quranSearchTabQuran.
   ///
   /// In ar, this message translates to:
@@ -2258,6 +2300,18 @@ abstract class AppLocalizations {
   /// **'الأذان'**
   String get remindersSoundAdhan;
 
+  /// Adhan sounds, iOS only; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل الأذان كاملًا في التطبيق'**
+  String get remindersFullAdhan;
+
+  /// Adhan sounds, iOS only; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'صوت الإشعار نفسه مقطع قصير (الحد الأقصى لنظام آيفون نصف دقيقة). مع هذا الخيار، يُشغَّل الأذان كاملًا داخل التطبيق إذا كان مفتوحًا وقت التذكير، أو عند الضغط على الإشعار.'**
+  String get remindersFullAdhanHint;
+
   /// Adhan sounds; wording for owner review.
   ///
   /// In ar, this message translates to:
@@ -2327,8 +2381,38 @@ abstract class AppLocalizations {
   /// Adhan sounds; wording for owner review.
   ///
   /// In ar, this message translates to:
-  /// **'تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.'**
+  /// **'تعذّر على هذا الهاتف استخدام التسجيل صوتًا للإشعار.'**
   String get adhanUnsupported;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'يمكن لهذا الهاتف تنزيل تسجيل وتشغيله هنا، لكن لا يمكن استخدامه صوتًا لتذكير الصلاة.'**
+  String get adhanNoReminderSound;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تسجيلات الأذان'**
+  String get adhanBrowseTile;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'تشغيل'**
+  String get adhanPlay;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'إيقاف'**
+  String get adhanStop;
+
+  /// Adhan sounds; wording for owner review.
+  ///
+  /// In ar, this message translates to:
+  /// **'مستوى الصوت'**
+  String get adhanVolume;
 
   /// Adhan sounds; wording for owner review.
   ///

@@ -195,12 +195,15 @@ class AppDependencies {
   ImageSharer? get imageSharerIfEnabled =>
       features.shareCards && features.usesShell ? imageSharer : null;
 
-  /// Translations, tafsir and recitation-audio content as the reader should see it: the
+  /// Translations, tafsir, recitation-audio and Qira'at content as the reader should see it: the
   /// repository itself is available once any one of those flags is on; each flag then decides
-  /// independently, inside the reader, whether its own entry point (translation, tafsir, audio)
-  /// is actually shown.
+  /// independently, inside the reader, whether its own entry point (translation, tafsir, audio,
+  /// Qira'at) is actually shown.
   QuranContentRepository? get quranContentIfEnabled =>
-      features.quranTranslations || features.quranTafsir || features.quranAudio
+      features.quranTranslations ||
+          features.quranTafsir ||
+          features.quranAudio ||
+          features.quranQiraat
       ? quranContent
       : null;
 
