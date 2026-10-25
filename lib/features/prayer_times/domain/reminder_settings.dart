@@ -13,6 +13,8 @@ class ReminderSettings extends Equatable {
     this.leadMinutes = 0,
     this.sound = NotificationSound.system,
     this.adhanId,
+    this.fullAdhan = false,
+    this.adhanVolume = 1,
     this.vibrate = true,
     this.exactTiming = false,
     this.wakeUp = false,
@@ -40,6 +42,9 @@ class ReminderSettings extends Equatable {
         'leadMinutes',
         'must be one of $leadOptions',
       );
+    }
+    if (adhanVolume < 0 || adhanVolume > 1) {
+      throw ArgumentError.value(adhanVolume, 'adhanVolume', 'must be 0 to 1');
     }
   }
 
@@ -70,6 +75,17 @@ class ReminderSettings extends Equatable {
   /// A downloaded adhan recording to play, instead of the system sound, for the reminders that arrive
   /// at a prayer time. Null means the system sound. Ignored when [sound] is silent.
   final String? adhanId;
+
+  /// iOS only: also play the chosen adhan in full in the app, when it is in the foreground as the
+  /// reminder fires or the user taps it (the notification itself can only carry a short clip,
+  /// capped at 30 seconds by the system; see `docs/ADHAN_SOUNDS.md`). Ignored when [adhanId] is
+  /// null, and on Android, which already plays the full recording as the notification's own sound.
+  final bool fullAdhan;
+
+  /// How loud the adhan plays: 0 (silent) to 1 (full volume). Applies where the app plays it
+  /// itself — the in-app preview, and iOS's "Full adhan" (see [fullAdhan]) — not to a downloaded
+  /// recording used as Android's notification sound, which follows the phone's own volume.
+  final double adhanVolume;
   final bool vibrate;
 
   /// Android only: deliver each reminder on the minute, which needs the user to allow "Alarms &
@@ -120,6 +136,8 @@ class ReminderSettings extends Equatable {
     NotificationSound? sound,
     String? adhanId,
     bool clearAdhan = false,
+    bool? fullAdhan,
+    double? adhanVolume,
     bool? vibrate,
     bool? exactTiming,
     bool? wakeUp,
@@ -135,6 +153,8 @@ class ReminderSettings extends Equatable {
     leadMinutes: leadMinutes ?? this.leadMinutes,
     sound: sound ?? this.sound,
     adhanId: clearAdhan ? null : (adhanId ?? this.adhanId),
+    fullAdhan: clearAdhan ? false : (fullAdhan ?? this.fullAdhan),
+    adhanVolume: adhanVolume ?? this.adhanVolume,
     vibrate: vibrate ?? this.vibrate,
     exactTiming: exactTiming ?? this.exactTiming,
     wakeUp: wakeUp ?? this.wakeUp,
@@ -153,6 +173,8 @@ class ReminderSettings extends Equatable {
     leadMinutes,
     sound,
     adhanId,
+    fullAdhan,
+    adhanVolume,
     vibrate,
     exactTiming,
     wakeUp,

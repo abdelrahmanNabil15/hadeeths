@@ -46,6 +46,34 @@ void main() {
     });
 
     test(
+      'carries the chosen adhan and whether it plays in full, for iOS to read',
+      () {
+        final item = _plan([_c('fajr', const Duration(hours: 1))]).items.single;
+        final withAdhan = NotificationPayload.encode(
+          item,
+          adhanId: 'rifaat',
+          fullAdhan: true,
+        );
+        expect(withAdhan, contains('"adhan":"rifaat"'));
+        expect(withAdhan, contains('"full":true'));
+        // Still decodes to the same notification: iOS-only extras do not change what Dart reads.
+        expect(
+          NotificationPayload.decode(
+            PendingEntry(id: item.id, payload: withAdhan),
+          ),
+          item,
+        );
+      },
+    );
+
+    test('omits the adhan and full-adhan keys when there is no adhan', () {
+      final item = _plan([_c('fajr', const Duration(hours: 1))]).items.single;
+      final plain = NotificationPayload.encode(item);
+      expect(plain, isNot(contains('adhan')));
+      expect(plain, isNot(contains('full')));
+    });
+
+    test(
       'anything that is not ours or is damaged is ignored, never thrown',
       () {
         for (final bad in [
@@ -216,6 +244,27 @@ void main() {
       expect(gateway.held, isEmpty);
       expect(gateway.foreign, hasLength(1));
     });
+
+    test(
+      'the chosen adhan reaches the platform payload, for iOS to read on delivery',
+      () async {
+        final plan = _plan([_c('fajr', const Duration(hours: 1))]);
+        await sync.apply(
+          plan,
+          contentFor: (n) => const NotificationContent(
+            title: 'Fajr',
+            customSound: CustomSound(
+              id: 'rifaat',
+              label: 'Rifaat',
+              fullAdhan: true,
+            ),
+          ),
+        );
+        final payload = gateway.sorted.single.payload;
+        expect(payload, contains('"adhan":"rifaat"'));
+        expect(payload, contains('"full":true'));
+      },
+    );
 
     test(
       'the text is built only for notifications that are handed over',

@@ -5,9 +5,13 @@ import 'package:mynewapp/core/platform/adhan_sound_bridge.dart';
 import 'package:mynewapp/features/adhan_sounds/domain/adhan_library.dart';
 import 'package:mynewapp/features/adhan_sounds/domain/adhan_sound.dart';
 
-/// Keeps downloaded recordings as files in the app's own folder, and lists each one in the phone's
-/// shared notification sounds (through [AdhanSoundBridge]) so that a notification channel can play
-/// it.
+/// Keeps downloaded recordings as files in the app's own folder, and, where [AdhanSoundBridge]
+/// supports it, also makes each one usable as a notification sound: Android lists the full
+/// recording in the phone's shared notification sounds; iOS prepares a short clip, through the
+/// same [AdhanSoundBridge.register] call (see [iosSoundFileFor] and `docs/ADHAN_SOUNDS.md`). On a
+/// phone where none of that is possible (older Android), or where preparing the short clip failed
+/// on an otherwise-capable iPhone, the file is still kept, for playback in the app through
+/// [localPathFor].
 ///
 /// Nothing is requested until [download] is called, and nothing about the user is sent: the request
 /// is a plain `GET` of the recording's address.
@@ -16,11 +20,17 @@ class FileAdhanLibrary implements AdhanLibrary {
     required this.directory,
     required this.dio,
     required this.bridge,
+    this.iosSoundsDirectory,
   });
 
   final Future<Directory> Function() directory;
   final Dio dio;
   final AdhanSoundBridge bridge;
+
+  /// Where iOS keeps the short notification-sound clips it prepares at download time
+  /// (`Library/Sounds`, the one runtime-writable place `UNNotificationSound(named:)` resolves
+  /// besides the app bundle). Null elsewhere, and in tests that do not exercise [iosSoundFileFor].
+  final Future<Directory> Function()? iosSoundsDirectory;
 
   /// A real adhan is tens of seconds to a few minutes of audio. Anything much smaller is an error
   /// page; anything much larger is not what was listed.
@@ -79,9 +89,6 @@ class FileAdhanLibrary implements AdhanLibrary {
     AdhanSound sound,
     void Function(double fraction)? onProgress,
   ) async {
-    if (!await bridge.isSupported()) {
-      throw const AdhanDownloadException(AdhanDownloadFailure.unsupported);
-    }
     final target = await _file(sound.id);
     final part = File('${target.path}.part');
     try {
@@ -105,10 +112,24 @@ class FileAdhanLibrary implements AdhanLibrary {
       await _check(part, sound);
       if (target.existsSync()) target.deleteSync();
       part.renameSync(target.path);
-      final uri = await bridge.register(target.path, sound.id);
-      if (uri == null) {
-        target.deleteSync();
-        throw const AdhanDownloadException(AdhanDownloadFailure.unsupported);
+      // A phone that cannot list a notification sound at all (older Android) skips the attempt
+      // and keeps the file for in-app playback instead.
+      if (await bridge.isSupported()) {
+        final uri = await bridge.register(target.path, sound.id);
+        if (uri == null) {
+          if (iosSoundsDirectory != null) {
+            // iOS (recognised by iosSoundsDirectory being configured, see the class doc): the
+            // short clip could not be prepared (logged on the native side), but the recording
+            // itself is fine. It is kept for in-app playback, and the reminder falls back to the
+            // system sound (see docs/ADHAN_SOUNDS.md) rather than failing the download outright,
+            // as a listing failure on Android does.
+          } else {
+            target.deleteSync();
+            throw const AdhanDownloadException(
+              AdhanDownloadFailure.unsupported,
+            );
+          }
+        }
       }
       onProgress?.call(1);
     } on DioException {
@@ -164,5 +185,21 @@ class FileAdhanLibrary implements AdhanLibrary {
     } on Object {
       return null;
     }
+  }
+
+  @override
+  Future<String?> localPathFor(String id) async {
+    final file = await _file(id);
+    return file.existsSync() ? file.path : null;
+  }
+
+  @override
+  Future<String?> iosSoundFileFor(String id) async {
+    final dirFn = iosSoundsDirectory;
+    if (dirFn == null) return null;
+    final dir = await dirFn();
+    final name = '$id.caf';
+    final file = File('${dir.path}${Platform.pathSeparator}$name');
+    return file.existsSync() ? name : null;
   }
 }

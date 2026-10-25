@@ -6,15 +6,25 @@ import 'package:mynewapp/core/notifications/planned_notification.dart';
 
 /// The text attached to every notification the app schedules, so that what the platform holds can
 /// be read back, compared with the plan, and told apart from anything else.
+///
+/// [adhanId] and [fullAdhan] are read only by the iOS side (`AppDelegate.swift`), from the fired
+/// notification's own stored payload, to decide whether to play the full adhan in the app; Dart
+/// never reads them back, so they are not part of [decode] and do not affect `_version`.
 abstract final class NotificationPayload {
   static const _version = 1;
 
-  static String encode(PlannedNotification n) => jsonEncode({
+  static String encode(
+    PlannedNotification n, {
+    String? adhanId,
+    bool fullAdhan = false,
+  }) => jsonEncode({
     'v': _version,
     'k': n.kind.name,
     'key': n.key,
     'at': n.fireAt.millisecondsSinceEpoch,
     'sig': n.signature,
+    'adhan': ?adhanId,
+    if (fullAdhan) 'full': true,
   });
 
   /// The notification described by [entry], or null if the entry is not one of ours (or is
@@ -104,11 +114,16 @@ class NotificationSync {
     }
     for (final item in diff.schedule) {
       try {
+        final content = contentFor(item);
         await _gateway.schedule(
           id: item.id,
           fireAt: item.fireAt,
-          payload: NotificationPayload.encode(item),
-          content: contentFor(item),
+          payload: NotificationPayload.encode(
+            item,
+            adhanId: content.customSound?.id,
+            fullAdhan: content.customSound?.fullAdhan ?? false,
+          ),
+          content: content,
           exact: exact,
         );
         scheduled++;

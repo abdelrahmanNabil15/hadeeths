@@ -537,6 +537,37 @@ void main() {
     );
 
     test(
+      'carries whether it plays in full (iOS), off unless the user turned it on',
+      () async {
+        final off = _fixture(
+          reminders: ReminderSettings(enabled: true, adhanId: 'rifaat'),
+        );
+        await off.services.reminders.reconcile();
+        expect(
+          off.notifications.held.values.every(
+            (h) => h.content.customSound?.fullAdhan == false,
+          ),
+          isTrue,
+        );
+
+        final on = _fixture(
+          reminders: ReminderSettings(
+            enabled: true,
+            adhanId: 'rifaat',
+            fullAdhan: true,
+          ),
+        );
+        await on.services.reminders.reconcile();
+        expect(
+          on.notifications.held.values.every(
+            (h) => h.content.customSound?.fullAdhan == true,
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test(
       'is not used for an early reminder, for sunrise, or when silent',
       () async {
         final early = _fixture(

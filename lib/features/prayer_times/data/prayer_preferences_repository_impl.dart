@@ -67,6 +67,8 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
         'leadMinutes': p.reminders.leadMinutes,
         'sound': p.reminders.sound.name,
         'adhan': p.reminders.adhanId,
+        'fullAdhan': p.reminders.fullAdhan,
+        'adhanVolume': p.reminders.adhanVolume,
         'vibrate': p.reminders.vibrate,
         'exactTiming': p.reminders.exactTiming,
         'wakeUp': {
@@ -177,6 +179,8 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
       adhanId: json['adhan'] is String && (json['adhan'] as String).isNotEmpty
           ? json['adhan'] as String
           : null,
+      fullAdhan: json['fullAdhan'] == true,
+      adhanVolume: _volume(json['adhanVolume']),
       vibrate: json['vibrate'] != false,
       exactTiming: json['exactTiming'] == true,
       wakeUp: wake['enabled'] == true,
@@ -196,6 +200,13 @@ class PrayerPreferencesRepositoryImpl implements PrayerPreferencesRepository {
   /// A minute of the day (0 to 1439), or null for anything else.
   static int? _minute(Object? value) =>
       value is int && value >= 0 && value < 1440 ? value : null;
+
+  /// A saved volume (0 to 1); anything else, including older data that has none, means full
+  /// volume (the behaviour before this existed).
+  static double _volume(Object? value) {
+    final v = value is num ? value.toDouble() : null;
+    return v != null && v >= 0 && v <= 1 ? v : 1;
+  }
 
   /// Salawat settings; anything missing or out of range falls back to the defaults, and a saved
   /// combination that is no longer valid as a whole falls back to the defaults switched off.

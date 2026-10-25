@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
@@ -108,8 +110,11 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
   Future<bool> _explain() => explainNotifications(context);
 
   void _openAdhan() {
-    final library = context.read<PrayerServices>().adhan;
-    if (library != null) _openSub(AdhanSoundsPage(library: library));
+    final services = context.read<PrayerServices>();
+    final library = services.adhan;
+    if (library != null) {
+      _openSub(AdhanSoundsPage(library: library, player: services.adhanPlayer));
+    }
   }
 
   /// Opens a reminders sub-page that shares this page's state.
@@ -318,6 +323,33 @@ class _RemindersScaffoldState extends State<_RemindersScaffold>
                                       settings.adhanId,
                                     )?.name(l10n.localeName.startsWith('ar')) ??
                                     l10n.adhanNoneChosen,
+                                onTap: _openAdhan,
+                              ),
+                              // iOS only: its notification can only carry a short clip of the
+                              // adhan (capped at 30 seconds by the system), so this plays the full
+                              // recording in the app instead, when it can (see
+                              // docs/ADHAN_SOUNDS.md). Android already plays the full recording as
+                              // the notification's own sound.
+                              if (Platform.isIOS) ...[
+                                const SizedBox(height: AppSpacing.sm),
+                                SwitchRow(
+                                  title: l10n.remindersFullAdhan,
+                                  subtitle: l10n.remindersFullAdhanHint,
+                                  value: settings.fullAdhan,
+                                  onChanged: (on) => cubit.setFullAdhan(on: on),
+                                ),
+                              ],
+                            ],
+                            // This phone cannot use a downloaded recording as the reminder's
+                            // sound (so "Adhan" is not one of the choices above), but it can still
+                            // download one and play it in the app.
+                            if (!withAdhan &&
+                                context.read<PrayerServices>().adhan !=
+                                    null) ...[
+                              const SizedBox(height: AppSpacing.sm),
+                              AppTile(
+                                title: l10n.adhanBrowseTile,
+                                leadingIcon: Icons.graphic_eq,
                                 onTap: _openAdhan,
                               ),
                             ],

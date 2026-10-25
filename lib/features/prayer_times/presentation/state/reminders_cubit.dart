@@ -205,6 +205,16 @@ class RemindersCubit extends Cubit<RemindersState> {
           _settings.copyWith(sound: NotificationSound.system, adhanId: id),
         );
 
+  /// iOS only: also play the chosen adhan in full in the app (see
+  /// [ReminderSettings.fullAdhan]). No effect without an adhan chosen.
+  Future<void> setFullAdhan({required bool on}) =>
+      _apply(_settings.copyWith(fullAdhan: on));
+
+  /// How loud the adhan plays where the app plays it itself (see
+  /// [ReminderSettings.adhanVolume]). [volume] is clamped to 0–1.
+  Future<void> setAdhanVolume(double volume) =>
+      _apply(_settings.copyWith(adhanVolume: volume.clamp(0.0, 1.0)));
+
   /// The wake-up alarm before Fajr, on or off.
   Future<void> setWakeUp({required bool on}) =>
       _apply(_settings.copyWith(wakeUp: on));

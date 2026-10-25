@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 
 import 'package:flutter/services.dart';
 import 'package:mynewapp/app/composite_permission_gateway.dart';
+import 'package:mynewapp/app/full_adhan_coordinator.dart';
 import 'package:mynewapp/app/reminder_coordinator.dart';
 import 'package:mynewapp/app/widget_snapshot.dart';
 import 'package:mynewapp/app/widget_updating_reminders.dart';
@@ -13,9 +14,11 @@ import 'package:mynewapp/core/notifications/local_notifications_gateway.dart';
 import 'package:mynewapp/core/permissions/permission_flow.dart';
 import 'package:mynewapp/core/permissions/permission_gateway.dart';
 import 'package:mynewapp/core/platform/adhan_sound_bridge.dart';
+import 'package:mynewapp/core/platform/full_adhan_channel.dart';
 import 'package:mynewapp/core/platform/home_widget_bridge.dart';
 import 'package:mynewapp/core/time/clock.dart';
 import 'package:mynewapp/features/adhan_sounds/data/file_adhan_library.dart';
+import 'package:mynewapp/features/adhan_sounds/data/just_audio_adhan_player.dart';
 import 'package:mynewapp/features/prayer_times/data/adhan_prayer_times_calculator.dart';
 import 'package:mynewapp/features/prayer_times/data/geolocator_location_service.dart';
 import 'package:mynewapp/features/prayer_times/data/hijri_core_converter.dart';
@@ -43,7 +46,8 @@ PrayerServices buildPrayerServices({
   Future<CityCatalog>? cities;
   Future<CountryLookup>? countries;
   Future<WorldMagneticModel>? magnetic;
-  // Downloadable adhan recordings (Android 10 and later), only when the feature is on.
+  // Downloadable adhan recordings, only when the feature is on. Usable as the reminder's sound
+  // on Android 10 and later; elsewhere (iOS), played only in the app.
   final adhan = adhanSounds
       ? FileAdhanLibrary(
           directory: () async {
@@ -52,10 +56,31 @@ PrayerServices buildPrayerServices({
           },
           dio: Dio(),
           bridge: MethodChannelAdhanSoundBridge(),
+          // iOS keeps its short notification-sound clips here (`Library/Sounds`); irrelevant on
+          // Android, which lists the full recording itself instead (see docs/ADHAN_SOUNDS.md).
+          iosSoundsDirectory: Platform.isIOS
+              ? () async {
+                  final base = await getLibraryDirectory();
+                  return Directory(
+                    '${base.path}${Platform.pathSeparator}Sounds',
+                  );
+                }
+              : null,
         )
       : null;
   final notifications = LocalNotificationsGateway(soundResolver: adhan);
   final prayerPreferences = PrayerPreferencesRepositoryImpl(preferences);
+  // Plays the full adhan in the app when iOS asks for it (foreground delivery of a "Full adhan"
+  // reminder, or a tap on it). Android never asks: its notification already plays the full file.
+  if (adhan != null && Platform.isIOS) {
+    FullAdhanCoordinator(
+      channel: MethodChannelFullAdhanChannel(),
+      library: adhan,
+      player: JustAudioAdhanPlayer(),
+      volume: () async =>
+          (await prayerPreferences.load()).reminders.adhanVolume,
+    );
+  }
   const calculator = AdhanPrayerTimesCalculator();
   final coordinator = ReminderCoordinator(
     preferences: prayerPreferences,
@@ -86,6 +111,7 @@ PrayerServices buildPrayerServices({
             },
           ),
     adhan: adhan,
+    adhanPlayer: adhan == null ? null : () => JustAudioAdhanPlayer(),
     hijri: const HijriCoreConverter(),
     permissions: PermissionFlow(
       buildPermissionGateway(notifications: notifications),

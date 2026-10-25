@@ -7,24 +7,30 @@ import 'package:mynewapp/core/widgets/app_card.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/status_banner.dart';
 import 'package:mynewapp/features/adhan_sounds/domain/adhan_library.dart';
+import 'package:mynewapp/features/adhan_sounds/domain/adhan_player.dart';
 import 'package:mynewapp/features/adhan_sounds/domain/adhan_sound.dart';
 import 'package:mynewapp/features/adhan_sounds/presentation/state/adhan_sounds_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/prayer_cubit.dart';
 import 'package:mynewapp/features/prayer_times/presentation/state/reminders_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
-/// The adhan recordings the user can download, use as the sound of the prayer-time reminders, or
-/// delete. Opened from Reminders, with that page's cubits.
+/// The adhan recordings the user can download and play in the app; where the phone supports it
+/// (Android 10 and later), also use as the sound of the prayer-time reminders, or delete. Opened
+/// from Reminders, with that page's cubits.
 class AdhanSoundsPage extends StatelessWidget {
-  const AdhanSoundsPage({super.key, required this.library});
+  const AdhanSoundsPage({super.key, required this.library, this.player});
 
   /// Given by the page that opens this one: a new route does not see the app's own providers.
   final AdhanLibrary library;
 
+  /// Builds the in-app player; null plays nothing (used where [library] came with no player, or
+  /// in tests that do not exercise playback).
+  final AdhanPlayer Function()? player;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AdhanSoundsCubit(library)..load(),
+      create: (_) => AdhanSoundsCubit(library, player?.call())..load(),
       child: const _AdhanSoundsView(),
     );
   }
@@ -45,6 +51,7 @@ class _AdhanSoundsView extends StatelessWidget {
           builder: (context, state) => BlocBuilder<PrayerCubit, PrayerState>(
             builder: (context, prayer) {
               final reminders = prayer.preferences.reminders;
+              final remindersCubit = context.read<RemindersCubit>();
               final chosen = reminders.adhanId;
               return ListView(
                 padding: const EdgeInsets.all(AppSpacing.lg),
@@ -53,25 +60,57 @@ class _AdhanSoundsView extends StatelessWidget {
                   const SizedBox(height: AppSpacing.sm),
                   Text(l10n.adhanPrayerOnly, style: type.meta),
                   const SizedBox(height: AppSpacing.lg),
-                  if (state.loaded && !state.supported)
-                    StatusBanner(
-                      message: l10n.adhanUnsupported,
-                      kind: StatusKind.warning,
-                    )
-                  else
-                    for (final item in state.items) ...[
-                      _AdhanTile(
-                        item: item,
-                        arabic: arabic,
-                        inUse: chosen == item.sound.id,
+                  // Applies to playing a recording in the app (the preview below, and iOS's "Full
+                  // adhan"), not to a downloaded recording used as Android's notification sound,
+                  // which follows the phone's own volume.
+                  Text(l10n.adhanVolume, style: type.meta),
+                  const SizedBox(height: AppSpacing.xs),
+                  Row(
+                    children: [
+                      const Icon(Icons.volume_down),
+                      Expanded(
+                        child: Semantics(
+                          label: l10n.adhanVolume,
+                          child: Slider(
+                            value: reminders.adhanVolume,
+                            label: context.digits.localize(
+                              '${(reminders.adhanVolume * 100).round()}%',
+                            ),
+                            semanticFormatterCallback: (value) => context.digits
+                                .localize('${(value * 100).round()}%'),
+                            onChanged: remindersCubit.setAdhanVolume,
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: AppSpacing.md),
+                      const Icon(Icons.volume_up),
                     ],
-                  const SizedBox(height: AppSpacing.sm),
-                  Text(
-                    l10n.adhanTestHint(l10n.remindersTest),
-                    style: type.meta,
                   ),
+                  const SizedBox(height: AppSpacing.sm),
+                  if (state.loaded && !state.supported) ...[
+                    StatusBanner(
+                      message: l10n.adhanNoReminderSound,
+                      kind: StatusKind.warning,
+                    ),
+                    const SizedBox(height: AppSpacing.lg),
+                  ],
+                  for (final item in state.items) ...[
+                    _AdhanTile(
+                      item: item,
+                      arabic: arabic,
+                      inUse: chosen == item.sound.id,
+                      canUseAsReminder: state.supported,
+                      playing: state.playingId == item.sound.id,
+                      volume: reminders.adhanVolume,
+                    ),
+                    const SizedBox(height: AppSpacing.md),
+                  ],
+                  if (state.supported) ...[
+                    const SizedBox(height: AppSpacing.sm),
+                    Text(
+                      l10n.adhanTestHint(l10n.remindersTest),
+                      style: type.meta,
+                    ),
+                  ],
                   const SizedBox(height: AppSpacing.sm),
                   Text(l10n.adhanSourceLine(adhanSource), style: type.meta),
                 ],
@@ -89,11 +128,24 @@ class _AdhanTile extends StatelessWidget {
     required this.item,
     required this.arabic,
     required this.inUse,
+    required this.canUseAsReminder,
+    required this.playing,
+    required this.volume,
   });
 
   final AdhanItem item;
   final bool arabic;
   final bool inUse;
+
+  /// Whether this phone can use a downloaded recording as a notification sound at all. When
+  /// false, "Use this adhan" is not offered, but the recording can still be played in the app.
+  final bool canUseAsReminder;
+
+  /// Whether this recording is playing in the app right now.
+  final bool playing;
+
+  /// How loud the preview plays: the user's saved adhan volume.
+  final double volume;
 
   String _size(BuildContext context) {
     final mb = item.sound.bytes / (1024 * 1024);
@@ -139,7 +191,9 @@ class _AdhanTile extends StatelessWidget {
       AdhanStatus.ready => Row(
         children: [
           Expanded(
-            child: inUse
+            child: !canUseAsReminder
+                ? const SizedBox.shrink()
+                : inUse
                 ? Row(
                     children: [
                       Icon(Icons.check_circle, color: scheme.primary),
@@ -154,6 +208,13 @@ class _AdhanTile extends StatelessWidget {
                       child: Text(l10n.adhanUse),
                     ),
                   ),
+          ),
+          IconButton(
+            tooltip: playing ? l10n.adhanStop : l10n.adhanPlay,
+            icon: Icon(
+              playing ? Icons.stop_circle_outlined : Icons.play_circle_outline,
+            ),
+            onPressed: () => cubit.preview(item.sound.id, volume: volume),
           ),
           IconButton(
             tooltip: l10n.adhanDelete,

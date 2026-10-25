@@ -89,21 +89,33 @@ class LocalNotificationsGateway implements NotificationGateway {
     (NotificationSound.silent, false) => labels.silent,
   };
 
-  /// A downloaded recording is a channel of its own: Android fixes a channel's sound when it is made,
-  /// and the recording's location is part of the channel's name, so a recording downloaded again
-  /// (which gets a new location) gets a new channel. Returns null when the recording cannot be used
-  /// (not Android, not found, no resolver): the caller then uses the system sound.
+  /// A downloaded recording plays differently per platform. Android: a channel of its own (fixed
+  /// sound when it is made, so a recording downloaded again, at a new location, gets a new
+  /// channel). iOS: the short clip already prepared for it at download time (see
+  /// `docs/ADHAN_SOUNDS.md`); there are no channels there. Returns null when the recording cannot
+  /// be used (not found, no resolver, no clip): the caller then uses the system sound.
   Future<NotificationDetails?> _recordingDetails(
     NotificationContent content,
   ) async {
     final custom = content.customSound;
     final resolver = _soundResolver;
-    final android = _android;
     if (custom == null ||
         resolver == null ||
-        android == null ||
         content.sound != NotificationSound.system) {
       return null;
+    }
+    final android = _android;
+    if (android == null) {
+      if (_ios == null) return null;
+      final soundFile = await resolver.iosSoundFileFor(custom.id);
+      if (soundFile == null) return null;
+      return NotificationDetails(
+        iOS: DarwinNotificationDetails(
+          presentAlert: true,
+          presentSound: true,
+          sound: soundFile,
+        ),
+      );
     }
     final uri = await resolver.uriFor(custom.id);
     if (uri == null) return null;
@@ -157,46 +169,49 @@ class LocalNotificationsGateway implements NotificationGateway {
     );
   }
 
-  /// A sound that ships with the app plays through a channel of its own, for the same reason. Null
-  /// when there is none or this is not Android.
+  /// A sound that ships with the app plays through a channel of its own on Android, for the same
+  /// reason as a downloaded recording. On iOS there are no channels: a short (non-alarm) recording
+  /// is named as the notification's own sound (bundled as `<resource>.caf`, see
+  /// `docs/ADHAN_SOUNDS.md`); the alarm-type wake-up recording is too long for iOS's 30-second
+  /// notification-sound limit and keeps the system sound there. Null when neither platform has
+  /// anything to play.
   Future<NotificationDetails?> _bundledDetails(
     NotificationContent content,
   ) async {
     final bundled = content.bundledSound;
-    final android = _android;
-    if (bundled == null ||
-        android == null ||
-        content.sound != NotificationSound.system) {
+    if (bundled == null || content.sound != NotificationSound.system) {
       return null;
     }
-    final id =
-        'prayer_raw_${bundled.resource}_${content.vibrate ? 'vibrate' : 'still'}';
-    final labels = _labels;
-    final name = labels == null
-        ? bundled.label
-        : '${content.vibrate ? labels.soundAndVibration : labels.soundOnly}'
-              ' - ${bundled.label}';
-    final sound = RawResourceAndroidNotificationSound(bundled.resource);
-    final importance = bundled.alarm ? Importance.max : Importance.high;
-    final usage = bundled.alarm
-        ? AudioAttributesUsage.alarm
-        : AudioAttributesUsage.notification;
-    if (_recordingChannels.add(id)) {
-      await android.createNotificationChannel(
-        AndroidNotificationChannel(
-          id,
-          name,
-          description: labels?.description,
-          importance: importance,
-          playSound: true,
-          sound: sound,
-          enableVibration: content.vibrate,
-          audioAttributesUsage: usage,
-        ),
-      );
-    }
-    return NotificationDetails(
-      android: AndroidNotificationDetails(
+    final android = _android;
+    AndroidNotificationDetails? androidDetails;
+    if (android != null) {
+      final id =
+          'prayer_raw_${bundled.resource}_${content.vibrate ? 'vibrate' : 'still'}';
+      final labels = _labels;
+      final name = labels == null
+          ? bundled.label
+          : '${content.vibrate ? labels.soundAndVibration : labels.soundOnly}'
+                ' - ${bundled.label}';
+      final sound = RawResourceAndroidNotificationSound(bundled.resource);
+      final importance = bundled.alarm ? Importance.max : Importance.high;
+      final usage = bundled.alarm
+          ? AudioAttributesUsage.alarm
+          : AudioAttributesUsage.notification;
+      if (_recordingChannels.add(id)) {
+        await android.createNotificationChannel(
+          AndroidNotificationChannel(
+            id,
+            name,
+            description: labels?.description,
+            importance: importance,
+            playSound: true,
+            sound: sound,
+            enableVibration: content.vibrate,
+            audioAttributesUsage: usage,
+          ),
+        );
+      }
+      androidDetails = AndroidNotificationDetails(
         id,
         name,
         channelDescription: labels?.description,
@@ -206,10 +221,18 @@ class LocalNotificationsGateway implements NotificationGateway {
         sound: sound,
         enableVibration: content.vibrate,
         audioAttributesUsage: usage,
-      ),
-      iOS: const DarwinNotificationDetails(
+      );
+    }
+    final iosSound = bundled.alarm || _ios == null
+        ? null
+        : '${bundled.resource}.caf';
+    if (androidDetails == null && iosSound == null) return null;
+    return NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(
         presentAlert: true,
         presentSound: true,
+        sound: iosSound,
       ),
     );
   }
