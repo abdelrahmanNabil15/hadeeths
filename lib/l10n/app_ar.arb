@@ -476,6 +476,44 @@
   "quranPage": "صفحة {number}",
   "quranBookmarkAdd": "وضع علامة على هذه الآية",
   "quranBookmarkRemove": "إزالة العلامة",
+  "quranReadingMode": "وضع القراءة",
+  "quranReadingModeMushaf": "المصحف",
+  "quranReadingModeVerseByVerse": "آية بآية",
+  "quranTranslation": "الترجمة",
+  "quranChooseTranslation": "اختر ترجمة",
+  "quranTranslationNone": "بلا ترجمة",
+  "quranTranslationSearchHint": "ابحث بالاسم أو المؤلف أو اللغة",
+  "quranTranslationNoMatch": "لا توجد ترجمة مطابقة.",
+  "quranTranslationCredit": "الترجمة: {name}",
+  "quranTafsir": "التفسير",
+  "quranChooseTafsir": "اختر تفسيرًا",
+  "quranTafsirNone": "بلا تفسير",
+  "quranTafsirSearchHint": "ابحث بالاسم أو المؤلف أو اللغة",
+  "quranTafsirNoMatch": "لا يوجد تفسير مطابق.",
+  "quranTafsirCredit": "التفسير: {name}",
+  "quranTafsirRead": "قراءة التفسير",
+  "quranTafsirDisclaimer": "هذا اجتهاد أحد العلماء في التفسير، وليس نص القرآن نفسه.",
+  "quranRecitation": "التلاوة الصوتية",
+  "quranChooseReciter": "اختر قارئًا",
+  "quranReciterNone": "بدون قارئ",
+  "quranListen": "استماع",
+  "quranAudioPlay": "تشغيل",
+  "quranAudioPause": "إيقاف مؤقت",
+  "quranAudioPrevious": "الآية السابقة",
+  "quranAudioNext": "الآية التالية",
+  "quranAudioStop": "إيقاف",
+  "quranQiraat": "اختلافات القراءات",
+  "quranQiraatNone": "لا توجد اختلافات قراءات معتمدة في هذه الآية.",
+  "quranQiraatDisclaimer": "هذه قراءات أصيلة متواترة للقرآن، وليست تفسيرات بديلة.",
+  "quranQiraatCredit": "بيانات القراءات: مؤسسة القرآن (Quran Foundation).",
+  "quranQiraatCategoryMeaning": "المعنى",
+  "quranQiraatCategoryWording": "الرسم",
+  "quranQiraatCategoryPronunciation": "اللفظ",
+  "quranSearchTabQuran": "نص القرآن",
+  "quranTranslationSearchPrompt": "اكتب كلمة للبحث في الترجمة.",
+  "quranTranslationSearchNeedsEdition": "اختر ترجمة أولاً للبحث في نصها.",
+  "quranSearchLoadMore": "تحميل المزيد",
+  "quranSearchLoadMoreFailed": "تعذّر تحميل مزيد من النتائج.",
   "quranSurasHeading": "السور",
   "quranCredit": "نص القرآن: مشروع تنزيل (tanzil.net)، مستخدَم دون أي تغيير وفق ترخيصه.",
   "aboutQuranHeading": "نص القرآن الكريم",
@@ -660,6 +698,14 @@
   "@remindersSoundAdhan": {
     "description": "Adhan sounds; wording for owner review."
   },
+  "remindersFullAdhan": "تشغيل الأذان كاملًا في التطبيق",
+  "@remindersFullAdhan": {
+    "description": "Adhan sounds, iOS only; wording for owner review."
+  },
+  "remindersFullAdhanHint": "صوت الإشعار نفسه مقطع قصير (الحد الأقصى لنظام آيفون نصف دقيقة). مع هذا الخيار، يُشغَّل الأذان كاملًا داخل التطبيق إذا كان مفتوحًا وقت التذكير، أو عند الضغط على الإشعار.",
+  "@remindersFullAdhanHint": {
+    "description": "Adhan sounds, iOS only; wording for owner review."
+  },
   "adhanTitle": "صوت الأذان",
   "@adhanTitle": {
     "description": "Adhan sounds; wording for owner review."
@@ -714,8 +760,28 @@
   "@adhanFailedFile": {
     "description": "Adhan sounds; wording for owner review."
   },
-  "adhanUnsupported": "تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.",
+  "adhanUnsupported": "تعذّر على هذا الهاتف استخدام التسجيل صوتًا للإشعار.",
   "@adhanUnsupported": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanNoReminderSound": "يمكن لهذا الهاتف تنزيل تسجيل وتشغيله هنا، لكن لا يمكن استخدامه صوتًا لتذكير الصلاة.",
+  "@adhanNoReminderSound": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanBrowseTile": "تسجيلات الأذان",
+  "@adhanBrowseTile": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanPlay": "تشغيل",
+  "@adhanPlay": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanStop": "إيقاف",
+  "@adhanStop": {
+    "description": "Adhan sounds; wording for owner review."
+  },
+  "adhanVolume": "مستوى الصوت",
+  "@adhanVolume": {
     "description": "Adhan sounds; wording for owner review."
   },
   "adhanSourceLine": "التسجيلات من {source}. وحقوقها لأصحابها.",

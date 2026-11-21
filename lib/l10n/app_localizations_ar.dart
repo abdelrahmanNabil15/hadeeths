@@ -1061,6 +1061,128 @@ class AppLocalizationsAr extends AppLocalizations {
   String get quranBookmarkRemove => 'إزالة العلامة';
 
   @override
+  String get quranReadingMode => 'وضع القراءة';
+
+  @override
+  String get quranReadingModeMushaf => 'المصحف';
+
+  @override
+  String get quranReadingModeVerseByVerse => 'آية بآية';
+
+  @override
+  String get quranTranslation => 'الترجمة';
+
+  @override
+  String get quranChooseTranslation => 'اختر ترجمة';
+
+  @override
+  String get quranTranslationNone => 'بلا ترجمة';
+
+  @override
+  String get quranTranslationSearchHint => 'ابحث بالاسم أو المؤلف أو اللغة';
+
+  @override
+  String get quranTranslationNoMatch => 'لا توجد ترجمة مطابقة.';
+
+  @override
+  String quranTranslationCredit(Object name) {
+    return 'الترجمة: $name';
+  }
+
+  @override
+  String get quranTafsir => 'التفسير';
+
+  @override
+  String get quranChooseTafsir => 'اختر تفسيرًا';
+
+  @override
+  String get quranTafsirNone => 'بلا تفسير';
+
+  @override
+  String get quranTafsirSearchHint => 'ابحث بالاسم أو المؤلف أو اللغة';
+
+  @override
+  String get quranTafsirNoMatch => 'لا يوجد تفسير مطابق.';
+
+  @override
+  String quranTafsirCredit(Object name) {
+    return 'التفسير: $name';
+  }
+
+  @override
+  String get quranTafsirRead => 'قراءة التفسير';
+
+  @override
+  String get quranTafsirDisclaimer =>
+      'هذا اجتهاد أحد العلماء في التفسير، وليس نص القرآن نفسه.';
+
+  @override
+  String get quranRecitation => 'التلاوة الصوتية';
+
+  @override
+  String get quranChooseReciter => 'اختر قارئًا';
+
+  @override
+  String get quranReciterNone => 'بدون قارئ';
+
+  @override
+  String get quranListen => 'استماع';
+
+  @override
+  String get quranAudioPlay => 'تشغيل';
+
+  @override
+  String get quranAudioPause => 'إيقاف مؤقت';
+
+  @override
+  String get quranAudioPrevious => 'الآية السابقة';
+
+  @override
+  String get quranAudioNext => 'الآية التالية';
+
+  @override
+  String get quranAudioStop => 'إيقاف';
+
+  @override
+  String get quranQiraat => 'اختلافات القراءات';
+
+  @override
+  String get quranQiraatNone => 'لا توجد اختلافات قراءات معتمدة في هذه الآية.';
+
+  @override
+  String get quranQiraatDisclaimer =>
+      'هذه قراءات أصيلة متواترة للقرآن، وليست تفسيرات بديلة.';
+
+  @override
+  String get quranQiraatCredit =>
+      'بيانات القراءات: مؤسسة القرآن (Quran Foundation).';
+
+  @override
+  String get quranQiraatCategoryMeaning => 'المعنى';
+
+  @override
+  String get quranQiraatCategoryWording => 'الرسم';
+
+  @override
+  String get quranQiraatCategoryPronunciation => 'اللفظ';
+
+  @override
+  String get quranSearchTabQuran => 'نص القرآن';
+
+  @override
+  String get quranTranslationSearchPrompt => 'اكتب كلمة للبحث في الترجمة.';
+
+  @override
+  String get quranTranslationSearchNeedsEdition =>
+      'اختر ترجمة أولاً للبحث في نصها.';
+
+  @override
+  String get quranSearchLoadMore => 'تحميل المزيد';
+
+  @override
+  String get quranSearchLoadMoreFailed => 'تعذّر تحميل مزيد من النتائج.';
+
+  @override
   String get quranSurasHeading => 'السور';
 
   @override
@@ -1259,6 +1381,13 @@ class AppLocalizationsAr extends AppLocalizations {
   String get remindersSoundAdhan => 'الأذان';
 
   @override
+  String get remindersFullAdhan => 'تشغيل الأذان كاملًا في التطبيق';
+
+  @override
+  String get remindersFullAdhanHint =>
+      'صوت الإشعار نفسه مقطع قصير (الحد الأقصى لنظام آيفون نصف دقيقة). مع هذا الخيار، يُشغَّل الأذان كاملًا داخل التطبيق إذا كان مفتوحًا وقت التذكير، أو عند الضغط على الإشعار.';
+
+  @override
   String get adhanTitle => 'صوت الأذان';
 
   @override
@@ -1300,7 +1429,23 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get adhanUnsupported =>
-      'تسجيلات الأذان المُنزَّلة تحتاج إلى أندرويد 10 أو أحدث.';
+      'تعذّر على هذا الهاتف استخدام التسجيل صوتًا للإشعار.';
+
+  @override
+  String get adhanNoReminderSound =>
+      'يمكن لهذا الهاتف تنزيل تسجيل وتشغيله هنا، لكن لا يمكن استخدامه صوتًا لتذكير الصلاة.';
+
+  @override
+  String get adhanBrowseTile => 'تسجيلات الأذان';
+
+  @override
+  String get adhanPlay => 'تشغيل';
+
+  @override
+  String get adhanStop => 'إيقاف';
+
+  @override
+  String get adhanVolume => 'مستوى الصوت';
 
   @override
   String adhanSourceLine(String source) {

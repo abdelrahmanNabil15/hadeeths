@@ -1,0 +1,9 @@
+name = "hadeeths-quran-proxy"
+main = "src/index.ts"
+compatibility_date = "2026-10-17"
+
+# Client IDs are not secret (they identify the client, not authenticate it); set them here.
+# Client secrets are set separately with `wrangler secret put`, never in this file.
+[vars]
+QURAN_PRELIVE_CLIENT_ID = "aaddea04-7748-4b33-823d-82e4461ce31e"
+QURAN_PRODUCTION_CLIENT_ID = "8cb2df3f-f5f4-4ea9-a927-474becc88264"

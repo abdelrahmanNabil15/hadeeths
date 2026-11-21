@@ -64,6 +64,31 @@ void main() {
     });
 
     test(
+      'the full-adhan toggle starts off, can be set, and clearing the adhan clears it too',
+      () {
+        final s = ReminderSettings(adhanId: 'rifaat');
+        expect(s.fullAdhan, isFalse);
+        expect(s.copyWith(fullAdhan: true).fullAdhan, isTrue);
+        expect(
+          s.copyWith(fullAdhan: true).copyWith(clearAdhan: true).fullAdhan,
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'the adhan volume starts full, can be changed, and must be 0 to 1',
+      () {
+        final s = ReminderSettings();
+        expect(s.adhanVolume, 1);
+        expect(s.copyWith(adhanVolume: 0.4).adhanVolume, 0.4);
+        for (final bad in [-0.1, 1.1]) {
+          expect(() => ReminderSettings(adhanVolume: bad), throwsArgumentError);
+        }
+      },
+    );
+
+    test(
       'the wake-up alarm starts off, 30 minutes before, and accepts only the offered times',
       () {
         final s = ReminderSettings();
@@ -191,6 +216,44 @@ void main() {
       })).load();
       expect(p.reminders.adhanId, isNull);
     });
+
+    test(
+      'the full-adhan toggle round-trips, and older data means off',
+      () async {
+        final r = await repo();
+        await r.save(
+          PrayerPreferences().withReminders(
+            ReminderSettings(adhanId: 'rifaat', fullAdhan: true),
+          ),
+        );
+        expect((await r.load()).reminders.fullAdhan, isTrue);
+        final older = await (await repo({
+          PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+            'reminders': {'enabled': true, 'adhan': 'rifaat'},
+          }),
+        })).load();
+        expect(older.reminders.fullAdhan, isFalse);
+      },
+    );
+
+    test(
+      'the adhan volume round-trips, and older or bad data means full volume',
+      () async {
+        final r = await repo();
+        await r.save(
+          PrayerPreferences().withReminders(ReminderSettings(adhanVolume: 0.3)),
+        );
+        expect((await r.load()).reminders.adhanVolume, 0.3);
+        for (final bad in <Object?>[null, 'loud', -0.2, 1.5]) {
+          final p = await (await repo({
+            PrayerPreferencesRepositoryImpl.storageKey: jsonEncode({
+              'reminders': {'enabled': true, 'adhanVolume': bad},
+            }),
+          })).load();
+          expect(p.reminders.adhanVolume, 1, reason: '$bad');
+        }
+      },
+    );
 
     test(
       'the wake-up alarm round-trips, and bad values mean the default',

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
 import 'package:mynewapp/core/design_system/typography.dart';
 import 'package:mynewapp/core/format/digits.dart';
@@ -11,6 +12,8 @@ import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
 import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
+import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
+import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/domain/sura_lookup.dart';
@@ -29,6 +32,9 @@ class QuranPage extends StatelessWidget {
     required this.source,
     this.lines,
     this.userData,
+    this.content,
+    this.features = const FeatureFlags(),
+    this.audioPlayerFactory,
   });
 
   final QuranSource source;
@@ -37,10 +43,27 @@ class QuranPage extends StatelessWidget {
   final MushafLinesSource? lines;
   final QuranUserData? userData;
 
+  /// Translation, tafsir and recitation-audio content; `null` when none of its flags is on.
+  final QuranContentRepository? content;
+
+  /// Which of [content]'s features the reader should actually offer
+  /// (`quranTranslations`, `quranTafsir`, `quranAudio`).
+  final FeatureFlags features;
+
+  /// Builds a fresh audio player for the reader's mini player; `null` when `quranAudio` is off.
+  final QuranAudioPlayer Function()? audioPlayerFactory;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => QuranCubit(source: source, lines: lines, userData: userData)..load(),
+      create: (_) => QuranCubit(
+        source: source,
+        lines: lines,
+        userData: userData,
+        content: content,
+        features: features,
+        audioPlayerFactory: audioPlayerFactory,
+      )..load(),
       // Reading: the saved place moves on to another verse. Counted once per sura per day.
       child: BlocListener<QuranCubit, QuranState>(
         listenWhen: (previous, current) =>

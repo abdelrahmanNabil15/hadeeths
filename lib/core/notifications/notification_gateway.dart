@@ -2,19 +2,32 @@
 /// audio of its own; a [CustomSound] is a recording the user chose to download.
 enum NotificationSound { system, silent }
 
-/// A recording the user downloaded, to play instead of the system's notification sound (Android
-/// 10 and later). [id] names it in the app's library; [label] is its name in the user's language,
-/// shown in the phone's own notification settings.
+/// A recording the user downloaded, to play instead of the system's notification sound. [id] names
+/// it in the app's library; [label] is its name in the user's language, shown in the phone's own
+/// notification settings (Android) or logged (iOS).
 class CustomSound {
-  const CustomSound({required this.id, required this.label});
+  const CustomSound({
+    required this.id,
+    required this.label,
+    this.fullAdhan = false,
+  });
 
   final String id;
   final String label;
+
+  /// iOS only: also play the full recording in the app when the reminder fires in the foreground
+  /// or the user taps it (the notification's own sound is a short clip there; see
+  /// `docs/ADHAN_SOUNDS.md`). Android ignores this: it already plays the full recording as the
+  /// notification's own sound.
+  final bool fullAdhan;
 }
 
-/// A short recording that ships with the app (an Android raw resource called [resource], without
-/// its extension). [label] names it in the phone's own notification settings. With [alarm] it
-/// plays as an alarm does, not as a notification: it is not muted with the notification volume.
+/// A short recording that ships with the app: an Android raw resource called [resource] (without
+/// its extension), and, when it is short enough for iOS's notification-sound limit (30 seconds),
+/// an iOS bundle resource `[resource].caf`. [label] names it in the phone's own notification
+/// settings. With [alarm] it plays as an alarm does, not as a notification: it is not muted with
+/// the notification volume (Android only; an alarm recording keeps the system sound on iOS, see
+/// `docs/ADHAN_SOUNDS.md`).
 class BundledSound {
   const BundledSound({
     required this.resource,
@@ -30,7 +43,16 @@ class BundledSound {
 /// Finds where the platform can read a downloaded recording from. Null when it is gone or not
 /// supported, in which case the notification uses the system sound.
 abstract interface class NotificationSoundResolver {
+  /// Android: the shared-list address of the full recording (through the notification channel's
+  /// own sound). Not used on iOS, where a notification sound cannot be an arbitrary file; see
+  /// [iosSoundFileFor].
   Future<String?> uriFor(String id);
+
+  /// iOS only: the short notification-sound file already prepared for [id] (trimmed and converted
+  /// to `.caf` when it was downloaded; see `docs/ADHAN_SOUNDS.md`), without redoing that work.
+  /// Null when there is none — not downloaded, or the conversion failed — in which case the
+  /// reminder falls back to the system sound; the full recording is unaffected either way.
+  Future<String?> iosSoundFileFor(String id);
 }
 
 /// What the user reads. Built by the feature when a notification is scheduled; never contains a

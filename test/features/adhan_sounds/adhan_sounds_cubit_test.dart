@@ -27,16 +27,20 @@ void main() {
     },
   );
 
-  test('a phone that cannot use it lists nothing as downloaded', () async {
-    final lib = FakeAdhanLibrary()
-      ..supported = false
-      ..have.add('rifaat');
-    final cubit = AdhanSoundsCubit(lib);
-    await cubit.load();
-    expect(cubit.state.supported, isFalse);
-    expect(_item(cubit, 'rifaat').status, AdhanStatus.missing);
-    await cubit.close();
-  });
+  test(
+    'a phone that cannot use it as a notification sound still lists a downloaded recording, '
+    'for preview',
+    () async {
+      final lib = FakeAdhanLibrary()
+        ..supported = false
+        ..have.add('rifaat');
+      final cubit = AdhanSoundsCubit(lib);
+      await cubit.load();
+      expect(cubit.state.supported, isFalse);
+      expect(_item(cubit, 'rifaat').status, AdhanStatus.ready);
+      await cubit.close();
+    },
+  );
 
   test('a download shows its progress, then is ready', () async {
     final lib = FakeAdhanLibrary()..hold = Completer<void>();
@@ -92,6 +96,88 @@ void main() {
     expect(_item(cubit, 'tokhi').status, AdhanStatus.missing);
     await cubit.close();
   });
+
+  test('previewing a downloaded recording plays its local file', () async {
+    final lib = FakeAdhanLibrary()..have.add('rifaat');
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.load();
+    await cubit.preview('rifaat');
+    expect(player.played, ['/fake/adhan/rifaat.mp3']);
+    expect(cubit.state.playingId, 'rifaat');
+    await cubit.close();
+  });
+
+  test(
+    'previewing plays at the given volume, full volume by default',
+    () async {
+      final lib = FakeAdhanLibrary()..have.add('rifaat');
+      final player = FakeAdhanPlayer();
+      final cubit = AdhanSoundsCubit(lib, player);
+      await cubit.load();
+      await cubit.preview('rifaat');
+      expect(player.volumes, [1]);
+      await cubit.preview('rifaat'); // stop
+      await cubit.preview('rifaat', volume: 0.25);
+      expect(player.volumes, [1, 0.25]);
+      await cubit.close();
+    },
+  );
+
+  test('previewing the one already playing stops it', () async {
+    final lib = FakeAdhanLibrary()..have.add('rifaat');
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.load();
+    await cubit.preview('rifaat');
+    await cubit.preview('rifaat');
+    expect(player.stopped, hasLength(1));
+    expect(cubit.state.playingId, isNull);
+    await cubit.close();
+  });
+
+  test('previewing a recording that is not downloaded does nothing', () async {
+    final lib = FakeAdhanLibrary();
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.load();
+    await cubit.preview('rifaat');
+    expect(player.played, isEmpty);
+    expect(cubit.state.playingId, isNull);
+    await cubit.close();
+  });
+
+  test('playback finishing on its own clears the playing state', () async {
+    final lib = FakeAdhanLibrary()..have.add('rifaat');
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.load();
+    await cubit.preview('rifaat');
+    player.completeNow();
+    await Future<void>.delayed(Duration.zero);
+    expect(cubit.state.playingId, isNull);
+    await cubit.close();
+  });
+
+  test('deleting what is playing stops it first', () async {
+    final lib = FakeAdhanLibrary()..have.add('rifaat');
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.load();
+    await cubit.preview('rifaat');
+    await cubit.delete('rifaat');
+    expect(player.stopped, hasLength(1));
+    expect(cubit.state.playingId, isNull);
+    await cubit.close();
+  });
+
+  test('closing the cubit disposes the player', () async {
+    final lib = FakeAdhanLibrary();
+    final player = FakeAdhanPlayer();
+    final cubit = AdhanSoundsCubit(lib, player);
+    await cubit.close();
+    expect(player.disposed, isTrue);
+  });
 }
 
 class _CountingLibrary implements AdhanLibrary {
@@ -123,4 +209,10 @@ class _CountingLibrary implements AdhanLibrary {
 
   @override
   Future<String?> uriFor(String id) => _inner.uriFor(id);
+
+  @override
+  Future<String?> localPathFor(String id) => _inner.localPathFor(id);
+
+  @override
+  Future<String?> iosSoundFileFor(String id) => _inner.iosSoundFileFor(id);
 }

@@ -67,6 +67,15 @@ enum PageFrameStyle {
   none,
 }
 
+/// How the Quran reader lays out a sura's verses.
+enum QuranReadingMode {
+  /// The current mushaf page, turned like a printed copy.
+  mushaf,
+
+  /// One verse per block, scrolled through a single sura.
+  verseByVerse,
+}
+
 /// How the app writes its own numbers.
 enum DigitStyle {
   /// Arabic-Indic digits (٠١٢٣) when the interface is Arabic, Western digits (0123) otherwise.
@@ -87,6 +96,13 @@ class AppSettings extends Equatable {
     this.mushafLayoutStyle = MushafLayoutStyle.madinah15,
     this.surahHeaderStyle = SurahHeaderStyle.madinah,
     this.pageFrameStyle = PageFrameStyle.madinah,
+    this.quranReadingMode = QuranReadingMode.mushaf,
+    this.quranTranslationEditionId,
+    this.quranTranslationEditionName,
+    this.quranTafsirEditionId,
+    this.quranTafsirEditionName,
+    this.quranReciterId,
+    this.quranReciterName,
   });
 
   /// Allowed multipliers for the reading text (hadith and explanation), smallest first.
@@ -118,6 +134,27 @@ class AppSettings extends Equatable {
   /// Whether the Quran reader's fitted page view is wrapped in a decorative frame.
   final PageFrameStyle pageFrameStyle;
 
+  /// Which layout the Quran reader opens with.
+  final QuranReadingMode quranReadingMode;
+
+  /// The translation edition shown under each verse in verse-by-verse mode (an id from the Quran
+  /// Foundation API, via `QuranContentRepository`); `null` shows no translation.
+  final int? quranTranslationEditionId;
+
+  /// The chosen edition's name, saved alongside its id so the credit line can be shown without
+  /// needing the full edition list loaded again.
+  final String? quranTranslationEditionName;
+
+  /// The tafsir edition read per verse in verse-by-verse mode; `null` means no tafsir is offered
+  /// per verse (the reader still has only the bookmark action).
+  final int? quranTafsirEditionId;
+  final String? quranTafsirEditionName;
+
+  /// The reciter the mini player uses; `null` means no reciter is chosen and "Listen" is not
+  /// offered per verse.
+  final int? quranReciterId;
+  final String? quranReciterName;
+
   /// Index of [readingScale] in [readingScales].
   int get readingScaleIndex => readingScales.indexOf(readingScale);
 
@@ -144,6 +181,16 @@ class AppSettings extends Equatable {
     MushafLayoutStyle? mushafLayoutStyle,
     SurahHeaderStyle? surahHeaderStyle,
     PageFrameStyle? pageFrameStyle,
+    QuranReadingMode? quranReadingMode,
+    int? quranTranslationEditionId,
+    String? quranTranslationEditionName,
+    bool clearQuranTranslationEditionId = false,
+    int? quranTafsirEditionId,
+    String? quranTafsirEditionName,
+    bool clearQuranTafsirEditionId = false,
+    int? quranReciterId,
+    String? quranReciterName,
+    bool clearQuranReciterId = false,
   }) => AppSettings(
     language: language ?? this.language,
     theme: theme ?? this.theme,
@@ -154,6 +201,25 @@ class AppSettings extends Equatable {
     mushafLayoutStyle: mushafLayoutStyle ?? this.mushafLayoutStyle,
     surahHeaderStyle: surahHeaderStyle ?? this.surahHeaderStyle,
     pageFrameStyle: pageFrameStyle ?? this.pageFrameStyle,
+    quranReadingMode: quranReadingMode ?? this.quranReadingMode,
+    quranTranslationEditionId: clearQuranTranslationEditionId
+        ? null
+        : (quranTranslationEditionId ?? this.quranTranslationEditionId),
+    quranTranslationEditionName: clearQuranTranslationEditionId
+        ? null
+        : (quranTranslationEditionName ?? this.quranTranslationEditionName),
+    quranTafsirEditionId: clearQuranTafsirEditionId
+        ? null
+        : (quranTafsirEditionId ?? this.quranTafsirEditionId),
+    quranTafsirEditionName: clearQuranTafsirEditionId
+        ? null
+        : (quranTafsirEditionName ?? this.quranTafsirEditionName),
+    quranReciterId: clearQuranReciterId
+        ? null
+        : (quranReciterId ?? this.quranReciterId),
+    quranReciterName: clearQuranReciterId
+        ? null
+        : (quranReciterName ?? this.quranReciterName),
   );
 
   @override
@@ -167,5 +233,12 @@ class AppSettings extends Equatable {
     mushafLayoutStyle,
     surahHeaderStyle,
     pageFrameStyle,
+    quranReadingMode,
+    quranTranslationEditionId,
+    quranTranslationEditionName,
+    quranTafsirEditionId,
+    quranTafsirEditionName,
+    quranReciterId,
+    quranReciterName,
   ];
 }

@@ -125,7 +125,11 @@ NotificationContent wakeUpContent({
 CustomSound? adhanSoundFor(ReminderSettings settings, {required bool arabic}) {
   final chosen = adhanById(settings.adhanId);
   if (chosen == null || settings.sound != NotificationSound.system) return null;
-  return CustomSound(id: chosen.id, label: chosen.name(arabic));
+  return CustomSound(
+    id: chosen.id,
+    label: chosen.name(arabic),
+    fullAdhan: settings.fullAdhan,
+  );
 }
 
 /// The words of a salawat reminder: the owner-approved Arabic, in both interface languages. It plays

@@ -11,6 +11,8 @@ import 'package:mynewapp/core/share/image_sharer.dart';
 import 'package:mynewapp/features/daily_hadith/domain/daily_hadith_store.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
+import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
+import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -49,6 +51,8 @@ AppDependencies testDependencies(
   UserDatabase? userData,
   QuranSource? quran,
   QuranUserData? quranUserData,
+  QuranContentRepository? quranContent,
+  QuranAudioPlayer Function()? quranAudioPlayerFactory,
   ImageSharer? imageSharer,
   DailyHadithStore? dailyHadith,
   HomeWidgetBridge? homeWidget,
@@ -67,6 +71,8 @@ AppDependencies testDependencies(
   userData: userData,
   quran: quran,
   quranUserData: quranUserData,
+  quranContent: quranContent,
+  quranAudioPlayerFactory: quranAudioPlayerFactory,
   imageSharer: imageSharer ?? const SystemImageSharer(),
   dailyHadith: dailyHadith,
   homeWidget: homeWidget,
@@ -93,6 +99,8 @@ Future<void> pumpApp(
   UserDatabase? userData,
   QuranSource? quran,
   QuranUserData? quranUserData,
+  QuranContentRepository? quranContent,
+  QuranAudioPlayer Function()? quranAudioPlayerFactory,
   ImageSharer? imageSharer,
   DailyHadithStore? dailyHadith,
   HomeWidgetBridge? homeWidget,
@@ -114,6 +122,8 @@ Future<void> pumpApp(
         userData: userData,
         quran: quran,
         quranUserData: quranUserData,
+        quranContent: quranContent,
+        quranAudioPlayerFactory: quranAudioPlayerFactory,
         imageSharer: imageSharer,
         dailyHadith: dailyHadith,
         homeWidget: homeWidget,

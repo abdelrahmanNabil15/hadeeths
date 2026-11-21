@@ -1059,6 +1059,129 @@ class AppLocalizationsEn extends AppLocalizations {
   String get quranBookmarkRemove => 'Remove the bookmark';
 
   @override
+  String get quranReadingMode => 'Reading mode';
+
+  @override
+  String get quranReadingModeMushaf => 'Mushaf';
+
+  @override
+  String get quranReadingModeVerseByVerse => 'Verse by verse';
+
+  @override
+  String get quranTranslation => 'Translation';
+
+  @override
+  String get quranChooseTranslation => 'Choose a translation';
+
+  @override
+  String get quranTranslationNone => 'No translation';
+
+  @override
+  String get quranTranslationSearchHint => 'Search by name, author or language';
+
+  @override
+  String get quranTranslationNoMatch => 'No translation matches.';
+
+  @override
+  String quranTranslationCredit(Object name) {
+    return 'Translation: $name';
+  }
+
+  @override
+  String get quranTafsir => 'Tafsir';
+
+  @override
+  String get quranChooseTafsir => 'Choose a tafsir';
+
+  @override
+  String get quranTafsirNone => 'No tafsir';
+
+  @override
+  String get quranTafsirSearchHint => 'Search by name, author or language';
+
+  @override
+  String get quranTafsirNoMatch => 'No tafsir matches.';
+
+  @override
+  String quranTafsirCredit(Object name) {
+    return 'Tafsir: $name';
+  }
+
+  @override
+  String get quranTafsirRead => 'Read the tafsir';
+
+  @override
+  String get quranTafsirDisclaimer =>
+      'A scholar\'s interpretation, not the Quran itself.';
+
+  @override
+  String get quranRecitation => 'Recitation';
+
+  @override
+  String get quranChooseReciter => 'Choose a reciter';
+
+  @override
+  String get quranReciterNone => 'No reciter';
+
+  @override
+  String get quranListen => 'Listen';
+
+  @override
+  String get quranAudioPlay => 'Play';
+
+  @override
+  String get quranAudioPause => 'Pause';
+
+  @override
+  String get quranAudioPrevious => 'Previous verse';
+
+  @override
+  String get quranAudioNext => 'Next verse';
+
+  @override
+  String get quranAudioStop => 'Stop';
+
+  @override
+  String get quranQiraat => 'Qira\'at variations';
+
+  @override
+  String get quranQiraatNone =>
+      'No approved Qira\'at variations for this verse.';
+
+  @override
+  String get quranQiraatDisclaimer =>
+      'These are authentic, transmitted readings of the Qur\'an, not alternate interpretations.';
+
+  @override
+  String get quranQiraatCredit => 'Qira\'at data: Quran Foundation.';
+
+  @override
+  String get quranQiraatCategoryMeaning => 'Meaning';
+
+  @override
+  String get quranQiraatCategoryWording => 'Wording';
+
+  @override
+  String get quranQiraatCategoryPronunciation => 'Pronunciation';
+
+  @override
+  String get quranSearchTabQuran => 'Qur\'an text';
+
+  @override
+  String get quranTranslationSearchPrompt =>
+      'Type a word to search the translation.';
+
+  @override
+  String get quranTranslationSearchNeedsEdition =>
+      'Choose a translation first to search its text.';
+
+  @override
+  String get quranSearchLoadMore => 'Load more';
+
+  @override
+  String get quranSearchLoadMoreFailed => 'Couldn\'t load more results.';
+
+  @override
   String get quranSurasHeading => 'Suras';
 
   @override
@@ -1250,6 +1373,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get remindersSoundAdhan => 'Adhan';
 
   @override
+  String get remindersFullAdhan => 'Play the full adhan in the app';
+
+  @override
+  String get remindersFullAdhanHint =>
+      'The notification\'s own sound is a short clip (capped at 30 seconds by iPhone). With this on, the full adhan plays in the app when it is open at the reminder\'s time, or when you tap the notification.';
+
+  @override
   String get adhanTitle => 'Adhan sound';
 
   @override
@@ -1292,7 +1422,23 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get adhanUnsupported =>
-      'Downloaded adhan recordings need Android 10 or later.';
+      'This phone could not use the recording as a notification sound.';
+
+  @override
+  String get adhanNoReminderSound =>
+      'This phone can download a recording and play it here, but cannot use it as the sound of a prayer reminder.';
+
+  @override
+  String get adhanBrowseTile => 'Adhan recordings';
+
+  @override
+  String get adhanPlay => 'Play';
+
+  @override
+  String get adhanStop => 'Stop';
+
+  @override
+  String get adhanVolume => 'Volume';
 
   @override
   String adhanSourceLine(String source) {

@@ -84,7 +84,9 @@ Future<void> main() async {
     preferences: preferences,
     loadAppSettings: () => dependencies.settings.load(),
     homeWidget: features.prayer ? homeWidget : null,
-    adhanSounds: features.adhanSounds && Platform.isAndroid,
+    // Android can use a downloaded recording as the reminder's sound; iOS cannot, but can still
+    // download one and play it in the app (see docs/ADHAN_SOUNDS.md).
+    adhanSounds: features.adhanSounds && (Platform.isAndroid || Platform.isIOS),
   );
   // Asking for a rating (Android and iOS only). It leaves a due prayer and a download alone.
   final review = features.inAppReview && (Platform.isAndroid || Platform.isIOS)

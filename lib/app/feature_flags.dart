@@ -15,6 +15,11 @@ class FeatureFlags {
     this.dailyHadith = false,
     this.adhanSounds = false,
     this.inAppReview = false,
+    this.quranTranslations = false,
+    this.quranTafsir = false,
+    this.quranTranslationSearch = false,
+    this.quranAudio = false,
+    this.quranQiraat = false,
   });
 
   /// Everything on (previews and tests).
@@ -25,7 +30,12 @@ class FeatureFlags {
       shareCards = true,
       dailyHadith = true,
       adhanSounds = true,
-      inAppReview = true;
+      inAppReview = true,
+      quranTranslations = true,
+      quranTafsir = true,
+      quranTranslationSearch = true,
+      quranAudio = true,
+      quranQiraat = true;
 
   /// Reads the preview switch given at build time; off by default.
   factory FeatureFlags.fromEnvironment() =>
@@ -53,6 +63,33 @@ class FeatureFlags {
   /// Asking the system to show its rating sheet at the right moment, and a "Rate" entry that opens the
   /// store page. Off until the implementation has been reviewed (`docs/IN_APP_REVIEW.md`).
   final bool inAppReview;
+
+  /// Translations under each verse in the Quran reader's verse-by-verse layout, fetched through
+  /// hadeeths' own proxy (`docs/QURAN_API_REFACTOR_PLAN.md`). Off until reviewed on a device.
+  final bool quranTranslations;
+
+  /// Tafsir (scholarly commentary) reachable per verse in verse-by-verse mode, fetched through
+  /// the same proxy. Independent of [quranTranslations]: either can be on without the other.
+  /// Off until reviewed on a device.
+  final bool quranTafsir;
+
+  /// Searching inside the reader's chosen translation edition (the Quran Foundation Search API,
+  /// additive to the always-on on-device Arabic search). Only meaningful together with
+  /// [quranTranslations], since there is no translation to search without it. Off until reviewed
+  /// on a device.
+  final bool quranTranslationSearch;
+
+  /// A per-verse "Listen" action and a persistent mini player, playing a chosen reciter's
+  /// recitation through the same proxy. Foreground playback only for this version -- no
+  /// lock-screen controls or background-audio entitlement yet (deliberately deferred, see
+  /// `docs/QURAN_API_REFACTOR_PLAN.md` flag D). Off until reviewed on a device.
+  final bool quranAudio;
+
+  /// A per-verse "Qira'at variations" action, showing the approved recitation-variant comparison
+  /// for that verse through the same proxy. Most verses have none; the sheet says so rather than
+  /// not offering the action, since whether a verse has variations is itself not obvious to a
+  /// reader. Off until reviewed on a device.
+  final bool quranQiraat;
 
   /// The bottom navigation appears once there is more than the hadith home to switch to.
   bool get usesShell => quran || prayer;

@@ -140,6 +140,8 @@ class ReminderCoordinator implements ReminderService {
           settings.sound.name,
           // Which downloaded adhan plays at prayer times (none: the system sound).
           settings.adhanId ?? '-',
+          // iOS only: whether that adhan also plays in full in the app.
+          settings.fullAdhan,
           settings.vibrate,
           digits.arabicIndic,
           env.use24Hour,

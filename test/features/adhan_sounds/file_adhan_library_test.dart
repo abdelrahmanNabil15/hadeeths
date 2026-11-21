@@ -82,11 +82,15 @@ void main() {
 
   tearDown(() => dir.deleteSync(recursive: true));
 
-  FileAdhanLibrary library(_Server server) => FileAdhanLibrary(
-    directory: () async => Directory('${dir.path}/adhan'),
-    dio: Dio()..httpClientAdapter = server,
-    bridge: bridge,
-  );
+  FileAdhanLibrary library(_Server server, {bool ios = false}) =>
+      FileAdhanLibrary(
+        directory: () async => Directory('${dir.path}/adhan'),
+        dio: Dio()..httpClientAdapter = server,
+        bridge: bridge,
+        iosSoundsDirectory: ios
+            ? () async => Directory('${dir.path}/Sounds')
+            : null,
+      );
 
   List<String> leftovers() => Directory('${dir.path}/adhan').existsSync()
       ? [
@@ -204,30 +208,71 @@ void main() {
     },
   );
 
-  test('a phone that cannot use it asks for nothing', () async {
-    bridge.supported = false;
-    final server = _Server((_) async => _audio(_mp3Bytes()));
-    await expectLater(
-      library(server).download(_sound),
-      throwsA(
-        isA<AdhanDownloadException>().having(
-          (e) => e.failure,
-          'failure',
-          AdhanDownloadFailure.unsupported,
-        ),
-      ),
-    );
-    expect(server.requests, 0);
+  test(
+    'a phone that cannot list it as a notification sound still downloads it, for preview',
+    () async {
+      bridge.supported = false;
+      final server = _Server((_) async => _audio(_mp3Bytes()));
+      final lib = library(server);
+      await lib.download(_sound);
+      expect(server.requests, 1);
+      expect(await lib.downloaded(), {_sound.id});
+      expect(leftovers(), ['${_sound.id}.mp3']);
+      // Not supported, so the file is never offered to the shared list.
+      expect(bridge.registered, isEmpty);
+      expect(await lib.localPathFor(_sound.id), endsWith('${_sound.id}.mp3'));
+    },
+  );
+
+  test('a recording that is not downloaded has no local file', () async {
+    final lib = library(_Server((_) async => _audio(_mp3Bytes())));
+    expect(await lib.localPathFor(_sound.id), isNull);
   });
 
-  test('if the phone refuses to list the file, it is not kept', () async {
-    bridge.refuse = true;
-    final lib = library(_Server((_) async => _audio(_mp3Bytes())));
-    await expectLater(
-      lib.download(_sound),
-      throwsA(isA<AdhanDownloadException>()),
-    );
-    expect(leftovers(), isEmpty);
+  test(
+    'if the phone refuses to list the file, it is not kept (Android)',
+    () async {
+      bridge.refuse = true;
+      final lib = library(_Server((_) async => _audio(_mp3Bytes())));
+      await expectLater(
+        lib.download(_sound),
+        throwsA(isA<AdhanDownloadException>()),
+      );
+      expect(leftovers(), isEmpty);
+    },
+  );
+
+  test(
+    'on iOS, a failed short-clip conversion keeps the recording for preview and the full adhan',
+    () async {
+      bridge.refuse = true;
+      final lib = library(_Server((_) async => _audio(_mp3Bytes())), ios: true);
+      await lib.download(_sound);
+      expect(await lib.downloaded(), {_sound.id});
+      expect(leftovers(), ['${_sound.id}.mp3']);
+      expect(await lib.localPathFor(_sound.id), endsWith('${_sound.id}.mp3'));
+      // No .caf was produced, so the reminder falls back to the system sound.
+      expect(await lib.iosSoundFileFor(_sound.id), isNull);
+    },
+  );
+
+  group('the iOS notification-sound file', () {
+    test('is named for the id, when it is there', () async {
+      final lib = library(_Server((_) async => _audio(_mp3Bytes())), ios: true);
+      Directory('${dir.path}/Sounds').createSync(recursive: true);
+      File('${dir.path}/Sounds/${_sound.id}.caf').writeAsBytesSync([1]);
+      expect(await lib.iosSoundFileFor(_sound.id), '${_sound.id}.caf');
+    });
+
+    test('is null when it was never prepared', () async {
+      final lib = library(_Server((_) async => _audio(_mp3Bytes())), ios: true);
+      expect(await lib.iosSoundFileFor(_sound.id), isNull);
+    });
+
+    test('is null when the library was not given a sounds directory', () async {
+      final lib = library(_Server((_) async => _audio(_mp3Bytes())));
+      expect(await lib.iosSoundFileFor(_sound.id), isNull);
+    });
   });
 
   test('deleting removes the file and its entry in the shared list', () async {
@@ -247,15 +292,21 @@ void main() {
     expect(await lib.downloaded(), isEmpty);
   });
 
-  test(
-    'the catalogue has five recordings with unique ids and https addresses',
-    () {
-      expect(adhanCatalogue, hasLength(5));
-      expect({for (final s in adhanCatalogue) s.id}, hasLength(5));
-      expect(adhanCatalogue.every((s) => s.url.startsWith('https://')), isTrue);
-      expect(adhanById('rifaat')?.nameEn, 'Muhammad Rifaat');
-      expect(adhanById('missing'), isNull);
-      expect(adhanById(null), isNull);
-    },
-  );
+  test('the catalogue has recordings with unique ids and https addresses, '
+      'each a plausible adhan length', () {
+    expect(adhanCatalogue, isNotEmpty);
+    expect({
+      for (final s in adhanCatalogue) s.id,
+    }, hasLength(adhanCatalogue.length));
+    expect(adhanCatalogue.every((s) => s.url.startsWith('https://')), isTrue);
+    expect(
+      adhanCatalogue.every(
+        (s) => s.bytes >= 20 * 1024 && s.bytes <= 12 * 1024 * 1024,
+      ),
+      isTrue,
+    );
+    expect(adhanById('rifaat')?.nameEn, 'Muhammad Rifaat');
+    expect(adhanById('missing'), isNull);
+    expect(adhanById(null), isNull);
+  });
 }
