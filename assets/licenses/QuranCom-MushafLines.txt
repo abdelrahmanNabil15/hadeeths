@@ -1,0 +1,10 @@
+Mushaf line layout (assets/quran/mushaf-madinah-lines.txt)
+
+Which words of the Quran fall on which line of which page of the 15-line Madinah mushaf
+(King Fahd Glorious Quran Printing Complex, 1421H print), together with the Complex's own Uthmani
+Hafs text, as published by the Quran.com API v4 (https://api.quran.com, fields text_qpc_hafs,
+v2_page and line_v2). Retrieved 2026-11-21 and rearranged into one line per mushaf line by
+tool/build_mushaf_lines.dart; no word was changed.
+
+The printed layout and the Uthmani Hafs text are the work of the King Fahd Glorious Quran
+Printing Complex, Al-Madinah Al-Munawwarah.

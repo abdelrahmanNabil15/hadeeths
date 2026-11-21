@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mynewapp/app/feature_flags.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_search.dart';
@@ -13,12 +14,17 @@ class QuranState {
   const QuranState({
     this.status = QuranStatus.loading,
     this.text,
+    this.lines,
     this.lastRead,
     this.bookmarks = const [],
   });
 
   final QuranStatus status;
   final QuranText? text;
+
+  /// The 15-line mushaf's lines; null when they are not in this build or did not read, and the
+  /// reader then runs each page as one paragraph.
+  final MushafLines? lines;
   final VerseRef? lastRead;
   final List<VerseRef> bookmarks;
 
@@ -26,6 +32,7 @@ class QuranState {
       QuranState(
         status: status,
         text: text,
+        lines: lines,
         lastRead: lastRead ?? this.lastRead,
         bookmarks: bookmarks ?? this.bookmarks,
       );
@@ -36,6 +43,7 @@ class QuranState {
 class QuranCubit extends Cubit<QuranState> {
   QuranCubit({
     required this.source,
+    this.lines,
     this.userData,
     this.content,
     this.features = const FeatureFlags(),
@@ -43,6 +51,9 @@ class QuranCubit extends Cubit<QuranState> {
   }) : super(const QuranState());
 
   final QuranSource source;
+
+  /// Where the 15-line mushaf's lines come from; optional.
+  final MushafLinesSource? lines;
 
   /// Null when the user's storage could not be opened: reading still works, nothing is remembered.
   final QuranUserData? userData;
@@ -67,7 +78,12 @@ class QuranCubit extends Cubit<QuranState> {
 
   Future<void> load() async {
     try {
+      final linesLoad = lines
+          ?.load()
+          .then<MushafLines?>((l) => l)
+          .catchError((Object _) => null);
       final text = await source.load();
+      final mushafLines = await linesLoad;
       VerseRef? last;
       var marks = const <VerseRef>[];
       try {
@@ -81,6 +97,7 @@ class QuranCubit extends Cubit<QuranState> {
         QuranState(
           status: QuranStatus.ready,
           text: text,
+          lines: mushafLines,
           lastRead: last,
           bookmarks: marks,
         ),

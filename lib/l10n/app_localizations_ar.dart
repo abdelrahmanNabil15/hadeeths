@@ -200,6 +200,49 @@ class AppLocalizationsAr extends AppLocalizations {
   String get digitsWestern => 'الأرقام الغربية (0123)';
 
   @override
+  String get ayahMarkerStyleHeading => 'علامة الآية';
+
+  @override
+  String get ayahMarkerStyleRosette => 'الوردة الذهبية (الافتراضي)';
+
+  @override
+  String get ayahMarkerStyleMushafGlyph => 'رسم مصحفي (أميري)';
+
+  @override
+  String get ayahMarkerStyleScheherazadeColor => 'رسم مصحفي ملوّن (شهرزاد)';
+
+  @override
+  String get ayahMarkerStyleMushafFont =>
+      'زخرفة مصحف المدينة (خط مجمع الملك فهد)';
+
+  @override
+  String get mushafLayoutStyleHeading => 'تخطيط الصفحة';
+
+  @override
+  String get mushafLayoutStyleMadinah15 => '١٥ سطرًا كمصحف المدينة (الافتراضي)';
+
+  @override
+  String get mushafLayoutStyleFlowing => 'فقرة متصلة';
+
+  @override
+  String get surahHeaderStyleHeading => 'عنوان السورة (في الفقرة المتصلة)';
+
+  @override
+  String get surahHeaderStyleMadinah => 'زخرفة مصحف المدينة (الافتراضي)';
+
+  @override
+  String get surahHeaderStyleBanner => 'لوحة بسيطة';
+
+  @override
+  String get pageFrameStyleHeading => 'إطار الصفحة';
+
+  @override
+  String get pageFrameStyleMadinah => 'إطار مصحف المدينة (الافتراضي)';
+
+  @override
+  String get pageFrameStyleNone => 'بلا إطار';
+
+  @override
   String get navHadiths => 'الأحاديث';
 
   @override

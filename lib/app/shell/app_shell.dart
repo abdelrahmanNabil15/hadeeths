@@ -11,6 +11,7 @@ import 'package:mynewapp/features/categories/presentation/pages/home_page.dart';
 import 'package:mynewapp/features/favorites/domain/favorites_repository.dart';
 import 'package:mynewapp/features/prayer_times/domain/prayer_services.dart';
 import 'package:mynewapp/features/prayer_times/presentation/pages/prayer_page.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
@@ -41,6 +42,7 @@ class AppShell extends StatefulWidget {
     this.onDeleteAll,
     this.tabRequests,
     this.quran,
+    this.quranLines,
     this.quranUserData,
     this.quranContent,
     this.quranAudioPlayerFactory,
@@ -70,6 +72,9 @@ class AppShell extends StatefulWidget {
 
   /// The Quran text; without it the Quran section shows its placeholder.
   final QuranSource? quran;
+
+  /// The mushaf's lines; without them the reader runs each page as one paragraph.
+  final MushafLinesSource? quranLines;
   final QuranUserData? quranUserData;
 
   /// Translation, tafsir and recitation-audio content; `null` when the flag is off.
@@ -242,6 +247,7 @@ class _AppShellState extends State<AppShell> {
             )
           : QuranPage(
               source: widget.quran!,
+              lines: widget.quranLines,
               userData: widget.quranUserData,
               content: widget.quranContent,
               features: widget.features,

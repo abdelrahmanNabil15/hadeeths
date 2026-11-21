@@ -55,6 +55,18 @@ class SettingsCubit extends Cubit<AppSettings> {
   Future<void> setOfflineCopies({required bool enabled}) =>
       _update(state.copyWith(offlineCopies: enabled));
 
+  Future<void> setAyahMarkerStyle(AyahMarkerStyle style) =>
+      _update(state.copyWith(ayahMarkerStyle: style));
+
+  Future<void> setMushafLayoutStyle(MushafLayoutStyle style) =>
+      _update(state.copyWith(mushafLayoutStyle: style));
+
+  Future<void> setSurahHeaderStyle(SurahHeaderStyle style) =>
+      _update(state.copyWith(surahHeaderStyle: style));
+
+  Future<void> setPageFrameStyle(PageFrameStyle style) =>
+      _update(state.copyWith(pageFrameStyle: style));
+
   Future<void> setReadingScale(double scale) => _update(
     state.copyWith(readingScale: AppSettings.snapReadingScale(scale)),
   );

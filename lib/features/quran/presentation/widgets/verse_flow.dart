@@ -4,7 +4,8 @@ import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
-import 'package:mynewapp/features/quran/presentation/widgets/verse_marker.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/ayah_marker.dart';
+import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
 /// The opening line the source file puts at the start of verse 1 of most suras, taken from the
@@ -28,11 +29,15 @@ class VerseFlow extends StatefulWidget {
     required this.bookmarks,
     required this.onVerseActions,
     this.skipFromFirst = '',
+    this.markerStyle = AyahMarkerStyle.rosette,
   });
 
   final List<Verse> verses;
   final TextStyle style;
   final List<VerseRef> bookmarks;
+
+  /// How the verse-number marker is drawn; see [AyahMarkerStyle].
+  final AyahMarkerStyle markerStyle;
 
   final void Function(Verse verse) onVerseActions;
 
@@ -98,7 +103,8 @@ class _VerseFlowState extends State<VerseFlow> {
               child: GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onLongPress: () => widget.onVerseActions(verse),
-                child: VerseMarker(
+                child: AyahMarker(
+                  style: widget.markerStyle,
                   number: verse.number,
                   bookmarked: marked,
                   size: markerSize,

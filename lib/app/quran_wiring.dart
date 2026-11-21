@@ -1,5 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:mynewapp/features/quran/data/bundled_mushaf_lines_source.dart';
 import 'package:mynewapp/features/quran/data/bundled_quran_source.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 
 /// The verified Quran file shipped with the app. The app reads only this exact file.
@@ -19,3 +21,18 @@ const bundledQuranFile = QuranFile(
 
 QuranSource buildQuranSource() =>
     BundledQuranSource(file: bundledQuranFile, loadAsset: rootBundle.load);
+
+/// The 15-line Madinah mushaf's lines, in the King Fahd Complex's Uthmani Hafs text. Built by
+/// `dart run tool/build_mushaf_lines.dart <cache-dir>` (from the Quran.com API, 2026-11-21); to
+/// rebuild, run it again and record the new size and fingerprint here (`dart run
+/// tool/quran_fingerprint.dart assets/quran/mushaf-madinah-lines.txt`; a test checks them).
+const bundledMushafLinesFile = QuranFile(
+  assetPath: 'assets/quran/mushaf-madinah-lines.txt',
+  byteLength: 1524618,
+  fingerprint: 'f97203e59d5ed180',
+);
+
+MushafLinesSource buildMushafLinesSource() => BundledMushafLinesSource(
+  file: bundledMushafLinesFile,
+  loadAsset: rootBundle.load,
+);

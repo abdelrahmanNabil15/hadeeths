@@ -109,6 +109,7 @@ Future<void> main() async {
     userData: userData,
     features: features,
     quran: buildQuranSource(),
+    quranLines: buildMushafLinesSource(),
   );
   // Saved language, theme and the offline setting are known before the first frame.
   final settings = await dependencies.settings.load();

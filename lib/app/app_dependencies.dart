@@ -24,6 +24,7 @@ import 'package:mynewapp/features/quran/data/just_audio_quran_player.dart';
 import 'package:mynewapp/features/quran/data/quran_content_remote_data_source.dart';
 import 'package:mynewapp/features/quran/data/quran_content_repository_impl.dart';
 import 'package:mynewapp/features/quran/data/quran_user_data_impl.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
@@ -55,6 +56,7 @@ class AppDependencies {
     this.tasbeeh,
     this.favorites,
     this.quran,
+    this.quranLines,
     this.quranUserData,
     this.quranContent,
     this.quranAudioPlayerFactory,
@@ -76,6 +78,7 @@ class AppDependencies {
     PrayerServices? prayer,
     HomeWidgetBridge? homeWidget,
     QuranSource? quran,
+    MushafLinesSource? quranLines,
     ReviewCoordinator? review,
   }) {
     final http = client ?? HadeethClient();
@@ -106,6 +109,7 @@ class AppDependencies {
       dailyHadith: PrefsDailyHadithStore(preferences),
       homeWidget: homeWidget,
       quran: quran,
+      quranLines: quranLines,
       quranUserData: userData == null ? null : SqliteQuranUserData(userData.db),
       quranContent: QuranContentRepositoryImpl(
         HttpQuranContentRemoteDataSource(quranContentHttp, fetcher),
@@ -145,6 +149,9 @@ class AppDependencies {
 
   /// The verified Quran text (Phase 3E); `null` in tests that do not use it.
   final QuranSource? quran;
+
+  /// The 15-line Madinah mushaf's lines; without them the reader runs each page as one paragraph.
+  final MushafLinesSource? quranLines;
 
   /// Last-read place and bookmarks; `null` when the user database could not be opened.
   final QuranUserData? quranUserData;

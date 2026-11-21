@@ -452,6 +452,90 @@ abstract class AppLocalizations {
   /// **'الأرقام الغربية (0123)'**
   String get digitsWestern;
 
+  /// No description provided for @ayahMarkerStyleHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'علامة الآية'**
+  String get ayahMarkerStyleHeading;
+
+  /// No description provided for @ayahMarkerStyleRosette.
+  ///
+  /// In ar, this message translates to:
+  /// **'الوردة الذهبية (الافتراضي)'**
+  String get ayahMarkerStyleRosette;
+
+  /// No description provided for @ayahMarkerStyleMushafGlyph.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم مصحفي (أميري)'**
+  String get ayahMarkerStyleMushafGlyph;
+
+  /// No description provided for @ayahMarkerStyleScheherazadeColor.
+  ///
+  /// In ar, this message translates to:
+  /// **'رسم مصحفي ملوّن (شهرزاد)'**
+  String get ayahMarkerStyleScheherazadeColor;
+
+  /// No description provided for @ayahMarkerStyleMushafFont.
+  ///
+  /// In ar, this message translates to:
+  /// **'زخرفة مصحف المدينة (خط مجمع الملك فهد)'**
+  String get ayahMarkerStyleMushafFont;
+
+  /// No description provided for @mushafLayoutStyleHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'تخطيط الصفحة'**
+  String get mushafLayoutStyleHeading;
+
+  /// No description provided for @mushafLayoutStyleMadinah15.
+  ///
+  /// In ar, this message translates to:
+  /// **'١٥ سطرًا كمصحف المدينة (الافتراضي)'**
+  String get mushafLayoutStyleMadinah15;
+
+  /// No description provided for @mushafLayoutStyleFlowing.
+  ///
+  /// In ar, this message translates to:
+  /// **'فقرة متصلة'**
+  String get mushafLayoutStyleFlowing;
+
+  /// No description provided for @surahHeaderStyleHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'عنوان السورة (في الفقرة المتصلة)'**
+  String get surahHeaderStyleHeading;
+
+  /// No description provided for @surahHeaderStyleMadinah.
+  ///
+  /// In ar, this message translates to:
+  /// **'زخرفة مصحف المدينة (الافتراضي)'**
+  String get surahHeaderStyleMadinah;
+
+  /// No description provided for @surahHeaderStyleBanner.
+  ///
+  /// In ar, this message translates to:
+  /// **'لوحة بسيطة'**
+  String get surahHeaderStyleBanner;
+
+  /// No description provided for @pageFrameStyleHeading.
+  ///
+  /// In ar, this message translates to:
+  /// **'إطار الصفحة'**
+  String get pageFrameStyleHeading;
+
+  /// No description provided for @pageFrameStyleMadinah.
+  ///
+  /// In ar, this message translates to:
+  /// **'إطار مصحف المدينة (الافتراضي)'**
+  String get pageFrameStyleMadinah;
+
+  /// No description provided for @pageFrameStyleNone.
+  ///
+  /// In ar, this message translates to:
+  /// **'بلا إطار'**
+  String get pageFrameStyleNone;
+
   /// No description provided for @navHadiths.
   ///
   /// In ar, this message translates to:

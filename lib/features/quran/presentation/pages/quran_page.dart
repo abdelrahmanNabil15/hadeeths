@@ -11,6 +11,7 @@ import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_audio_player.dart';
 import 'package:mynewapp/features/quran/domain/quran_content_repository.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
@@ -29,6 +30,7 @@ class QuranPage extends StatelessWidget {
   const QuranPage({
     super.key,
     required this.source,
+    this.lines,
     this.userData,
     this.content,
     this.features = const FeatureFlags(),
@@ -36,6 +38,9 @@ class QuranPage extends StatelessWidget {
   });
 
   final QuranSource source;
+
+  /// The 15-line mushaf's lines; without them the reader runs each page as one paragraph.
+  final MushafLinesSource? lines;
   final QuranUserData? userData;
 
   /// Translation, tafsir and recitation-audio content; `null` when none of its flags is on.
@@ -53,6 +58,7 @@ class QuranPage extends StatelessWidget {
     return BlocProvider(
       create: (_) => QuranCubit(
         source: source,
+        lines: lines,
         userData: userData,
         content: content,
         features: features,

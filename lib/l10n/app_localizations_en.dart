@@ -202,6 +202,51 @@ class AppLocalizationsEn extends AppLocalizations {
   String get digitsWestern => 'Western (0123)';
 
   @override
+  String get ayahMarkerStyleHeading => 'Ayah marker';
+
+  @override
+  String get ayahMarkerStyleRosette => 'Rosette (default)';
+
+  @override
+  String get ayahMarkerStyleMushafGlyph => 'Mushaf glyph (Amiri)';
+
+  @override
+  String get ayahMarkerStyleScheherazadeColor =>
+      'Mushaf glyph, full colour (Scheherazade)';
+
+  @override
+  String get ayahMarkerStyleMushafFont =>
+      'Madinah mushaf ornament (King Fahd Complex font)';
+
+  @override
+  String get mushafLayoutStyleHeading => 'Page layout';
+
+  @override
+  String get mushafLayoutStyleMadinah15 =>
+      '15 lines, as the Madinah mushaf (default)';
+
+  @override
+  String get mushafLayoutStyleFlowing => 'Running paragraph';
+
+  @override
+  String get surahHeaderStyleHeading => 'Surah header (running paragraph)';
+
+  @override
+  String get surahHeaderStyleMadinah => 'Madinah mushaf style (default)';
+
+  @override
+  String get surahHeaderStyleBanner => 'Simple banner';
+
+  @override
+  String get pageFrameStyleHeading => 'Page frame';
+
+  @override
+  String get pageFrameStyleMadinah => 'Madinah mushaf style (default)';
+
+  @override
+  String get pageFrameStyleNone => 'None';
+
+  @override
   String get navHadiths => 'Hadiths';
 
   @override
