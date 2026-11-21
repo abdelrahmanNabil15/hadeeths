@@ -256,6 +256,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                             tabRequests: _widgetTabs,
                             onHomeReturn: _backOnHome,
                             quran: deps.quran,
+                            quranLines: deps.quranLines,
                             quranUserData: deps.quranUserData,
                           )
                         : const HomePage(),

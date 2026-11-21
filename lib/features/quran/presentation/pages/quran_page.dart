@@ -10,6 +10,7 @@ import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/section_heading.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/app_review/presentation/review_scope.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_source.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/domain/sura_lookup.dart';
@@ -23,15 +24,23 @@ import 'package:mynewapp/l10n/l10n.dart';
 /// The Quran section: continue reading, bookmarks, search, go to a verse, and the list of suras.
 /// If the verified text is not in this build, it says so and shows nothing else.
 class QuranPage extends StatelessWidget {
-  const QuranPage({super.key, required this.source, this.userData});
+  const QuranPage({
+    super.key,
+    required this.source,
+    this.lines,
+    this.userData,
+  });
 
   final QuranSource source;
+
+  /// The 15-line mushaf's lines; without them the reader runs each page as one paragraph.
+  final MushafLinesSource? lines;
   final QuranUserData? userData;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => QuranCubit(source: source, userData: userData)..load(),
+      create: (_) => QuranCubit(source: source, lines: lines, userData: userData)..load(),
       // Reading: the saved place moves on to another verse. Counted once per sura per day.
       child: BlocListener<QuranCubit, QuranState>(
         listenWhen: (previous, current) =>

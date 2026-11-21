@@ -14,6 +14,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
   static const offlineCopiesKey = 'settings.offlineCopies';
   static const digitsKey = 'settings.digits';
   static const ayahMarkerStyleKey = 'settings.ayahMarkerStyle';
+  static const mushafLayoutStyleKey = 'settings.mushafLayoutStyle';
+  static const surahHeaderStyleKey = 'settings.surahHeaderStyle';
+  static const pageFrameStyleKey = 'settings.pageFrameStyle';
 
   @override
   Future<AppSettings> load() async {
@@ -47,6 +50,24 @@ class SettingsRepositoryImpl implements SettingsRepository {
             _read(() => _prefs.getString(ayahMarkerStyleKey)),
           ) ??
           AyahMarkerStyle.rosette,
+      mushafLayoutStyle:
+          _enumByName(
+            MushafLayoutStyle.values,
+            _read(() => _prefs.getString(mushafLayoutStyleKey)),
+          ) ??
+          MushafLayoutStyle.madinah15,
+      surahHeaderStyle:
+          _enumByName(
+            SurahHeaderStyle.values,
+            _read(() => _prefs.getString(surahHeaderStyleKey)),
+          ) ??
+          SurahHeaderStyle.madinah,
+      pageFrameStyle:
+          _enumByName(
+            PageFrameStyle.values,
+            _read(() => _prefs.getString(pageFrameStyleKey)),
+          ) ??
+          PageFrameStyle.madinah,
     );
   }
 
@@ -58,6 +79,15 @@ class SettingsRepositoryImpl implements SettingsRepository {
     await _prefs.setBool(offlineCopiesKey, settings.offlineCopies);
     await _prefs.setString(digitsKey, settings.digits.name);
     await _prefs.setString(ayahMarkerStyleKey, settings.ayahMarkerStyle.name);
+    await _prefs.setString(
+      mushafLayoutStyleKey,
+      settings.mushafLayoutStyle.name,
+    );
+    await _prefs.setString(
+      surahHeaderStyleKey,
+      settings.surahHeaderStyle.name,
+    );
+    await _prefs.setString(pageFrameStyleKey, settings.pageFrameStyle.name);
   }
 
   /// A value of the wrong type (a corrupted or hand-edited store) counts as missing.

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mynewapp/core/design_system/app_colors.dart';
-import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/features/quran/domain/mushaf_asset.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/marker_digits.dart';
 
 /// The verse number drawn inside a traced Mushaf ayah-marker glyph (Quran.ws Quran Assets,
 /// OFL-1.1, `confirmed` assets only — see `docs/QURAN_ASSETS_INTEGRATION_PLAN.md`). An alternative
@@ -43,9 +43,20 @@ class MushafGlyphMarker extends StatelessWidget {
     final colors = AppColors.of(context);
     final scheme = Theme.of(context).colorScheme;
     final glyphHeight = size / asset.aspect;
-    final digitColor = tinted && bookmarked
+    // Full-contrast digits: the theme's text colour round a tinted glyph, and a fixed dark ink
+    // inside a full-colour glyph, whose own light fill does not change with the theme.
+    final digitColor = !tinted
+        ? const Color(0xFF1F1A14)
+        : bookmarked
         ? colors.onSage
-        : scheme.onSurfaceVariant;
+        : scheme.onSurface;
+    // The traced number slot is tight round the source font's own digits; the Naskh digits need
+    // more room, so it is grown about its centre (staying inside the glyph).
+    final slot = asset.numberSlot;
+    final slotWidth = (slot.width * 1.45).clamp(0.0, 0.72);
+    final slotHeight = (slot.height * 1.9).clamp(0.0, 0.5);
+    final slotLeft = slot.x + slot.width / 2 - slotWidth / 2;
+    final slotTop = slot.y + slot.height / 2 - slotHeight / 2;
     final glyph = SizedBox(
       width: size,
       height: glyphHeight,
@@ -69,16 +80,17 @@ class MushafGlyphMarker extends StatelessWidget {
               height: glyphHeight,
             ),
           Positioned(
-            left: asset.numberSlot.x * size,
-            top: asset.numberSlot.y * glyphHeight,
-            width: asset.numberSlot.width * size,
-            height: asset.numberSlot.height * glyphHeight,
+            left: slotLeft * size,
+            top: slotTop * glyphHeight,
+            width: slotWidth * size,
+            height: slotHeight * glyphHeight,
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                context.digits.format(number),
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
+                arabicIndicDigits(number),
+                textScaler: TextScaler.noScaling,
+                style: markerDigitStyle(
+                  fontSize: size * 0.5,
                   color: digitColor,
                 ),
               ),

@@ -372,3 +372,67 @@ keeping them byte-for-byte as fetched.
 **Not claimed:** this is not "the Quran Assets collection, production-ready." It is 40 of 71 assets, in one
 category, behind one opt-in setting, with the other 31 deliberately excluded and the page-frame/surah-header
 categories still entirely blocked on upstream permission, exactly as scoped in §8/§9 and confirmed again here.
+**This statement was true when written; §12 below records the owner's later decision to ship two of those
+"blocked" categories anyway.**
+
+## 12. Surah header and page frame, shipped against upstream permission (2026-10-19, same day)
+
+The owner was asked directly whether to (a) prepare these two categories without shipping them, (b) ship them
+despite the CC-BY-NC-SA-4.0 "provisional" status, or (c) hold entirely — and chose **(b), ship anyway**, in full
+knowledge that Quran.ws's own publisher permission for these scan-derived assets had not come through. That
+decision, not a reversal of §2's licensing analysis, is why this section exists: §2's findings stand unchanged.
+
+**What shipped:** one printing — Hafs, Madinah *mumtaza* — of both categories, behind two new settings ("Surah
+header": Banner default / Mushaf scan; "Page frame": None default / Mushaf scan), both off by default. The page
+frame only applies in the reader's fitted (one-page) layout, never while scrolling, per §2.2's layout-model note.
+New files: `lib/features/quran/domain/mushaf_page_decoration.dart`, `mushaf_page_decoration_manifest.dart`,
+`lib/features/quran/presentation/widgets/mushaf_surah_header.dart`, `mushaf_page_frame_decoration.dart`, five new
+SVGs under `assets/quran_assets/surah_headers/` and `assets/quran_assets/page_frames/` (color + mono + three
+tileable slices — corner, horizontal edge, vertical edge — for the frame), plus the matching settings/l10n/test
+wiring. The required CC-BY-NC-SA attribution (mushaf name and archive.org source) is carried on both manifest
+constants, not dropped.
+
+**The page frame is a real 9-slice border**, not a stretched image: one corner and one edge tile each, mirrored to
+the frame's other three corners and four edges (`Transform.flip`), tiled with `Positioned` rather than `Row`/`Column`
+(a `Flex`'s intrinsic-size pass disagreed with `SvgPicture`'s explicit size by a pixel or two and overflowed —
+`Stack` + `Positioned` + `ClipRect` sidesteps that entirely).
+
+**Bug found and fixed the same day, from your own testing:** the first version fit page content into the frame's
+text area with `BoxFit.contain` against a block still built at the *full* page width, so content was shrunk by
+roughly the fraction of the page the border itself occupies (here, about 27%) **even on an ordinary page** — you
+caught this directly ("i think it too text small"). Fixed by having `MushafPageFrameDecoration` hand content
+builders the text area's actual pixel width up front (`contentBuilder: (contentWidth) => ...`), so text wraps into
+the narrower column instead of shrinking, and reserving `BoxFit.scaleDown` for the genuine edge case — a page too
+*tall* for the frame, not too *wide*. Verified on-device on both a short page (Al-Fatihah) and a dense one (Al
+'Imran, page 73): both now read at full, unshrunk size. One minor, accepted side effect: `_SuraBanner`-style
+titles now wrap to two lines inside the narrower column on some suras, where they fit on one line unframed.
+
+**Tests:** 4 new tests in `mushaf_page_frame_decoration_test.dart` (renders without throwing, sizes from width and
+aspect, content is built at the text area's width not the full frame width, an ordinary page is not shrunk below
+that width), 2 in `mushaf_surah_header_test.dart`, 7 in `mushaf_page_decoration_manifest_test.dart` (geometry
+sanity, bundled files exist, required attribution present), plus settings round-trip coverage. Full suite:
+**1,420 passed, 0 failed**; `flutter analyze` clean.
+
+## 13. 15-line Madinah pages; the §12 scan artwork replaced (2026-11-21)
+
+The owner asked for the reader to look like the printed mushaf, and found the §12 surah-header and page-frame
+scans not good enough. What changed:
+
+- **Line-for-line pages.** `assets/quran/mushaf-madinah-lines.txt` holds every line of the 15-line Madinah
+  mushaf (KFGQPC 1421H, "V2"; 8 lines on pages 1–2) in the King Fahd Complex's Uthmani Hafs text, built by
+  `tool/build_mushaf_lines.dart` from the public Quran.com API v4 (`text_qpc_hafs`, `v2_page`, `line_v2`).
+  QUL (qul.tarteel.ai) has the same layout but needs a sign-in to download and states no licence. The file is
+  fingerprinted like the Tanzil text (`lib/app/quran_wiring.dart`) and checked against Tanzil's verse counts.
+  Sura-name and basmala lines (absent from the API) are the pages' empty lines. Two data notes: 573 verse
+  numbers wrap alone onto the next line in the print (kept as a number-only piece), and the API puts 84:21's
+  number a line before its last word (moved to that word's line).
+- **Font.** KFGQPC HAFS Uthmanic Script 0.18, bundled unchanged (`assets/fonts/UthmanicHafs1Ver18.ttf`). Its
+  embedded licence allows free use, copying and distribution, not modification or sale; full text in
+  `assets/licenses/KFGQPC-Hafs.txt`, shown on the licences page with the line-data credit.
+- **Header and frame drawn in code** (`mushaf_surah_header.dart`, `mushaf_page_frame_decoration.dart`), no
+  artwork files, theme-aware. The Quran.ws surah-header/page-frame SVGs are no longer listed in `pubspec.yaml`
+  and no longer shipped. A "sura names" calligraphy font from quran.com's frontend was rejected: it carries no
+  copyright or licence information.
+- **Settings.** New "Page layout" (15 lines, default / running paragraph). Header and frame now offer the
+  drawn Madinah style (default) or the simple banner / no frame. A larger reading or system text size still
+  falls back to the scrolling paragraph.

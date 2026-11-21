@@ -130,6 +130,41 @@ void main() {
         expect((await repo.load()).ayahMarkerStyle, AyahMarkerStyle.rosette);
       },
     );
+
+    test(
+      'the page layout, surah header and page frame default to the Madinah style',
+      () async {
+        final settings = await (await _repo()).load();
+        expect(settings.mushafLayoutStyle, MushafLayoutStyle.madinah15);
+        expect(settings.surahHeaderStyle, SurahHeaderStyle.madinah);
+        expect(settings.pageFrameStyle, PageFrameStyle.madinah);
+      },
+    );
+
+    test('a saved page layout, surah header and frame are read back', () async {
+      final repo = await _repo();
+      await repo.save(
+        const AppSettings(
+          mushafLayoutStyle: MushafLayoutStyle.flowing,
+          surahHeaderStyle: SurahHeaderStyle.banner,
+          pageFrameStyle: PageFrameStyle.none,
+        ),
+      );
+      final settings = await repo.load();
+      expect(settings.mushafLayoutStyle, MushafLayoutStyle.flowing);
+      expect(settings.surahHeaderStyle, SurahHeaderStyle.banner);
+      expect(settings.pageFrameStyle, PageFrameStyle.none);
+    });
+
+    test('an unknown stored page layout falls back to 15 lines', () async {
+      final repo = await _repo({
+        SettingsRepositoryImpl.mushafLayoutStyleKey: 'mushafScan',
+      });
+      expect(
+        (await repo.load()).mushafLayoutStyle,
+        MushafLayoutStyle.madinah15,
+      );
+    });
   });
 
   group('SettingsCubit', () {
@@ -150,6 +185,19 @@ void main() {
       final cubit = SettingsCubit(repo, const AppSettings());
       await cubit.setAyahMarkerStyle(AyahMarkerStyle.mushafGlyph);
       expect(cubit.state.ayahMarkerStyle, AyahMarkerStyle.mushafGlyph);
+      expect(repo.stored, cubit.state);
+      await cubit.close();
+    });
+
+    test('the surah header and page frame styles can be changed', () async {
+      final repo = InMemorySettingsRepository();
+      final cubit = SettingsCubit(repo, const AppSettings());
+      await cubit.setMushafLayoutStyle(MushafLayoutStyle.flowing);
+      await cubit.setSurahHeaderStyle(SurahHeaderStyle.banner);
+      await cubit.setPageFrameStyle(PageFrameStyle.none);
+      expect(cubit.state.mushafLayoutStyle, MushafLayoutStyle.flowing);
+      expect(cubit.state.surahHeaderStyle, SurahHeaderStyle.banner);
+      expect(cubit.state.pageFrameStyle, PageFrameStyle.none);
       expect(repo.stored, cubit.state);
       await cubit.close();
     });

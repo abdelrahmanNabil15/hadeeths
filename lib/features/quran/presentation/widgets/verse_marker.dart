@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/core/design_system/tokens.dart';
-import 'package:mynewapp/core/format/digits.dart';
 import 'package:mynewapp/core/widgets/geometric_pattern.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/marker_digits.dart';
 
 /// The verse number at the end of a verse, like the rosette in a printed mushaf: the number inside a
 /// small ring, set in a fine gold eight-pointed star, filled with sage when the verse is bookmarked.
@@ -41,13 +41,13 @@ class VerseMarker extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Padding(
-              padding: EdgeInsets.all(size * 0.18),
+              padding: EdgeInsets.all(size * 0.17),
               child: Text(
-                context.digits.format(number),
-                style: TextStyle(
-                  fontSize: size * 0.34,
-                  fontWeight: FontWeight.w600,
-                  color: bookmarked ? colors.onSage : scheme.onSurfaceVariant,
+                arabicIndicDigits(number),
+                textScaler: TextScaler.noScaling,
+                style: markerDigitStyle(
+                  fontSize: size * 0.46,
+                  color: bookmarked ? colors.onSage : scheme.onSurface,
                 ),
               ),
             ),

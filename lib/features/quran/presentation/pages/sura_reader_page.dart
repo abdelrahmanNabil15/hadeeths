@@ -8,12 +8,17 @@ import 'package:mynewapp/core/navigation/app_route.dart';
 import 'package:mynewapp/core/widgets/app_sheet.dart';
 import 'package:mynewapp/core/widgets/content_width.dart';
 import 'package:mynewapp/core/widgets/geometric_pattern.dart';
+import 'package:mynewapp/features/quran/domain/mushaf_lines.dart';
 import 'package:mynewapp/features/quran/domain/quran_structure.dart';
 import 'package:mynewapp/features/quran/domain/quran_text.dart';
 import 'package:mynewapp/features/quran/domain/quran_user_data.dart';
 import 'package:mynewapp/features/quran/presentation/quran_labels.dart';
 import 'package:mynewapp/features/quran/presentation/state/quran_cubit.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/mushaf_line_page.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/mushaf_page_frame_decoration.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/mushaf_surah_header.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/verse_flow.dart';
+import 'package:mynewapp/features/settings/domain/app_settings.dart';
 import 'package:mynewapp/features/settings/presentation/state/settings_cubit.dart';
 import 'package:mynewapp/l10n/l10n.dart';
 
@@ -55,6 +60,10 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
 
   late final QuranText _text = context.read<QuranCubit>().state.text!;
 
+  /// The 15-line mushaf's lines, when this build has them (the page then follows the print line
+  /// for line, see [MushafLayoutStyle]).
+  late final MushafLines? _lines = context.read<QuranCubit>().state.lines;
+
   /// The pages that have any verse in the text (all 604 for the real file).
   late final List<int> _pages = [
     for (var page = 1; page <= QuranStructure.pageCount; page++)
@@ -72,7 +81,8 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
     super.initState();
     final start = widget.initialVerse.clamp(1, _text.versesIn(widget.sura));
     context.read<QuranCubit>().setLastRead(VerseRef(widget.sura, start));
-    final target = _structure.pageOf(VerseRef(widget.sura, start));
+    final place = VerseRef(widget.sura, start);
+    final target = _lines?.pageOf(place) ?? _structure.pageOf(place);
     _index = _pages.lastIndexWhere((page) => page <= target).clamp(0, 604);
     _controller = PageController(initialPage: _index);
   }
@@ -147,6 +157,7 @@ class _SuraReaderPageState extends State<SuraReaderPage> {
               child: _MushafPageView(
                 page: _pages[index],
                 verses: _verses(_pages[index]),
+                lines: _lines?.page(_pages[index]),
                 text: _text,
                 onVerseActions: _verseActions,
               ),
@@ -163,12 +174,16 @@ class _MushafPageView extends StatelessWidget {
   const _MushafPageView({
     required this.page,
     required this.verses,
+    required this.lines,
     required this.text,
     required this.onVerseActions,
   });
 
   final int page;
   final List<Verse> verses;
+
+  /// The page's lines in the 15-line mushaf; null when this build does not have them.
+  final List<MushafLine>? lines;
   final QuranText text;
   final void Function(Verse verse) onVerseActions;
 
@@ -183,9 +198,55 @@ class _MushafPageView extends StatelessWidget {
     final markerStyle = context.select(
       (SettingsCubit c) => c.state.ayahMarkerStyle,
     );
+    final headerStyle = context.select(
+      (SettingsCubit c) => c.state.surahHeaderStyle,
+    );
+    final frameStyle = context.select(
+      (SettingsCubit c) => c.state.pageFrameStyle,
+    );
+    final layoutStyle = context.select(
+      (SettingsCubit c) => c.state.mushafLayoutStyle,
+    );
     final bookmarks = context.select((QuranCubit c) => c.state.bookmarks);
     final fitted =
         scale == 1 && MediaQuery.textScalerOf(context).scale(10) == 10;
+    Widget framed(Widget page) => frameStyle == PageFrameStyle.madinah
+        ? MushafPageFrame(child: page)
+        : page;
+    final pageLines = lines;
+    // The 15-line page is a sheet of paper scaled whole to the screen, so the system text size
+    // does not change it (the page never wraps); only a larger in-app reading size asks for the
+    // running paragraph instead.
+    if (scale == 1 &&
+        pageLines != null &&
+        layoutStyle == MushafLayoutStyle.madinah15) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
+        child: FittedBox(
+          child: framed(
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MushafLinePage(
+                  lines: pageLines,
+                  page: page,
+                  width: _designWidth,
+                  bookmarks: bookmarks,
+                  markerStyle: markerStyle,
+                  onVerseActions: (ref) =>
+                      onVerseActions(text.verse(ref.sura, ref.verse)),
+                ),
+                const SizedBox(height: AppSpacing.sm),
+                _PageNumber(page: page),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
     final style = fitted
         ? quranTextStyle(
             context,
@@ -208,7 +269,9 @@ class _MushafPageView extends StatelessWidget {
       children: [
         for (final group in groups) ...[
           if (group.first.number == 1) ...[
-            _SuraBanner(sura: group.first.sura),
+            headerStyle == SurahHeaderStyle.madinah
+                ? MushafSuraHeader(sura: group.first.sura)
+                : _SuraBanner(sura: group.first.sura),
             const SizedBox(height: AppSpacing.sm),
           ],
           // Quran text is right to left whatever the interface language.
@@ -249,7 +312,7 @@ class _MushafPageView extends StatelessWidget {
           vertical: AppSpacing.sm,
         ),
         child: FittedBox(
-          child: SizedBox(width: _designWidth, child: content),
+          child: framed(SizedBox(width: _designWidth, child: content)),
         ),
       );
     }

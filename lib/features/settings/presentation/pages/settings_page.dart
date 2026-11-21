@@ -86,6 +86,46 @@ class SettingsPage extends StatelessWidget {
                     AyahMarkerStyle.scheherazadeColor,
                     l10n.ayahMarkerStyleScheherazadeColor,
                   ),
+                  (
+                    AyahMarkerStyle.mushafFont,
+                    l10n.ayahMarkerStyleMushafFont,
+                  ),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.mushafLayoutStyleHeading),
+              const SizedBox(height: AppSpacing.sm),
+              OptionGroup<MushafLayoutStyle>(
+                selected: settings.mushafLayoutStyle,
+                onSelected: cubit.setMushafLayoutStyle,
+                options: [
+                  (
+                    MushafLayoutStyle.madinah15,
+                    l10n.mushafLayoutStyleMadinah15,
+                  ),
+                  (MushafLayoutStyle.flowing, l10n.mushafLayoutStyleFlowing),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.surahHeaderStyleHeading),
+              const SizedBox(height: AppSpacing.sm),
+              OptionGroup<SurahHeaderStyle>(
+                selected: settings.surahHeaderStyle,
+                onSelected: cubit.setSurahHeaderStyle,
+                options: [
+                  (SurahHeaderStyle.madinah, l10n.surahHeaderStyleMadinah),
+                  (SurahHeaderStyle.banner, l10n.surahHeaderStyleBanner),
+                ],
+              ),
+              const SizedBox(height: AppSpacing.xl),
+              SectionHeading(l10n.pageFrameStyleHeading),
+              const SizedBox(height: AppSpacing.sm),
+              OptionGroup<PageFrameStyle>(
+                selected: settings.pageFrameStyle,
+                onSelected: cubit.setPageFrameStyle,
+                options: [
+                  (PageFrameStyle.madinah, l10n.pageFrameStyleMadinah),
+                  (PageFrameStyle.none, l10n.pageFrameStyleNone),
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),

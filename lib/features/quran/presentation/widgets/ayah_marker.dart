@@ -1,5 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:mynewapp/core/design_system/app_colors.dart';
 import 'package:mynewapp/features/quran/domain/mushaf_asset_manifest.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/marker_digits.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/mushaf_glyph_marker.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/verse_marker.dart';
 import 'package:mynewapp/features/settings/domain/app_settings.dart';
@@ -49,6 +51,27 @@ class AyahMarker extends StatelessWidget {
           tinted: false,
           size: size,
           semanticLabel: semanticLabel,
+        );
+      case AyahMarkerStyle.mushafFont:
+        // The font draws Arabic-Indic digits inside its end-of-verse ornament by itself.
+        return Semantics(
+          label: semanticLabel,
+          excludeSemantics: true,
+          child: Text(
+            arabicIndicDigits(number),
+            textDirection: TextDirection.rtl,
+            maxLines: 1,
+            softWrap: false,
+            textScaler: TextScaler.noScaling,
+            style: TextStyle(
+              fontFamily: 'KFGQPCHafs',
+              fontSize: size * 0.95,
+              height: 1,
+              color: bookmarked
+                  ? AppColors.of(context).gold
+                  : Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
         );
     }
   }

@@ -72,7 +72,9 @@ flutter:
     - assets/licenses/
     # City list (GeoNames, CC BY 4.0) and country borders (Natural Earth, public domain) for prayer times.
     - assets/data/
-    # Tanzil Quran text, verbatim (CC BY 3.0, changing it is not allowed).
+    # Tanzil Quran text, verbatim (CC BY 3.0, changing it is not allowed), and the 15-line Madinah
+    # mushaf's lines in the King Fahd Complex's text (from the Quran.com API; see
+    # tool/build_mushaf_lines.dart and assets/licenses/QuranCom-MushafLines.txt).
     - assets/quran/
     # Ayah-marker glyphs from Quran.ws Quran Assets (OFL-1.1, confirmed only — see
     # docs/QURAN_ASSETS_INTEGRATION_PLAN.md). Only the 40 confirmed SVGs are ever placed here;
@@ -94,3 +96,9 @@ flutter:
     - family: AmiriQuran
       fonts:
         - asset: assets/fonts/AmiriQuran.ttf
+    # KFGQPC HAFS Uthmanic Script 0.18 (King Fahd Glorious Quran Printing Complex), bundled
+    # unchanged: free to use, copy and distribute, never to modify or sell. Licence text in
+    # assets/licenses/KFGQPC-Hafs.txt. Draws the 15-line mushaf pages.
+    - family: KFGQPCHafs
+      fonts:
+        - asset: assets/fonts/UthmanicHafs1Ver18.ttf

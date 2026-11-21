@@ -4,6 +4,7 @@ import 'package:mynewapp/app/feature_flags.dart';
 import 'package:mynewapp/core/widgets/app_card.dart';
 import 'package:mynewapp/core/widgets/state_views.dart';
 import 'package:mynewapp/features/quran/domain/sura_names.dart';
+import 'package:mynewapp/features/quran/presentation/widgets/mushaf_surah_header.dart';
 import 'package:mynewapp/features/quran/presentation/widgets/verse_marker.dart';
 import 'package:mynewapp/l10n/app_localizations.dart';
 
@@ -46,10 +47,13 @@ void main() {
       final l10n = await _open(tester);
       await tester.tap(find.text('1. ${SuraNames.latin(1)}'));
       await tester.pumpAndSettle();
+      // The Madinah-style header shows the name in Arabic, as in the print, and reads it out in
+      // the interface language.
       final title = l10n.quranSuraTitle(SuraNames.latin(1));
-      expect(find.text(title), findsOneWidget);
+      expect(find.byType(MushafSuraHeader), findsOneWidget);
+      expect(find.text('سورة الفاتحة'), findsOneWidget);
       expect(
-        tester.getSemantics(find.text(title)),
+        tester.getSemantics(find.bySemanticsLabel(title)),
         isSemantics(label: title, isHeader: true),
       );
       expect(find.text(l10n.quranJuz('1')), findsOneWidget);
@@ -59,7 +63,7 @@ void main() {
             .widget<Directionality>(
               find
                   .ancestor(
-                    of: find.text(title),
+                    of: find.byType(MushafSuraHeader),
                     matching: find.byType(Directionality),
                   )
                   .first,
