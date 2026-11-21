@@ -11,7 +11,9 @@ Widget _host(Widget child, {double width = 360}) => MaterialApp(
   localizationsDelegates: AppLocalizations.localizationsDelegates,
   supportedLocales: AppLocalizations.supportedLocales,
   home: Scaffold(
-    body: Center(child: SizedBox(width: width, child: child)),
+    body: Center(
+      child: SizedBox(width: width, child: child),
+    ),
   ),
 );
 
@@ -24,9 +26,7 @@ void main() {
     expect(find.text('سورة الفاتحة'), findsOneWidget);
   });
 
-  testWidgets('is exactly as wide as the text column it heads', (
-    tester,
-  ) async {
+  testWidgets('is exactly as wide as the text column it heads', (tester) async {
     await tester.pumpWidget(
       _host(const MushafSuraHeader(sura: 2, height: 40), width: 300),
     );
@@ -41,7 +41,9 @@ void main() {
   testWidgets('announces itself as a header to screen readers', (tester) async {
     final handle = tester.ensureSemantics();
     await tester.pumpWidget(_host(const MushafSuraHeader(sura: 2)));
-    final node = tester.getSemantics(find.bySemanticsLabel(RegExp('Al-Baqarah')));
+    final node = tester.getSemantics(
+      find.bySemanticsLabel(RegExp('Al-Baqarah')),
+    );
     expect(node.getSemanticsData().flagsCollection.isHeader, isTrue);
     handle.dispose();
   });

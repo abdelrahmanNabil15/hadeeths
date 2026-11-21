@@ -16,14 +16,12 @@ void registerFontLicences() {
     }
   });
   LicenseRegistry.addLicense(() async* {
-    yield LicenseEntryWithLineBreaks(
-      ['KFGQPC HAFS Uthmanic Script font'],
-      await rootBundle.loadString('assets/licenses/KFGQPC-Hafs.txt'),
-    );
-    yield LicenseEntryWithLineBreaks(
-      ['Mushaf line layout (Quran.com)'],
-      await rootBundle.loadString('assets/licenses/QuranCom-MushafLines.txt'),
-    );
+    yield LicenseEntryWithLineBreaks([
+      'KFGQPC HAFS Uthmanic Script font',
+    ], await rootBundle.loadString('assets/licenses/KFGQPC-Hafs.txt'));
+    yield LicenseEntryWithLineBreaks([
+      'Mushaf line layout (Quran.com)',
+    ], await rootBundle.loadString('assets/licenses/QuranCom-MushafLines.txt'));
   });
   registerMushafAssetLicences();
 }

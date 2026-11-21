@@ -105,12 +105,7 @@ Future<void> main(List<String> args) async {
   for (final MapEntry(key: slot, value: segs) in lineSegs.entries) {
     final ended = lineEnds[slot] ?? const {};
     slots[slot] =
-        'a|${[
-          for (final seg in segs)
-            ended.contains(seg.split(':').take(2).join(':'))
-                ? seg.replaceFirst(':-:', ':e:')
-                : seg,
-        ].join(';')}';
+        'a|${[for (final seg in segs) ended.contains(seg.split(':').take(2).join(':')) ? seg.replaceFirst(':-:', ':e:') : seg].join(';')}';
   }
 
   // The empty lines, in reading order, each run going to the sura that begins next.
@@ -131,10 +126,7 @@ Future<void> main(List<String> args) async {
     if (firstSeg[1] != '1') {
       throw StateError('empty lines before ${firstSeg[0]}:${firstSeg[1]}');
     }
-    final fill = [
-      's|$sura',
-      if (sura != 1 && sura != 9) 'b|$basmala',
-    ];
+    final fill = ['s|$sura', if (sura != 1 && sura != 9) 'b|$basmala'];
     if (i - start != fill.length) {
       throw StateError(
         '${i - start} empty lines before sura $sura, expected ${fill.length}',
@@ -164,13 +156,21 @@ Future<void> main(List<String> args) async {
   }
 
   final out = StringBuffer()
-    ..writeln('# The 15-line Madinah mushaf (KFGQPC, 1421H print), line by line, in the')
-    ..writeln("# King Fahd Complex's Uthmani Hafs text. From the Quran.com API v4, 2026-11-21.")
-    ..writeln('# Written by tool/build_mushaf_lines.dart; do not edit by hand.');
+    ..writeln(
+      '# The 15-line Madinah mushaf (KFGQPC, 1421H print), line by line, in the',
+    )
+    ..writeln(
+      "# King Fahd Complex's Uthmani Hafs text. From the Quran.com API v4, 2026-11-21.",
+    )
+    ..writeln(
+      '# Written by tool/build_mushaf_lines.dart; do not edit by hand.',
+    );
   for (final (int page, int line) in order) {
     out.writeln('$page|$line|${slots[(page, line)]}');
   }
-  File('assets/quran/mushaf-madinah-lines.txt').writeAsStringSync(out.toString());
+  File(
+    'assets/quran/mushaf-madinah-lines.txt',
+  ).writeAsStringSync(out.toString());
   stdout.writeln('wrote ${order.length} lines');
 }
 
@@ -185,7 +185,9 @@ Future<List<Map<String, dynamic>>> _fetch(HttpClient client, int page) async {
   for (var attempt = 0; ; attempt++) {
     try {
       final response = await (await client.getUrl(uri)).close();
-      if (response.statusCode != 200) throw HttpException('${response.statusCode}');
+      if (response.statusCode != 200) {
+        throw HttpException('${response.statusCode}');
+      }
       final body =
           jsonDecode(await response.transform(utf8.decoder).join())
               as Map<String, dynamic>;
