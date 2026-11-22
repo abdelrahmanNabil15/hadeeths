@@ -125,10 +125,7 @@ void main() {
         ByteData.sublistView(Uint8List.fromList(File(path).readAsBytesSync()));
 
     test('loads the verified file', () async {
-      final source = BundledMushafLinesSource(
-        file: file,
-        loadAsset: fromDisk,
-      );
+      final source = BundledMushafLinesSource(file: file, loadAsset: fromDisk);
       expect((await source.load()).pages, 604);
     });
 

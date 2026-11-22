@@ -132,7 +132,9 @@ class MushafLines {
               fail('bad verse piece "$seg"');
             }
             final key = _key(sura, verse);
-            if (ended.contains(key)) fail('$sura:$verse continues after its end');
+            if (ended.contains(key)) {
+              fail('$sura:$verse continues after its end');
+            }
             pageOfVerse.putIfAbsent(key, () => page);
             if (fields[2] == 'e') ended.add(key);
             pieces.add(

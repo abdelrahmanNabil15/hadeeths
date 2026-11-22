@@ -33,17 +33,24 @@ class BundledMushafLinesSource implements MushafLinesSource {
     } on Object {
       throw QuranUnavailable('missing file ${file.assetPath}');
     }
-    final bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+    final bytes = data.buffer.asUint8List(
+      data.offsetInBytes,
+      data.lengthInBytes,
+    );
     if (bytes.length != file.byteLength ||
         fingerprint(bytes) != file.fingerprint) {
-      throw const QuranUnavailable('the bundled lines file is not the verified one');
+      throw const QuranUnavailable(
+        'the bundled lines file is not the verified one',
+      );
     }
     try {
       return await Isolate.run(
         () => MushafLines.parse(utf8.decode(Uint8List.fromList(bytes))),
       );
     } on FormatException catch (e) {
-      throw QuranUnavailable('the bundled lines file does not read: ${e.message}');
+      throw QuranUnavailable(
+        'the bundled lines file does not read: ${e.message}',
+      );
     }
   }
 }
